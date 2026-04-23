@@ -1,0 +1,320 @@
+@startuml
+title Class Diagram for Chess Game (with a mostly complete domain layer and a draft for the UI Layer)
+
+package ui{
+
+    +class Main{
+        +{static} main(args: String[]): void
+    }
+
+    +class WelcomeView{
+        -player1NameField: JTextField
+        -player2NameField: JTextField
+
+        +WelcomeView()
+        -createWelcomeScreenUI(): void
+    }
+
+    +class GameStatsView{
+        -currentPlayerLabel:JLabel
+        -gameStateLabel: JLabel
+
+        +GameStatsView(player1Name: String, player2Name: String)
+        +updateCurrentPlayerLabel(playerName: String): void
+        +updateGameStateLabel(gameState: GameState): void
+    }
+
+    +class MainView{
+        -boardView: BoardView
+        -boardController: BoardController
+        -gameStatsView: GameStatsView
+        -player1Name: String
+        -player2Name: String
+
+        +MainView(player1Name: String, player2Name: String)
+        -configureMainView(): void
+        -addGameStatsView(): void
+        -addBoardView(): void
+    }
+
+    +class BoardView{
+        -{static}{final} BOARD_SIZE: int
+        -{static}{final} TILE_SIZE: int
+        -{static}{final} LIGHT_SQUARE_COLOR: Color
+        -{static}{final} DARK_SQUARE_COLOR: Color
+        -{static}{final} SELECTED_SQUARE_COLOR: Color
+
+        -selectedRow: int
+        -selectedCol: int
+
+        -whitePieceImages: Map<PieceType, Image>
+        -blackPieceImages: Map<PieceType, Image>
+
+        -boardController: BoardController
+
+        +BoardView(boardController: BoardController)
+        #paintComponent(g: Graphics): void
+
+        -drawBoard(g: Graphics): void
+        -loadPieceIMages(): void
+        -loadOnePieceIMage(pieceType: PieceType, color: Color, imagePath: String): void
+        -drawPieces(g: Graphics): void
+        -drawSelectedSquare(g: Graphics): void
+    }
+
+    -class BoardMouseListener{
+        +mouseClicked(e: MouseEvent): void
+    }
+
+    +class BoardController{
+        -boardView: BoardView
+        -board: Board
+
+        -lastSelectedLoc: Location
+
+        +BoardController()
+        +setBoardView(boardView: BoardView): void
+
+        +handleSquareClick(loc: Location): void
+        -determineAction(currentSelectedLoc: Location): void
+
+        -repaintBoardView(): void
+
+        +getBoardSnapshot(): Piece[][]
+    }
+
+    note right of BoardController::determineAction
+        The current selected location could be:
+        1) choosing a piece to move
+        2) choosing the destination location for a previously chosen piece to move to
+        3) invalid selection (empty or opponent's piece)
+        4) part of a castling action
+
+        This method will determine which of the above cases it is.
+    end note
+
+}
+
+package domain{
+
+    package piece{
+        +enum PieceColor{
+            WHITE,
+            BLACK
+        }
+
+        +enum PieceType{
+            PAWN,
+            ROOK,
+            KNIGHT,
+            BISHOP,
+            QUEEN,
+            KING
+        }
+
+        +abstract class Piece{
+            -{final} type: PieceType
+            -{final} color: PieceColor
+            #{final} canJump: boolean
+            -hasMoved: boolean
+
+            +Piece(type: PieceType, color: PieceColor)
+
+            +getType(): PieceType
+            +getColor(): PieceColor
+
+            +isSameColor(piece: Piece): boolean
+            +canJump(): boolean
+
+            +changeToMoved(): void
+            +resetHasMoved(): void
+
+            +toString(): String
+
+            +{abstract}makeCopy(): Piece
+            +{abstract}isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class Bishop{
+            +Bishop(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class King{
+            +King(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class Knight{
+            +Knight(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class Pawn{
+            +Pawn(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class Queen{
+            +Queen(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class Rook{
+            +Rook(color: PieceColor)
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+
+    }
+
+    +class Board{
+        -{final} TOTAL_ROWS: int
+        -{final} TOTAL_COLS: int
+        -pieces: Piece[][]
+        -currentGameState: GameState
+
+        -blackKingLocation: Location
+        -whiteKingLocation: Location
+
+        +Board()
+        +getSnapshot(): Piece[][]
+
+        +movePiece(from: Square, to: Square): boolean
+        -isDestinationNotSameColor(from: Square, to: Square): boolean
+        -isMoveValidShape(from: Square, to: Square): boolean
+        -hasNoObstacle(from: Square, to: Square): boolean
+        -checkNotMoveIntoCheck(from: Square, to: Square): boolean
+
+        -capture(from: Location, to: Location): boolean
+
+        +promotePawn(location: Location, newPieceType: PieceType): boolean
+        +castle(kingFrom: Location, kingTo: Location, rookFrom: Location, rookTo: Location): boolean
+
+        -updateGameState(): void
+        -checkCheckmate(): void
+        -checkStalemate(): void
+
+        -updateWhiteKingLocation(location: Location): void
+        -updateBlackKingLocation(location: Location): void
+
+        +switchTurn(): void
+        +getCurrentGameState(): GameState
+
+        -initializeBoard(): void
+    }
+
+    note left of Board::movePiece
+        First call isDestinationNotSameColor,
+        then isMoveValidShape,
+        then hasNoObstacle,
+        then checkNotMoveIntoCheck.
+    end note
+
+    note left of Board::isDestinationNotSameColor
+        First use 'from' and 'to' locations to get the Piece objects from the array.
+        Then use the Piece object's isSameColor method.
+
+        Chess rule: can't move to a location occupied by a piece of the same color.
+    end note
+
+    note left of Board::isValidShape
+        First 'from' location to get the Piece obejct form the array.
+        Then use the Piece object's isValidMoveShape method.
+    end note
+
+    note left of Board::hasNoObstacle
+        Check whether the piece can jump.
+        If no, check whether there is any piece
+        (obstacle) on the way.
+    end note
+
+
+    +enum GameState{
+        WHITE_TURN
+        BLACK_TURN
+        WHITE_WIN
+        BLACK_WIN
+        DRAW
+    }
+
+    +class Location{
+        -{final} x: int
+        -{final} y: int
+
+        +Location(x: int, y: int)
+        +getX(): int
+        +getY(): int
+    }
+
+}
+
+package java{
+  +class JFrame{
+  }
+  +class JPanel{
+  }
+  +class Color{
+  }
+  +class Image{
+  }
+  +class Graphics{
+  }
+  +class MouseAdapter{
+  }
+}
+
+Main ..> WelcomeView
+
+WelcomeView -u-|> JFrame
+
+MainView -u-|> JFrame
+MainView --> BoardView
+MainView --> BoardController
+MainView --> GameStatsView
+
+GameStatsView -u-|> JPanel
+GameStatsView --> GameState
+
+BoardView -u-|> JPanel
+BoardView --> "3" Color
+BoardView --> "*" PieceType
+BoardView --> "*" Image
+BoardView --> BoardController
+BoardView ..> Graphics
+BoardView --+ BoardMouseListener
+
+BoardMouseListener -u-|> MouseAdapter
+
+BoardController --> BoardView
+BoardController --> Board
+BoardController ..> Location
+BoardController ..> Piece
+
+Bishop -u-|> Piece
+King -u-|> Piece
+Knight -u-|> Piece
+Pawn -u-|> Piece
+Queen -u-|> Piece
+Rook -u-|> Piece
+
+Board --> "64" Piece
+Board ..> Bishop
+Board ..> King
+Board ..> Knight
+Board ..> Pawn
+Board ..> Queen
+Board ..> Rook
+Board ..> PieceColor
+Board --> GameState
+
+Piece --> PieceType
+Piece --> PieceColor
+Piece ..> Location
+@enduml
