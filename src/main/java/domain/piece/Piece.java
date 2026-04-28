@@ -41,4 +41,11 @@ public abstract class Piece {
     public void resetHasMoved() {
         this.hasMoved = false;
     }
+
+    public abstract Piece makeCopy();
+
+    @Override
+    public String toString() {
+        return color + " " + type;
+    }
 }
