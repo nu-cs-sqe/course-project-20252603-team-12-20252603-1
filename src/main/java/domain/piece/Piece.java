@@ -4,7 +4,7 @@ public abstract class Piece {
 
     private final PieceType type;
     private final PieceColor color;
-    protected final boolean canJump;
+    private final boolean canJump;
     private boolean hasMoved;
 
     public Piece(PieceType type, PieceColor color) {
