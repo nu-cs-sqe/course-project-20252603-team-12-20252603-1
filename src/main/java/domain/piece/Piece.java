@@ -13,4 +13,8 @@ public abstract class Piece {
         this.canJump = (PieceType.KNIGHT == type);
         this.hasMoved = false;
     }
+
+    public PieceType getType() {
+        return type;
+    }
 }
