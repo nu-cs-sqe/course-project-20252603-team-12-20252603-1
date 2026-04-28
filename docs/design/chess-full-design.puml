@@ -115,7 +115,7 @@ package domain{
         +abstract class Piece{
             -{final} type: PieceType
             -{final} color: PieceColor
-            #{final} canJump: boolean
+            -{final} canJump: boolean
             -hasMoved: boolean
 
             +Piece(type: PieceType, color: PieceColor)
@@ -125,6 +125,7 @@ package domain{
 
             +isSameColor(piece: Piece): boolean
             +canJump(): boolean
+            +hasMoved(): boolean
 
             +changeToMoved(): void
             +resetHasMoved(): void
