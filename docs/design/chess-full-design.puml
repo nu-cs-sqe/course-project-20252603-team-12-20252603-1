@@ -125,6 +125,7 @@ package domain{
 
             +isSameColor(piece: Piece): boolean
             +canJump(): boolean
+            +hasMoved(): boolean
 
             +changeToMoved(): void
             +resetHasMoved(): void

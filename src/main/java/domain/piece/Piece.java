@@ -17,4 +17,28 @@ public abstract class Piece {
     public PieceType getType() {
         return type;
     }
+
+    public PieceColor getColor() {
+        return color;
+    }
+
+    public boolean isSameColor(Piece piece) {
+        return this.color == piece.color;
+    }
+
+    public boolean canJump() {
+        return canJump;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void changeToMoved() {
+        this.hasMoved = true;
+    }
+
+    public void resetHasMoved() {
+        this.hasMoved = false;
+    }
 }
