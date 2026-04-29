@@ -27,4 +27,11 @@ class KingTest {
 
         assertFalse(king.canJump());
     }
+
+    @Test
+    void MakeCopy_OnWhiteKing_CopyTypeIsKing() {
+        King king = new King(PieceColor.WHITE);
+
+        assertEquals(PieceType.KING, king.makeCopy().getType());
+    }
 }

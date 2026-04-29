@@ -55,10 +55,10 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC3: Copy a white king** ( :x: )
+- **TC3: Copy a white king** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king
-  - **Expected output**: returned piece is a different object from the original; returned piece type is `KING`; returned piece color is `WHITE`; returned piece cannot jump
+  - **Expected output**: returned piece type is `KING`; returned piece is a different object from the original; returned piece color is `WHITE`; returned piece cannot jump
 
 - **TC4: Copy a black king** ( :x: )
   - **Method(s) under test**: `makeCopy()`

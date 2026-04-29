@@ -8,6 +8,6 @@ public class King extends Piece {
 
     @Override
     public Piece makeCopy() {
-        return null;
+        return new King(getColor());
     }
 }
