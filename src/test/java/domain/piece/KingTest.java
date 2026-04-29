@@ -12,4 +12,11 @@ class KingTest {
 
         assertEquals(PieceType.KING, king.getType());
     }
+
+    @Test
+    void Constructor_OnWhiteKing_ColorIsWhite() {
+        King king = new King(PieceColor.WHITE);
+
+        assertEquals(PieceColor.WHITE, king.getColor());
+    }
 }

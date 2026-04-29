@@ -30,7 +30,7 @@
   - **State of the system**: no existing king object; input color is `WHITE`
   - **Expected output**: created piece type is `KING`
 
-- **TC2: Constructor_OnWhiteKing_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhiteKing_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `King(PieceColor color)`
   - **State of the system**: no existing king object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
