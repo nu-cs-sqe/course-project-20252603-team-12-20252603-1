@@ -35,7 +35,7 @@
   - **State of the system**: no existing king object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
 
-- **TC3: Constructor_OnWhiteKing_CanJumpIsFalse** ( :x: )
+- **TC3: Constructor_OnWhiteKing_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `King(PieceColor color)`
   - **State of the system**: no existing king object; input color is `WHITE`
   - **Expected output**: `canJump()` returns `false`
