@@ -17,23 +17,28 @@
 
 ### Step 1-3: Analysis
 
-| Parameter | Catalog clue | Values considered |
-|-----------|--------------|-------------------|
-| Input: `color` | Cases | `WHITE`, `BLACK` |
-| Output: piece type | Cases | `KING` |
-| Output: piece jump capability | Boolean | `false` |
+| Parameter                     | Catalog clue | Values considered |
+| ----------------------------- | ------------ | ----------------- |
+| Input: `color`                | Cases        | `WHITE`, `BLACK`  |
+| Output: piece type            | Cases        | `KING`            |
+| Output: piece jump capability | Boolean      | `false`           |
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Construct a white king** ( :x: )
+- **TC1: Constructor_OnWhiteKing_TypeIsKing** ( :white_check_mark: )
   - **Method(s) under test**: `King(PieceColor color)`
   - **State of the system**: no existing king object; input color is `WHITE`
-  - **Expected output**: created piece type is `KING`; `getColor()` returns `WHITE`; `canJump()` returns `false`
+  - **Expected output**: created piece type is `KING`
 
-- **TC2: Construct a black king** ( :x: )
+- **TC2: Constructor_OnWhiteKing_ColorIsWhite** ( :x: )
   - **Method(s) under test**: `King(PieceColor color)`
-  - **State of the system**: no existing king object; input color is `BLACK`
-  - **Expected output**: created piece type is `KING`; `getColor()` returns `BLACK`; `canJump()` returns `false`
+  - **State of the system**: no existing king object; input color is `WHITE`
+  - **Expected output**: `getColor()` returns `WHITE`
+
+- **TC3: Constructor_OnWhiteKing_CanJumpIsFalse** ( :x: )
+  - **Method(s) under test**: `King(PieceColor color)`
+  - **State of the system**: no existing king object; input color is `WHITE`
+  - **Expected output**: `canJump()` returns `false`
 
 ---
 
@@ -41,12 +46,12 @@
 
 ### Step 1-3: Analysis
 
-| Parameter | Catalog clue | Values considered |
-|-----------|--------------|-------------------|
-| Input: original piece color | Cases | `WHITE`, `BLACK` |
-| Output: returned piece type | Cases | `KING` |
-| Output: returned piece jump capability | Boolean | `false` |
-| Output: original and copy references | Pairs of references | same object is not allowed; copy must be a different object |
+| Parameter                              | Catalog clue        | Values considered                                           |
+| -------------------------------------- | ------------------- | ----------------------------------------------------------- |
+| Input: original piece color            | Cases               | `WHITE`, `BLACK`                                            |
+| Output: returned piece type            | Cases               | `KING`                                                      |
+| Output: returned piece jump capability | Boolean             | `false`                                                     |
+| Output: original and copy references   | Pairs of references | same object is not allowed; copy must be a different object |
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
