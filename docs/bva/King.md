@@ -70,7 +70,7 @@
   - **State of the system**: an existing black king
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC6: Copy a black king and check jump capability** ( :x: )
+- **TC6: Copy a black king and check jump capability** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece cannot jump
