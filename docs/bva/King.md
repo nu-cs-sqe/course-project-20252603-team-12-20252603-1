@@ -65,7 +65,7 @@
   - **State of the system**: an existing black king
   - **Expected output**: returned piece type is `KING`
 
-- **TC5: Copy a black king and check its color** ( :x: )
+- **TC5: Copy a black king and check its color** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece color is `BLACK`
