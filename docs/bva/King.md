@@ -75,7 +75,7 @@
   - **State of the system**: an existing black king
   - **Expected output**: returned piece cannot jump
 
-- **TC7: Copy a black king and check reference equality** ( :x: )
+- **TC7: Copy a black king and check reference equality** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece is a different object from the original

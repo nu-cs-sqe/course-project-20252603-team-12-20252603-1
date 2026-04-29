@@ -3,6 +3,7 @@ package domain.piece;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,5 +56,12 @@ class KingTest {
         King king = new King(PieceColor.BLACK);
 
         assertFalse(king.makeCopy().canJump());
+    }
+
+    @Test
+    void MakeCopy_OnBlackKing_CopyIsDifferentObject() {
+        King king = new King(PieceColor.BLACK);
+
+        assertNotSame(king, king.makeCopy());
     }
 }
