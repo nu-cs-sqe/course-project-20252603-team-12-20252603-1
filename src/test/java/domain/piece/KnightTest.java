@@ -34,4 +34,11 @@ class KnightTest {
 
         assertEquals(PieceType.KNIGHT, knight.makeCopy().getType());
     }
+
+    @Test
+    void MakeCopy_OnBlackKnight_CopyTypeIsKnight() {
+        Knight knight = new Knight(PieceColor.BLACK);
+
+        assertEquals(PieceType.KNIGHT, knight.makeCopy().getType());
+    }
 }
