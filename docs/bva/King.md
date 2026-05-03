@@ -48,10 +48,10 @@
 
 | Parameter                              | Catalog clue        | Values considered                                           |
 | -------------------------------------- | ------------------- | ----------------------------------------------------------- |
-| Input: original piece color            | Cases               | `WHITE`, `BLACK`                                            |
+| Input: original piece reference        | Pairs of references | same object is not allowed; copy must be a different object |
 | Output: returned piece type            | Cases               | `KING`                                                      |
+| Output: returned piece color           | Cases               | `WHITE`, `BLACK`                                            |
 | Output: returned piece jump capability | Boolean             | `false`                                                     |
-| Output: original and copy references   | Pairs of references | same object is not allowed; copy must be a different object |
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
