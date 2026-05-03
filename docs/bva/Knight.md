@@ -31,7 +31,7 @@
   - **State of the system**: no existing knight object; input color is `WHITE`
   - **Expected output**: created piece type is `KNIGHT`
 
-- **TC2: Constructor_OnWhiteKnight_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhiteKnight_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Knight(PieceColor color)`
   - **State of the system**: no existing knight object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
