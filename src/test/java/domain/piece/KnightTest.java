@@ -12,14 +12,20 @@ class KnightTest {
     void Constructor_OnWhiteKnight_TypeIsKnight() {
         Knight knight = new Knight(PieceColor.WHITE);
 
-        assertEquals(PieceType.KNIGHT, knight.getType());
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.getType();
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void Constructor_OnWhiteKnight_ColorIsWhite() {
         Knight knight = new Knight(PieceColor.WHITE);
 
-        assertEquals(PieceColor.WHITE, knight.getColor());
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = knight.getColor();
+
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -33,21 +39,30 @@ class KnightTest {
     void MakeCopy_OnWhiteKnight_CopyTypeIsKnight() {
         Knight knight = new Knight(PieceColor.WHITE);
 
-        assertEquals(PieceType.KNIGHT, knight.makeCopy().getType());
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.makeCopy().getType();
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void MakeCopy_OnBlackKnight_CopyTypeIsKnight() {
         Knight knight = new Knight(PieceColor.BLACK);
 
-        assertEquals(PieceType.KNIGHT, knight.makeCopy().getType());
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.makeCopy().getType();
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void MakeCopy_OnBlackKnight_CopyColorIsBlack() {
         Knight knight = new Knight(PieceColor.BLACK);
 
-        assertEquals(PieceColor.BLACK, knight.makeCopy().getColor());
+        PieceColor expected = PieceColor.BLACK;
+        PieceColor actual = knight.makeCopy().getColor();
+
+        assertEquals(expected, actual);
     }
 
     @Test
