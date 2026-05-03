@@ -14,9 +14,21 @@
 4. [done] Didier: Edited user stories (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/issues/3)
 
 **Planning Tracking**:
-1. [not started] Matthew: Piece abstract class 
-2. [not started] Alex: Pawn class 
-3. [not started] Didier: King class 
+1. [done] Matthew: Piece abstract class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/12)
+2. [done] Alex: Knight class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/14)
+3. [done] Didier: King class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/12)
+
+# Week 5 (04/27/2026-05/03/2026) 
+**Progress Tracking**:
+1. [done] Matthew: Piece abstract class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/12)
+2. [done] Alex: Knight class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/14)
+3. [done] Didier: King class (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/12)
+
+**Planning Tracking**:
+1. [not started] Matthew: Board class
+2. [not started] Alex: Remaining piece classes
+3. [not started] Didier: Location class, Game State enum, Board Controller Class
+
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
