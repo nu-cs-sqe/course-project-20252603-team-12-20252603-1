@@ -3,7 +3,6 @@ package domain.piece;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +12,18 @@ class KingTest {
     void Constructor_OnWhiteKing_TypeIsKing() {
         King king = new King(PieceColor.WHITE);
 
-        assertEquals(PieceType.KING, king.getType());
+        PieceType expected = PieceType.KING;
+        PieceType actual = king.getType();
+        assertEquals(expected, actual);
     }
 
     @Test
     void Constructor_OnWhiteKing_ColorIsWhite() {
         King king = new King(PieceColor.WHITE);
 
-        assertEquals(PieceColor.WHITE, king.getColor());
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = king.getColor();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -34,21 +37,27 @@ class KingTest {
     void MakeCopy_OnWhiteKing_CopyTypeIsKing() {
         King king = new King(PieceColor.WHITE);
 
-        assertEquals(PieceType.KING, king.makeCopy().getType());
+        PieceType expected = PieceType.KING;
+        PieceType actual = king.makeCopy().getType();
+        assertEquals(expected, actual);
     }
 
     @Test
     void MakeCopy_OnBlackKing_CopyTypeIsKing() {
         King king = new King(PieceColor.BLACK);
 
-        assertEquals(PieceType.KING, king.makeCopy().getType());
+        PieceType expected = PieceType.KING;
+        PieceType actual = king.makeCopy().getType();
+        assertEquals(expected, actual);
     }
 
     @Test
     void MakeCopy_OnBlackKing_CopyColorIsBlack() {
         King king = new King(PieceColor.BLACK);
 
-        assertEquals(PieceColor.BLACK, king.makeCopy().getColor());
+        PieceColor expected = PieceColor.BLACK;
+        PieceColor actual = king.makeCopy().getColor();
+        assertEquals(expected, actual);
     }
 
     @Test
