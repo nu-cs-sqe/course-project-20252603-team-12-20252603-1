@@ -71,7 +71,7 @@
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC7: MakeCopy_OnBlackKnight_CopyCanJumpIsTrue** ( :x: )
+- **TC7: MakeCopy_OnBlackKnight_CopyCanJumpIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece can jump
