@@ -76,7 +76,7 @@
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece can jump
 
-- **TC8: MakeCopy_OnBlackKnight_CopyIsDifferentObject** ( :x: )
+- **TC8: MakeCopy_OnBlackKnight_CopyIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece is a different object from the original
