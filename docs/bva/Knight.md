@@ -56,14 +56,29 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC3: Copy a white knight** ( :x: )
+- **TC4: MakeCopy_OnWhiteKnight_CopyTypeIsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white knight
-  - **Expected output**: returned piece is a different object from the original; returned piece type is `KNIGHT`; returned piece color is `WHITE`; returned piece can jump
+  - **Expected output**: returned piece type is `KNIGHT`
 
-- **TC4: Copy a black knight** ( :x: )
+- **TC5: MakeCopy_OnBlackKnight_CopyTypeIsKnight** ( :x: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black knight
-  - **Expected output**: returned piece is a different object from the original; returned piece type is `KNIGHT`; returned piece color is `BLACK`; returned piece can jump
+  - **Expected output**: returned piece type is `KNIGHT`
+
+- **TC6: MakeCopy_OnBlackKnight_CopyColorIsBlack** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing black knight
+  - **Expected output**: returned piece color is `BLACK`
+
+- **TC7: MakeCopy_OnBlackKnight_CopyCanJumpIsTrue** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing black knight
+  - **Expected output**: returned piece can jump
+
+- **TC8: MakeCopy_OnBlackKnight_CopyIsDifferentObject** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing black knight
+  - **Expected output**: returned piece is a different object from the original
 
 ---

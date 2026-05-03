@@ -8,6 +8,6 @@ public class Knight extends Piece {
 
     @Override
     public Piece makeCopy() {
-        return null;
+        return new Knight(getColor());
     }
 }
