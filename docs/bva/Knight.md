@@ -26,15 +26,20 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Construct a white knight** ( :x: )
+- **TC1: Constructor_OnWhiteKnight_TypeIsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `Knight(PieceColor color)`
   - **State of the system**: no existing knight object; input color is `WHITE`
-  - **Expected output**: created piece type is `KNIGHT`; `getColor()` returns `WHITE`; `canJump()` returns `true`
+  - **Expected output**: created piece type is `KNIGHT`
 
-- **TC2: Construct a black knight** ( :x: )
+- **TC2: Constructor_OnWhiteKnight_ColorIsWhite** ( :x: )
   - **Method(s) under test**: `Knight(PieceColor color)`
-  - **State of the system**: no existing knight object; input color is `BLACK`
-  - **Expected output**: created piece type is `KNIGHT`; `getColor()` returns `BLACK`; `canJump()` returns `true`
+  - **State of the system**: no existing knight object; input color is `WHITE`
+  - **Expected output**: `getColor()` returns `WHITE`
+
+- **TC3: Constructor_OnWhiteKnight_CanJumpIsTrue** ( :x: )
+  - **Method(s) under test**: `Knight(PieceColor color)`
+  - **State of the system**: no existing knight object; input color is `WHITE`
+  - **Expected output**: `canJump()` returns `true`
 
 ---
 
