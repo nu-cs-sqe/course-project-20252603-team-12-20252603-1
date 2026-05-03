@@ -66,7 +66,7 @@
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece type is `KNIGHT`
 
-- **TC6: MakeCopy_OnBlackKnight_CopyColorIsBlack** ( :x: )
+- **TC6: MakeCopy_OnBlackKnight_CopyColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece color is `BLACK`
