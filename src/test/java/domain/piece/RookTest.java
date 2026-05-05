@@ -25,4 +25,11 @@ class RookTest {
         PieceColor actual = rook.getColor();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhiteRook_CanJumpIsFalse() {
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        assertFalse(rook.canJump());
+    }
 }

@@ -36,7 +36,7 @@
   - **State of the system**: no existing rook object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
 
-- **TC3: Constructor_OnWhiteRook_CanJumpIsFalse** ( :x: )
+- **TC3: Constructor_OnWhiteRook_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `Rook(PieceColor color)`
   - **State of the system**: no existing rook object; input color is `WHITE`
   - **Expected output**: `canJump()` returns `false`
