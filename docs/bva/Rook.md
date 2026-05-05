@@ -61,7 +61,7 @@
   - **State of the system**: an existing white rook
   - **Expected output**: returned piece type is `ROOK`
 
-- **TC5: MakeCopy_OnBlackRook_CopyTypeIsRook** ( :x: )
+- **TC5: MakeCopy_OnBlackRook_CopyTypeIsRook** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black rook
   - **Expected output**: returned piece type is `ROOK`
