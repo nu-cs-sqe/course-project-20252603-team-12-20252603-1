@@ -56,7 +56,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC4: MakeCopy_OnWhiteQueen_CopyTypeIsQueen** ( :x: )
+- **TC4: MakeCopy_OnWhiteQueen_CopyTypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white queen
   - **Expected output**: returned piece type is `QUEEN`

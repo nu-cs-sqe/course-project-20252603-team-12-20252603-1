@@ -32,4 +32,13 @@ class QueenTest {
 
         assertFalse(queen.canJump());
     }
+
+    @Test
+    void MakeCopy_OnWhiteQueen_CopyTypeIsQueen() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        PieceType expected = PieceType.QUEEN;
+        PieceType actual = queen.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 }
