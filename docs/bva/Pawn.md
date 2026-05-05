@@ -66,7 +66,7 @@
   - **State of the system**: an existing black pawn
   - **Expected output**: returned piece type is `PAWN`
 
-- **TC6: MakeCopy_OnBlackPawn_CopyColorIsBlack** ( :x: )
+- **TC6: MakeCopy_OnBlackPawn_CopyColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black pawn
   - **Expected output**: returned piece color is `BLACK`
