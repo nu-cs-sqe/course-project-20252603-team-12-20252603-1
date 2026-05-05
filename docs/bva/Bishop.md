@@ -31,7 +31,7 @@
   - **State of the system**: no existing bishop object; input color is `WHITE`
   - **Expected output**: created piece type is `BISHOP`
 
-- **TC2: Constructor_OnWhiteBishop_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhiteBishop_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Bishop(PieceColor color)`
   - **State of the system**: no existing bishop object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`

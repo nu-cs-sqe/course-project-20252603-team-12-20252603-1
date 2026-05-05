@@ -14,4 +14,13 @@ class BishopTest {
         PieceType actual = bishop.getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhiteBishop_ColorIsWhite() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = bishop.getColor();
+        assertEquals(expected, actual);
+    }
 }
