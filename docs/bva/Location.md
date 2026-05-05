@@ -44,7 +44,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC2: Constructor_OnRepresentativeInput_GetYReturnsY** ( :x: )
+- **TC2: Constructor_OnRepresentativeInput_GetYReturnsY** ( :white_check_mark: )
   - **Method(s) under test**: `Location(int x, int y)`, `getY()`
   - **State of the system**: create location with `x=3`, `y=4`
   - **Expected output**: `getY()` returns `4`

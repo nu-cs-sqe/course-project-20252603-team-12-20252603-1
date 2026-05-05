@@ -14,4 +14,13 @@ public class LocationTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void Constructor_OnRepresentativeInput_GetYReturnsY() {
+        Location location = new Location(3, 4);
+        int expected = 4;
+        int actual = location.getY();
+
+        assertEquals(expected, actual);
+    }
 }
