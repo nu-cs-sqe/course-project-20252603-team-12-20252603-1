@@ -8,6 +8,6 @@ public class Bishop extends Piece {
 
     @Override
     public Piece makeCopy() {
-        return null;
+        return new Bishop(getColor());
     }
 }

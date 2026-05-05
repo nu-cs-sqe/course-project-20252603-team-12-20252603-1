@@ -31,4 +31,13 @@ class BishopTest {
 
         assertFalse(bishop.canJump());
     }
+
+    @Test
+    void MakeCopy_OnWhiteBishop_CopyTypeIsBishop() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        PieceType expected = PieceType.BISHOP;
+        PieceType actual = bishop.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 }

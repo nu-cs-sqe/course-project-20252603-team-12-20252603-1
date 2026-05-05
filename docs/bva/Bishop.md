@@ -56,7 +56,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC4: MakeCopy_OnWhiteBishop_CopyTypeIsBishop** ( :x: )
+- **TC4: MakeCopy_OnWhiteBishop_CopyTypeIsBishop** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white bishop
   - **Expected output**: returned piece type is `BISHOP`
