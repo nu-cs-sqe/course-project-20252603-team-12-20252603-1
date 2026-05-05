@@ -26,7 +26,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Constructor_OnWhiteRook_TypeIsRook** ( :x: )
+- **TC1: Constructor_OnWhiteRook_TypeIsRook** ( :white_check_mark: )
   - **Method(s) under test**: `Rook(PieceColor color)`
   - **State of the system**: no existing rook object; input color is `WHITE`
   - **Expected output**: created piece type is `ROOK`
