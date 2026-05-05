@@ -1,6 +1,7 @@
 package domain.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +23,12 @@ class PawnTest {
         PieceColor expected = PieceColor.WHITE;
         PieceColor actual = pawn.getColor();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnWhitePawn_CanJumpIsFalse() {
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        assertFalse(pawn.canJump());
     }
 }

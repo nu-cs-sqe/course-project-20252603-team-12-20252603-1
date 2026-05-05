@@ -36,7 +36,7 @@
   - **State of the system**: no existing pawn object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
 
-- **TC3: Constructor_OnWhitePawn_CanJumpIsFalse** ( :x: )
+- **TC3: Constructor_OnWhitePawn_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `Pawn(PieceColor color)`
   - **State of the system**: no existing pawn object; input color is `WHITE`
   - **Expected output**: `canJump()` returns `false`
