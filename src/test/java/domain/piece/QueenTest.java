@@ -25,4 +25,11 @@ class QueenTest {
         PieceColor actual = queen.getColor();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhiteQueen_CanJumpIsFalse() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        assertFalse(queen.canJump());
+    }
 }

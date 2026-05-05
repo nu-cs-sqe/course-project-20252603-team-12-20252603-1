@@ -36,7 +36,7 @@
   - **State of the system**: no existing queen object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
 
-- **TC3: Constructor_OnWhiteQueen_CanJumpIsFalse** ( :x: )
+- **TC3: Constructor_OnWhiteQueen_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `Queen(PieceColor color)`
   - **State of the system**: no existing queen object; input color is `WHITE`
   - **Expected output**: `canJump()` returns `false`
