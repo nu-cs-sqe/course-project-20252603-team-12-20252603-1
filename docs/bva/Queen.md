@@ -26,7 +26,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Constructor_OnWhiteQueen_TypeIsQueen** ( :x: )
+- **TC1: Constructor_OnWhiteQueen_TypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `Queen(PieceColor color)`
   - **State of the system**: no existing queen object; input color is `WHITE`
   - **Expected output**: created piece type is `QUEEN`
