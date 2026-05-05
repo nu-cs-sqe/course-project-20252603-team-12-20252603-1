@@ -40,4 +40,13 @@ class PawnTest {
         PieceType actual = pawn.makeCopy().getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void MakeCopy_OnBlackPawn_CopyTypeIsPawn() {
+        Pawn pawn = new Pawn(PieceColor.BLACK);
+
+        PieceType expected = PieceType.PAWN;
+        PieceType actual = pawn.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 }
