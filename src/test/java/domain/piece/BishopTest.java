@@ -1,6 +1,7 @@
 package domain.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +23,12 @@ class BishopTest {
         PieceColor expected = PieceColor.WHITE;
         PieceColor actual = bishop.getColor();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnWhiteBishop_CanJumpIsFalse() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        assertFalse(bishop.canJump());
     }
 }

@@ -36,7 +36,7 @@
   - **State of the system**: no existing bishop object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
 
-- **TC3: Constructor_OnWhiteBishop_CanJumpIsFalse** ( :x: )
+- **TC3: Constructor_OnWhiteBishop_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `Bishop(PieceColor color)`
   - **State of the system**: no existing bishop object; input color is `WHITE`
   - **Expected output**: `canJump()` returns `false`
