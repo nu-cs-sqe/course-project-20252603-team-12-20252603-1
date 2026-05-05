@@ -2,6 +2,7 @@ package domain.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -64,5 +65,12 @@ class PawnTest {
         Pawn pawn = new Pawn(PieceColor.BLACK);
 
         assertFalse(pawn.makeCopy().canJump());
+    }
+
+    @Test
+    void MakeCopy_OnBlackPawn_CopyIsDifferentObject() {
+        Pawn pawn = new Pawn(PieceColor.BLACK);
+
+        assertNotSame(pawn, pawn.makeCopy());
     }
 }
