@@ -58,4 +58,11 @@ class BishopTest {
         PieceColor actual = bishop.makeCopy().getColor();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void MakeCopy_OnBlackBishop_CopyCanJumpIsFalse() {
+        Bishop bishop = new Bishop(PieceColor.BLACK);
+
+        assertFalse(bishop.makeCopy().canJump());
+    }
 }
