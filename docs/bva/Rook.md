@@ -71,7 +71,7 @@
   - **State of the system**: an existing black rook
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC7: MakeCopy_OnBlackRook_CopyCanJumpIsFalse** ( :x: )
+- **TC7: MakeCopy_OnBlackRook_CopyCanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black rook
   - **Expected output**: returned piece cannot jump
