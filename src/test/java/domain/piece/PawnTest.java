@@ -58,4 +58,11 @@ class PawnTest {
         PieceColor actual = pawn.makeCopy().getColor();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void MakeCopy_OnBlackPawn_CopyCanJumpIsFalse() {
+        Pawn pawn = new Pawn(PieceColor.BLACK);
+
+        assertFalse(pawn.makeCopy().canJump());
+    }
 }

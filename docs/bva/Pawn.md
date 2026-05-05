@@ -71,7 +71,7 @@
   - **State of the system**: an existing black pawn
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC7: MakeCopy_OnBlackPawn_CopyCanJumpIsFalse** ( :x: )
+- **TC7: MakeCopy_OnBlackPawn_CopyCanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black pawn
   - **Expected output**: returned piece cannot jump
