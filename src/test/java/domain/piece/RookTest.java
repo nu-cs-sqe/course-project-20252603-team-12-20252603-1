@@ -32,4 +32,13 @@ class RookTest {
 
         assertFalse(rook.canJump());
     }
+
+    @Test
+    void MakeCopy_OnWhiteRook_CopyTypeIsRook() {
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        PieceType expected = PieceType.ROOK;
+        PieceType actual = rook.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 }

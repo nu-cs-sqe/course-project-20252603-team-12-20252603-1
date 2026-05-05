@@ -56,7 +56,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC4: MakeCopy_OnWhiteRook_CopyTypeIsRook** ( :x: )
+- **TC4: MakeCopy_OnWhiteRook_CopyTypeIsRook** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white rook
   - **Expected output**: returned piece type is `ROOK`

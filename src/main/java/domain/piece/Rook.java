@@ -8,6 +8,6 @@ public class Rook extends Piece {
 
     @Override
     public Piece makeCopy() {
-        return null;
+        return new Rook(getColor());
     }
 }
