@@ -16,4 +16,13 @@ class QueenTest {
         PieceType actual = queen.getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhiteQueen_ColorIsWhite() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = queen.getColor();
+        assertEquals(expected, actual);
+    }
 }

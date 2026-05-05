@@ -31,7 +31,7 @@
   - **State of the system**: no existing queen object; input color is `WHITE`
   - **Expected output**: created piece type is `QUEEN`
 
-- **TC2: Constructor_OnWhiteQueen_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhiteQueen_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Queen(PieceColor color)`
   - **State of the system**: no existing queen object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
