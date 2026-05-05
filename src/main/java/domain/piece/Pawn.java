@@ -8,6 +8,6 @@ public class Pawn extends Piece {
 
     @Override
     public Piece makeCopy() {
-        return null;
+        return new Pawn(getColor());
     }
 }

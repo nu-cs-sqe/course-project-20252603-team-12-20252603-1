@@ -56,7 +56,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC4: MakeCopy_OnWhitePawn_CopyTypeIsPawn** ( :x: )
+- **TC4: MakeCopy_OnWhitePawn_CopyTypeIsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white pawn
   - **Expected output**: returned piece type is `PAWN`
