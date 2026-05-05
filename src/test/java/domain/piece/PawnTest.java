@@ -14,4 +14,13 @@ class PawnTest {
         PieceType actual = pawn.getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhitePawn_ColorIsWhite() {
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = pawn.getColor();
+        assertEquals(expected, actual);
+    }
 }

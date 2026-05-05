@@ -31,7 +31,7 @@
   - **State of the system**: no existing pawn object; input color is `WHITE`
   - **Expected output**: created piece type is `PAWN`
 
-- **TC2: Constructor_OnWhitePawn_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhitePawn_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Pawn(PieceColor color)`
   - **State of the system**: no existing pawn object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
