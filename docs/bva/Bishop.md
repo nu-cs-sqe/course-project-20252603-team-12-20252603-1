@@ -66,7 +66,7 @@
   - **State of the system**: an existing black bishop
   - **Expected output**: returned piece type is `BISHOP`
 
-- **TC6: MakeCopy_OnBlackBishop_CopyColorIsBlack** ( :x: )
+- **TC6: MakeCopy_OnBlackBishop_CopyColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black bishop
   - **Expected output**: returned piece color is `BLACK`
