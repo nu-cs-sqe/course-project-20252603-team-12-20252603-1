@@ -76,7 +76,7 @@
   - **State of the system**: an existing black rook
   - **Expected output**: returned piece cannot jump
 
-- **TC8: MakeCopy_OnBlackRook_CopyIsDifferentObject** ( :x: )
+- **TC8: MakeCopy_OnBlackRook_CopyIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black rook
   - **Expected output**: returned piece is a different object from the original

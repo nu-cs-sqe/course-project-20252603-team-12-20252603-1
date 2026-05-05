@@ -66,4 +66,11 @@ class RookTest {
 
         assertFalse(rook.makeCopy().canJump());
     }
+
+    @Test
+    void MakeCopy_OnBlackRook_CopyIsDifferentObject() {
+        Rook rook = new Rook(PieceColor.BLACK);
+
+        assertNotSame(rook, rook.makeCopy());
+    }
 }
