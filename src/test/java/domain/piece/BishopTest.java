@@ -2,6 +2,7 @@ package domain.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -64,5 +65,12 @@ class BishopTest {
         Bishop bishop = new Bishop(PieceColor.BLACK);
 
         assertFalse(bishop.makeCopy().canJump());
+    }
+
+    @Test
+    void MakeCopy_OnBlackBishop_CopyIsDifferentObject() {
+        Bishop bishop = new Bishop(PieceColor.BLACK);
+
+        assertNotSame(bishop, bishop.makeCopy());
     }
 }
