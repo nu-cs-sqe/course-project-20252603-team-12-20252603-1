@@ -59,4 +59,11 @@ class QueenTest {
         PieceColor actual = queen.makeCopy().getColor();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void MakeCopy_OnBlackQueen_CopyCanJumpIsFalse() {
+        Queen queen = new Queen(PieceColor.BLACK);
+
+        assertFalse(queen.makeCopy().canJump());
+    }
 }

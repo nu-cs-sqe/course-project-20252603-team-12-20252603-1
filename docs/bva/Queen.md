@@ -71,7 +71,7 @@
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC7: MakeCopy_OnBlackQueen_CopyCanJumpIsFalse** ( :x: )
+- **TC7: MakeCopy_OnBlackQueen_CopyCanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece cannot jump
