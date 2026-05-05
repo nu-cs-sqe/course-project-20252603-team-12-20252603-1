@@ -61,7 +61,7 @@
   - **State of the system**: an existing white queen
   - **Expected output**: returned piece type is `QUEEN`
 
-- **TC5: MakeCopy_OnBlackQueen_CopyTypeIsQueen** ( :x: )
+- **TC5: MakeCopy_OnBlackQueen_CopyTypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece type is `QUEEN`
