@@ -50,4 +50,13 @@ class RookTest {
         PieceType actual = rook.makeCopy().getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void MakeCopy_OnBlackRook_CopyColorIsBlack() {
+        Rook rook = new Rook(PieceColor.BLACK);
+
+        PieceColor expected = PieceColor.BLACK;
+        PieceColor actual = rook.makeCopy().getColor();
+        assertEquals(expected, actual);
+    }
 }
