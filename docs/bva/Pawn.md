@@ -26,7 +26,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Constructor_OnWhitePawn_TypeIsPawn** ( :x: )
+- **TC1: Constructor_OnWhitePawn_TypeIsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `Pawn(PieceColor color)`
   - **State of the system**: no existing pawn object; input color is `WHITE`
   - **Expected output**: created piece type is `PAWN`
