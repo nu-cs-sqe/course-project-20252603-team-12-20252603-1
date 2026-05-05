@@ -16,4 +16,13 @@ class RookTest {
         PieceType actual = rook.getType();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnWhiteRook_ColorIsWhite() {
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = rook.getColor();
+        assertEquals(expected, actual);
+    }
 }

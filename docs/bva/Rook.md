@@ -31,7 +31,7 @@
   - **State of the system**: no existing rook object; input color is `WHITE`
   - **Expected output**: created piece type is `ROOK`
 
-- **TC2: Constructor_OnWhiteRook_ColorIsWhite** ( :x: )
+- **TC2: Constructor_OnWhiteRook_ColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Rook(PieceColor color)`
   - **State of the system**: no existing rook object; input color is `WHITE`
   - **Expected output**: `getColor()` returns `WHITE`
