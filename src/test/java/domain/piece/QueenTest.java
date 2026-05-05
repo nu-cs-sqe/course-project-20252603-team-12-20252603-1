@@ -66,4 +66,11 @@ class QueenTest {
 
         assertFalse(queen.makeCopy().canJump());
     }
+
+    @Test
+    void MakeCopy_OnBlackQueen_CopyIsDifferentObject() {
+        Queen queen = new Queen(PieceColor.BLACK);
+
+        assertNotSame(queen, queen.makeCopy());
+    }
 }

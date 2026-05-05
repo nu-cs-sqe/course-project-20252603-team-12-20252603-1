@@ -76,7 +76,7 @@
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece cannot jump
 
-- **TC8: MakeCopy_OnBlackQueen_CopyIsDifferentObject** ( :x: )
+- **TC8: MakeCopy_OnBlackQueen_CopyIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece is a different object from the original
