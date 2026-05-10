@@ -27,6 +27,75 @@
 
 ---
 
+## Method: `hasSelection(): boolean`
+
+### Step 1: Input and output equivalence classes
+
+| Output         | Equivalence classes                                    |
+| -------------- | ------------------------------------------------------ |
+| Boolean result | `true` (selection exists); `false` (no selection)      |
+| Internal state | `lastSelectedLoc == null` vs `lastSelectedLoc != null` |
+
+### Step 2: BVA catalog data types
+
+| Concern         | Catalog type                   |
+| --------------- | ------------------------------ |
+| Selection state | Pointers: `null` vs non-`null` |
+
+### Step 3: Concrete boundary values
+
+- `lastSelectedLoc` is `null` after construction.
+- `lastSelectedLoc` is non-`null` after successful `handleSquareClick()` on a white piece.
+
+### Step 4: Test cases
+
+- **BC-TC1b: HasSelection_FreshInstance_ReturnsFalse** ( :white_check_mark: )
+  - **Method(s) under test**: `hasSelection()`
+  - **State of the system**: newly constructed controller; no clicks yet
+  - **Expected output**: `false`
+
+- **BC-TC1c: HasSelection_AfterSelectingWhitePiece_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: standard start; clicked on a white piece (e.g., `Location(0, 1)` for knight)
+  - **Expected output**: `true`
+
+---
+
+## Method: `getSelectedLocation(): Location`
+
+### Step 1: Input and output equivalence classes
+
+| Output             | Equivalence classes                                             |
+| ------------------ | --------------------------------------------------------------- |
+| Returned reference | `null` (no selection); non-`null` `Location` (selection exists) |
+| Location identity  | Exact location clicked; matches input coordinates               |
+
+### Step 2: BVA catalog data types
+
+| Concern              | Catalog type                                             |
+| -------------------- | -------------------------------------------------------- |
+| Selection state      | Pointers: `null` vs non-`null` reference                 |
+| Location coordinates | Values: `(0, 1)`, `(7, 6)` (representative white pieces) |
+
+### Step 3: Concrete boundary values
+
+- `null` after construction (no selection).
+- Non-`null` `Location` matching clicked coordinates after successful selection.
+
+### Step 4: Test cases
+
+- **BC-TC1d: GetSelectedLocation_FreshInstance_ReturnsNull** ( :white_check_mark: )
+  - **Method(s) under test**: `getSelectedLocation()`
+  - **State of the system**: newly constructed controller; no clicks yet
+  - **Expected output**: `null`
+
+- **BC-TC1e: GetSelectedLocation_AfterSelectingWhitePiece_ReturnsClickedLocation** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: standard start; clicked on a white piece at `Location(3, 1)` (pawn)
+  - **Expected output**: non-`null` `Location` equal to `Location(3, 1)`
+
+---
+
 ## Method: `getBoardSnapshot(): Piece[][]`
 
 ### Step 1: Input and output equivalence classes
