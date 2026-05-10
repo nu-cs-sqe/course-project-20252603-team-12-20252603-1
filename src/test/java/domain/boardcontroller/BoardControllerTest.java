@@ -119,6 +119,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual =
+                chess960BackRanksMirrorPieceTypes(snapshot)
+                        && chess960StandardPawnRows(snapshot);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -278,5 +291,40 @@ class BoardControllerTest {
         int rookMin = Math.min(rookA, rookB);
         int rookMax = Math.max(rookA, rookB);
         return kingFile > rookMin && kingFile < rookMax;
+    }
+
+    private static boolean chess960BackRanksMirrorPieceTypes(Piece[][] snapshot) {
+        for (int file = 0; file < 8; file++) {
+            Piece whiteBack = snapshot[0][file];
+            Piece blackBack = snapshot[7][file];
+            if (whiteBack == null || blackBack == null) {
+                return false;
+            }
+            if (whiteBack.getType() != blackBack.getType()) {
+                return false;
+            }
+            if (whiteBack.getColor() != PieceColor.WHITE || blackBack.getColor() != PieceColor.BLACK) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean chess960StandardPawnRows(Piece[][] snapshot) {
+        for (int file = 0; file < 8; file++) {
+            Piece whitePawn = snapshot[1][file];
+            Piece blackPawn = snapshot[6][file];
+            if (whitePawn == null
+                    || whitePawn.getType() != PieceType.PAWN
+                    || whitePawn.getColor() != PieceColor.WHITE) {
+                return false;
+            }
+            if (blackPawn == null
+                    || blackPawn.getType() != PieceType.PAWN
+                    || blackPawn.getColor() != PieceColor.BLACK) {
+                return false;
+            }
+        }
+        return true;
     }
 }

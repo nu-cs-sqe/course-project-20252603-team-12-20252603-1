@@ -106,7 +106,7 @@
   - **State of the system**: Chess960 start
   - **Expected output**: on each side’s back rank, king file is strictly between the two rook files
 
-- **BC-TC10: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes** ( :x: )
+- **BC-TC10: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: Chess960 start
   - **Expected output**: same piece **types** per file on both back ranks; opposite colors; pawns on the two usual pawn ranks
