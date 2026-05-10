@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class BoardTest {
 
     @Test
-    void GetSnapshot_OnFreshBoard_OuterArrayIsDifferentObject() {
+    void GetSnapshot_ReturnedOuterArrayIsDifferentObject() {
         Board board = new Board();
 
         Piece[][] snapshot1 = board.getSnapshot();
@@ -18,7 +18,7 @@ class BoardTest {
     }
 
     @Test
-    void GetSnapshot_OnFreshBoard_RowArrayIsDifferentObject() {
+    void GetSnapshot_ReturnedRowArrayIsDifferentObject() {
         Board board = new Board();
 
         Piece[] row1 = board.getSnapshot()[0];
@@ -27,7 +27,7 @@ class BoardTest {
     }
 
     @Test
-    void GetSnapshot_OnFreshBoard_PieceIsDifferentObjectWithSameContents() {
+    void GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents() {
         Board board = new Board();
 
         Piece piece1 = board.getSnapshot()[0][0];
