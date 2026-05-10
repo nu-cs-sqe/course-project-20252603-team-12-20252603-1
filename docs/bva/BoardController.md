@@ -162,7 +162,7 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a black piece
   - **Expected output**: `getBoardSnapshot()` unchanged cell-wise; turn still `WHITE_TURN`
 
-- **BC-TC15: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation** ( :x: )
+- **BC-TC15: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game; `loc` on an empty square (e.g. center)
   - **Expected output**: snapshot unchanged; turn still `WHITE_TURN`
