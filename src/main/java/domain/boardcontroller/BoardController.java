@@ -101,61 +101,50 @@ public class BoardController {
 
     private void placeChess960SeededStartingPosition(long seed) {
         Random rng = new Random(seed);
-        List<PieceType> multiset =
-                new ArrayList<>(
-                        Arrays.asList(
-                                PieceType.ROOK,
-                                PieceType.ROOK,
-                                PieceType.KNIGHT,
-                                PieceType.KNIGHT,
-                                PieceType.BISHOP,
-                                PieceType.BISHOP,
-                                PieceType.QUEEN,
-                                PieceType.KING));
-        for (int attempt = 0; attempt < 50_000; attempt++) {
-            List<PieceType> bag = new ArrayList<>(multiset);
-            Collections.shuffle(bag, rng);
-            PieceType[] byFile = bag.toArray(new PieceType[0]);
-            if (isLegalChess960WhiteBackRank(byFile)) {
-                fillBackRankFromTypes(0, PieceColor.WHITE, byFile);
-                fillBackRankFromTypes(7, PieceColor.BLACK, byFile);
-                for (int file = 0; file < 8; file++) {
-                    pieces[1][file] = new Pawn(PieceColor.WHITE);
-                    pieces[6][file] = new Pawn(PieceColor.BLACK);
-                }
-                return;
-            }
-        }
-        throw new IllegalStateException("Chess960: no valid SP for seed " + seed);
-    }
-
-    private static boolean isLegalChess960WhiteBackRank(PieceType[] byFile) {
-        int[] rooks = filesOfType(byFile, PieceType.ROOK, 2);
-        int[] bishops = filesOfType(byFile, PieceType.BISHOP, 2);
-        int[] king = filesOfType(byFile, PieceType.KING, 1);
-        if (rooks == null || bishops == null || king == null) {
-            return false;
-        }
-        if ((bishops[0] % 2) == (bishops[1] % 2)) {
-            return false;
-        }
-        int rookLo = Math.min(rooks[0], rooks[1]);
-        int rookHi = Math.max(rooks[0], rooks[1]);
-        return king[0] > rookLo && king[0] < rookHi;
-    }
-
-    private static int[] filesOfType(PieceType[] byFile, PieceType type, int expectedCount) {
-        int[] files = new int[expectedCount];
-        int found = 0;
+        PieceType[] byFile = generateChess960BackRank(rng);
+        fillBackRankFromTypes(0, PieceColor.WHITE, byFile);
+        fillBackRankFromTypes(7, PieceColor.BLACK, byFile);
         for (int file = 0; file < 8; file++) {
-            if (byFile[file] == type) {
-                if (found >= expectedCount) {
-                    return null;
-                }
-                files[found++] = file;
+            pieces[1][file] = new Pawn(PieceColor.WHITE);
+            pieces[6][file] = new Pawn(PieceColor.BLACK);
+        }
+    }
+
+    private PieceType[] generateChess960BackRank(Random rng) {
+        PieceType[] byFile = new PieceType[8];
+        
+        int[] lightFiles = {0, 2, 4, 6};
+        int lightBishopFile = lightFiles[rng.nextInt(4)];
+        byFile[lightBishopFile] = PieceType.BISHOP;
+        
+        int[] darkFiles = {1, 3, 5, 7};
+        int darkBishopFile = darkFiles[rng.nextInt(4)];
+        byFile[darkBishopFile] = PieceType.BISHOP;
+        
+        List<Integer> remaining = new ArrayList<>();
+        for (int file = 0; file < 8; file++) {
+            if (byFile[file] == null) {
+                remaining.add(file);
             }
         }
-        return found == expectedCount ? files : null;
+        
+        int queenIdx = rng.nextInt(3);
+        byFile[remaining.get(queenIdx)] = PieceType.QUEEN;
+        remaining.remove(queenIdx);
+        
+        int knight1Idx = rng.nextInt(4);
+        byFile[remaining.get(knight1Idx)] = PieceType.KNIGHT;
+        remaining.remove(knight1Idx);
+        
+        int knight2Idx = rng.nextInt(3);
+        byFile[remaining.get(knight2Idx)] = PieceType.KNIGHT;
+        remaining.remove(knight2Idx);
+        
+        byFile[remaining.get(0)] = PieceType.ROOK;
+        byFile[remaining.get(1)] = PieceType.KING;
+        byFile[remaining.get(2)] = PieceType.ROOK;
+        
+        return byFile;
     }
 
     private void fillBackRankFromTypes(int rank, PieceColor color, PieceType[] byFile) {
