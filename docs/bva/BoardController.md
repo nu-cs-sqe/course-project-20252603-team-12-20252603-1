@@ -67,7 +67,7 @@
   - **State of the system**: new game controller (grid dimensions only for this increment; **`Board` domain class deferred**—snapshot backed by controller-owned `Piece[][]` until extraction)
   - **Expected output**: outer length 8; each inner array length 8
 
-- **BC-TC3: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :x: )
+- **BC-TC3: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: standard start
   - **Expected output**: corners contain rooks with correct `PieceColor` for your fixed orientation; **extend this test (or add neighbors in the same class)** with more squares until the full standard layout is asserted—BC-TC3 is the seed, not the whole “correct positions” proof by itself
