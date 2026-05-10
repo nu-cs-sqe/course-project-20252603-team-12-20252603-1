@@ -5,13 +5,13 @@
 | Concern           | Equivalence classes                                                                    |
 | ----------------- | -------------------------------------------------------------------------------------- |
 | Object life cycle | Fresh instance; no clicks yet                                                          |
-| Collaborators     | `Board` unset vs set per constructor or setter you choose; **no `BoardView`** in tests |
+| Collaborators     | Internal `Piece[][]` exists; **`Board` domain class not used yet**; **no `BoardView`** in tests |
 
 ### Step 2: BVA catalog data types
 
 | Variable / output                           | Catalog type | Rationale                          |
 | ------------------------------------------- | ------------ | ---------------------------------- |
-| `board`, `lastSelectedLoc` (if inspectable) | Pointers     | `null` vs non-`null` at boundaries |
+| `lastSelectedLoc` (if inspectable)           | Pointers     | `null` vs non-`null` at boundaries |
 
 ### Step 3: Concrete boundary values
 
@@ -22,7 +22,7 @@
 
 - **BC-TC1: Constructor_FreshInstance_LastSelectedUnset** ( :white_check_mark: )
   - **Method(s) under test**: `BoardController()` (and any agreed way to observe selection state in tests)
-  - **State of the system**: newly constructed controller wired only as your API requires (e.g. with a `Board` if the constructor demands it); **no UI types**
+  - **State of the system**: newly constructed controller; **no UI types**
   - **Expected output**: no square is selected for movement (`lastSelectedLoc` absent or `null`)
 
 ---
@@ -62,9 +62,9 @@
 
 **Shape and delegation**
 
-- **BC-TC2: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :x: )
+- **BC-TC2: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: `Board` in standard start; controller constructed with that `Board` per your seam
+  - **State of the system**: new game controller (grid dimensions only for this increment; **`Board` domain class deferred**—snapshot backed by controller-owned `Piece[][]` until extraction)
   - **Expected output**: outer length 8; each inner array length 8
 
 - **BC-TC3: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :x: )
