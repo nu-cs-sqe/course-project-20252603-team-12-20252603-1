@@ -213,7 +213,13 @@ public class BoardController {
     }
 
     public Piece[][] getBoardSnapshot() {
-        return pieces;
+        Piece[][] copy = new Piece[8][8];
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                copy[rank][file] = pieces[rank][file];
+            }
+        }
+        return copy;
     }
 
     public GameState getCurrentGameState() {

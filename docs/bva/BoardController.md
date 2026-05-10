@@ -77,6 +77,11 @@
   - **State of the system**: independent `Piece[][]` built in test with real `Piece` subclasses (stand-in for a `Board` snapshot until `Board` exists)
   - **Expected output**: controller snapshot matches that grid by `PieceType` and `PieceColor` per cell (different array identity and different piece instances allowed)
 
+- **BC-TC4a: GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: standard start; called twice in succession
+  - **Expected output**: two snapshot calls return different array objects (different references); encapsulation verified—internal `Piece[][]` protected from external mutation
+
 **Standard start — counts and turn**
 
 - **BC-TC5: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )

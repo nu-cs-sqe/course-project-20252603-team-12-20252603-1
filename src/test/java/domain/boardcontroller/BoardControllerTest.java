@@ -95,6 +95,18 @@ class BoardControllerTest {
     }
 
     @Test
+    void GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy() {
+        BoardController controller = new BoardController();
+
+        Piece[][] snapshot1 = controller.getBoardSnapshot();
+        Piece[][] snapshot2 = controller.getBoardSnapshot();
+
+        boolean expected = false;
+        boolean actual = snapshot1 == snapshot2;
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
 
