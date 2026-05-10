@@ -16,6 +16,7 @@ public class Board {
             }
         }
         pieces[0][0] = new King(PieceColor.BLACK);
+        pieces[7][4] = new King(PieceColor.WHITE);
     }
 
     public Piece[][] getSnapshot() {

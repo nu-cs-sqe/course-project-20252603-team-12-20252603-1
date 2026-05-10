@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import domain.piece.Piece;
+import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
@@ -24,6 +26,15 @@ class BoardTest {
         Piece[] row1 = board.getSnapshot()[0];
         Piece[] row2 = board.getSnapshot()[0];
         assertNotSame(row1, row2);
+    }
+
+    @Test
+    void GetSnapshot_SnapshotContentMatchesBoardState() {
+        Board board = new Board();
+
+        Piece piece = board.getSnapshot()[7][4];
+        assertEquals(PieceType.KING, piece.getType());
+        assertEquals(PieceColor.WHITE, piece.getColor());
     }
 
     @Test

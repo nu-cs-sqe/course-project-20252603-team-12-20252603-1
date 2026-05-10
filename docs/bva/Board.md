@@ -339,14 +339,14 @@ Each boundary value from Step 3 appears in at least one test case.
   - **State of the system**: a freshly constructed board
   - **Expected output**: the Piece object at `getSnapshot()[0][0]` is not the same reference as the Piece at a second `getSnapshot()[0][0]`, but has the same type and color
 
-- **TC40: GetSnapshot_SnapshotContentMatchesBoardState** ( :x: )
+- **TC40: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a freshly constructed board
   - **Expected output**: `getSnapshot()[7][4]` has type `KING` and color `WHITE`
 
 - **TC41: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :x: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board; set `getSnapshot()[7][0]` to `null`
+  - **State of the system**: a freshly constructed board; set `getSnapshot()[7][0]` to `NonePiece`
   - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
 
 ---
