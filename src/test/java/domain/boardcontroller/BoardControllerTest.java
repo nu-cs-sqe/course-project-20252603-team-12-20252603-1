@@ -42,9 +42,10 @@ class BoardControllerTest {
         BoardController controller = new BoardController();
 
         Piece[][] snapshot = controller.getBoardSnapshot();
+        Piece[][] expectedGrid = newStandardStartingGrid();
 
         boolean expected = true;
-        boolean actual = cornersHaveStandardRooks(snapshot);
+        boolean actual = cellWiseSameTypeAndColor(expectedGrid, snapshot);
         assertEquals(expected, actual);
     }
 

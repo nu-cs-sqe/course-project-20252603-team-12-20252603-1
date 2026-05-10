@@ -137,9 +137,9 @@
   - **Expected output**: outer length 8; each inner array length 8
 
 - **BC-TC3: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: standard start
-  - **Expected output**: corners contain rooks with correct `PieceColor` for your fixed orientation; **extend this test (or add neighbors in the same class)** with more squares until the full standard layout is asserted—BC-TC3 is the seed, not the whole “correct positions” proof by itself
+- **Method(s) under test**: `getBoardSnapshot()`
+- **State of the system**: standard start
+- **Expected output**: full standard starting layout is present: back-rank piece types and colors match the expected standard layout and the pawn rows are present on ranks 1 and 6. This test asserts cell-wise piece type and color equality against the canonical standard starting grid.
 
 - **BC-TC4: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
