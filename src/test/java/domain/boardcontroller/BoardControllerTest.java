@@ -217,6 +217,23 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+        Location clicked = new Location(0, 1);
+
+        controller.handleSquareClick(clicked);
+
+        boolean expected = true;
+        boolean actual =
+                controller.hasSelection()
+                        && locationsEqual(controller.getSelectedLocation(), clicked)
+                        && controller.getCurrentGameState() == GameState.WHITE_TURN
+                        && cellWiseSameTypeAndColor(
+                                newChess960FixedStartingGrid(), controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+    }
+
     private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
         return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
                 && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK)
@@ -278,6 +295,36 @@ class BoardControllerTest {
         grid[7][4] = new King(PieceColor.BLACK);
         grid[7][5] = new Bishop(PieceColor.BLACK);
         grid[7][6] = new Knight(PieceColor.BLACK);
+        grid[7][7] = new Rook(PieceColor.BLACK);
+        return grid;
+    }
+
+    /** Mirrors {@link BoardController} fixed Chess960 layout (BC-TC8 seed path); separate instances for comparisons. */
+    private static Piece[][] newChess960FixedStartingGrid() {
+        Piece[][] grid = new Piece[8][8];
+        grid[0][0] = new Rook(PieceColor.WHITE);
+        grid[0][1] = new Bishop(PieceColor.WHITE);
+        grid[0][2] = new Knight(PieceColor.WHITE);
+        grid[0][3] = new Queen(PieceColor.WHITE);
+        grid[0][4] = new King(PieceColor.WHITE);
+        grid[0][5] = new Knight(PieceColor.WHITE);
+        grid[0][6] = new Bishop(PieceColor.WHITE);
+        grid[0][7] = new Rook(PieceColor.WHITE);
+        for (int file = 0; file < 8; file++) {
+            grid[1][file] = new Pawn(PieceColor.WHITE);
+        }
+
+        for (int file = 0; file < 8; file++) {
+            grid[6][file] = new Pawn(PieceColor.BLACK);
+        }
+
+        grid[7][0] = new Rook(PieceColor.BLACK);
+        grid[7][1] = new Bishop(PieceColor.BLACK);
+        grid[7][2] = new Knight(PieceColor.BLACK);
+        grid[7][3] = new Queen(PieceColor.BLACK);
+        grid[7][4] = new King(PieceColor.BLACK);
+        grid[7][5] = new Knight(PieceColor.BLACK);
+        grid[7][6] = new Bishop(PieceColor.BLACK);
         grid[7][7] = new Rook(PieceColor.BLACK);
         return grid;
     }

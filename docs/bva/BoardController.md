@@ -172,7 +172,7 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
   - **State of the system**: `new Location(-1, 0)` or `new Location(8, 8)`
   - **Expected output**: no board mutation; no-op or documented exception
 
-- **BC-TC17: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :x: )
+- **BC-TC17: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: Chess960 start, `WHITE_TURN`
   - **Expected output**: selecting a white square follows the same first-click rules as standard start (no turn flip, no piece removed)
