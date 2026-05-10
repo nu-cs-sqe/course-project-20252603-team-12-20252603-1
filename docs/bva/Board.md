@@ -329,7 +329,7 @@ Each boundary value from Step 3 appears in at least one test case.
   - **State of the system**: a freshly constructed board
   - **Expected output**: the returned `Piece[][]` reference is not the same object as a second call to `getSnapshot()`
 
-- **TC38: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :x: )
+- **TC38: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a freshly constructed board
   - **Expected output**: `getSnapshot()[0]` is not the same array reference as a second `getSnapshot()[0]`
