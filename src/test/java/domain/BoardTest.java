@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 class BoardTest {
 
     @Test
-    void GetSnapshot_ReturnedOuterArrayIsDifferentObject() {
+    void GetSnapshot_OnFreshBoard_OuterArrayIsDifferentObject() {
         Board board = new Board();
 
         Piece[][] snapshot1 = board.getSnapshot();
