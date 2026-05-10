@@ -53,6 +53,16 @@ class BoardTest {
         assertEquals(expectedType, board.getSnapshot()[row][col].getType());
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "0, 0, BLACK",
+            "7, 0, WHITE"
+    })
+    void Constructor_OnNewBoard_PieceColorAtPositionIsCorrect(int row, int col, PieceColor expectedColor) {
+        Board board = new Board();
+        assertEquals(expectedColor, board.getSnapshot()[row][col].getColor());
+    }
+
     @Test
     void GetSnapshot_ReturnedOuterArrayIsDifferentObject() {
         Board board = new Board();

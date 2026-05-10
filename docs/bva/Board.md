@@ -278,7 +278,7 @@ Each boundary value from Step 3 appears in at least one test case.
   - **Expected output**: piece at `[7][7]` has type `ROOK`
   - **Covered by**: TC1 (parameterized test)
 
-- **TC34: Constructor_OnNewBoard_ColorAtRow0Col0IsBlack** ( :white_check_mark: )
+- **TC34: Constructor_OnNewBoard_PieceColorAtPositionIsCorrect** ( :white_check_mark: )
   - **Method(s) under test**: `Board()`
   - **State of the system**: no existing board; call constructor
   - **Expected output**: piece at `[0][0]` has color `BLACK`
