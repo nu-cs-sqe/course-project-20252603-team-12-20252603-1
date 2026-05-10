@@ -132,6 +132,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual =
+                chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE)
+                        && chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -326,5 +339,40 @@ class BoardControllerTest {
             }
         }
         return true;
+    }
+
+    private static boolean chess960BackRankMajorPieceCounts(
+            Piece[][] snapshot, int rank, PieceColor color) {
+        int queens = 0;
+        int knights = 0;
+        int bishops = 0;
+        int rooks = 0;
+        int kings = 0;
+        for (int file = 0; file < 8; file++) {
+            Piece piece = snapshot[rank][file];
+            if (piece == null || piece.getColor() != color) {
+                return false;
+            }
+            PieceType type = piece.getType();
+            if (type == PieceType.PAWN) {
+                return false;
+            }
+            if (type == PieceType.QUEEN) {
+                queens++;
+            } else if (type == PieceType.KNIGHT) {
+                knights++;
+            } else if (type == PieceType.BISHOP) {
+                bishops++;
+            } else if (type == PieceType.ROOK) {
+                rooks++;
+            } else if (type == PieceType.KING) {
+                kings++;
+            }
+        }
+        return queens == 1
+                && knights == 2
+                && bishops == 2
+                && rooks == 2
+                && kings == 1;
     }
 }
