@@ -126,4 +126,11 @@ class BoardTest {
         assertEquals(piece1.getColor(), piece2.getColor());
     }
 
+    @Test
+    void SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn() {
+        Board board = new Board();
+        board.switchTurn();
+        board.switchTurn();
+        assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
+    }
 }

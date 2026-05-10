@@ -418,7 +418,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Covered by**: TC43
   - **Expected output**: after `switchTurn()`, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC45: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :x: )
+- **TC45: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: board where `switchTurn()` has been called once (state is `BLACK_TURN`)
   - **Expected output**: after a second `switchTurn()`, `getCurrentGameState()` returns `WHITE_TURN`
