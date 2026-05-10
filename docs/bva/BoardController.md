@@ -116,10 +116,20 @@
   - **State of the system**: Chess960 start
   - **Expected output**: on each back rank: one `QUEEN`, two `KNIGHT`, two `BISHOP`, two `ROOK`, one `KING`
 
-- **BC-TC12: GetBoardSnapshot_Chess960_MultipleRandomSeeds_AllValid** ( :x: )
-  - **Method(s) under test**: snapshot after repeated Chess960 inits (bounded trials)
-  - **State of the system**: several RNG seeds
-  - **Expected output**: each trial satisfies BC-TC8–BC-TC11
+- **BC-TC12a: GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11** ( :x: )
+  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
+  - **State of the system**: `chess960Seed == 1L`
+  - **Expected output**: composite snapshot check (same predicates as BC-TC8–BC-TC11) is satisfied — **one assertion**
+
+- **BC-TC12b: GetBoardSnapshot_Chess960_SeedFortyTwo_PassesTc8ThroughTc11** ( :x: )
+  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
+  - **State of the system**: `chess960Seed == 42L`
+  - **Expected output**: composite snapshot check (BC-TC8–BC-TC11) is satisfied — **one assertion**
+
+- **BC-TC12c: GetBoardSnapshot_Chess960_SeedLongMax_PassesTc8ThroughTc11** ( :x: )
+  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
+  - **State of the system**: `chess960Seed == Long.MAX_VALUE`
+  - **Expected output**: composite snapshot check (BC-TC8–BC-TC11) is satisfied — **one assertion**
 
 **Guard (optional)**
 
