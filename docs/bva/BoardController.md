@@ -101,7 +101,7 @@
   - **State of the system**: legal Chess960 start
   - **Expected output**: on each back rank, the two bishops’ squares differ in `(file + rank) % 2` parity
 
-- **BC-TC9: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank** ( :x: )
+- **BC-TC9: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: Chess960 start
   - **Expected output**: on each side’s back rank, king file is strictly between the two rook files

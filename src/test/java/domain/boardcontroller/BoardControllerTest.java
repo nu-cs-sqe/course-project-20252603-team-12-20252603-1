@@ -106,6 +106,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual =
+                kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE)
+                        && kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -232,5 +245,38 @@ class BoardControllerTest {
         int parityFirst = (firstFile + rank) % 2;
         int paritySecond = (secondFile + rank) % 2;
         return parityFirst != paritySecond;
+    }
+
+    private static boolean kingStrictlyBetweenOwnRooksOnRank(
+            Piece[][] snapshot, int rank, PieceColor color) {
+        int rookA = -1;
+        int rookB = -1;
+        int kingFile = -1;
+        for (int file = 0; file < 8; file++) {
+            Piece piece = snapshot[rank][file];
+            if (piece == null || piece.getColor() != color) {
+                continue;
+            }
+            if (piece.getType() == PieceType.ROOK) {
+                if (rookA < 0) {
+                    rookA = file;
+                } else if (rookB < 0) {
+                    rookB = file;
+                } else {
+                    return false;
+                }
+            } else if (piece.getType() == PieceType.KING) {
+                if (kingFile >= 0) {
+                    return false;
+                }
+                kingFile = file;
+            }
+        }
+        if (rookA < 0 || rookB < 0 || kingFile < 0) {
+            return false;
+        }
+        int rookMin = Math.min(rookA, rookB);
+        int rookMax = Math.max(rookA, rookB);
+        return kingFile > rookMin && kingFile < rookMax;
     }
 }
