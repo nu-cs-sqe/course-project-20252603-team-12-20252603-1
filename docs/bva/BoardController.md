@@ -72,10 +72,10 @@
   - **State of the system**: standard start
   - **Expected output**: corners contain rooks with correct `PieceColor` for your fixed orientation; **extend this test (or add neighbors in the same class)** with more squares until the full standard layout is asserted—BC-TC3 is the seed, not the whole “correct positions” proof by itself
 
-- **BC-TC4: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :x: )
+- **BC-TC4: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: `Board` (or test-only fake) that returns a known `Piece[][]` built from real `Piece` subclasses
-  - **Expected output**: controller snapshot matches that grid by `PieceType` and `PieceColor` per cell (allow different array identity)
+  - **State of the system**: independent `Piece[][]` built in test with real `Piece` subclasses (stand-in for a `Board` snapshot until `Board` exists)
+  - **Expected output**: controller snapshot matches that grid by `PieceType` and `PieceColor` per cell (different array identity and different piece instances allowed)
 
 **Standard start — counts and turn**
 

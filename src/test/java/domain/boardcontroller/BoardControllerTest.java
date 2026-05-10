@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Rook;
 import org.junit.jupiter.api.Test;
 
 class BoardControllerTest {
@@ -40,6 +41,17 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_MatchesBoardSnapshot_Cellwise() {
+        Piece[][] expectedGrid = newStandardCornerRookSeedGrid();
+        BoardController controller = new BoardController();
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = cellWiseSameTypeAndColor(expectedGrid, snapshot);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -63,5 +75,36 @@ class BoardControllerTest {
         return piece != null
                 && piece.getType() == PieceType.ROOK
                 && piece.getColor() == color;
+    }
+
+    private static Piece[][] newStandardCornerRookSeedGrid() {
+        Piece[][] grid = new Piece[8][8];
+        grid[0][0] = new Rook(PieceColor.WHITE);
+        grid[0][7] = new Rook(PieceColor.WHITE);
+        grid[7][0] = new Rook(PieceColor.BLACK);
+        grid[7][7] = new Rook(PieceColor.BLACK);
+        return grid;
+    }
+
+    private static boolean cellWiseSameTypeAndColor(Piece[][] expected, Piece[][] actual) {
+        if (!isEightByEight(expected) || !isEightByEight(actual)) {
+            return false;
+        }
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                Piece e = expected[rank][file];
+                Piece a = actual[rank][file];
+                if (e == null && a == null) {
+                    continue;
+                }
+                if (e == null || a == null) {
+                    return false;
+                }
+                if (e.getType() != a.getType() || e.getColor() != a.getColor()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
