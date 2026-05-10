@@ -152,7 +152,7 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
 
 ### Step 4: Test cases
 
-- **BC-TC13: HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects** ( :x: )
+- **BC-TC13: HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a white piece
   - **Expected output**: selection updated; `Board` piece layout unchanged

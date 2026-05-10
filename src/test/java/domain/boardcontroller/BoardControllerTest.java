@@ -3,6 +3,7 @@ package domain.boardcontroller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -155,6 +156,22 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects() {
+        BoardController controller = new BoardController();
+        Location clicked = new Location(0, 1);
+
+        controller.handleSquareClick(clicked);
+
+        boolean expected = true;
+        boolean actual =
+                controller.hasSelection()
+                        && locationsEqual(controller.getSelectedLocation(), clicked)
+                        && cellWiseSameTypeAndColor(
+                                newStandardStartingGrid(), controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+    }
+
     private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
         return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
                 && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK)
@@ -218,6 +235,10 @@ class BoardControllerTest {
         grid[7][6] = new Knight(PieceColor.BLACK);
         grid[7][7] = new Rook(PieceColor.BLACK);
         return grid;
+    }
+
+    private static boolean locationsEqual(Location a, Location b) {
+        return a.getX() == b.getX() && a.getY() == b.getY();
     }
 
     private static boolean cellWiseSameTypeAndColor(Piece[][] expected, Piece[][] actual) {

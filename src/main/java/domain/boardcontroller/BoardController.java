@@ -186,6 +186,32 @@ public class BoardController {
         return lastSelectedLoc != null;
     }
 
+    public Location getSelectedLocation() {
+        return lastSelectedLoc;
+    }
+
+    public void handleSquareClick(Location loc) {
+        if (!isInBounds(loc)) {
+            return;
+        }
+        int file = loc.getX();
+        int rank = loc.getY();
+        Piece at = pieces[rank][file];
+        if (at == null || currentGameState != GameState.WHITE_TURN) {
+            return;
+        }
+        if (at.getColor() != PieceColor.WHITE) {
+            return;
+        }
+        lastSelectedLoc = loc;
+    }
+
+    private static boolean isInBounds(Location loc) {
+        int x = loc.getX();
+        int y = loc.getY();
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
+
     public Piece[][] getBoardSnapshot() {
         return pieces;
     }
