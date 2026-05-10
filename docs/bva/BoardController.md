@@ -167,7 +167,7 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
   - **State of the system**: standard new game; `loc` on an empty square (e.g. center)
   - **Expected output**: snapshot unchanged; turn still `WHITE_TURN`
 
-- **BC-TC16: HandleSquareClick_InvalidLocation_Rejected** ( :x: )
+- **BC-TC16: HandleSquareClick_InvalidLocation_Rejected** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: `new Location(-1, 0)` or `new Location(8, 8)`
   - **Expected output**: no board mutation; no-op or documented exception

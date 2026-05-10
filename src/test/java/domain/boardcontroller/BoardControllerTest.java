@@ -202,6 +202,21 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void HandleSquareClick_InvalidLocation_Rejected() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(-1, 0));
+
+        boolean expected = true;
+        boolean actual =
+                !controller.hasSelection()
+                        && controller.getCurrentGameState() == GameState.WHITE_TURN
+                        && cellWiseSameTypeAndColor(
+                                newStandardStartingGrid(), controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+    }
+
     private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
         return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
                 && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK)
