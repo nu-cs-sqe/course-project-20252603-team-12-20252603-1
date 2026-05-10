@@ -157,7 +157,7 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a white piece
   - **Expected output**: selection updated; `Board` piece layout unchanged
 
-- **BC-TC14: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation** ( :x: )
+- **BC-TC14: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a black piece
   - **Expected output**: `getBoardSnapshot()` unchanged cell-wise; turn still `WHITE_TURN`
