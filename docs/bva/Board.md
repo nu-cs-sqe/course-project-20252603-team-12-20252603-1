@@ -412,9 +412,10 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC44: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :x: )
+- **TC44: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: freshly constructed board; `currentGameState` is `WHITE_TURN`
+  - **Covered by**: TC43
   - **Expected output**: after `switchTurn()`, `getCurrentGameState()` returns `BLACK_TURN`
 
 - **TC45: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :x: )
