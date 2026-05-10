@@ -290,7 +290,7 @@ Each boundary value from Step 3 appears in at least one test case.
   - **Expected output**: piece at `[7][0]` has color `WHITE`
   - **Covered by**: TC34 (parameterized test)
 
-- **TC36: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :x: )
+- **TC36: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `Board()`, `getCurrentGameState()`
   - **State of the system**: no existing board; call constructor
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`

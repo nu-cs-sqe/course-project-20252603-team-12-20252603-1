@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.gamestate.GameState;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -61,6 +62,12 @@ class BoardTest {
     void Constructor_OnNewBoard_PieceColorAtPositionIsCorrect(int row, int col, PieceColor expectedColor) {
         Board board = new Board();
         assertEquals(expectedColor, board.getSnapshot()[row][col].getColor());
+    }
+
+    @Test
+    void Constructor_OnNewBoard_GameStateIsWhiteTurn() {
+        Board board = new Board();
+        assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
 
     @Test

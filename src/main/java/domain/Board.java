@@ -1,5 +1,6 @@
 package domain;
 
+import domain.gamestate.GameState;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -13,6 +14,7 @@ import domain.piece.Rook;
 public class Board {
 
     private final Piece[][] pieces = new Piece[8][8];
+    private GameState currentGameState = GameState.WHITE_TURN;
 
     public Board() {
         for (int row = 0; row < 8; row++) {
@@ -46,6 +48,10 @@ public class Board {
         pieces[7][5] = new Bishop(PieceColor.WHITE);
         pieces[7][6] = new Knight(PieceColor.WHITE);
         pieces[7][7] = new Rook(PieceColor.WHITE);
+    }
+
+    public GameState getCurrentGameState() {
+        return currentGameState;
     }
 
     public Piece[][] getSnapshot() {
