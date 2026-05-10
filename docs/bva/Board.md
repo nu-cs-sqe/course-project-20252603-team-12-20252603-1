@@ -324,7 +324,7 @@ Each boundary value from Step 3 appears in at least one test case.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC37: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :x: )
+- **TC37: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a freshly constructed board
   - **Expected output**: the returned `Piece[][]` reference is not the same object as a second call to `getSnapshot()`
