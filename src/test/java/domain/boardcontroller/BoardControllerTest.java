@@ -145,6 +145,27 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960SnapshotSatisfiesTc8ThroughTc11(snapshot);
+        assertEquals(expected, actual);
+    }
+
+    private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
+        return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
+                && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK)
+                && kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE)
+                && kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK)
+                && chess960BackRanksMirrorPieceTypes(snapshot)
+                && chess960StandardPawnRows(snapshot)
+                && chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE)
+                && chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -170,7 +191,6 @@ class BoardControllerTest {
                 && piece.getColor() == color;
     }
 
-    /** Mirrors {@link BoardController} standard layout; separate instances for BC-TC4. */
     private static Piece[][] newStandardStartingGrid() {
         Piece[][] grid = new Piece[8][8];
         grid[0][0] = new Rook(PieceColor.WHITE);

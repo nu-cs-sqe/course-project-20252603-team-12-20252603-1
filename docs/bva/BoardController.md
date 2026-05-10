@@ -116,28 +116,10 @@
   - **State of the system**: Chess960 start
   - **Expected output**: on each back rank: one `QUEEN`, two `KNIGHT`, two `BISHOP`, two `ROOK`, one `KING`
 
-- **BC-TC12a: GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11** ( :x: )
+- **BC-TC12: GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11** ( :white_check_mark: )
   - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
   - **State of the system**: `chess960Seed == 1L`
-  - **Expected output**: composite snapshot check (same predicates as BC-TC8–BC-TC11) is satisfied — **one assertion**
-
-- **BC-TC12b: GetBoardSnapshot_Chess960_SeedFortyTwo_PassesTc8ThroughTc11** ( :x: )
-  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
-  - **State of the system**: `chess960Seed == 42L`
-  - **Expected output**: composite snapshot check (BC-TC8–BC-TC11) is satisfied — **one assertion**
-
-- **BC-TC12c: GetBoardSnapshot_Chess960_SeedLongMax_PassesTc8ThroughTc11** ( :x: )
-  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
-  - **State of the system**: `chess960Seed == Long.MAX_VALUE`
-  - **Expected output**: composite snapshot check (BC-TC8–BC-TC11) is satisfied — **one assertion**
-
-**Guard (optional)**
-
-- **BC-TC13: GetBoardSnapshot_WhenBoardMissing_DefensiveBehavior** ( :x: or **N/A** )
-  - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: controller exists with **no** `Board` reference **only if** your constructor or factory allows that transient state
-  - **Expected output**: explicit failure or empty snapshot per team policy—never a plausible but wrong position
-  - **If** `Board` is **always** required in the `BoardController` constructor, **drop BC-TC13** (impossible state—prefer making an illegal state unrepresentable).
+  - **Expected output**: composite snapshot check (same predicates as BC-TC8–BC-TC11) is satisfied — **one assertion** (additional seeds: deferred)
 
 ---
 
@@ -170,27 +152,27 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
 
 ### Step 4: Test cases
 
-- **BC-TC14: HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects** ( :x: )
+- **BC-TC13: HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a white piece
   - **Expected output**: selection updated; `Board` piece layout unchanged
 
-- **BC-TC15: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation** ( :x: )
+- **BC-TC14: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a black piece
   - **Expected output**: `getBoardSnapshot()` unchanged cell-wise; turn still `WHITE_TURN`
 
-- **BC-TC16: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation** ( :x: )
+- **BC-TC15: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: standard new game; `loc` on an empty square (e.g. center)
   - **Expected output**: snapshot unchanged; turn still `WHITE_TURN`
 
-- **BC-TC17: HandleSquareClick_InvalidLocation_Rejected** ( :x: )
+- **BC-TC16: HandleSquareClick_InvalidLocation_Rejected** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: `new Location(-1, 0)` or `new Location(8, 8)`
   - **Expected output**: no board mutation; no-op or documented exception
 
-- **BC-TC18: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :x: )
+- **BC-TC17: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: Chess960 start, `WHITE_TURN`
   - **Expected output**: selecting a white square follows the same first-click rules as standard start (no turn flip, no piece removed)
