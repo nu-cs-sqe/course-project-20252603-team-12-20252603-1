@@ -54,6 +54,14 @@ public class Board {
         return currentGameState;
     }
 
+    public void switchTurn() {
+        if (currentGameState == GameState.WHITE_TURN) {
+            currentGameState = GameState.BLACK_TURN;
+        } else {
+            currentGameState = GameState.WHITE_TURN;
+        }
+    }
+
     public Piece[][] getSnapshot() {
         Piece[][] snapshot = new Piece[8][8];
         for (int row = 0; row < 8; row++) {

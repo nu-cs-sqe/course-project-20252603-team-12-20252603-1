@@ -65,6 +65,13 @@ class BoardTest {
     }
 
     @Test
+    void GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn() {
+        Board board = new Board();
+        board.switchTurn();
+        assertEquals(GameState.BLACK_TURN, board.getCurrentGameState());
+    }
+
+    @Test
     void Constructor_OnNewBoard_GameStateIsWhiteTurn() {
         Board board = new Board();
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());

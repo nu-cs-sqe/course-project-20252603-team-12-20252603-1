@@ -379,7 +379,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Expected output**: returns `WHITE_TURN`
   - **Covered by**: TC36
 
-- **TC43: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :x: )
+- **TC43: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `switchTurn()`
   - **State of the system**: board after one `switchTurn()` call
   - **Expected output**: returns `BLACK_TURN`
