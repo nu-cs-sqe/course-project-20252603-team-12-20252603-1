@@ -104,6 +104,7 @@ package domain{
         }
 
         +enum PieceType{
+            NONE,
             PAWN,
             ROOK,
             KNIGHT,
@@ -170,6 +171,13 @@ package domain{
             +Rook(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
+        }
+
+        +class NonePiece{
+            +NonePiece()
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+            +isSameColor(piece: Piece): boolean
         }
 
 
@@ -301,6 +309,7 @@ BoardController ..> Piece
 Bishop -u-|> Piece
 King -u-|> Piece
 Knight -u-|> Piece
+NonePiece -u-|> Piece
 Pawn -u-|> Piece
 Queen -u-|> Piece
 Rook -u-|> Piece
@@ -309,6 +318,7 @@ Board --> "64" Piece
 Board ..> Bishop
 Board ..> King
 Board ..> Knight
+Board ..> NonePiece
 Board ..> Pawn
 Board ..> Queen
 Board ..> Rook
