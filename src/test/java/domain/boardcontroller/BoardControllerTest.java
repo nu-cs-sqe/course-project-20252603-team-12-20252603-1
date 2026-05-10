@@ -93,6 +93,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual =
+                bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
+                        && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
@@ -193,5 +206,31 @@ class BoardControllerTest {
             }
         }
         return true;
+    }
+
+    private static boolean bishopsOnOppositeColorSquaresOnRank(
+            Piece[][] snapshot, int rank, PieceColor color) {
+        int firstFile = -1;
+        int secondFile = -1;
+        for (int file = 0; file < 8; file++) {
+            Piece piece = snapshot[rank][file];
+            if (piece != null
+                    && piece.getType() == PieceType.BISHOP
+                    && piece.getColor() == color) {
+                if (firstFile < 0) {
+                    firstFile = file;
+                } else if (secondFile < 0) {
+                    secondFile = file;
+                } else {
+                    return false;
+                }
+            }
+        }
+        if (firstFile < 0 || secondFile < 0) {
+            return false;
+        }
+        int parityFirst = (firstFile + rank) % 2;
+        int paritySecond = (secondFile + rank) % 2;
+        return parityFirst != paritySecond;
     }
 }

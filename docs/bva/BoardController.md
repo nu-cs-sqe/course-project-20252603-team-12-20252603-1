@@ -96,10 +96,10 @@
 
 **Chess960**
 
-- **BC-TC8: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares** ( :x: )
-  - **Method(s) under test**: `getBoardSnapshot()` with `Board` in Chess960 mode
-  - **State of the system**: legal Chess960 start (seeded or injected)
-  - **Expected output**: the two bishops’ squares differ in `(file + rank) % 2` parity for your coordinate system
+- **BC-TC8: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()` with `BoardController(StartingPositionKind.CHESS960)` (fixed legal SP until random SP is implemented)
+  - **State of the system**: legal Chess960 start
+  - **Expected output**: on each back rank, the two bishops’ squares differ in `(file + rank) % 2` parity
 
 - **BC-TC9: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank** ( :x: )
   - **Method(s) under test**: `getBoardSnapshot()`
