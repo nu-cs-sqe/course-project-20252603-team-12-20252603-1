@@ -38,6 +38,17 @@ class BoardTest {
     }
 
     @Test
+    void GetSnapshot_ModifySnapshotDoesNotAffectBoard() {
+        Board board = new Board();
+
+        Piece[][] snapshot = board.getSnapshot();
+        snapshot[7][0] = null;
+        Piece piece = board.getSnapshot()[7][0];
+        assertEquals(PieceType.KNIGHT, piece.getType());
+        assertEquals(PieceColor.WHITE, piece.getColor());
+    }
+
+    @Test
     void GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents() {
         Board board = new Board();
 

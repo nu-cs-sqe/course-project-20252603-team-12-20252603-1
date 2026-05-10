@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.King;
+import domain.piece.Knight;
 import domain.piece.NonePiece;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
@@ -16,6 +17,7 @@ public class Board {
             }
         }
         pieces[0][0] = new King(PieceColor.BLACK);
+        pieces[7][0] = new Knight(PieceColor.WHITE);
         pieces[7][4] = new King(PieceColor.WHITE);
     }
 

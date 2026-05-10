@@ -344,10 +344,10 @@ Each boundary value from Step 3 appears in at least one test case.
   - **State of the system**: a freshly constructed board
   - **Expected output**: `getSnapshot()[7][4]` has type `KING` and color `WHITE`
 
-- **TC41: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :x: )
+- **TC41: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board; set `getSnapshot()[7][0]` to `NonePiece`
-  - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
+  - **State of the system**: a freshly constructed board; set `getSnapshot()[7][0]` to `null`
+  - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `KNIGHT` and color `WHITE`
 
 ---
 
