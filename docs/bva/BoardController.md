@@ -79,7 +79,7 @@
 
 **Standard start — counts and turn**
 
-- **BC-TC5: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :x: )
+- **BC-TC5: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()` and/or `Board` state readers you add
   - **State of the system**: standard initialization complete
   - **Expected output**: count of non-`null` white pieces is `16`
