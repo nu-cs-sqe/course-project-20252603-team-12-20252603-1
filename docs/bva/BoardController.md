@@ -20,7 +20,7 @@
 
 ### Step 4: Test cases
 
-- **BC-TC1: Constructor_FreshInstance_LastSelectedUnset** ( :x: )
+- **BC-TC1: Constructor_FreshInstance_LastSelectedUnset** ( :white_check_mark: )
   - **Method(s) under test**: `BoardController()` (and any agreed way to observe selection state in tests)
   - **State of the system**: newly constructed controller wired only as your API requires (e.g. with a `Board` if the constructor demands it); **no UI types**
   - **Expected output**: no square is selected for movement (`lastSelectedLoc` absent or `null`)
