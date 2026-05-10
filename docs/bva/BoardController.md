@@ -84,7 +84,7 @@
   - **State of the system**: standard initialization complete
   - **Expected output**: count of non-`null` white pieces is `16`
 
-- **BC-TC6: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :x: )
+- **BC-TC6: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()` (and `Board` as needed)
   - **State of the system**: standard initialization complete
   - **Expected output**: count of non-`null` black pieces is `16`

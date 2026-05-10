@@ -68,6 +68,17 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces() {
+        BoardController controller = new BoardController();
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        int expected = 16;
+        int actual = countPiecesOfColor(snapshot, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
     private static boolean isEightByEight(Piece[][] snapshot) {
         if (snapshot == null || snapshot.length != 8) {
             return false;
