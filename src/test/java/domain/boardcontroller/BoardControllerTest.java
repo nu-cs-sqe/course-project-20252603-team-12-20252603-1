@@ -224,13 +224,12 @@ class BoardControllerTest {
 
         controller.handleSquareClick(clicked);
 
-        boolean expected = true;
-        boolean actual =
-                controller.hasSelection()
-                        && locationsEqual(controller.getSelectedLocation(), clicked)
-                        && controller.getCurrentGameState() == GameState.WHITE_TURN
-                        && cellWiseSameTypeAndColor(
-                                newChess960FixedStartingGrid(), controller.getBoardSnapshot());
+        boolean expected = controller.getCurrentGameState() == GameState.WHITE_TURN
+                && cellWiseSameTypeAndColor(
+                        newChess960FixedStartingGrid(), controller.getBoardSnapshot());
+        boolean actual = controller.hasSelection()
+                && locationsEqual(controller.getSelectedLocation(), clicked)
+                && controller.getCurrentGameState() == GameState.WHITE_TURN;
         assertEquals(expected, actual);
     }
 
