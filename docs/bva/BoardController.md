@@ -2,16 +2,16 @@
 
 ### Step 1: Input and output equivalence classes
 
-| Concern           | Equivalence classes                                                                    |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| Object life cycle | Fresh instance; no clicks yet                                                          |
+| Concern           | Equivalence classes                                                                             |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| Object life cycle | Fresh instance; no clicks yet                                                                   |
 | Collaborators     | Internal `Piece[][]` exists; **`Board` domain class not used yet**; **no `BoardView`** in tests |
 
 ### Step 2: BVA catalog data types
 
-| Variable / output                           | Catalog type | Rationale                          |
-| ------------------------------------------- | ------------ | ---------------------------------- |
-| `lastSelectedLoc` (if inspectable)           | Pointers     | `null` vs non-`null` at boundaries |
+| Variable / output                  | Catalog type | Rationale                          |
+| ---------------------------------- | ------------ | ---------------------------------- |
+| `lastSelectedLoc` (if inspectable) | Pointers     | `null` vs non-`null` at boundaries |
 
 ### Step 3: Concrete boundary values
 
@@ -89,8 +89,8 @@
   - **State of the system**: standard initialization complete
   - **Expected output**: count of non-`null` black pieces is `16`
 
-- **BC-TC7: GameStart_Standard_WhiteTurnAndNoPieceHasMoved** ( :x: )
-  - **Method(s) under test**: `getBoardSnapshot()` **plus** `Board` queries on the **same** `Board` the controller uses (`getCurrentGameState()` / equivalent from the diagram, and `Piece.hasMoved()` on each non-`null` cell from the snapshot or board)
+- **BC-TC7: GameStart_Standard_WhiteTurnAndNoPieceHasMoved** ( :white_check_mark: )
+  - **Method(s) under test**: `getCurrentGameState()`, `getBoardSnapshot()` then `Piece.hasMoved()` on each non-`null` cell (until a `Board` class exists, turn lives on `BoardController` per diagram intent)
   - **State of the system**: immediately after standard new game
   - **Expected output**: `GameState.WHITE_TURN`; every piece has `hasMoved() == false`
 

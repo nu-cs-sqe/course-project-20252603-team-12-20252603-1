@@ -2,6 +2,7 @@ package domain.boardcontroller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import domain.gamestate.GameState;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -76,6 +77,19 @@ class BoardControllerTest {
 
         int expected = 16;
         int actual = countPiecesOfColor(snapshot, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GameStart_Standard_WhiteTurnAndNoPieceHasMoved() {
+        BoardController controller = new BoardController();
+
+        GameState expectedState = GameState.WHITE_TURN;
+        GameState actualState = controller.getCurrentGameState();
+        assertEquals(expectedState, actualState);
+
+        boolean expected = true;
+        boolean actual = everyOccupiedPieceHasNotMoved(controller.getBoardSnapshot());
         assertEquals(expected, actual);
     }
 
@@ -167,5 +181,17 @@ class BoardControllerTest {
             }
         }
         return count;
+    }
+
+    private static boolean everyOccupiedPieceHasNotMoved(Piece[][] snapshot) {
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                Piece piece = snapshot[rank][file];
+                if (piece != null && piece.hasMoved()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

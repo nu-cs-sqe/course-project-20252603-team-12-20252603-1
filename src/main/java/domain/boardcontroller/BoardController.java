@@ -1,5 +1,6 @@
 package domain.boardcontroller;
 
+import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.piece.Bishop;
 import domain.piece.King;
@@ -14,10 +15,12 @@ public class BoardController {
 
     private final Piece[][] pieces;
     private Location lastSelectedLoc;
+    private GameState currentGameState;
 
     public BoardController() {
         pieces = new Piece[8][8];
         lastSelectedLoc = null;
+        currentGameState = GameState.WHITE_TURN;
         placeStandardStartingPosition();
     }
 
@@ -55,5 +58,9 @@ public class BoardController {
 
     public Piece[][] getBoardSnapshot() {
         return pieces;
+    }
+
+    public GameState getCurrentGameState() {
+        return currentGameState;
     }
 }
