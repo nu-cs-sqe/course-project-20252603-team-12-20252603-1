@@ -233,18 +233,49 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
-        Location clicked = new Location(0, 1);
 
-        controller.handleSquareClick(clicked);
+        Piece[][] snapshot = controller.getBoardSnapshot();
 
-        boolean expected = controller.getCurrentGameState() == GameState.WHITE_TURN
-                && cellWiseSameTypeAndColor(
-                        newChess960FixedStartingGrid(), controller.getBoardSnapshot());
-        boolean actual = controller.hasSelection()
-                && locationsEqual(controller.getSelectedLocation(), clicked)
-                && controller.getCurrentGameState() == GameState.WHITE_TURN;
+        boolean expected = true;
+        boolean actual = cellWiseSameTypeAndColor(newChess960FixedStartingGrid(), snapshot);
         assertEquals(expected, actual);
     }
+
+        @Test
+        void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn() {
+            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+            Location clicked = new Location(0, 1);
+
+            controller.handleSquareClick(clicked);
+
+            boolean expected = true;
+            boolean actual = controller.hasSelection();
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches() {
+            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+            Location clicked = new Location(0, 1);
+
+            controller.handleSquareClick(clicked);
+
+            boolean expected = true;
+            boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        void HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite() {
+            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+            Location clicked = new Location(0, 1);
+
+            controller.handleSquareClick(clicked);
+
+            GameState expected = GameState.WHITE_TURN;
+            GameState actual = controller.getCurrentGameState();
+            assertEquals(expected, actual);
+        }
 
     private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
         return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)

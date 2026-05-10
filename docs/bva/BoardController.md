@@ -251,4 +251,19 @@ _(Later stories extend full move/castle pipeline; here: first-turn readiness usi
   - **State of the system**: Chess960 start, `WHITE_TURN`
   - **Expected output**: selecting a white square follows the same first-click rules as standard start (no turn flip, no piece removed)
 
+  - **BC-TC17a: HandleSquareClick_Chess960Start_FirstWhiteSelection_Selects** ( :white_check_mark: )
+    - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+    - **State of the system**: Chess960 start; click on a white piece
+    - **Expected output**: `hasSelection()` returns `true`
+
+  - **BC-TC17b: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches** ( :white_check_mark: )
+    - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+    - **State of the system**: Chess960 start; click on a white piece at `loc`
+    - **Expected output**: `getSelectedLocation()` returns a non-`null` `Location` equal to the clicked `loc`
+
+  - **BC-TC17c: HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite** ( :white_check_mark: )
+    - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+    - **State of the system**: Chess960 start; click on a white piece
+    - **Expected output**: `getCurrentGameState()` remains `GameState.WHITE_TURN`
+
 ---
