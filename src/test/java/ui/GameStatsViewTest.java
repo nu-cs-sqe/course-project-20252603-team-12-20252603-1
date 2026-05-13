@@ -93,4 +93,15 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest() {
+        GameStatsView view = new GameStatsView("Pat", "Pat");
+        view.updateCurrentPlayerLabel("Alice");
+        view.updateCurrentPlayerLabel("Bob");
+
+        String expected = "Bob";
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }

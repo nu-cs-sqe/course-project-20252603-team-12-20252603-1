@@ -100,7 +100,7 @@
   - **State of the system**: argument is `"   "` (tabs/spaces only)
   - **Expected output**: `currentPlayerLabel` text equals the argument verbatim (no trim; same contract as `setText`)
 
-- **GS-TC10: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :x: )
+- **GS-TC10: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)` twice
   - **State of the system**: first `"Alice"`, then `"Bob"`
   - **Expected output**: final visible text corresponds to `"Bob"` under the same formatting rules as GS-TC7
