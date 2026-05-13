@@ -82,4 +82,15 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+        String whitespaceOnly = "   ";
+        view.updateCurrentPlayerLabel(whitespaceOnly);
+
+        String expected = whitespaceOnly;
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }

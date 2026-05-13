@@ -95,10 +95,10 @@
   - **State of the system**: label previously showed a non-empty name (e.g. `"Alice"` from construction); argument is `""`
   - **Expected output**: `currentPlayerLabel` text is empty (cleared; same contract as `setText` with `""`)
 
-- **GS-TC9: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :x: )
+- **GS-TC9: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is `"   "` (tabs/spaces only)
-  - **Expected output**: documented behavior (trim or show verbatim)
+  - **Expected output**: `currentPlayerLabel` text equals the argument verbatim (no trim; same contract as `setText`)
 
 - **GS-TC10: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)` twice
