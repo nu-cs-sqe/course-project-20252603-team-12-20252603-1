@@ -14,4 +14,13 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+
+        String expected = "Alice vs Bob";
+        String actual = view.getGameStateLabelText();
+        assertEquals(expected, actual);
+    }
 }

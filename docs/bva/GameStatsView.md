@@ -32,7 +32,7 @@
   - **State of the system**: `player1Name` and `player2Name` are short distinct non-empty strings
   - **Expected output**: `currentPlayerLabel` shows player 1’s name (whose turn it is at game start) — **one assertion**
 
-- **GS-TC2: Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine** ( :x: )
+- **GS-TC2: Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: same as GS-TC1
   - **Expected output**: `gameStateLabel` shows both names in a fixed `"<p1> vs <p2>"` matchup line — **one assertion**
