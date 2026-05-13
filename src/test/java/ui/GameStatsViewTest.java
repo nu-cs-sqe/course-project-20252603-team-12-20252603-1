@@ -72,4 +72,14 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+        view.updateCurrentPlayerLabel("");
+
+        String expected = "";
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }

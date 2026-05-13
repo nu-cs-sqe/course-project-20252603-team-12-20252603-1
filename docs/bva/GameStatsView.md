@@ -90,10 +90,10 @@
   - **State of the system**: constructed view; argument is a normal non-empty name
   - **Expected output**: `currentPlayerLabel` shows exactly that string (no prefix/suffix; `Objects.requireNonNull` on the argument)
 
-- **GS-TC8: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :x: )
+- **GS-TC8: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: label previously showed `"White"`; argument is `""`
-  - **Expected output**: label shows the team’s empty policy (cleared text, dash, or placeholder)—must match spec, not random whitespace
+  - **State of the system**: label previously showed a non-empty name (e.g. `"Alice"` from construction); argument is `""`
+  - **Expected output**: `currentPlayerLabel` text is empty (cleared; same contract as `setText` with `""`)
 
 - **GS-TC9: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
