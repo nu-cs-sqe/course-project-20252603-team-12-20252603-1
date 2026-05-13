@@ -1,5 +1,7 @@
 # BVA Analysis for GameStatsView
 
+Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
+
 ## Method / behavior: `GameStatsView(String player1Name, String player2Name)`
 
 ### Step 1: Input and output equivalence classes
@@ -78,10 +80,10 @@
 
 ### Step 3: Concrete boundary values
 
-- `null` rejected at construction (see GS-TC6); `updateCurrentPlayerLabel` policy aligns when implemented.
-- `""` then `"White"` (overwrite shorter/longer pattern).
-- `"Alice"` then `"Alice"` (plateau / idempotent display).
-- Long string: length 0 → 1 → many → “uncomfortably large” if you impose no hard cap.
+- `null`: `Objects.requireNonNull` on the argument (fail fast).
+- `""` vs non-empty overwrite; whitespace-only string verbatim.
+- Two calls: second value replaces the first (`"Alice"` then `"Bob"`).
+- Long string (e.g. 500 ASCII chars): full text shown unless a later story adds truncation.
 
 ### Step 4: Test cases
 
@@ -109,83 +111,3 @@
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is a long but finite string (e.g. 500 ASCII chars)
   - **Expected output**: no exception; `currentPlayerLabel` text equals the full argument (no truncation in this implementation)
-
----
-
-## Method: `updateGameStateLabel(GameState gameState)`
-
-### Step 1: Input and output equivalence classes
-
-| Input       | Classes                                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- |
-| `gameState` | Each enum case: `WHITE_TURN`, `BLACK_TURN`, `WHITE_WIN`, `BLACK_WIN`, `DRAW`             |
-| Invalid     | `null` if API allows—otherwise **unrepresentable**                                       |
-| Sequences   | Overwrite same state twice; transition between two different states (pairs of **Cases**) |
-
-### Step 2: BVA catalog data types
-
-| Concern       | Catalog type                                                                                                            |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `gameState`   | **Cases** (enum): every enumerator; impossible case `null` if permitted                                                 |
-| Label updates | **Overwriting the previous contents**; **Streaming** with two values if you only ever alternate two strings in practice |
-
-### Step 3: Concrete boundary values
-
-- All five `GameState` literals from `domain.gamestate.GameState`.
-- Sequence: `WHITE_TURN` → `BLACK_TURN` → `WHITE_WIN` (exercises non-terminal then terminal copy).
-- Repeat: `DRAW` → `DRAW` (plateau).
-
-### Step 4: Test cases
-
-- **GS-TC12: UpdateGameStateLabel_OnWhiteTurn_TextMatchesContract** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `gameState == WHITE_TURN`
-  - **Expected output**: `gameStateLabel` text equals the agreed string for white to move (document the exact copy in one place—tests lock it)
-
-- **GS-TC13: UpdateGameStateLabel_OnBlackTurn_TextMatchesContract** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `gameState == BLACK_TURN`
-  - **Expected output**: label text matches agreed black-to-move copy
-
-- **GS-TC14: UpdateGameStateLabel_OnWhiteWin_TextMatchesContract** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `gameState == WHITE_WIN`
-  - **Expected output**: label text matches agreed end-state copy
-
-- **GS-TC15: UpdateGameStateLabel_OnBlackWin_TextMatchesContract** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `gameState == BLACK_WIN`
-  - **Expected output**: label text matches agreed end-state copy
-
-- **GS-TC16: UpdateGameStateLabel_OnDraw_TextMatchesContract** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `gameState == DRAW`
-  - **Expected output**: label text matches agreed draw copy
-
-- **GS-TC17: UpdateGameStateLabel_TransitionWhiteTurnToBlackTurn_SecondTextShown** ( :x: )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)` twice
-  - **State of the system**: call with `WHITE_TURN`, then `BLACK_TURN`
-  - **Expected output**: label shows black-turn copy after the second call
-
-- **GS-TC18: UpdateGameStateLabel_OnNullState_DefensiveOrN_A** ( :x: or **N/A** )
-  - **Method(s) under test**: `updateGameStateLabel(GameState)`
-  - **State of the system**: `null` only if the signature allows it (prefer non-null `GameState` and drop this row)
-  - **Expected output**: fail fast or no-op per policy—never a misleading label
-
----
-
-## Collaboration: constructor + updaters (ordering)
-
-### Step 1–3: Catalog mapping
-
-| Concern                  | Catalog type                                                                                                         |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| First paint vs updates   | **Overwriting** label text after construction                                                                        |
-| Cross-field independence | **Pairs of variables**: current-player text vs game-state text should not accidentally share one `StringBuilder` bug |
-
-### Step 4: Test cases
-
-- **GS-TC19: AfterConstruction_UpdatePlayerThenState_BothLabelsIndependent** ( :x: )
-  - **Method(s) under test**: constructor, then `updateCurrentPlayerLabel`, then `updateGameStateLabel`
-  - **State of the system**: typical names at construction; then `"Carol"`; then `BLACK_TURN`
-  - **Expected output**: player label reflects `"Carol"` formatting; state label reflects `BLACK_TURN` formatting; neither clobbers the other’s text
