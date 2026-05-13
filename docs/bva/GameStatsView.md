@@ -27,27 +27,32 @@
 
 ### Step 4: Test cases (each-choice; avoid combinatorial explosion)
 
-- **GS-TC1: Constructor_OnBothNamesNonEmpty_InitialLabelsConsistentWithDesign** ( :x: )
+- **GS-TC1: Constructor_OnBothNamesNonEmpty_CurrentPlayerLabelShowsPlayerOneName** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: `player1Name` and `player2Name` are short distinct non-empty strings
-  - **Expected output**: initial `JLabel` texts (or documented placeholders) match the team’s **written UI contract** for “game just opened”
+  - **Expected output**: `currentPlayerLabel` shows player 1’s name (whose turn it is at game start) — **one assertion**
 
-- **GS-TC2: Constructor_OnBothNamesEmpty_InitialLabelsDefined** ( :x: )
+- **GS-TC2: Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine** ( :x: )
+  - **Method(s) under test**: `GameStatsView(String, String)`
+  - **State of the system**: same as GS-TC1
+  - **Expected output**: `gameStateLabel` shows both names in a fixed `"<p1> vs <p2>"` matchup line — **one assertion**
+
+- **GS-TC3: Constructor_OnBothNamesEmpty_InitialLabelsDefined** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: both names are `""`
   - **Expected output**: no uncaught exception; initial texts are the agreed empty-state copy (or placeholders), not `null` text on visible labels if that would break the UI
 
-- **GS-TC3: Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined** ( :x: )
+- **GS-TC4: Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: `player1Name == ""`, `player2Name == "Bob"` (and optionally the swapped pair in a **separate** test if not redundant)
-  - **Expected output**: consistent with GS-TC2’s empty policy and still shows usable distinction where required
+  - **Expected output**: consistent with GS-TC3’s empty policy and still shows usable distinction where required
 
-- **GS-TC4: Constructor_OnEqualNames_InitialLabelsShowSameSpelling** ( :x: )
+- **GS-TC5: Constructor_OnEqualNames_InitialLabelsShowSameSpelling** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: both names are the same non-empty string
   - **Expected output**: both sides of the UI that display names reflect that spelling (no accidental deduplication bug)
 
-- **GS-TC5: Constructor_OnNullNamePolicy_DefensiveOrDocumented** ( :x: )
+- **GS-TC6: Constructor_OnNullNamePolicy_DefensiveOrDocumented** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: one or both arguments `null` **if** the API permits (prefer **non-null** API and `Objects.requireNonNull`—then mark this **N/A** and delete the test)
   - **Expected output**: clear failure fast, or safe substitution per policy—never a broken `JLabel` state
@@ -65,42 +70,42 @@
 
 ### Step 2: BVA catalog data types
 
-| Concern          | Catalog type                                                                                  |
-| ---------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `playerName`     | **Pointers** (`null` vs reference); **Strings** (empty, compare-last-char difference)         |
+| Concern          | Catalog type                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| `playerName`     | **Pointers** (`null` vs reference); **Strings** (empty, compare-last-char difference) |
 | Repeated updates | **Overwriting the previous contents** (new string shorter, same length, longer than previous) |
-| `JLabel` display | **Streaming / fixed UI string**                                                               | treat displayed text as the output stream of length 1 per call for that label |
+| `JLabel` display | **Streaming / fixed UI string** — treat displayed text as the output per call         |
 
 ### Step 3: Concrete boundary values
 
-- `null` (only if constructor allows null strings—align with GS-TC5 policy).
+- `null` (only if constructor allows null strings—align with GS-TC6 policy).
 - `""` then `"White"` (overwrite shorter/longer pattern).
 - `"Alice"` then `"Alice"` (plateau / idempotent display).
 - Long string: length 0 → 1 → many → “uncomfortably large” if you impose no hard cap.
 
 ### Step 4: Test cases
 
-- **GS-TC6: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :x: )
+- **GS-TC7: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: constructed view; argument is a normal non-empty name
   - **Expected output**: `currentPlayerLabel` shows the agreed format (exact string vs `"Current: " + name`—fix one contract in tests)
 
-- **GS-TC7: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :x: )
+- **GS-TC8: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: label previously showed `"White"`; argument is `""`
   - **Expected output**: label shows the team’s empty policy (cleared text, dash, or placeholder)—must match spec, not random whitespace
 
-- **GS-TC8: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :x: )
+- **GS-TC9: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is `"   "` (tabs/spaces only)
   - **Expected output**: documented behavior (trim or show verbatim)
 
-- **GS-TC9: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :x: )
+- **GS-TC10: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)` twice
   - **State of the system**: first `"Alice"`, then `"Bob"`
-  - **Expected output**: final visible text corresponds to `"Bob"` under the same formatting rules as GS-TC6
+  - **Expected output**: final visible text corresponds to `"Bob"` under the same formatting rules as GS-TC7
 
-- **GS-TC10: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :x: )
+- **GS-TC11: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is a long but finite string (e.g. 500 ASCII chars)
   - **Expected output**: no exception; label text equals formatted output (or documents truncation with a separate truncation test if you add ellipsis rules later)
@@ -132,37 +137,37 @@
 
 ### Step 4: Test cases
 
-- **GS-TC11: UpdateGameStateLabel_OnWhiteTurn_TextMatchesContract** ( :x: )
+- **GS-TC12: UpdateGameStateLabel_OnWhiteTurn_TextMatchesContract** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `gameState == WHITE_TURN`
   - **Expected output**: `gameStateLabel` text equals the agreed string for white to move (document the exact copy in one place—tests lock it)
 
-- **GS-TC12: UpdateGameStateLabel_OnBlackTurn_TextMatchesContract** ( :x: )
+- **GS-TC13: UpdateGameStateLabel_OnBlackTurn_TextMatchesContract** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `gameState == BLACK_TURN`
   - **Expected output**: label text matches agreed black-to-move copy
 
-- **GS-TC13: UpdateGameStateLabel_OnWhiteWin_TextMatchesContract** ( :x: )
+- **GS-TC14: UpdateGameStateLabel_OnWhiteWin_TextMatchesContract** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `gameState == WHITE_WIN`
   - **Expected output**: label text matches agreed end-state copy
 
-- **GS-TC14: UpdateGameStateLabel_OnBlackWin_TextMatchesContract** ( :x: )
+- **GS-TC15: UpdateGameStateLabel_OnBlackWin_TextMatchesContract** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `gameState == BLACK_WIN`
   - **Expected output**: label text matches agreed end-state copy
 
-- **GS-TC15: UpdateGameStateLabel_OnDraw_TextMatchesContract** ( :x: )
+- **GS-TC16: UpdateGameStateLabel_OnDraw_TextMatchesContract** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `gameState == DRAW`
   - **Expected output**: label text matches agreed draw copy
 
-- **GS-TC16: UpdateGameStateLabel_TransitionWhiteTurnToBlackTurn_SecondTextShown** ( :x: )
+- **GS-TC17: UpdateGameStateLabel_TransitionWhiteTurnToBlackTurn_SecondTextShown** ( :x: )
   - **Method(s) under test**: `updateGameStateLabel(GameState)` twice
   - **State of the system**: call with `WHITE_TURN`, then `BLACK_TURN`
   - **Expected output**: label shows black-turn copy after the second call
 
-- **GS-TC17: UpdateGameStateLabel_OnNullState_DefensiveOrN_A** ( :x: or **N/A** )
+- **GS-TC18: UpdateGameStateLabel_OnNullState_DefensiveOrN_A** ( :x: or **N/A** )
   - **Method(s) under test**: `updateGameStateLabel(GameState)`
   - **State of the system**: `null` only if the signature allows it (prefer non-null `GameState` and drop this row)
   - **Expected output**: fail fast or no-op per policy—never a misleading label
@@ -180,7 +185,15 @@
 
 ### Step 4: Test cases
 
-- **GS-TC18: AfterConstruction_UpdatePlayerThenState_BothLabelsIndependent** ( :x: )
+- **GS-TC19: AfterConstruction_UpdatePlayerThenState_BothLabelsIndependent** ( :x: )
   - **Method(s) under test**: constructor, then `updateCurrentPlayerLabel`, then `updateGameStateLabel`
   - **State of the system**: typical names at construction; then `"Carol"`; then `BLACK_TURN`
   - **Expected output**: player label reflects `"Carol"` formatting; state label reflects `BLACK_TURN` formatting; neither clobbers the other’s text
+
+---
+
+## Strategy note (Step 4, catalog coverage)
+
+Use **each-choice** across string boundaries, **all enum cases** for `GameState` (GS-TC12–GS-TC16), and a **small** set of overwrite/transition tests (GS-TC10, GS-TC17). Do **not** multiply every name length by every `GameState` unless the code concatenates them in one expression.
+
+When you add `MainView`, put **integration** tests there; keep **`GameStatsView`** tests to **this class’s public methods** and visible text only.
