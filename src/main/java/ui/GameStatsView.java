@@ -10,7 +10,11 @@ public class GameStatsView extends JPanel {
 
     public GameStatsView(String player1Name, String player2Name) {
         currentPlayerLabel = new JLabel(player1Name);
-        gameStateLabel = new JLabel(player1Name + " vs " + player2Name);
+        if (player1Name.isEmpty() && player2Name.isEmpty()) {
+            gameStateLabel = new JLabel("");
+        } else {
+            gameStateLabel = new JLabel(player1Name + " vs " + player2Name);
+        }
         add(currentPlayerLabel);
         add(gameStateLabel);
     }

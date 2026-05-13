@@ -23,4 +23,15 @@ class GameStatsViewTest {
         String actual = view.getGameStateLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnBothNamesEmpty_InitialLabelsDefined() {
+        GameStatsView view = new GameStatsView("", "");
+
+        boolean expected = true;
+        boolean actual =
+                view.getCurrentPlayerLabelText().isEmpty()
+                        && view.getGameStateLabelText().isEmpty();
+        assertEquals(expected, actual);
+    }
 }

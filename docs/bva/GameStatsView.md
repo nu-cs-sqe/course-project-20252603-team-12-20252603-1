@@ -37,10 +37,10 @@
   - **State of the system**: same as GS-TC1
   - **Expected output**: `gameStateLabel` shows both names in a fixed `"<p1> vs <p2>"` matchup line — **one assertion**
 
-- **GS-TC3: Constructor_OnBothNamesEmpty_InitialLabelsDefined** ( :x: )
+- **GS-TC3: Constructor_OnBothNamesEmpty_InitialLabelsDefined** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: both names are `""`
-  - **Expected output**: no uncaught exception; initial texts are the agreed empty-state copy (or placeholders), not `null` text on visible labels if that would break the UI
+  - **Expected output**: no uncaught exception; both labels show empty text (no `" vs "` fragment when both names are empty)
 
 - **GS-TC4: Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
