@@ -104,4 +104,15 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated() {
+        String longName = "a".repeat(500);
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+        view.updateCurrentPlayerLabel(longName);
+
+        String expected = longName;
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }

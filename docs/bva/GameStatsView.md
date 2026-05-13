@@ -70,11 +70,11 @@
 
 ### Step 2: BVA catalog data types
 
-| Concern          | Catalog type                                                                          |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| `playerName`     | **Pointers** (`null` vs reference); **Strings** (empty, compare-last-char difference) |
+| Concern          | Catalog type                                                                                  |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| `playerName`     | **Pointers** (`null` vs reference); **Strings** (empty, compare-last-char difference)         |
 | Repeated updates | **Overwriting the previous contents** (new string shorter, same length, longer than previous) |
-| `JLabel` display | **Streaming / fixed UI string** — treat displayed text as the output per call         |
+| `JLabel` display | **Streaming / fixed UI string** — treat displayed text as the output per call                 |
 
 ### Step 3: Concrete boundary values
 
@@ -105,10 +105,10 @@
   - **State of the system**: first `"Alice"`, then `"Bob"`
   - **Expected output**: final visible text corresponds to `"Bob"` under the same formatting rules as GS-TC7
 
-- **GS-TC11: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :x: )
+- **GS-TC11: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is a long but finite string (e.g. 500 ASCII chars)
-  - **Expected output**: no exception; label text equals formatted output (or documents truncation with a separate truncation test if you add ellipsis rules later)
+  - **Expected output**: no exception; `currentPlayerLabel` text equals the full argument (no truncation in this implementation)
 
 ---
 
@@ -189,11 +189,3 @@
   - **Method(s) under test**: constructor, then `updateCurrentPlayerLabel`, then `updateGameStateLabel`
   - **State of the system**: typical names at construction; then `"Carol"`; then `BLACK_TURN`
   - **Expected output**: player label reflects `"Carol"` formatting; state label reflects `BLACK_TURN` formatting; neither clobbers the other’s text
-
----
-
-## Strategy note (Step 4, catalog coverage)
-
-Use **each-choice** across string boundaries, **all enum cases** for `GameState` (GS-TC12–GS-TC16), and a **small** set of overwrite/transition tests (GS-TC10, GS-TC17). Do **not** multiply every name length by every `GameState` unless the code concatenates them in one expression.
-
-When you add `MainView`, put **integration** tests there; keep **`GameStatsView`** tests to **this class’s public methods** and visible text only.
