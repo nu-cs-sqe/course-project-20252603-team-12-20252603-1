@@ -62,4 +62,14 @@ class GameStatsViewTest {
     void Constructor_OnNullPlayerOneName_ThrowsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new GameStatsView(null, "Bob"));
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+        view.updateCurrentPlayerLabel("Carol");
+
+        String expected = "Carol";
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }

@@ -85,10 +85,10 @@
 
 ### Step 4: Test cases
 
-- **GS-TC7: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :x: )
+- **GS-TC7: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: constructed view; argument is a normal non-empty name
-  - **Expected output**: `currentPlayerLabel` shows the agreed format (exact string vs `"Current: " + name`—fix one contract in tests)
+  - **Expected output**: `currentPlayerLabel` shows exactly that string (no prefix/suffix; `Objects.requireNonNull` on the argument)
 
 - **GS-TC8: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`

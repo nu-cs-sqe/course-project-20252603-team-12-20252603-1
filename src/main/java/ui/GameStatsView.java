@@ -29,4 +29,9 @@ public class GameStatsView extends JPanel {
     String getGameStateLabelText() {
         return gameStateLabel.getText();
     }
+
+    public void updateCurrentPlayerLabel(String playerName) {
+        Objects.requireNonNull(playerName, "playerName");
+        currentPlayerLabel.setText(playerName);
+    }
 }
