@@ -52,10 +52,10 @@
   - **State of the system**: both names are the same non-empty string
   - **Expected output**: current-player label is that string; matchup label is `"<name> vs <name>"` (two occurrences, no accidental interning or single-reference bug)
 
-- **GS-TC6: Constructor_OnNullNamePolicy_DefensiveOrDocumented** ( :x: )
+- **GS-TC6: Constructor_OnNullNamePolicy_DefensiveOrDocumented** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: one or both arguments `null` **if** the API permits (prefer **non-null** API and `Objects.requireNonNull`—then mark this **N/A** and delete the test)
-  - **Expected output**: clear failure fast, or safe substitution per policy—never a broken `JLabel` state
+  - **State of the system**: `player1Name` is `null` (representative; both parameters are non-null in the public API contract)
+  - **Expected output**: `NullPointerException` from `Objects.requireNonNull` before any label is shown with invalid state
 
 ---
 
@@ -78,7 +78,7 @@
 
 ### Step 3: Concrete boundary values
 
-- `null` (only if constructor allows null strings—align with GS-TC6 policy).
+- `null` rejected at construction (see GS-TC6); `updateCurrentPlayerLabel` policy aligns when implemented.
 - `""` then `"White"` (overwrite shorter/longer pattern).
 - `"Alice"` then `"Alice"` (plateau / idempotent display).
 - Long string: length 0 → 1 → many → “uncomfortably large” if you impose no hard cap.

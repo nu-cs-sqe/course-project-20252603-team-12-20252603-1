@@ -1,6 +1,7 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,5 +56,10 @@ class GameStatsViewTest {
                 view.getCurrentPlayerLabelText().equals("Pat")
                         && view.getGameStateLabelText().equals("Pat vs Pat");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnNullPlayerOneName_ThrowsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new GameStatsView(null, "Bob"));
     }
 }

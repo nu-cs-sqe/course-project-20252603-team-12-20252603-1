@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.Objects;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -9,6 +10,8 @@ public class GameStatsView extends JPanel {
     private final JLabel gameStateLabel;
 
     public GameStatsView(String player1Name, String player2Name) {
+        Objects.requireNonNull(player1Name, "player1Name");
+        Objects.requireNonNull(player2Name, "player2Name");
         currentPlayerLabel = new JLabel(player1Name);
         if (player1Name.isEmpty() && player2Name.isEmpty()) {
             gameStateLabel = new JLabel("");
