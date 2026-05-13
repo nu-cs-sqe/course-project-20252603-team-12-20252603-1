@@ -45,4 +45,15 @@ class GameStatsViewTest {
                         && view.getGameStateLabelText().equals(" vs Bob");
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnEqualNames_InitialLabelsShowSameSpelling() {
+        GameStatsView view = new GameStatsView("Pat", "Pat");
+
+        boolean expected = true;
+        boolean actual =
+                view.getCurrentPlayerLabelText().equals("Pat")
+                        && view.getGameStateLabelText().equals("Pat vs Pat");
+        assertEquals(expected, actual);
+    }
 }

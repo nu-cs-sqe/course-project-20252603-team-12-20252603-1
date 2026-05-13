@@ -47,10 +47,10 @@
   - **State of the system**: `player1Name == ""`, `player2Name == "Bob"` (and optionally the swapped pair in a **separate** test if not redundant)
   - **Expected output**: current-player label is empty; matchup label is `" vs Bob"` (same `<p1> vs <p2>` rule as GS-TC2, so the non-empty name is still visible)
 
-- **GS-TC5: Constructor_OnEqualNames_InitialLabelsShowSameSpelling** ( :x: )
+- **GS-TC5: Constructor_OnEqualNames_InitialLabelsShowSameSpelling** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: both names are the same non-empty string
-  - **Expected output**: both sides of the UI that display names reflect that spelling (no accidental deduplication bug)
+  - **Expected output**: current-player label is that string; matchup label is `"<name> vs <name>"` (two occurrences, no accidental interning or single-reference bug)
 
 - **GS-TC6: Constructor_OnNullNamePolicy_DefensiveOrDocumented** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
