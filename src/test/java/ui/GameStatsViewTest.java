@@ -34,4 +34,15 @@ class GameStatsViewTest {
                         && view.getGameStateLabelText().isEmpty();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined() {
+        GameStatsView view = new GameStatsView("", "Bob");
+
+        boolean expected = true;
+        boolean actual =
+                view.getCurrentPlayerLabelText().isEmpty()
+                        && view.getGameStateLabelText().equals(" vs Bob");
+        assertEquals(expected, actual);
+    }
 }

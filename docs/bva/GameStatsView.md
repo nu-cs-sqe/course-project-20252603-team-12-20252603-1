@@ -42,10 +42,10 @@
   - **State of the system**: both names are `""`
   - **Expected output**: no uncaught exception; both labels show empty text (no `" vs "` fragment when both names are empty)
 
-- **GS-TC4: Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined** ( :x: )
+- **GS-TC4: Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
   - **State of the system**: `player1Name == ""`, `player2Name == "Bob"` (and optionally the swapped pair in a **separate** test if not redundant)
-  - **Expected output**: consistent with GS-TC3’s empty policy and still shows usable distinction where required
+  - **Expected output**: current-player label is empty; matchup label is `" vs Bob"` (same `<p1> vs <p2>` rule as GS-TC2, so the non-empty name is still visible)
 
 - **GS-TC5: Constructor_OnEqualNames_InitialLabelsShowSameSpelling** ( :x: )
   - **Method(s) under test**: `GameStatsView(String, String)`
