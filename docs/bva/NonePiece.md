@@ -46,7 +46,7 @@
   - **State of the system**: an existing NonePiece
   - **Expected output**: returned piece cannot jump
 
-- **TC5: MakeCopy_OnNonePiece_CopyIsDifferentObject** ( :x: )
+- **TC5: MakeCopy_OnNonePiece_CopyIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing NonePiece
   - **Expected output**: returned piece is a different object from the original
