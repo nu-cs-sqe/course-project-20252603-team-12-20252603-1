@@ -41,7 +41,7 @@
   - **State of the system**: an existing NonePiece
   - **Expected output**: returned piece type is `NONE`
 
-- **TC4: MakeCopy_OnNonePiece_CopyCanJumpIsFalse** ( :x: )
+- **TC4: MakeCopy_OnNonePiece_CopyCanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing NonePiece
   - **Expected output**: returned piece cannot jump
