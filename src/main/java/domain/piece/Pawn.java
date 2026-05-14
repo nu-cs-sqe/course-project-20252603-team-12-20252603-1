@@ -2,12 +2,12 @@ package domain.piece;
 
 public class Pawn extends Piece {
 
-	public Pawn(PieceColor color) {
-		super(PieceType.PAWN, color);
-	}
+  public Pawn(PieceColor color) {
+    super(PieceType.PAWN, color);
+  }
 
-	@Override
-	public Piece makeCopy() {
-		return new Pawn(getColor());
-	}
+  @Override
+  public Piece makeCopy() {
+    return new Pawn(getColor());
+  }
 }

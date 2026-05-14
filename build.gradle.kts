@@ -3,7 +3,6 @@ import org.gradle.api.plugins.quality.Checkstyle
 plugins {
     id("java")
     checkstyle
-    id("com.github.spotbugs") version "6.0.26"
 }
 
 group = "nu.csse.sqe"
@@ -15,7 +14,13 @@ repositories {
 
 checkstyle {
     toolVersion = "10.21.4"
-    configFile = file("config/checkstyle/checkstyle.xml")
+    // Official Google Java Style rules bundled with Checkstyle; see
+    // https://checkstyle.sourceforge.io/google_style.html
+    configFile = file("config/checkstyle/google_checks.xml")
+    configProperties =
+        mapOf(
+            "org.checkstyle.google.suppressionfilter.config" to
+                file("${rootDir}/config/checkstyle/suppressions.xml").absolutePath)
 }
 
 tasks.withType<Checkstyle>().configureEach {
@@ -23,10 +28,6 @@ tasks.withType<Checkstyle>().configureEach {
         xml.required.set(true)
         html.required.set(true)
     }
-}
-
-tasks.named("check") {
-    dependsOn("spotbugsMain", "spotbugsTest")
 }
 
 dependencies {

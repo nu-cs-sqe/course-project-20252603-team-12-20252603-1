@@ -8,69 +8,69 @@ import org.junit.jupiter.api.Test;
 
 class PawnTest {
 
-	@Test
-	void Constructor_OnWhitePawn_TypeIsPawn() {
-		Pawn pawn = new Pawn(PieceColor.WHITE);
+  @Test
+  void constructorOnWhitePawnTypeIsPawn() {
+    Pawn pawn = new Pawn(PieceColor.WHITE);
 
-		PieceType expected = PieceType.PAWN;
-		PieceType actual = pawn.getType();
-		assertEquals(expected, actual);
-	}
+    PieceType expected = PieceType.PAWN;
+    PieceType actual = pawn.getType();
+    assertEquals(expected, actual);
+  }
 
-	@Test
-	void Constructor_OnWhitePawn_ColorIsWhite() {
-		Pawn pawn = new Pawn(PieceColor.WHITE);
+  @Test
+  void constructorOnWhitePawnColorIsWhite() {
+    Pawn pawn = new Pawn(PieceColor.WHITE);
 
-		PieceColor expected = PieceColor.WHITE;
-		PieceColor actual = pawn.getColor();
-		assertEquals(expected, actual);
-	}
+    PieceColor expected = PieceColor.WHITE;
+    PieceColor actual = pawn.getColor();
+    assertEquals(expected, actual);
+  }
 
-	@Test
-	void Constructor_OnWhitePawn_CanJumpIsFalse() {
-		Pawn pawn = new Pawn(PieceColor.WHITE);
+  @Test
+  void constructorOnWhitePawnCanJumpIsFalse() {
+    Pawn pawn = new Pawn(PieceColor.WHITE);
 
-		assertFalse(pawn.canJump());
-	}
+    assertFalse(pawn.canJump());
+  }
 
-	@Test
-	void MakeCopy_OnWhitePawn_CopyTypeIsPawn() {
-		Pawn pawn = new Pawn(PieceColor.WHITE);
+  @Test
+  void makeCopyOnWhitePawnCopyTypeIsPawn() {
+    Pawn pawn = new Pawn(PieceColor.WHITE);
 
-		PieceType expected = PieceType.PAWN;
-		PieceType actual = pawn.makeCopy().getType();
-		assertEquals(expected, actual);
-	}
+    PieceType expected = PieceType.PAWN;
+    PieceType actual = pawn.makeCopy().getType();
+    assertEquals(expected, actual);
+  }
 
-	@Test
-	void MakeCopy_OnBlackPawn_CopyTypeIsPawn() {
-		Pawn pawn = new Pawn(PieceColor.BLACK);
+  @Test
+  void makeCopyOnBlackPawnCopyTypeIsPawn() {
+    Pawn pawn = new Pawn(PieceColor.BLACK);
 
-		PieceType expected = PieceType.PAWN;
-		PieceType actual = pawn.makeCopy().getType();
-		assertEquals(expected, actual);
-	}
+    PieceType expected = PieceType.PAWN;
+    PieceType actual = pawn.makeCopy().getType();
+    assertEquals(expected, actual);
+  }
 
-	@Test
-	void MakeCopy_OnBlackPawn_CopyColorIsBlack() {
-		Pawn pawn = new Pawn(PieceColor.BLACK);
+  @Test
+  void makeCopyOnBlackPawnCopyColorIsBlack() {
+    Pawn pawn = new Pawn(PieceColor.BLACK);
 
-		PieceColor expected = PieceColor.BLACK;
-		PieceColor actual = pawn.makeCopy().getColor();
-		assertEquals(expected, actual);
-	}
+    PieceColor expected = PieceColor.BLACK;
+    PieceColor actual = pawn.makeCopy().getColor();
+    assertEquals(expected, actual);
+  }
 
-	@Test
-	void MakeCopy_OnBlackPawn_CopyCanJumpIsFalse() {
-		Pawn pawn = new Pawn(PieceColor.BLACK);
+  @Test
+  void makeCopyOnBlackPawnCopyCanJumpIsFalse() {
+    Pawn pawn = new Pawn(PieceColor.BLACK);
 
-		assertFalse(pawn.makeCopy().canJump());
-	}
+    assertFalse(pawn.makeCopy().canJump());
+  }
 
-	@Test
-	void MakeCopy_OnBlackPawn_CopyIsDifferentObject() {
-		Pawn pawn = new Pawn(PieceColor.BLACK);
+  @Test
+  void makeCopyOnBlackPawnCopyIsDifferentObject() {
+    Pawn pawn = new Pawn(PieceColor.BLACK);
 
-		assertNotSame(pawn, pawn.makeCopy());
-	}
+    assertNotSame(pawn, pawn.makeCopy());
+  }
 }
