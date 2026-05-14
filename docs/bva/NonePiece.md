@@ -36,7 +36,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC3: MakeCopy_OnNonePiece_CopyTypeIsNone** ( :x: )
+- **TC3: MakeCopy_OnNonePiece_CopyTypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing NonePiece
   - **Expected output**: returned piece type is `NONE`

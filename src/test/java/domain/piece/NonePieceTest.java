@@ -23,4 +23,14 @@ class NonePieceTest {
 
         assertFalse(nonePiece.canJump());
     }
+
+    @Test
+    void MakeCopy_OnNonePiece_CopyTypeIsNone() {
+        NonePiece nonePiece = new NonePiece();
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = nonePiece.makeCopy().getType();
+
+        assertEquals(expected, actual);
+    }
 }
