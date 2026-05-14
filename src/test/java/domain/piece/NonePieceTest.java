@@ -1,6 +1,7 @@
 package domain.piece;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,5 +15,12 @@ class NonePieceTest {
         PieceType actual = nonePiece.getType();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnNonePiece_CanJumpIsFalse() {
+        NonePiece nonePiece = new NonePiece();
+
+        assertFalse(nonePiece.canJump());
     }
 }

@@ -12,12 +12,12 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC1: Constructor_OnNonePiece_TypeIsNone** ( :x: )
+- **TC1: Constructor_OnNonePiece_TypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `NonePiece()`
   - **State of the system**: no existing NonePiece object
   - **Expected output**: created piece type is `NONE`
 
-- **TC2: Constructor_OnNonePiece_CanJumpIsFalse** ( :x: )
+- **TC2: Constructor_OnNonePiece_CanJumpIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `NonePiece()`
   - **State of the system**: no existing NonePiece object
   - **Expected output**: `canJump()` returns `false`
