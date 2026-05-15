@@ -7,4 +7,6 @@
   <suppress checks=".*Javadoc.*" files=".*"/>
   <!-- Allow short field names (e.g. x, y) in Location. -->
   <suppress checks="MemberName" files=".*[/\\]domain[/\\]location[/\\]Location\.java$"/>
+  <!-- Test methods use a leading capital; Google MethodName expects lowercase. -->
+  <suppress checks="MethodName" files=".*[/\\]src[/\\]test[/\\].*\.java$"/>
 </suppressions>

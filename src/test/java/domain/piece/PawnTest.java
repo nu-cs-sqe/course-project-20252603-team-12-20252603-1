@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class PawnTest {
 
   @Test
-  void constructorOnWhitePawnTypeIsPawn() {
+  void ConstructorOnWhitePawnTypeIsPawn() {
     Pawn pawn = new Pawn(PieceColor.WHITE);
 
     PieceType expected = PieceType.PAWN;
@@ -18,7 +18,7 @@ class PawnTest {
   }
 
   @Test
-  void constructorOnWhitePawnColorIsWhite() {
+  void ConstructorOnWhitePawnColorIsWhite() {
     Pawn pawn = new Pawn(PieceColor.WHITE);
 
     PieceColor expected = PieceColor.WHITE;
@@ -27,14 +27,14 @@ class PawnTest {
   }
 
   @Test
-  void constructorOnWhitePawnCanJumpIsFalse() {
+  void ConstructorOnWhitePawnCanJumpIsFalse() {
     Pawn pawn = new Pawn(PieceColor.WHITE);
 
     assertFalse(pawn.canJump());
   }
 
   @Test
-  void makeCopyOnWhitePawnCopyTypeIsPawn() {
+  void MakeCopyOnWhitePawnCopyTypeIsPawn() {
     Pawn pawn = new Pawn(PieceColor.WHITE);
 
     PieceType expected = PieceType.PAWN;
@@ -43,7 +43,7 @@ class PawnTest {
   }
 
   @Test
-  void makeCopyOnBlackPawnCopyTypeIsPawn() {
+  void MakeCopyOnBlackPawnCopyTypeIsPawn() {
     Pawn pawn = new Pawn(PieceColor.BLACK);
 
     PieceType expected = PieceType.PAWN;
@@ -52,7 +52,7 @@ class PawnTest {
   }
 
   @Test
-  void makeCopyOnBlackPawnCopyColorIsBlack() {
+  void MakeCopyOnBlackPawnCopyColorIsBlack() {
     Pawn pawn = new Pawn(PieceColor.BLACK);
 
     PieceColor expected = PieceColor.BLACK;
@@ -61,14 +61,14 @@ class PawnTest {
   }
 
   @Test
-  void makeCopyOnBlackPawnCopyCanJumpIsFalse() {
+  void MakeCopyOnBlackPawnCopyCanJumpIsFalse() {
     Pawn pawn = new Pawn(PieceColor.BLACK);
 
     assertFalse(pawn.makeCopy().canJump());
   }
 
   @Test
-  void makeCopyOnBlackPawnCopyIsDifferentObject() {
+  void MakeCopyOnBlackPawnCopyIsDifferentObject() {
     Pawn pawn = new Pawn(PieceColor.BLACK);
 
     assertNotSame(pawn, pawn.makeCopy());

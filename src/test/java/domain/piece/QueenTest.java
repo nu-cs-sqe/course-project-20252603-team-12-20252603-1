@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class QueenTest {
 
   @Test
-  void constructorOnWhiteQueenTypeIsQueen() {
+  void ConstructorOnWhiteQueenTypeIsQueen() {
     Queen queen = new Queen(PieceColor.WHITE);
 
     PieceType expected = PieceType.QUEEN;
@@ -18,7 +18,7 @@ class QueenTest {
   }
 
   @Test
-  void constructorOnWhiteQueenColorIsWhite() {
+  void ConstructorOnWhiteQueenColorIsWhite() {
     Queen queen = new Queen(PieceColor.WHITE);
 
     PieceColor expected = PieceColor.WHITE;
@@ -27,14 +27,14 @@ class QueenTest {
   }
 
   @Test
-  void constructorOnWhiteQueenCanJumpIsFalse() {
+  void ConstructorOnWhiteQueenCanJumpIsFalse() {
     Queen queen = new Queen(PieceColor.WHITE);
 
     assertFalse(queen.canJump());
   }
 
   @Test
-  void makeCopyOnWhiteQueenCopyTypeIsQueen() {
+  void MakeCopyOnWhiteQueenCopyTypeIsQueen() {
     Queen queen = new Queen(PieceColor.WHITE);
 
     PieceType expected = PieceType.QUEEN;
@@ -43,7 +43,7 @@ class QueenTest {
   }
 
   @Test
-  void makeCopyOnBlackQueenCopyTypeIsQueen() {
+  void MakeCopyOnBlackQueenCopyTypeIsQueen() {
     Queen queen = new Queen(PieceColor.BLACK);
 
     PieceType expected = PieceType.QUEEN;
@@ -52,7 +52,7 @@ class QueenTest {
   }
 
   @Test
-  void makeCopyOnBlackQueenCopyColorIsBlack() {
+  void MakeCopyOnBlackQueenCopyColorIsBlack() {
     Queen queen = new Queen(PieceColor.BLACK);
 
     PieceColor expected = PieceColor.BLACK;
@@ -61,14 +61,14 @@ class QueenTest {
   }
 
   @Test
-  void makeCopyOnBlackQueenCopyCanJumpIsFalse() {
+  void MakeCopyOnBlackQueenCopyCanJumpIsFalse() {
     Queen queen = new Queen(PieceColor.BLACK);
 
     assertFalse(queen.makeCopy().canJump());
   }
 
   @Test
-  void makeCopyOnBlackQueenCopyIsDifferentObject() {
+  void MakeCopyOnBlackQueenCopyIsDifferentObject() {
     Queen queen = new Queen(PieceColor.BLACK);
 
     assertNotSame(queen, queen.makeCopy());

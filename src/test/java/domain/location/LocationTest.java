@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class LocationTest {
 
   @Test
-  public void constructorOnRepresentativeInputGetXReturnsX() {
+  public void ConstructorOnRepresentativeInputHorizontalCoordinateMatches() {
     Location location = new Location(3, 4);
     int expected = 3;
     int actual = location.getX();
@@ -16,7 +16,7 @@ public class LocationTest {
   }
 
   @Test
-  public void constructorOnRepresentativeInputGetYReturnsY() {
+  public void ConstructorOnRepresentativeInputVerticalCoordinateMatches() {
     Location location = new Location(3, 4);
     int expected = 4;
     int actual = location.getY();

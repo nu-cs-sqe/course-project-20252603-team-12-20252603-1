@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class KnightTest {
 
   @Test
-  void constructorOnWhiteKnightTypeIsKnight() {
+  void ConstructorOnWhiteKnightTypeIsKnight() {
     Knight knight = new Knight(PieceColor.WHITE);
 
     PieceType expected = PieceType.KNIGHT;
@@ -19,7 +19,7 @@ class KnightTest {
   }
 
   @Test
-  void constructorOnWhiteKnightColorIsWhite() {
+  void ConstructorOnWhiteKnightColorIsWhite() {
     Knight knight = new Knight(PieceColor.WHITE);
 
     PieceColor expected = PieceColor.WHITE;
@@ -29,14 +29,14 @@ class KnightTest {
   }
 
   @Test
-  void constructorOnWhiteKnightCanJumpIsTrue() {
+  void ConstructorOnWhiteKnightCanJumpIsTrue() {
     Knight knight = new Knight(PieceColor.WHITE);
 
     assertTrue(knight.canJump());
   }
 
   @Test
-  void makeCopyOnWhiteKnightCopyTypeIsKnight() {
+  void MakeCopyOnWhiteKnightCopyTypeIsKnight() {
     Knight knight = new Knight(PieceColor.WHITE);
 
     PieceType expected = PieceType.KNIGHT;
@@ -46,7 +46,7 @@ class KnightTest {
   }
 
   @Test
-  void makeCopyOnBlackKnightCopyTypeIsKnight() {
+  void MakeCopyOnBlackKnightCopyTypeIsKnight() {
     Knight knight = new Knight(PieceColor.BLACK);
 
     PieceType expected = PieceType.KNIGHT;
@@ -56,7 +56,7 @@ class KnightTest {
   }
 
   @Test
-  void makeCopyOnBlackKnightCopyColorIsBlack() {
+  void MakeCopyOnBlackKnightCopyColorIsBlack() {
     Knight knight = new Knight(PieceColor.BLACK);
 
     PieceColor expected = PieceColor.BLACK;
@@ -66,14 +66,14 @@ class KnightTest {
   }
 
   @Test
-  void makeCopyOnBlackKnightCopyCanJumpIsTrue() {
+  void MakeCopyOnBlackKnightCopyCanJumpIsTrue() {
     Knight knight = new Knight(PieceColor.BLACK);
 
     assertTrue(knight.makeCopy().canJump());
   }
 
   @Test
-  void makeCopyOnBlackKnightCopyIsDifferentObject() {
+  void MakeCopyOnBlackKnightCopyIsDifferentObject() {
     Knight knight = new Knight(PieceColor.BLACK);
 
     assertNotSame(knight, knight.makeCopy());

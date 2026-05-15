@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class BishopTest {
 
   @Test
-  void constructorOnWhiteBishopTypeIsBishop() {
+  void ConstructorOnWhiteBishopTypeIsBishop() {
     Bishop bishop = new Bishop(PieceColor.WHITE);
 
     PieceType expected = PieceType.BISHOP;
@@ -18,7 +18,7 @@ class BishopTest {
   }
 
   @Test
-  void constructorOnWhiteBishopColorIsWhite() {
+  void ConstructorOnWhiteBishopColorIsWhite() {
     Bishop bishop = new Bishop(PieceColor.WHITE);
 
     PieceColor expected = PieceColor.WHITE;
@@ -27,14 +27,14 @@ class BishopTest {
   }
 
   @Test
-  void constructorOnWhiteBishopCanJumpIsFalse() {
+  void ConstructorOnWhiteBishopCanJumpIsFalse() {
     Bishop bishop = new Bishop(PieceColor.WHITE);
 
     assertFalse(bishop.canJump());
   }
 
   @Test
-  void makeCopyOnWhiteBishopCopyTypeIsBishop() {
+  void MakeCopyOnWhiteBishopCopyTypeIsBishop() {
     Bishop bishop = new Bishop(PieceColor.WHITE);
 
     PieceType expected = PieceType.BISHOP;
@@ -43,7 +43,7 @@ class BishopTest {
   }
 
   @Test
-  void makeCopyOnBlackBishopCopyTypeIsBishop() {
+  void MakeCopyOnBlackBishopCopyTypeIsBishop() {
     Bishop bishop = new Bishop(PieceColor.BLACK);
 
     PieceType expected = PieceType.BISHOP;
@@ -52,7 +52,7 @@ class BishopTest {
   }
 
   @Test
-  void makeCopyOnBlackBishopCopyColorIsBlack() {
+  void MakeCopyOnBlackBishopCopyColorIsBlack() {
     Bishop bishop = new Bishop(PieceColor.BLACK);
 
     PieceColor expected = PieceColor.BLACK;
@@ -61,14 +61,14 @@ class BishopTest {
   }
 
   @Test
-  void makeCopyOnBlackBishopCopyCanJumpIsFalse() {
+  void MakeCopyOnBlackBishopCopyCanJumpIsFalse() {
     Bishop bishop = new Bishop(PieceColor.BLACK);
 
     assertFalse(bishop.makeCopy().canJump());
   }
 
   @Test
-  void makeCopyOnBlackBishopCopyIsDifferentObject() {
+  void MakeCopyOnBlackBishopCopyIsDifferentObject() {
     Bishop bishop = new Bishop(PieceColor.BLACK);
 
     assertNotSame(bishop, bishop.makeCopy());

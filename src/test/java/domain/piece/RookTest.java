@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class RookTest {
 
   @Test
-  void constructorOnWhiteRookTypeIsRook() {
+  void ConstructorOnWhiteRookTypeIsRook() {
     Rook rook = new Rook(PieceColor.WHITE);
 
     PieceType expected = PieceType.ROOK;
@@ -18,7 +18,7 @@ class RookTest {
   }
 
   @Test
-  void constructorOnWhiteRookColorIsWhite() {
+  void ConstructorOnWhiteRookColorIsWhite() {
     Rook rook = new Rook(PieceColor.WHITE);
 
     PieceColor expected = PieceColor.WHITE;
@@ -27,14 +27,14 @@ class RookTest {
   }
 
   @Test
-  void constructorOnWhiteRookCanJumpIsFalse() {
+  void ConstructorOnWhiteRookCanJumpIsFalse() {
     Rook rook = new Rook(PieceColor.WHITE);
 
     assertFalse(rook.canJump());
   }
 
   @Test
-  void makeCopyOnWhiteRookCopyTypeIsRook() {
+  void MakeCopyOnWhiteRookCopyTypeIsRook() {
     Rook rook = new Rook(PieceColor.WHITE);
 
     PieceType expected = PieceType.ROOK;
@@ -43,7 +43,7 @@ class RookTest {
   }
 
   @Test
-  void makeCopyOnBlackRookCopyTypeIsRook() {
+  void MakeCopyOnBlackRookCopyTypeIsRook() {
     Rook rook = new Rook(PieceColor.BLACK);
 
     PieceType expected = PieceType.ROOK;
@@ -52,7 +52,7 @@ class RookTest {
   }
 
   @Test
-  void makeCopyOnBlackRookCopyColorIsBlack() {
+  void MakeCopyOnBlackRookCopyColorIsBlack() {
     Rook rook = new Rook(PieceColor.BLACK);
 
     PieceColor expected = PieceColor.BLACK;
@@ -61,14 +61,14 @@ class RookTest {
   }
 
   @Test
-  void makeCopyOnBlackRookCopyCanJumpIsFalse() {
+  void MakeCopyOnBlackRookCopyCanJumpIsFalse() {
     Rook rook = new Rook(PieceColor.BLACK);
 
     assertFalse(rook.makeCopy().canJump());
   }
 
   @Test
-  void makeCopyOnBlackRookCopyIsDifferentObject() {
+  void MakeCopyOnBlackRookCopyIsDifferentObject() {
     Rook rook = new Rook(PieceColor.BLACK);
 
     assertNotSame(rook, rook.makeCopy());
