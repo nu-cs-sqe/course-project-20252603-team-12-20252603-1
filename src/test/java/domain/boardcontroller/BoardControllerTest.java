@@ -83,12 +83,17 @@ class BoardControllerTest {
     }
 
     @Test
-    void GameStart_Standard_WhiteTurnAndNoPieceHasMoved() {
+    void GameStart_Standard_WhiteTurn() {
         BoardController controller = new BoardController();
 
         GameState expectedState = GameState.WHITE_TURN;
         GameState actualState = controller.getCurrentGameState();
         assertEquals(expectedState, actualState);
+    }
+
+    @Test
+    void GameStart_Standard_NoOccupiedPieceHasMoved() {
+        BoardController controller = new BoardController();
 
         boolean expected = true;
         boolean actual = everyOccupiedPieceHasNotMoved(controller.getBoardSnapshot());
@@ -108,69 +113,199 @@ class BoardControllerTest {
     }
 
     @Test
-    void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares() {
+    void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
 
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual =
-                bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
-                        && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE);
         assertEquals(expected, actual);
     }
 
     @Test
-    void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank() {
+    void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
 
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual =
-                kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE)
-                        && kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
         assertEquals(expected, actual);
     }
 
     @Test
-    void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes() {
+    void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_WhiteBackRank() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
 
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual =
-                chess960BackRanksMirrorPieceTypes(snapshot)
-                        && chess960StandardPawnRows(snapshot);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE);
         assertEquals(expected, actual);
     }
 
     @Test
-    void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank() {
+    void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_BlackBackRank() {
         BoardController controller = new BoardController(StartingPositionKind.CHESS960);
 
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual =
-                chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE)
-                        && chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
         assertEquals(expected, actual);
     }
 
     @Test
-    void GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11() {
+    void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_BackRankTypesMirror() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRanksMirrorPieceTypes(snapshot);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_StandardPawnRows() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960StandardPawnRows(snapshot);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_WhiteBackRank() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_BlackBackRank() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_WhiteBackRank() {
         BoardController controller = new BoardController(1L);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = chess960SnapshotSatisfiesTc8ThroughTc11(snapshot);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE);
         assertEquals(expected, actual);
     }
 
     @Test
-    void HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects() {
+    void GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_BlackBackRank() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_WhiteBackRank() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_BlackBackRank() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_BackRanksMirrorPieceTypes() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRanksMirrorPieceTypes(snapshot);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960StandardPawnRows(snapshot);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank() {
+        BoardController controller = new BoardController(1L);
+        Piece[][] snapshot = controller.getBoardSnapshot();
+
+        boolean expected = true;
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection() {
+        BoardController controller = new BoardController();
+        Location clicked = new Location(0, 1);
+
+        controller.handleSquareClick(clicked);
+
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches() {
+        BoardController controller = new BoardController();
+        Location clicked = new Location(0, 1);
+
+        controller.handleSquareClick(clicked);
+
+        boolean expected = true;
+        boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged() {
         BoardController controller = new BoardController();
         Location clicked = new Location(0, 1);
 
@@ -178,55 +313,109 @@ class BoardControllerTest {
 
         boolean expected = true;
         boolean actual =
-                controller.hasSelection()
-                        && locationsEqual(controller.getSelectedLocation(), clicked)
-                        && cellWiseSameTypeAndColor(
-                                newStandardStartingGrid(), controller.getBoardSnapshot());
+                cellWiseSameTypeAndColor(newStandardStartingGrid(), controller.getBoardSnapshot());
         assertEquals(expected, actual);
     }
 
     @Test
-    void HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation() {
+    void HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(0, 6));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(0, 6));
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged() {
         BoardController controller = new BoardController();
 
         controller.handleSquareClick(new Location(0, 6));
 
         boolean expected = true;
         boolean actual =
-                !controller.hasSelection()
-                        && controller.getCurrentGameState() == GameState.WHITE_TURN
-                        && cellWiseSameTypeAndColor(
-                                newStandardStartingGrid(), controller.getBoardSnapshot());
+                cellWiseSameTypeAndColor(newStandardStartingGrid(), controller.getBoardSnapshot());
         assertEquals(expected, actual);
     }
 
     @Test
-    void HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation() {
+    void HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoSelectionAfterClick() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(3, 3));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnEmptySquare_TurnRemainsWhite() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(3, 3));
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_BeforeFirstMove_OnEmptySquare_BoardUnchanged() {
         BoardController controller = new BoardController();
 
         controller.handleSquareClick(new Location(3, 3));
 
         boolean expected = true;
         boolean actual =
-                !controller.hasSelection()
-                        && controller.getCurrentGameState() == GameState.WHITE_TURN
-                        && cellWiseSameTypeAndColor(
-                                newStandardStartingGrid(), controller.getBoardSnapshot());
+                cellWiseSameTypeAndColor(newStandardStartingGrid(), controller.getBoardSnapshot());
         assertEquals(expected, actual);
     }
 
     @Test
-    void HandleSquareClick_InvalidLocation_Rejected() {
+    void HandleSquareClick_InvalidLocation_NoSelectionAfterClick() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(-1, 0));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_InvalidLocation_TurnRemainsWhite() {
+        BoardController controller = new BoardController();
+
+        controller.handleSquareClick(new Location(-1, 0));
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HandleSquareClick_InvalidLocation_BoardUnchanged() {
         BoardController controller = new BoardController();
 
         controller.handleSquareClick(new Location(-1, 0));
 
         boolean expected = true;
         boolean actual =
-                !controller.hasSelection()
-                        && controller.getCurrentGameState() == GameState.WHITE_TURN
-                        && cellWiseSameTypeAndColor(
-                                newStandardStartingGrid(), controller.getBoardSnapshot());
+                cellWiseSameTypeAndColor(newStandardStartingGrid(), controller.getBoardSnapshot());
         assertEquals(expected, actual);
     }
 
@@ -241,51 +430,40 @@ class BoardControllerTest {
         assertEquals(expected, actual);
     }
 
-        @Test
-        void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn() {
-            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
-            Location clicked = new Location(0, 1);
+    @Test
+    void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+        Location clicked = new Location(0, 1);
 
-            controller.handleSquareClick(clicked);
+        controller.handleSquareClick(clicked);
 
-            boolean expected = true;
-            boolean actual = controller.hasSelection();
-            assertEquals(expected, actual);
-        }
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
 
-        @Test
-        void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches() {
-            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
-            Location clicked = new Location(0, 1);
+    @Test
+    void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+        Location clicked = new Location(0, 1);
 
-            controller.handleSquareClick(clicked);
+        controller.handleSquareClick(clicked);
 
-            boolean expected = true;
-            boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
-            assertEquals(expected, actual);
-        }
+        boolean expected = true;
+        boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
+        assertEquals(expected, actual);
+    }
 
-        @Test
-        void HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite() {
-            BoardController controller = new BoardController(StartingPositionKind.CHESS960);
-            Location clicked = new Location(0, 1);
+    @Test
+    void HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite() {
+        BoardController controller = new BoardController(StartingPositionKind.CHESS960);
+        Location clicked = new Location(0, 1);
 
-            controller.handleSquareClick(clicked);
+        controller.handleSquareClick(clicked);
 
-            GameState expected = GameState.WHITE_TURN;
-            GameState actual = controller.getCurrentGameState();
-            assertEquals(expected, actual);
-        }
-
-    private static boolean chess960SnapshotSatisfiesTc8ThroughTc11(Piece[][] snapshot) {
-        return bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE)
-                && bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK)
-                && kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE)
-                && kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK)
-                && chess960BackRanksMirrorPieceTypes(snapshot)
-                && chess960StandardPawnRows(snapshot)
-                && chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE)
-                && chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
     }
 
     private static boolean isEightByEight(Piece[][] snapshot) {
