@@ -13,12 +13,13 @@ import domain.piece.Queen;
 import domain.piece.Rook;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class BoardController {
 
     private final Piece[][] pieces;
-    private Location lastSelectedLoc;
+    private Optional<Location> lastSelectedLoc;
     private GameState currentGameState;
 
     public BoardController() {
@@ -27,7 +28,7 @@ public class BoardController {
 
     public BoardController(StartingPositionKind startingPositionKind) {
         pieces = new Piece[8][8];
-        lastSelectedLoc = null;
+        lastSelectedLoc = Optional.empty();
         currentGameState = GameState.WHITE_TURN;
         if (startingPositionKind == StartingPositionKind.STANDARD) {
             placeStandardStartingPosition();
@@ -38,7 +39,7 @@ public class BoardController {
 
     public BoardController(long chess960Seed) {
         pieces = new Piece[8][8];
-        lastSelectedLoc = null;
+        lastSelectedLoc = Optional.empty();
         currentGameState = GameState.WHITE_TURN;
         placeChess960SeededStartingPosition(chess960Seed);
     }
@@ -173,11 +174,11 @@ public class BoardController {
     }
 
     public boolean hasSelection() {
-        return lastSelectedLoc != null;
+        return lastSelectedLoc.isPresent();
     }
 
     public Location getSelectedLocation() {
-        return lastSelectedLoc;
+        return lastSelectedLoc.orElse(null);
     }
 
     public void handleSquareClick(Location loc) {
@@ -193,7 +194,7 @@ public class BoardController {
         if (at.getColor() != PieceColor.WHITE) {
             return;
         }
-        lastSelectedLoc = loc;
+        lastSelectedLoc = Optional.of(loc);
     }
 
     private static boolean isInBounds(Location loc) {
