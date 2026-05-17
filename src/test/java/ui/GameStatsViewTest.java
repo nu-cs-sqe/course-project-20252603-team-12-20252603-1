@@ -26,35 +26,56 @@ class GameStatsViewTest {
     }
 
     @Test
-    void Constructor_OnBothNamesEmpty_InitialLabelsDefined() {
+    void Constructor_OnBothNamesEmpty_CurrentPlayerLabelEmpty() {
         GameStatsView view = new GameStatsView("", "");
 
         boolean expected = true;
-        boolean actual =
-                view.getCurrentPlayerLabelText().isEmpty()
-                        && view.getGameStateLabelText().isEmpty();
+        boolean actual = view.getCurrentPlayerLabelText().isEmpty();
         assertEquals(expected, actual);
     }
 
     @Test
-    void Constructor_OnOneNameEmptyOtherNonEmpty_InitialLabelsDefined() {
+    void Constructor_OnBothNamesEmpty_MatchupLabelEmpty() {
+        GameStatsView view = new GameStatsView("", "");
+
+        boolean expected = true;
+        boolean actual = view.getGameStateLabelText().isEmpty();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnOneNameEmptyOtherNonEmpty_CurrentPlayerLabelEmpty() {
         GameStatsView view = new GameStatsView("", "Bob");
 
         boolean expected = true;
-        boolean actual =
-                view.getCurrentPlayerLabelText().isEmpty()
-                        && view.getGameStateLabelText().equals(" vs Bob");
+        boolean actual = view.getCurrentPlayerLabelText().isEmpty();
         assertEquals(expected, actual);
     }
 
     @Test
-    void Constructor_OnEqualNames_InitialLabelsShowSameSpelling() {
+    void Constructor_OnOneNameEmptyOtherNonEmpty_MatchupLabelShowsVersusLine() {
+        GameStatsView view = new GameStatsView("", "Bob");
+
+        String expected = " vs Bob";
+        String actual = view.getGameStateLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnEqualNames_CurrentPlayerLabelShowsName() {
         GameStatsView view = new GameStatsView("Pat", "Pat");
 
-        boolean expected = true;
-        boolean actual =
-                view.getCurrentPlayerLabelText().equals("Pat")
-                        && view.getGameStateLabelText().equals("Pat vs Pat");
+        String expected = "Pat";
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void Constructor_OnEqualNames_MatchupLabelShowsVersusLine() {
+        GameStatsView view = new GameStatsView("Pat", "Pat");
+
+        String expected = "Pat vs Pat";
+        String actual = view.getGameStateLabelText();
         assertEquals(expected, actual);
     }
 
