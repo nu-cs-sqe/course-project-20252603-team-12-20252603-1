@@ -110,7 +110,10 @@ public class BoardController {
 
     private PieceType[] generateChess960BackRank(Random rng) {
         PieceType[] byFile = new PieceType[8];
-        
+        for (int file = 0; file < 8; file++) {
+            byFile[file] = PieceType.NONE;
+        }
+
         int[] lightFiles = {0, 2, 4, 6};
         int lightBishopFile = lightFiles[rng.nextInt(4)];
         byFile[lightBishopFile] = PieceType.BISHOP;
@@ -121,7 +124,7 @@ public class BoardController {
         
         List<Integer> remaining = new ArrayList<>();
         for (int file = 0; file < 8; file++) {
-            if (byFile[file] == null) {
+            if (byFile[file] == PieceType.NONE) {
                 remaining.add(file);
             }
         }
