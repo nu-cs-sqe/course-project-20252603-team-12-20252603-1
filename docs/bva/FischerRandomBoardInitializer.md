@@ -59,7 +59,7 @@
 
 Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are parameterized over both rows 0 and 7, so TC4–TC6 (white back rank) are covered by them.
 
-- **TC1: GetBoardLayout_BlackBackRankContainsAllRequiredPieceTypes** ( :x: )
+- **TC1: GetBoardLayout_BlackBackRankContainsAllRequiredPieceTypes** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `FischerRandomBoardInitializer`
   - **Expected output**: row 0 contains exactly ROOK×2, KNIGHT×2, BISHOP×2, QUEEN×1, KING×1
@@ -77,7 +77,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
   - **Expected output**: king column in row 0 is greater than the left rook's column and less than the right rook's column
   - **Note**: TC6 is covered by this test as a parameterized test (row 7)
 
-- **TC4: GetBoardLayout_WhiteBackRankContainsAllRequiredPieceTypes** ( :x: )
+- **TC4: GetBoardLayout_WhiteBackRankContainsAllRequiredPieceTypes** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
 - **TC5: GetBoardLayout_WhiteBishopsAreOnOppositeColoredSquares** ( :x: )
