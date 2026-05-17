@@ -71,7 +71,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
   - **Expected output**: one bishop in row 0 is on an even column; the other is on an odd column
   - **Note**: TC5 is covered by this test as a parameterized test (row 7)
 
-- **TC3: GetBoardLayout_BlackKingIsBetweenRooks** ( :x: )
+- **TC3: GetBoardLayout_BlackKingIsBetweenRooks** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `FischerRandomBoardInitializer`
   - **Expected output**: king column in row 0 is greater than the left rook's column and less than the right rook's column
@@ -83,7 +83,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
 - **TC5: GetBoardLayout_WhiteBishopsAreOnOppositeColoredSquares** ( :white_check_mark: )
   - **Covered by**: TC2 (parameterized test)
 
-- **TC6: GetBoardLayout_WhiteKingIsBetweenRooks** ( :x: )
+- **TC6: GetBoardLayout_WhiteKingIsBetweenRooks** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
 - **TC7: GetBoardLayout_PieceTypeAtPawnRankIsCorrect** ( :x: )

@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.piece.PieceType;
 import java.util.ArrayList;
@@ -41,5 +42,21 @@ class FischerRandomBoardInitializerTest {
         }
 
         assertNotEquals(bishopCols.get(0) % 2, bishopCols.get(1) % 2);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 7})
+    void GetBoardLayout_KingIsBetweenRooks(int row) {
+        FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
+        PieceType[] backRank = initializer.getBoardLayout()[row];
+
+        int kingCol = -1;
+        List<Integer> rookCols = new ArrayList<>();
+        for (int col = 0; col < 8; col++) {
+            if (backRank[col] == PieceType.KING) kingCol = col;
+            if (backRank[col] == PieceType.ROOK) rookCols.add(col);
+        }
+
+        assertTrue(rookCols.get(0) < kingCol && kingCol < rookCols.get(1));
     }
 }
