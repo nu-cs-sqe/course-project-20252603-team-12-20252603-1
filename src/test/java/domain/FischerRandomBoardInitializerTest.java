@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class FischerRandomBoardInitializerTest {
@@ -58,5 +59,15 @@ class FischerRandomBoardInitializerTest {
         }
 
         assertTrue(rookCols.get(0) < kingCol && kingCol < rookCols.get(1));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 0", "1, 1", "1, 2", "1, 3", "1, 4", "1, 5", "1, 6", "1, 7",
+            "6, 0", "6, 1", "6, 2", "6, 3", "6, 4", "6, 5", "6, 6", "6, 7"
+    })
+    void GetBoardLayout_PieceTypeAtPawnRankIsCorrect(int row, int col) {
+        FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
+        assertEquals(PieceType.PAWN, initializer.getBoardLayout()[row][col]);
     }
 }

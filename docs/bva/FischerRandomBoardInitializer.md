@@ -86,55 +86,55 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
 - **TC6: GetBoardLayout_WhiteKingIsBetweenRooks** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC7: GetBoardLayout_PieceTypeAtPawnRankIsCorrect** ( :x: )
+- **TC7: GetBoardLayout_PieceTypeAtPawnRankIsCorrect** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `FischerRandomBoardInitializer`
   - **Expected output**: position `[1][0]` has type `PAWN`
   - **Note**: TC8–TC22 are covered by this test as a parameterized test (same 16 pawn positions across rows 1 and 6)
 
-- **TC8: GetBoardLayout_TypeAtRow1Col1IsPawn** ( :x: )
+- **TC8: GetBoardLayout_TypeAtRow1Col1IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC9: GetBoardLayout_TypeAtRow1Col2IsPawn** ( :x: )
+- **TC9: GetBoardLayout_TypeAtRow1Col2IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC10: GetBoardLayout_TypeAtRow1Col3IsPawn** ( :x: )
+- **TC10: GetBoardLayout_TypeAtRow1Col3IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC11: GetBoardLayout_TypeAtRow1Col4IsPawn** ( :x: )
+- **TC11: GetBoardLayout_TypeAtRow1Col4IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC12: GetBoardLayout_TypeAtRow1Col5IsPawn** ( :x: )
+- **TC12: GetBoardLayout_TypeAtRow1Col5IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC13: GetBoardLayout_TypeAtRow1Col6IsPawn** ( :x: )
+- **TC13: GetBoardLayout_TypeAtRow1Col6IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC14: GetBoardLayout_TypeAtRow1Col7IsPawn** ( :x: )
+- **TC14: GetBoardLayout_TypeAtRow1Col7IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC15: GetBoardLayout_TypeAtRow6Col0IsPawn** ( :x: )
+- **TC15: GetBoardLayout_TypeAtRow6Col0IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC16: GetBoardLayout_TypeAtRow6Col1IsPawn** ( :x: )
+- **TC16: GetBoardLayout_TypeAtRow6Col1IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC17: GetBoardLayout_TypeAtRow6Col2IsPawn** ( :x: )
+- **TC17: GetBoardLayout_TypeAtRow6Col2IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC18: GetBoardLayout_TypeAtRow6Col3IsPawn** ( :x: )
+- **TC18: GetBoardLayout_TypeAtRow6Col3IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC19: GetBoardLayout_TypeAtRow6Col4IsPawn** ( :x: )
+- **TC19: GetBoardLayout_TypeAtRow6Col4IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC20: GetBoardLayout_TypeAtRow6Col5IsPawn** ( :x: )
+- **TC20: GetBoardLayout_TypeAtRow6Col5IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC21: GetBoardLayout_TypeAtRow6Col6IsPawn** ( :x: )
+- **TC21: GetBoardLayout_TypeAtRow6Col6IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC22: GetBoardLayout_TypeAtRow6Col7IsPawn** ( :x: )
+- **TC22: GetBoardLayout_TypeAtRow6Col7IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
 - **TC23: GetBoardLayout_EmptyPositionPieceTypeIsNone** ( :x: )
