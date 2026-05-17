@@ -18,6 +18,8 @@ import java.util.Random;
 
 public class BoardController {
 
+    private static final int BOARD_SIZE = 8;
+
     private final Piece[][] pieces;
     private Optional<Location> lastSelectedLoc;
     private GameState currentGameState;
@@ -27,7 +29,7 @@ public class BoardController {
     }
 
     public BoardController(StartingPositionKind startingPositionKind) {
-        pieces = new Piece[8][8];
+        pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
         lastSelectedLoc = Optional.empty();
         currentGameState = GameState.WHITE_TURN;
         if (startingPositionKind == StartingPositionKind.STANDARD) {
@@ -38,7 +40,7 @@ public class BoardController {
     }
 
     public BoardController(long chess960Seed) {
-        pieces = new Piece[8][8];
+        pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
         lastSelectedLoc = Optional.empty();
         currentGameState = GameState.WHITE_TURN;
         placeChess960SeededStartingPosition(chess960Seed);
@@ -53,11 +55,11 @@ public class BoardController {
         pieces[0][5] = new Bishop(PieceColor.WHITE);
         pieces[0][6] = new Knight(PieceColor.WHITE);
         pieces[0][7] = new Rook(PieceColor.WHITE);
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[1][file] = new Pawn(PieceColor.WHITE);
         }
 
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[6][file] = new Pawn(PieceColor.BLACK);
         }
 
@@ -80,11 +82,11 @@ public class BoardController {
         pieces[0][5] = new Knight(PieceColor.WHITE);
         pieces[0][6] = new Bishop(PieceColor.WHITE);
         pieces[0][7] = new Rook(PieceColor.WHITE);
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[1][file] = new Pawn(PieceColor.WHITE);
         }
 
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[6][file] = new Pawn(PieceColor.BLACK);
         }
 
@@ -103,15 +105,15 @@ public class BoardController {
         PieceType[] byFile = generateChess960BackRank(rng);
         fillBackRankFromTypes(0, PieceColor.WHITE, byFile);
         fillBackRankFromTypes(7, PieceColor.BLACK, byFile);
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[1][file] = new Pawn(PieceColor.WHITE);
             pieces[6][file] = new Pawn(PieceColor.BLACK);
         }
     }
 
     private PieceType[] generateChess960BackRank(Random rng) {
-        PieceType[] byFile = new PieceType[8];
-        for (int file = 0; file < 8; file++) {
+        PieceType[] byFile = new PieceType[BOARD_SIZE];
+        for (int file = 0; file < BOARD_SIZE; file++) {
             byFile[file] = PieceType.NONE;
         }
 
@@ -124,7 +126,7 @@ public class BoardController {
         byFile[darkBishopFile] = PieceType.BISHOP;
         
         List<Integer> remaining = new ArrayList<>();
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             if (byFile[file] == PieceType.NONE) {
                 remaining.add(file);
             }
@@ -150,7 +152,7 @@ public class BoardController {
     }
 
     private void fillBackRankFromTypes(int rank, PieceColor color, PieceType[] byFile) {
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[rank][file] = createPiece(byFile[file], color);
         }
     }
@@ -200,13 +202,13 @@ public class BoardController {
     private static boolean isInBounds(Location loc) {
         int x = loc.getX();
         int y = loc.getY();
-        return x >= 0 && x < 8 && y >= 0 && y < 8;
+        return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
     }
 
     public Piece[][] getBoardSnapshot() {
-        Piece[][] copy = new Piece[8][8];
-        for (int rank = 0; rank < 8; rank++) {
-            for (int file = 0; file < 8; file++) {
+        Piece[][] copy = new Piece[BOARD_SIZE][BOARD_SIZE];
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
                 copy[rank][file] = pieces[rank][file];
             }
         }
