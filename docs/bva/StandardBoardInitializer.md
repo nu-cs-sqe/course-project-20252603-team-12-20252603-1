@@ -69,104 +69,104 @@
 
 Each boundary value from Step 3 appears in at least one test case.
 
-- **TC1: GetBoardLayout_PieceTypeAtPositionIsCorrect** ( :x: )
+- **TC1: GetBoardLayout_PieceTypeAtPositionIsCorrect** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `StandardBoardInitializer`
   - **Expected output**: position `[0][0]` has type `ROOK`
   - **Note**: TC2–TC33 are covered by this test as a parameterized test
 
-- **TC2: GetBoardLayout_TypeAtRow0Col1IsKnight** ( :x: )
+- **TC2: GetBoardLayout_TypeAtRow0Col1IsKnight** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC3: GetBoardLayout_TypeAtRow0Col2IsBishop** ( :x: )
+- **TC3: GetBoardLayout_TypeAtRow0Col2IsBishop** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC4: GetBoardLayout_TypeAtRow0Col3IsQueen** ( :x: )
+- **TC4: GetBoardLayout_TypeAtRow0Col3IsQueen** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC5: GetBoardLayout_TypeAtRow0Col4IsKing** ( :x: )
+- **TC5: GetBoardLayout_TypeAtRow0Col4IsKing** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC6: GetBoardLayout_TypeAtRow0Col5IsBishop** ( :x: )
+- **TC6: GetBoardLayout_TypeAtRow0Col5IsBishop** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC7: GetBoardLayout_TypeAtRow0Col6IsKnight** ( :x: )
+- **TC7: GetBoardLayout_TypeAtRow0Col6IsKnight** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC8: GetBoardLayout_TypeAtRow0Col7IsRook** ( :x: )
+- **TC8: GetBoardLayout_TypeAtRow0Col7IsRook** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC9: GetBoardLayout_TypeAtRow1Col0IsPawn** ( :x: )
+- **TC9: GetBoardLayout_TypeAtRow1Col0IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC10: GetBoardLayout_TypeAtRow1Col1IsPawn** ( :x: )
+- **TC10: GetBoardLayout_TypeAtRow1Col1IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC11: GetBoardLayout_TypeAtRow1Col2IsPawn** ( :x: )
+- **TC11: GetBoardLayout_TypeAtRow1Col2IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC12: GetBoardLayout_TypeAtRow1Col3IsPawn** ( :x: )
+- **TC12: GetBoardLayout_TypeAtRow1Col3IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC13: GetBoardLayout_TypeAtRow1Col4IsPawn** ( :x: )
+- **TC13: GetBoardLayout_TypeAtRow1Col4IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC14: GetBoardLayout_TypeAtRow1Col5IsPawn** ( :x: )
+- **TC14: GetBoardLayout_TypeAtRow1Col5IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC15: GetBoardLayout_TypeAtRow1Col6IsPawn** ( :x: )
+- **TC15: GetBoardLayout_TypeAtRow1Col6IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC16: GetBoardLayout_TypeAtRow1Col7IsPawn** ( :x: )
+- **TC16: GetBoardLayout_TypeAtRow1Col7IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC17: GetBoardLayout_TypeAtRow3Col0IsNone** ( :x: )
+- **TC17: GetBoardLayout_TypeAtRow3Col0IsNone** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC18: GetBoardLayout_TypeAtRow6Col0IsPawn** ( :x: )
+- **TC18: GetBoardLayout_TypeAtRow6Col0IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC19: GetBoardLayout_TypeAtRow6Col1IsPawn** ( :x: )
+- **TC19: GetBoardLayout_TypeAtRow6Col1IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC20: GetBoardLayout_TypeAtRow6Col2IsPawn** ( :x: )
+- **TC20: GetBoardLayout_TypeAtRow6Col2IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC21: GetBoardLayout_TypeAtRow6Col3IsPawn** ( :x: )
+- **TC21: GetBoardLayout_TypeAtRow6Col3IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC22: GetBoardLayout_TypeAtRow6Col4IsPawn** ( :x: )
+- **TC22: GetBoardLayout_TypeAtRow6Col4IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC23: GetBoardLayout_TypeAtRow6Col5IsPawn** ( :x: )
+- **TC23: GetBoardLayout_TypeAtRow6Col5IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC24: GetBoardLayout_TypeAtRow6Col6IsPawn** ( :x: )
+- **TC24: GetBoardLayout_TypeAtRow6Col6IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC25: GetBoardLayout_TypeAtRow6Col7IsPawn** ( :x: )
+- **TC25: GetBoardLayout_TypeAtRow6Col7IsPawn** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC26: GetBoardLayout_TypeAtRow7Col0IsRook** ( :x: )
+- **TC26: GetBoardLayout_TypeAtRow7Col0IsRook** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC27: GetBoardLayout_TypeAtRow7Col1IsKnight** ( :x: )
+- **TC27: GetBoardLayout_TypeAtRow7Col1IsKnight** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC28: GetBoardLayout_TypeAtRow7Col2IsBishop** ( :x: )
+- **TC28: GetBoardLayout_TypeAtRow7Col2IsBishop** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC29: GetBoardLayout_TypeAtRow7Col3IsQueen** ( :x: )
+- **TC29: GetBoardLayout_TypeAtRow7Col3IsQueen** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC30: GetBoardLayout_TypeAtRow7Col4IsKing** ( :x: )
+- **TC30: GetBoardLayout_TypeAtRow7Col4IsKing** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC31: GetBoardLayout_TypeAtRow7Col5IsBishop** ( :x: )
+- **TC31: GetBoardLayout_TypeAtRow7Col5IsBishop** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC32: GetBoardLayout_TypeAtRow7Col6IsKnight** ( :x: )
+- **TC32: GetBoardLayout_TypeAtRow7Col6IsKnight** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC33: GetBoardLayout_TypeAtRow7Col7IsRook** ( :x: )
+- **TC33: GetBoardLayout_TypeAtRow7Col7IsRook** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
