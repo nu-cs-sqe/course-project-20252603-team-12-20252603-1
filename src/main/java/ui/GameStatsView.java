@@ -28,11 +28,11 @@ public class GameStatsView extends JPanel {
   }
 
   String getCurrentPlayerLabelText() {
-    return currentPlayerLabel.getText();
+    return Objects.requireNonNullElse(currentPlayerLabel.getText(), "");
   }
 
   String getGameStateLabelText() {
-    return gameStateLabel.getText();
+    return Objects.requireNonNullElse(gameStateLabel.getText(), "");
   }
 
   public void updateCurrentPlayerLabel(String playerName) {
