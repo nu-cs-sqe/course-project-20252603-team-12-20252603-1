@@ -1,9 +1,12 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import domain.piece.PieceType;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,7 +17,7 @@ class FischerRandomBoardInitializerTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 7})
-    void GetBoardLayout_BackRankContainsAllRequiredPieceTypes(int row) {
+    void GetBoardLayout_BlackBackRankContainsAllRequiredPieceTypes(int row) {
         FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
         Map<PieceType, Long> counts = Arrays.stream(initializer.getBoardLayout()[row])
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -24,5 +27,19 @@ class FischerRandomBoardInitializerTest {
         assertEquals(2L, counts.get(PieceType.BISHOP));
         assertEquals(1L, counts.get(PieceType.QUEEN));
         assertEquals(1L, counts.get(PieceType.KING));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 7})
+    void GetBoardLayout_BishopsAreOnOppositeColoredSquares(int row) {
+        FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
+        PieceType[] backRank = initializer.getBoardLayout()[row];
+
+        List<Integer> bishopCols = new ArrayList<>();
+        for (int col = 0; col < 8; col++) {
+            if (backRank[col] == PieceType.BISHOP) bishopCols.add(col);
+        }
+
+        assertNotEquals(bishopCols.get(0) % 2, bishopCols.get(1) % 2);
     }
 }

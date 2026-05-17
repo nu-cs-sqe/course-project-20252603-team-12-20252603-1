@@ -65,7 +65,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
   - **Expected output**: row 0 contains exactly ROOK×2, KNIGHT×2, BISHOP×2, QUEEN×1, KING×1
   - **Note**: TC4 is covered by this test as a parameterized test (row 7)
 
-- **TC2: GetBoardLayout_BlackBishopsAreOnOppositeColoredSquares** ( :x: )
+- **TC2: GetBoardLayout_BlackBishopsAreOnOppositeColoredSquares** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `FischerRandomBoardInitializer`
   - **Expected output**: one bishop in row 0 is on an even column; the other is on an odd column
@@ -80,7 +80,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
 - **TC4: GetBoardLayout_WhiteBackRankContainsAllRequiredPieceTypes** ( :white_check_mark: )
   - **Covered by**: TC1 (parameterized test)
 
-- **TC5: GetBoardLayout_WhiteBishopsAreOnOppositeColoredSquares** ( :x: )
+- **TC5: GetBoardLayout_WhiteBishopsAreOnOppositeColoredSquares** ( :white_check_mark: )
   - **Covered by**: TC2 (parameterized test)
 
 - **TC6: GetBoardLayout_WhiteKingIsBetweenRooks** ( :x: )
