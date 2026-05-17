@@ -9,8 +9,8 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
 
     private final Random random;
 
-    public FischerRandomBoardInitializer() {
-        this.random = new Random();
+    public FischerRandomBoardInitializer(Random random) {
+        this.random = random;
     }
 
     @Override
