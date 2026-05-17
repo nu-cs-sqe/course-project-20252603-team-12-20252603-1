@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -69,5 +70,11 @@ class FischerRandomBoardInitializerTest {
     void GetBoardLayout_PieceTypeAtPawnRankIsCorrect(int row, int col) {
         FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
         assertEquals(PieceType.PAWN, initializer.getBoardLayout()[row][col]);
+    }
+
+    @Test
+    void GetBoardLayout_EmptyPositionPieceTypeIsNone() {
+        FischerRandomBoardInitializer initializer = new FischerRandomBoardInitializer();
+        assertEquals(PieceType.NONE, initializer.getBoardLayout()[3][0]);
     }
 }

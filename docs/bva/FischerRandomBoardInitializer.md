@@ -137,7 +137,7 @@ Each boundary value from Step 3 appears in at least one test case. TC1–TC3 are
 - **TC22: GetBoardLayout_TypeAtRow6Col7IsPawn** ( :white_check_mark: )
   - **Covered by**: TC7 (parameterized test)
 
-- **TC23: GetBoardLayout_EmptyPositionPieceTypeIsNone** ( :x: )
+- **TC23: GetBoardLayout_EmptyPositionPieceTypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardLayout()`
   - **State of the system**: call `getBoardLayout()` on a new `FischerRandomBoardInitializer`
   - **Expected output**: position `[3][0]` has type `NONE`
