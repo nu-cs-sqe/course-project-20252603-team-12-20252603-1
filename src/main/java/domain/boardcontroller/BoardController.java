@@ -99,8 +99,8 @@ public class BoardController {
     private void placeChess960SeededStartingPosition(long seed) {
         Random rng = new Random(seed);
         PieceType[] byFile = generateChess960BackRank(rng);
-        fillBackRankFromTypes(0, PieceColor.WHITE, byFile);
-        fillBackRankFromTypes(7, PieceColor.BLACK, byFile);
+        placeBackRank(0, PieceColor.WHITE, byFile);
+        placeBackRank(7, PieceColor.BLACK, byFile);
         placeStartingPawns();
     }
 
@@ -142,10 +142,6 @@ public class BoardController {
         byFile[remaining.get(2)] = PieceType.ROOK;
 
         return byFile;
-    }
-
-    private void fillBackRankFromTypes(int rank, PieceColor color, PieceType[] byFile) {
-        placeBackRank(rank, color, byFile);
     }
 
     private static Piece createPiece(PieceType type, PieceColor color) {
