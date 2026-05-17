@@ -1,5 +1,8 @@
+import org.gradle.api.plugins.quality.Checkstyle
+
 plugins {
     id("java")
+    checkstyle
 }
 
 group = "nu.csse.sqe"
@@ -7,6 +10,24 @@ version = "1.0"
 
 repositories {
     mavenCentral()
+}
+
+checkstyle {
+    toolVersion = "10.21.4"
+    // Official Google Java Style rules bundled with Checkstyle; see
+    // https://checkstyle.sourceforge.io/google_style.html
+    configFile = file("config/checkstyle/google_checks.xml")
+    configProperties =
+        mapOf(
+            "org.checkstyle.google.suppressionfilter.config" to
+                file("${rootDir}/config/checkstyle/suppressions.xml").absolutePath)
+}
+
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 dependencies {
