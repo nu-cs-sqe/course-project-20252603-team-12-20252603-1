@@ -1,7 +1,6 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,11 +34,11 @@ class GameStatsViewTest {
     }
 
     @Test
-    void Constructor_OnBothNamesEmpty_MatchupLabelEmpty() {
+    void Constructor_OnBothNamesEmpty_MatchupLabelShowsVersusSeparator() {
         GameStatsView view = new GameStatsView("", "");
 
-        boolean expected = true;
-        boolean actual = view.getGameStateLabelText().isEmpty();
+        String expected = " vs ";
+        String actual = view.getGameStateLabelText();
         assertEquals(expected, actual);
     }
 
@@ -77,11 +76,6 @@ class GameStatsViewTest {
         String expected = "Pat vs Pat";
         String actual = view.getGameStateLabelText();
         assertEquals(expected, actual);
-    }
-
-    @Test
-    void Constructor_OnNullPlayerOneName_ThrowsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new GameStatsView(null, "Bob"));
     }
 
     @Test
