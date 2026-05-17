@@ -30,8 +30,7 @@ public class BoardController {
 
     public BoardController(StartingPositionKind startingPositionKind) {
         pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
-        lastSelectedLoc = Optional.empty();
-        currentGameState = GameState.WHITE_TURN;
+        initializeNewGameState();
         if (startingPositionKind == StartingPositionKind.STANDARD) {
             placeStandardStartingPosition();
         } else {
@@ -41,9 +40,13 @@ public class BoardController {
 
     public BoardController(long chess960Seed) {
         pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
+        initializeNewGameState();
+        placeChess960SeededStartingPosition(chess960Seed);
+    }
+
+    private void initializeNewGameState() {
         lastSelectedLoc = Optional.empty();
         currentGameState = GameState.WHITE_TURN;
-        placeChess960SeededStartingPosition(chess960Seed);
     }
 
     private void placeStandardStartingPosition() {
