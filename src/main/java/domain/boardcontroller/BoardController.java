@@ -20,6 +20,28 @@ public class BoardController {
 
     private static final int BOARD_SIZE = 8;
 
+    private static final PieceType[] STANDARD_BACK_RANK = {
+        PieceType.ROOK,
+        PieceType.KNIGHT,
+        PieceType.BISHOP,
+        PieceType.QUEEN,
+        PieceType.KING,
+        PieceType.BISHOP,
+        PieceType.KNIGHT,
+        PieceType.ROOK
+    };
+
+    private static final PieceType[] CHESS960_FIXED_BACK_RANK = {
+        PieceType.ROOK,
+        PieceType.BISHOP,
+        PieceType.KNIGHT,
+        PieceType.QUEEN,
+        PieceType.KING,
+        PieceType.KNIGHT,
+        PieceType.BISHOP,
+        PieceType.ROOK
+    };
+
     private final Piece[][] pieces;
     private Optional<Location> lastSelectedLoc;
     private GameState currentGameState;
@@ -50,57 +72,28 @@ public class BoardController {
     }
 
     private void placeStandardStartingPosition() {
-        pieces[0][0] = new Rook(PieceColor.WHITE);
-        pieces[0][1] = new Knight(PieceColor.WHITE);
-        pieces[0][2] = new Bishop(PieceColor.WHITE);
-        pieces[0][3] = new Queen(PieceColor.WHITE);
-        pieces[0][4] = new King(PieceColor.WHITE);
-        pieces[0][5] = new Bishop(PieceColor.WHITE);
-        pieces[0][6] = new Knight(PieceColor.WHITE);
-        pieces[0][7] = new Rook(PieceColor.WHITE);
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            pieces[1][file] = new Pawn(PieceColor.WHITE);
-        }
-
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            pieces[6][file] = new Pawn(PieceColor.BLACK);
-        }
-
-        pieces[7][0] = new Rook(PieceColor.BLACK);
-        pieces[7][1] = new Knight(PieceColor.BLACK);
-        pieces[7][2] = new Bishop(PieceColor.BLACK);
-        pieces[7][3] = new Queen(PieceColor.BLACK);
-        pieces[7][4] = new King(PieceColor.BLACK);
-        pieces[7][5] = new Bishop(PieceColor.BLACK);
-        pieces[7][6] = new Knight(PieceColor.BLACK);
-        pieces[7][7] = new Rook(PieceColor.BLACK);
+        placeBackRank(0, PieceColor.WHITE, STANDARD_BACK_RANK);
+        placeStartingPawns();
+        placeBackRank(7, PieceColor.BLACK, STANDARD_BACK_RANK);
     }
 
     private void placeChess960FixedStartingPosition() {
-        pieces[0][0] = new Rook(PieceColor.WHITE);
-        pieces[0][1] = new Bishop(PieceColor.WHITE);
-        pieces[0][2] = new Knight(PieceColor.WHITE);
-        pieces[0][3] = new Queen(PieceColor.WHITE);
-        pieces[0][4] = new King(PieceColor.WHITE);
-        pieces[0][5] = new Knight(PieceColor.WHITE);
-        pieces[0][6] = new Bishop(PieceColor.WHITE);
-        pieces[0][7] = new Rook(PieceColor.WHITE);
+        placeBackRank(0, PieceColor.WHITE, CHESS960_FIXED_BACK_RANK);
+        placeStartingPawns();
+        placeBackRank(7, PieceColor.BLACK, CHESS960_FIXED_BACK_RANK);
+    }
+
+    private void placeStartingPawns() {
         for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[1][file] = new Pawn(PieceColor.WHITE);
-        }
-
-        for (int file = 0; file < BOARD_SIZE; file++) {
             pieces[6][file] = new Pawn(PieceColor.BLACK);
         }
+    }
 
-        pieces[7][0] = new Rook(PieceColor.BLACK);
-        pieces[7][1] = new Bishop(PieceColor.BLACK);
-        pieces[7][2] = new Knight(PieceColor.BLACK);
-        pieces[7][3] = new Queen(PieceColor.BLACK);
-        pieces[7][4] = new King(PieceColor.BLACK);
-        pieces[7][5] = new Knight(PieceColor.BLACK);
-        pieces[7][6] = new Bishop(PieceColor.BLACK);
-        pieces[7][7] = new Rook(PieceColor.BLACK);
+    private void placeBackRank(int rank, PieceColor color, PieceType[] typesByFile) {
+        for (int file = 0; file < BOARD_SIZE; file++) {
+            pieces[rank][file] = createPiece(typesByFile[file], color);
+        }
     }
 
     private void placeChess960SeededStartingPosition(long seed) {
@@ -108,10 +101,7 @@ public class BoardController {
         PieceType[] byFile = generateChess960BackRank(rng);
         fillBackRankFromTypes(0, PieceColor.WHITE, byFile);
         fillBackRankFromTypes(7, PieceColor.BLACK, byFile);
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            pieces[1][file] = new Pawn(PieceColor.WHITE);
-            pieces[6][file] = new Pawn(PieceColor.BLACK);
-        }
+        placeStartingPawns();
     }
 
     private PieceType[] generateChess960BackRank(Random rng) {
@@ -123,41 +113,39 @@ public class BoardController {
         int[] lightFiles = {0, 2, 4, 6};
         int lightBishopFile = lightFiles[rng.nextInt(4)];
         byFile[lightBishopFile] = PieceType.BISHOP;
-        
+
         int[] darkFiles = {1, 3, 5, 7};
         int darkBishopFile = darkFiles[rng.nextInt(4)];
         byFile[darkBishopFile] = PieceType.BISHOP;
-        
+
         List<Integer> remaining = new ArrayList<>();
         for (int file = 0; file < BOARD_SIZE; file++) {
             if (byFile[file] == PieceType.NONE) {
                 remaining.add(file);
             }
         }
-        
+
         int queenIdx = rng.nextInt(3);
         byFile[remaining.get(queenIdx)] = PieceType.QUEEN;
         remaining.remove(queenIdx);
-        
+
         int knight1Idx = rng.nextInt(4);
         byFile[remaining.get(knight1Idx)] = PieceType.KNIGHT;
         remaining.remove(knight1Idx);
-        
+
         int knight2Idx = rng.nextInt(3);
         byFile[remaining.get(knight2Idx)] = PieceType.KNIGHT;
         remaining.remove(knight2Idx);
-        
+
         byFile[remaining.get(0)] = PieceType.ROOK;
         byFile[remaining.get(1)] = PieceType.KING;
         byFile[remaining.get(2)] = PieceType.ROOK;
-        
+
         return byFile;
     }
 
     private void fillBackRankFromTypes(int rank, PieceColor color, PieceType[] byFile) {
-        for (int file = 0; file < BOARD_SIZE; file++) {
-            pieces[rank][file] = createPiece(byFile[file], color);
-        }
+        placeBackRank(rank, color, byFile);
     }
 
     private static Piece createPiece(PieceType type, PieceColor color) {
@@ -172,7 +160,6 @@ public class BoardController {
                 return new Queen(color);
             case KING:
                 return new King(color);
-            case PAWN:
             default:
                 throw new IllegalArgumentException(type.name());
         }
