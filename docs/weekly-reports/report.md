@@ -40,6 +40,19 @@
 2. [not started] Alex: Create BoardView class skeleton in the domain package, implementing all the necessary code for Game Initialization User Story (BVA, TDD passes, etc) ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
 3. [not started] Didier: Create GameStatsView class skeleton in the domain package, implementing all the necessary code for Game Initialization User Story (BVA, TDD passes, etc) ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28))
 
+# Week 7 (05/11/2026-05/17/2026)
+**Progress Tracking**:
+1. [done] Matthew: Create NonePiece class, and implement the FischerRandom in Board for Game Initialization User Story (BVA, TDD passes, etc) ([#29](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/29))
+2. [in progress] Alex: Create BoardView class skeleton in the `ui` package, implemented BVA for BoardView. ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27)), reviewed ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28))
+3. [in progress] Didier: Create GameStatsView class in the `ui` package, implementing all the necessary code for Game Initialization User Story (BVA, TDD passes, etc) ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28))
+4. **Group check-in**: Met as a team, shared feedback on progress and process, and agreed to **finalize Game Initialization** work this coming week (merge open PRs, close remaining BVA/TDD gaps, address review items).
+
+**Planning Tracking**:
+
+1. [not started] Matthew: `Board` constructor from `Piece[][]`; cyclomatic-complexity pass on [#19](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/19)
+2. [not started] Alex: final details of `BoardView` implementation + PR merging ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
+3. [not started] Didier: Merge [#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28) and [#21](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/21); coordinate `Board` / `BoardController` integration with Matthew’s branch
+
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
