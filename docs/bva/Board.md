@@ -92,7 +92,7 @@
   - **Expected output**: piece at that position has type NONE
   - **Covered by**: TC1 (parameterized test)
 
-- **TC9: Constructor_WhenInitializerHasNonNoneTypeInTopHalf_PieceColorIsBlack** ( :x: )
+- **TC9: Constructor_WhenInitializerHasNonNoneTypeInTopHalf_PieceColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at a row 0–3 position; board is constructed
   - **Expected output**: piece at that position has color BLACK
