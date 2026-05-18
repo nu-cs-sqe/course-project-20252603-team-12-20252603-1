@@ -44,49 +44,49 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC1: Constructor_WhenInitializerHasPieceTypeAtPosition_PieceTypeMatches** ( :x: )
+- **TC1: Constructor_WhenInitializerHasPieceTypeAtPosition_PieceTypeMatches** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a layout with a single non-NONE piece type at one position; all other positions are NONE; board is constructed
   - **Expected output**: `getSnapshot()[row][col].getType()` equals the piece type the initializer returned
   - **Note**: TC2–TC7 are covered by this test case as a parameterized test
 
-- **TC2: Constructor_WhenInitializerHasRookAtPosition_PieceTypeIsRook** ( :x: )
+- **TC2: Constructor_WhenInitializerHasRookAtPosition_PieceTypeIsRook** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns ROOK at some position
   - **Expected output**: piece at that position has type ROOK
   - **Covered by**: TC1 (parameterized test)
 
-- **TC3: Constructor_WhenInitializerHasKnightAtPosition_PieceTypeIsKnight** ( :x: )
+- **TC3: Constructor_WhenInitializerHasKnightAtPosition_PieceTypeIsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns KNIGHT at some position
   - **Expected output**: piece at that position has type KNIGHT
   - **Covered by**: TC1 (parameterized test)
 
-- **TC4: Constructor_WhenInitializerHasBishopAtPosition_PieceTypeIsBishop** ( :x: )
+- **TC4: Constructor_WhenInitializerHasBishopAtPosition_PieceTypeIsBishop** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns BISHOP at some position
   - **Expected output**: piece at that position has type BISHOP
   - **Covered by**: TC1 (parameterized test)
 
-- **TC5: Constructor_WhenInitializerHasQueenAtPosition_PieceTypeIsQueen** ( :x: )
+- **TC5: Constructor_WhenInitializerHasQueenAtPosition_PieceTypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns QUEEN at some position
   - **Expected output**: piece at that position has type QUEEN
   - **Covered by**: TC1 (parameterized test)
 
-- **TC6: Constructor_WhenInitializerHasKingAtPosition_PieceTypeIsKing** ( :x: )
+- **TC6: Constructor_WhenInitializerHasKingAtPosition_PieceTypeIsKing** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns KING at some position
   - **Expected output**: piece at that position has type KING
   - **Covered by**: TC1 (parameterized test)
 
-- **TC7: Constructor_WhenInitializerHasPawnAtPosition_PieceTypeIsPawn** ( :x: )
+- **TC7: Constructor_WhenInitializerHasPawnAtPosition_PieceTypeIsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns PAWN at some position
   - **Expected output**: piece at that position has type PAWN
   - **Covered by**: TC1 (parameterized test)
 
-- **TC8: Constructor_WhenInitializerHasNoneAtPosition_PieceTypeIsNone** ( :x: )
+- **TC8: Constructor_WhenInitializerHasNoneAtPosition_PieceTypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns NONE at some position
   - **Expected output**: piece at that position has type NONE
@@ -102,7 +102,7 @@
   - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
   - **Expected output**: piece at that position has color WHITE
 
-- **TC11: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :x: )
+- **TC11: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`, `getCurrentGameState()`
   - **State of the system**: board is freshly constructed
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
@@ -139,28 +139,28 @@
 
 `createPiece` is private; all test cases are exercised indirectly through `Board(BoardInitializer)`.
 
-- **TC12: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :x: )
+- **TC12: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns ROOK at a top-half position
   - **Expected output**: piece has type ROOK and color BLACK
   - **Covered by**: TC2 + TC9
 
-- **TC13: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :x: )
+- **TC13: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :white_check_mark: )
   - **Covered by**: TC3
 
-- **TC14: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :x: )
+- **TC14: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :white_check_mark: )
   - **Covered by**: TC4
 
-- **TC15: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :x: )
+- **TC15: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :white_check_mark: )
   - **Covered by**: TC5
 
-- **TC16: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :x: )
+- **TC16: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :white_check_mark: )
   - **Covered by**: TC6
 
-- **TC17: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :x: )
+- **TC17: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :white_check_mark: )
   - **Covered by**: TC7
 
-- **TC18: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :x: )
+- **TC18: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
   - **Covered by**: TC8
 
 - **TC19: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :x: )
