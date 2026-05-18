@@ -97,7 +97,7 @@
   - **State of the system**: initializer returns a non-NONE piece type at a row 0–3 position; board is constructed
   - **Expected output**: piece at that position has color BLACK
 
-- **TC10: Constructor_WhenInitializerHasNonNoneTypeInBottomHalf_PieceColorIsWhite** ( :x: )
+- **TC10: Constructor_WhenInitializerHasNonNoneTypeInBottomHalf_PieceColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
   - **Expected output**: piece at that position has color WHITE
@@ -163,7 +163,7 @@
 - **TC18: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
   - **Covered by**: TC8
 
-- **TC19: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :x: )
+- **TC19: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece at a bottom-half position
   - **Expected output**: piece has color WHITE
