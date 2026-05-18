@@ -7,12 +7,14 @@ import domain.location.Location;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
+import domain.piece.NonePiece;
 import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class BoardControllerTest {
@@ -23,6 +25,15 @@ class BoardControllerTest {
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetSelectedLocation_FreshInstance_ReturnsEmpty() {
+        BoardController controller = new BoardController();
+
+        Optional<Location> expected = Optional.empty();
+        Optional<Location> actual = controller.getSelectedLocation();
         assertEquals(expected, actual);
     }
 
@@ -300,7 +311,7 @@ class BoardControllerTest {
         controller.handleSquareClick(clicked);
 
         boolean expected = true;
-        boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
+        boolean actual = selectedLocationMatches(controller.getSelectedLocation(), clicked);
         assertEquals(expected, actual);
     }
 
@@ -450,7 +461,7 @@ class BoardControllerTest {
         controller.handleSquareClick(clicked);
 
         boolean expected = true;
-        boolean actual = locationsEqual(controller.getSelectedLocation(), clicked);
+        boolean actual = selectedLocationMatches(controller.getSelectedLocation(), clicked);
         assertEquals(expected, actual);
     }
 
@@ -478,21 +489,8 @@ class BoardControllerTest {
         return true;
     }
 
-    private static boolean cornersHaveStandardRooks(Piece[][] snapshot) {
-        return isRookOfColor(snapshot[0][0], PieceColor.WHITE)
-                && isRookOfColor(snapshot[0][7], PieceColor.WHITE)
-                && isRookOfColor(snapshot[7][0], PieceColor.BLACK)
-                && isRookOfColor(snapshot[7][7], PieceColor.BLACK);
-    }
-
-    private static boolean isRookOfColor(Piece piece, PieceColor color) {
-        return piece != null
-                && piece.getType() == PieceType.ROOK
-                && piece.getColor() == color;
-    }
-
     private static Piece[][] newStandardStartingGrid() {
-        Piece[][] grid = new Piece[8][8];
+        Piece[][] grid = emptyGrid();
         grid[0][0] = new Rook(PieceColor.WHITE);
         grid[0][1] = new Knight(PieceColor.WHITE);
         grid[0][2] = new Bishop(PieceColor.WHITE);
@@ -522,7 +520,7 @@ class BoardControllerTest {
 
     /** Mirrors {@link BoardController} fixed Chess960 layout (BC-TC8 seed path); separate instances for comparisons. */
     private static Piece[][] newChess960FixedStartingGrid() {
-        Piece[][] grid = new Piece[8][8];
+        Piece[][] grid = emptyGrid();
         grid[0][0] = new Rook(PieceColor.WHITE);
         grid[0][1] = new Bishop(PieceColor.WHITE);
         grid[0][2] = new Knight(PieceColor.WHITE);
@@ -550,8 +548,21 @@ class BoardControllerTest {
         return grid;
     }
 
-    private static boolean locationsEqual(Location a, Location b) {
-        return a.getX() == b.getX() && a.getY() == b.getY();
+    private static boolean selectedLocationMatches(
+            Optional<Location> actual, Location expected) {
+        return actual.isPresent()
+                && actual.get().getX() == expected.getX()
+                && actual.get().getY() == expected.getY();
+    }
+
+    private static Piece[][] emptyGrid() {
+        Piece[][] grid = new Piece[8][8];
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                grid[rank][file] = new NonePiece();
+            }
+        }
+        return grid;
     }
 
     private static boolean cellWiseSameTypeAndColor(Piece[][] expected, Piece[][] actual) {
@@ -562,12 +573,6 @@ class BoardControllerTest {
             for (int file = 0; file < 8; file++) {
                 Piece e = expected[rank][file];
                 Piece a = actual[rank][file];
-                if (e == null && a == null) {
-                    continue;
-                }
-                if (e == null || a == null) {
-                    return false;
-                }
                 if (e.getType() != a.getType() || e.getColor() != a.getColor()) {
                     return false;
                 }
@@ -581,7 +586,7 @@ class BoardControllerTest {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
                 Piece piece = snapshot[rank][file];
-                if (piece != null && piece.getColor() == color) {
+                if (piece.getType() != PieceType.NONE && piece.getColor() == color) {
                     count++;
                 }
             }
@@ -593,7 +598,7 @@ class BoardControllerTest {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
                 Piece piece = snapshot[rank][file];
-                if (piece != null && piece.hasMoved()) {
+                if (piece.getType() != PieceType.NONE && piece.hasMoved()) {
                     return false;
                 }
             }
@@ -607,9 +612,7 @@ class BoardControllerTest {
         int secondFile = -1;
         for (int file = 0; file < 8; file++) {
             Piece piece = snapshot[rank][file];
-            if (piece != null
-                    && piece.getType() == PieceType.BISHOP
-                    && piece.getColor() == color) {
+            if (piece.getType() == PieceType.BISHOP && piece.getColor() == color) {
                 if (firstFile < 0) {
                     firstFile = file;
                 } else if (secondFile < 0) {
@@ -634,7 +637,7 @@ class BoardControllerTest {
         int kingFile = -1;
         for (int file = 0; file < 8; file++) {
             Piece piece = snapshot[rank][file];
-            if (piece == null || piece.getColor() != color) {
+            if (piece.getType() == PieceType.NONE || piece.getColor() != color) {
                 continue;
             }
             if (piece.getType() == PieceType.ROOK) {
@@ -664,7 +667,7 @@ class BoardControllerTest {
         for (int file = 0; file < 8; file++) {
             Piece whiteBack = snapshot[0][file];
             Piece blackBack = snapshot[7][file];
-            if (whiteBack == null || blackBack == null) {
+            if (whiteBack.getType() == PieceType.NONE || blackBack.getType() == PieceType.NONE) {
                 return false;
             }
             if (whiteBack.getType() != blackBack.getType()) {
@@ -681,14 +684,10 @@ class BoardControllerTest {
         for (int file = 0; file < 8; file++) {
             Piece whitePawn = snapshot[1][file];
             Piece blackPawn = snapshot[6][file];
-            if (whitePawn == null
-                    || whitePawn.getType() != PieceType.PAWN
-                    || whitePawn.getColor() != PieceColor.WHITE) {
+            if (whitePawn.getType() != PieceType.PAWN || whitePawn.getColor() != PieceColor.WHITE) {
                 return false;
             }
-            if (blackPawn == null
-                    || blackPawn.getType() != PieceType.PAWN
-                    || blackPawn.getColor() != PieceColor.BLACK) {
+            if (blackPawn.getType() != PieceType.PAWN || blackPawn.getColor() != PieceColor.BLACK) {
                 return false;
             }
         }
@@ -704,7 +703,7 @@ class BoardControllerTest {
         int kings = 0;
         for (int file = 0; file < 8; file++) {
             Piece piece = snapshot[rank][file];
-            if (piece == null || piece.getColor() != color) {
+            if (piece.getType() == PieceType.NONE || piece.getColor() != color) {
                 return false;
             }
             PieceType type = piece.getType();
