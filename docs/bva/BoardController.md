@@ -1,98 +1,36 @@
 # BVA Analysis for BoardController
 
+Scope: **Game Initialization** — selection state, board snapshot delegation to `Board`, first-click policy. Placement and Chess960 generation live on `Board` via `BoardInitializer` implementations (`StandardBoardInitializer`, `Chess960FixedBoardInitializer`, `FischerRandomBoardInitializer`).
+
 ### Step 1: Input and output equivalence classes
 
-| Concern           | Equivalence classes                                                                             |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| Object life cycle | Fresh instance; no clicks yet                                                                   |
-| Collaborators     | Internal `Piece[][]` exists; **`Board` domain class not used yet**; **no `BoardView`** in tests |
+| Concern           | Equivalence classes                                                                 |
+| ----------------- | ----------------------------------------------------------------------------------- |
+| Object life cycle | Fresh instance; no clicks yet                                                       |
+| Collaborators     | `Board` holds `Piece[][]` with `NonePiece` on empty squares; **no `BoardView`** in tests |
 
 ### Step 2: BVA catalog data types
 
-| Variable / output                  | Catalog type | Rationale                          |
-| ---------------------------------- | ------------ | ---------------------------------- |
-| `lastSelectedLoc` (if inspectable) | Pointers     | `null` vs non-`null` at boundaries |
+| Variable / output     | Catalog type | Rationale                                      |
+| --------------------- | ------------ | ---------------------------------------------- |
+| `lastSelectedLoc`     | Optional     | `Optional.empty()` vs `Optional.of(Location)` |
 
 ### Step 3: Concrete boundary values
 
-- `lastSelectedLoc` absent / `null` after construction.
+- `lastSelectedLoc` is `Optional.empty()` after construction.
 - Zero clicks processed.
 
 ### Step 4: Test cases
 
 - **BC-TC1: Constructor_FreshInstance_LastSelectedUnset** ( :white_check_mark: )
-  - **Method(s) under test**: `BoardController()` (and any agreed way to observe selection state in tests)
-  - **State of the system**: newly constructed controller; **no UI types**
-  - **Expected output**: no square is selected for movement (`lastSelectedLoc` absent or `null`)
+  - **Method(s) under test**: `BoardController()`, `hasSelection()`
+  - **State of the system**: newly constructed controller
+  - **Expected output**: `hasSelection()` is `false`
 
----
-
-## Method: `hasSelection(): boolean`
-
-### Step 1: Input and output equivalence classes
-
-| Output         | Equivalence classes                                    |
-| -------------- | ------------------------------------------------------ |
-| Boolean result | `true` (selection exists); `false` (no selection)      |
-| Internal state | `lastSelectedLoc == null` vs `lastSelectedLoc != null` |
-
-### Step 2: BVA catalog data types
-
-| Concern         | Catalog type                   |
-| --------------- | ------------------------------ |
-| Selection state | Pointers: `null` vs non-`null` |
-
-### Step 3: Concrete boundary values
-
-- `lastSelectedLoc` is `null` after construction.
-- `lastSelectedLoc` is non-`null` after successful `handleSquareClick()` on a white piece.
-
-### Step 4: Test cases
-
-- **BC-TC1b: HasSelection_FreshInstance_ReturnsFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `hasSelection()`
-  - **State of the system**: newly constructed controller; no clicks yet
-  - **Expected output**: `false`
-
-- **BC-TC1c: HasSelection_AfterSelectingWhitePiece_ReturnsTrue** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
-  - **State of the system**: standard start; clicked on a white piece (e.g., `Location(0, 1)` for knight)
-  - **Expected output**: `true`
-
----
-
-## Method: `getSelectedLocation(): Location`
-
-### Step 1: Input and output equivalence classes
-
-| Output             | Equivalence classes                                             |
-| ------------------ | --------------------------------------------------------------- |
-| Returned reference | `null` (no selection); non-`null` `Location` (selection exists) |
-| Location identity  | Exact location clicked; matches input coordinates               |
-
-### Step 2: BVA catalog data types
-
-| Concern              | Catalog type                                             |
-| -------------------- | -------------------------------------------------------- |
-| Selection state      | Pointers: `null` vs non-`null` reference                 |
-| Location coordinates | Values: `(0, 1)`, `(7, 6)` (representative white pieces) |
-
-### Step 3: Concrete boundary values
-
-- `null` after construction (no selection).
-- Non-`null` `Location` matching clicked coordinates after successful selection.
-
-### Step 4: Test cases
-
-- **BC-TC1d: GetSelectedLocation_FreshInstance_ReturnsNull** ( :white_check_mark: )
+- **BC-TC2: GetSelectedLocation_FreshInstance_ReturnsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `getSelectedLocation()`
   - **State of the system**: newly constructed controller; no clicks yet
-  - **Expected output**: `null`
-
-- **BC-TC1e: GetSelectedLocation_AfterSelectingWhitePiece_ReturnsClickedLocation** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
-  - **State of the system**: standard start; clicked on a white piece at `Location(3, 1)` (pawn)
-  - **Expected output**: non-`null` `Location` equal to `Location(3, 1)`
+  - **Expected output**: `Optional.empty()`
 
 ---
 
@@ -100,170 +38,230 @@
 
 ### Step 1: Input and output equivalence classes
 
-| Input (implicit) | Classes                                                                                                |
-| ---------------- | ------------------------------------------------------------------------------------------------------ |
-| Underlying board | Standard initial position; Chess960 initial position; board not wired (error / guard state if allowed) |
+| Input (implicit) | Classes                                                          |
+| ---------------- | ---------------------------------------------------------------- |
+| Underlying board | Standard init; fixed Chess960 init; seeded Fischer Random init |
 
-| Output    | Classes                                                                                         |
-| --------- | ----------------------------------------------------------------------------------------------- |
-| Grid      | Always 8×8 for a live game                                                                      |
-| Cells     | `null` or `Piece`; standard vs Chess960 layouts                                                 |
-| Counts    | 16 white and 16 black pieces at game start                                                      |
-| Readiness | All pieces `hasMoved() == false`; turn `WHITE_TURN` (via `Board` API you expose for this story) |
-
-### Step 2: BVA catalog data types
-
-| Concern               | Catalog type                                                               |
-| --------------------- | -------------------------------------------------------------------------- |
-| Row/column count      | Sizes of collections (exactly 8 per dimension)                             |
-| Indices when scanning | Multidimensional arrays: `(0,0)`, `(7,7)`, edges                           |
-| Per-side totals       | Counts: exactly `16` per color at start                                    |
-| Chess960 back rank    | Contents of collections; king-between-rooks; bishops opposite color parity |
-| Delegation            | Cell-wise equality vs `Board`’s snapshot; array identity may differ        |
-
-### Step 3: Concrete boundary values
-
-- Exactly 8×8 cells; indices `0`…`7`; no ragged rows.
-- Corners for placement checks once orientation is fixed.
-- Chess960: include interior king file and extreme rook separation cases across sampled seeds.
+| Output    | Classes                                                                        |
+| --------- | ------------------------------------------------------------------------------ |
+| Grid      | Always 8×8                                                                     |
+| Cells     | `Piece` per cell; empty squares use `PieceType.NONE` (`NonePiece`)             |
+| Counts    | 16 white and 16 black pieces at standard start                                 |
+| Readiness | All non-`NONE` pieces `hasMoved() == false`; turn `WHITE_TURN` via `Board`     |
 
 ### Step 4: Test cases
 
-**Shape and delegation**
-
-- **BC-TC2: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :white_check_mark: )
+- **BC-TC3: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: new game controller (grid dimensions only for this increment; **`Board` domain class deferred**—snapshot backed by controller-owned `Piece[][]` until extraction)
+  - **State of the system**: `new BoardController()`
   - **Expected output**: outer length 8; each inner array length 8
 
-- **BC-TC3: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
-- **Method(s) under test**: `getBoardSnapshot()`
-- **State of the system**: standard start
-- **Expected output**: full standard starting layout is present: back-rank piece types and colors match the expected standard layout and the pawn rows are present on ranks 1 and 6. This test asserts cell-wise piece type and color equality against the canonical standard starting grid.
-
-- **BC-TC4: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
+- **BC-TC4: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: independent `Piece[][]` built in test with real `Piece` subclasses (stand-in for a `Board` snapshot until `Board` exists)
-  - **Expected output**: controller snapshot matches that grid by `PieceType` and `PieceColor` per cell (different array identity and different piece instances allowed)
+  - **State of the system**: standard start
+  - **Expected output**: cell-wise type and color match canonical standard grid (including `NonePiece` on empty ranks)
 
-- **BC-TC4a: GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy** ( :white_check_mark: )
+- **BC-TC5: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: standard start; called twice in succession
-  - **Expected output**: two snapshot calls return different array objects (different references); encapsulation verified—internal `Piece[][]` protected from external mutation
+  - **State of the system**: expected grid built in test; new controller
+  - **Expected output**: snapshot matches expected grid by type and color per cell
 
-**Standard start — counts and turn**
+- **BC-TC6: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: standard initialization
+  - **Expected output**: count of white pieces with `type != NONE` is `16`
 
-- **BC-TC5: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()` and/or `Board` state readers you add
-  - **State of the system**: standard initialization complete
-  - **Expected output**: count of non-`null` white pieces is `16`
+- **BC-TC7: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: standard initialization
+  - **Expected output**: count of black pieces with `type != NONE` is `16`
 
-- **BC-TC6: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()` (and `Board` as needed)
-  - **State of the system**: standard initialization complete
-  - **Expected output**: count of non-`null` black pieces is `16`
-
-- **BC-TC7: GameStart_Standard_WhiteTurnAndNoPieceHasMoved** ( :white_check_mark: )
-  - **Method(s) under test**: `getCurrentGameState()`, `getBoardSnapshot()` then `Piece.hasMoved()` on each non-`null` cell (until a `Board` class exists, turn lives on `BoardController` per diagram intent)
+- **BC-TC8: GameStart_Standard_WhiteTurn** ( :white_check_mark: )
+  - **Method(s) under test**: `getCurrentGameState()`
   - **State of the system**: immediately after standard new game
-  - **Expected output**: `GameState.WHITE_TURN`; every piece has `hasMoved() == false`
+  - **Expected output**: `GameState.WHITE_TURN`
 
-**Chess960**
-
-- **BC-TC8: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()` with `BoardController(StartingPositionKind.CHESS960)` (fixed legal SP until random SP is implemented)
-  - **State of the system**: legal Chess960 start
-  - **Expected output**: on each back rank, the two bishops’ squares differ in `(file + rank) % 2` parity
-
-- **BC-TC9: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank** ( :white_check_mark: )
+- **BC-TC9: GameStart_Standard_NoOccupiedPieceHasMoved** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: Chess960 start
-  - **Expected output**: on each side’s back rank, king file is strictly between the two rook files
+  - **State of the system**: immediately after standard new game
+  - **Expected output**: every piece with `type != NONE` has `hasMoved() == false`
 
-- **BC-TC10: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes** ( :white_check_mark: )
+- **BC-TC10: GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()` twice
+  - **State of the system**: standard start
+  - **Expected output**: two returned arrays are different references
+
+**Chess960 (fixed layout via `Chess960FixedBoardInitializer`)**
+
+- **BC-TC11: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`, `BoardController(StartingPositionKind.CHESS960)`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: white back rank bishops on opposite color parity
+
+- **BC-TC12: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`, `BoardController(StartingPositionKind.CHESS960)`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: black back rank bishops on opposite color parity
+
+- **BC-TC13: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_WhiteBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: Chess960 start
-  - **Expected output**: same piece **types** per file on both back ranks; opposite colors; pawns on the two usual pawn ranks
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: white king file strictly between own rook files
 
-- **BC-TC11: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank** ( :white_check_mark: )
+- **BC-TC14: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_BlackBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
-  - **State of the system**: Chess960 start
-  - **Expected output**: on each back rank: one `QUEEN`, two `KNIGHT`, two `BISHOP`, two `ROOK`, one `KING`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: black king file strictly between own rook files
 
-- **BC-TC12: GetBoardSnapshot_Chess960_SeedOne_PassesTc8ThroughTc11** ( :white_check_mark: )
-  - **Method(s) under test**: `new BoardController(long chess960Seed)`, `getBoardSnapshot()`
+- **BC-TC15: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_BackRankTypesMirror** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: same piece types per file on ranks 0 and 7; opposite colors
+
+- **BC-TC16: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_StandardPawnRows** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: pawn rows on ranks 1 and 6 with correct colors
+
+- **BC-TC17: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: white back rank has one queen, two knights, two bishops, two rooks, one king
+
+- **BC-TC18: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardSnapshot()`
+  - **State of the system**: fixed Chess960 start
+  - **Expected output**: black back rank has one queen, two knights, two bishops, two rooks, one king
+
+**Chess960 (seeded via `FischerRandomBoardInitializer`, seed `1L`)**
+
+- **BC-TC19: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
+- **BC-TC20: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
+- **BC-TC21: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_WhiteBackRank** ( :white_check_mark: )
+- **BC-TC22: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_BlackBackRank** ( :white_check_mark: )
+- **BC-TC23: GetBoardSnapshot_Chess960_SeedOne_BackRanksMirrorPieceTypes** ( :white_check_mark: )
+- **BC-TC24: GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows** ( :white_check_mark: )
+- **BC-TC25: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
+- **BC-TC26: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
+
+  - **Method(s) under test**: `BoardController(long)`, `getBoardSnapshot()`
   - **State of the system**: `chess960Seed == 1L`
-  - **Expected output**: composite snapshot check (same predicates as BC-TC8–BC-TC11) is satisfied — **one assertion** (additional seeds: deferred)
+  - **Expected output**: same predicates as BC-TC11–BC-TC18 for the seeded layout
+
+---
+
+## Method: `hasSelection(): boolean` / `getSelectedLocation(): Optional<Location>`
+
+### Step 1: Input and output equivalence classes
+
+| Output                    | Equivalence classes                                      |
+| ------------------------- | -------------------------------------------------------- |
+| `hasSelection()`          | `true` / `false`                                         |
+| `getSelectedLocation()`   | `Optional.empty()` / `Optional.of(Location)`              |
+
+### Step 2: BVA catalog data types
+
+| Concern           | Catalog type                          |
+| ----------------- | ------------------------------------- |
+| Selection state   | Optional: empty vs present            |
+
+### Step 4: Test cases
+
+_(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `handleSquareClick`.)_
 
 ---
 
 ## Method: `handleSquareClick(loc: Location)`
 
-_(Later stories extend full move/castle pipeline; here: first-turn readiness using real `Location` and `Board` only.)_
-
 ### Step 1: Input and output equivalence classes
 
-| Input           | Classes                                                                |
-| --------------- | ---------------------------------------------------------------------- |
-| `loc`           | In-bounds; out-of-bounds coordinates still constructible as `Location` |
-| Square at start | Empty; white piece; black piece                                        |
+| Input           | Classes                                       |
+| --------------- | --------------------------------------------- |
+| `loc`           | In-bounds; out-of-bounds                      |
+| Square at start | `NonePiece`; white piece; black piece         |
 
-| Effect            | Classes                                                             |
-| ----------------- | ------------------------------------------------------------------- |
-| Selection / guard | White may select; black or empty at start must not change the board |
-
-### Step 2: BVA catalog data types
-
-| Concern     | Catalog type                                                                   |
-| ----------- | ------------------------------------------------------------------------------ |
-| Coordinates | Values `-1`, `0`, `7`, `8` inside `Location`; validation in controller/`Board` |
-| Occupancy   | Cases: empty, own piece, opponent piece                                        |
-
-### Step 3: Concrete boundary values
-
-- `new Location(0,0)`, `new Location(7,7)`, other corners at standard start.
-- `new Location(-1, 0)`, `new Location(8, 8)` for rejection paths.
+| Effect            | Classes                                              |
+| ----------------- | ---------------------------------------------------- |
+| Selection / guard | White may select; black or empty must not change board |
 
 ### Step 4: Test cases
 
-- **BC-TC13: HandleSquareClick_BeforeFirstMove_OnWhitePiece_Selects** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a white piece
-  - **Expected output**: selection updated; `Board` piece layout unchanged
+- **BC-TC27: HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: standard new game; white piece at `loc`
+  - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC14: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoBoardMutation** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: standard new game, `WHITE_TURN`; `loc` on a black piece
-  - **Expected output**: `getBoardSnapshot()` unchanged cell-wise; turn still `WHITE_TURN`
+- **BC-TC28: HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: standard new game; click `Location(0, 1)`
+  - **Expected output**: `getSelectedLocation()` present with same coordinates as click
 
-- **BC-TC15: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoMutation** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: standard new game; `loc` on an empty square (e.g. center)
-  - **Expected output**: snapshot unchanged; turn still `WHITE_TURN`
+- **BC-TC29: HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: standard new game; click white piece
+  - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC16: HandleSquareClick_InvalidLocation_Rejected** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: `new Location(-1, 0)` or `new Location(8, 8)`
-  - **Expected output**: no board mutation; no-op or documented exception
+- **BC-TC30: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: standard new game; black piece square
+  - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC17: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: Chess960 start, `WHITE_TURN`
-  - **Expected output**: selecting a white square follows the same first-click rules as standard start (no turn flip, no piece removed)
+- **BC-TC31: HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: standard new game; black piece square
+  - **Expected output**: `GameState.WHITE_TURN`
 
-  - **BC-TC17a: HandleSquareClick_Chess960Start_FirstWhiteSelection_Selects** ( :white_check_mark: )
-    - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
-    - **State of the system**: Chess960 start; click on a white piece
-    - **Expected output**: `hasSelection()` returns `true`
+- **BC-TC32: HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: standard new game; black piece square
+  - **Expected output**: snapshot unchanged cell-wise
 
-  - **BC-TC17b: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches** ( :white_check_mark: )
-    - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
-    - **State of the system**: Chess960 start; click on a white piece at `loc`
-    - **Expected output**: `getSelectedLocation()` returns a non-`null` `Location` equal to the clicked `loc`
+- **BC-TC33: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: standard new game; `NonePiece` square (e.g. center)
+  - **Expected output**: `hasSelection()` is `false`
 
-  - **BC-TC17c: HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite** ( :white_check_mark: )
-    - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
-    - **State of the system**: Chess960 start; click on a white piece
-    - **Expected output**: `getCurrentGameState()` remains `GameState.WHITE_TURN`
+- **BC-TC34: HandleSquareClick_BeforeFirstMove_OnEmptySquare_TurnRemainsWhite** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: standard new game; empty square
+  - **Expected output**: `GameState.WHITE_TURN`
 
----
+- **BC-TC35: HandleSquareClick_BeforeFirstMove_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: standard new game; empty square
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC36: HandleSquareClick_InvalidLocation_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `new Location(-1, 0)`
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC37: HandleSquareClick_InvalidLocation_TurnRemainsWhite** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: out-of-bounds `loc`
+  - **Expected output**: `GameState.WHITE_TURN`
+
+- **BC-TC38: HandleSquareClick_InvalidLocation_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: out-of-bounds `loc`
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC39: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: Chess960 fixed start
+  - **Expected output**: snapshot matches fixed Chess960 grid before/after policy check
+
+- **BC-TC40: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: Chess960 fixed start; white piece click
+  - **Expected output**: `hasSelection()` is `true`
+
+- **BC-TC41: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: Chess960 fixed start; click `Location(0, 1)`
+  - **Expected output**: `getSelectedLocation()` present with same coordinates
+
+- **BC-TC42: HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: Chess960 fixed start; white piece click
+  - **Expected output**: `GameState.WHITE_TURN`
