@@ -1,73 +1,39 @@
 # BVA Analysis for Board
 
-## Method: `Board()`
+## Method: `Board(BoardInitializer)`
 
 ### Step 1: Equivalence Classes
 
-- **Output: piece type at each black back rank position** — the piece type placed at each column of row 0
-- **Output: piece type at each black pawn rank position** — the piece type placed at each column of row 1
-- **Output: content at each empty position** — the value at positions in rows 2–5
-- **Output: piece type at each white pawn rank position** — the piece type placed at each column of row 6
-- **Output: piece type at each white back rank position** — the piece type placed at each column of row 7
-- **Output: piece color at an occupied position** — the color of the piece at a given occupied board position
+- **Input: piece type returned by initializer** — the `PieceType` at each position in the layout
+- **Input: position half** — whether the position is in the top half (rows 0–3) or bottom half (rows 4–7)
+- **Output: piece type at position** — the type of the `Piece` placed on the board
+- **Output: piece color at an occupied position** — the color assigned to the piece
 - **Output: initial game state** — the game state immediately after construction
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class                                    | Catalog data type | Parameters                                                                                                             |
-| ---------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Output: piece type at each black back rank position  | Cases             | `[0][0]`=ROOK, `[0][1]`=KNIGHT, `[0][2]`=BISHOP, `[0][3]`=QUEEN, `[0][4]`=KING, `[0][5]`=BISHOP, `[0][6]`=KNIGHT, `[0][7]`=ROOK |
-| Output: piece type at each black pawn rank position  | Cases             | `[1][0]`=PAWN, `[1][1]`=PAWN, `[1][2]`=PAWN, `[1][3]`=PAWN, `[1][4]`=PAWN, `[1][5]`=PAWN, `[1][6]`=PAWN, `[1][7]`=PAWN         |
-| Output: content at each empty position               | Cases             | `NONE`                                                                                                                 |
-| Output: piece type at each white pawn rank position  | Cases             | `[6][0]`=PAWN, `[6][1]`=PAWN, `[6][2]`=PAWN, `[6][3]`=PAWN, `[6][4]`=PAWN, `[6][5]`=PAWN, `[6][6]`=PAWN, `[6][7]`=PAWN         |
-| Output: piece type at each white back rank position  | Cases             | `[7][0]`=ROOK, `[7][1]`=KNIGHT, `[7][2]`=BISHOP, `[7][3]`=QUEEN, `[7][4]`=KING, `[7][5]`=BISHOP, `[7][6]`=KNIGHT, `[7][7]`=ROOK |
-| Output: piece color at an occupied position          | Cases             | BLACK, WHITE                                                                                                           |
-| Output: initial game state                           | Cases             | WHITE_TURN                                                                                                             |
+| Equivalence class                              | Catalog data type | Parameters                                    |
+| ---------------------------------------------- | ----------------- | --------------------------------------------- |
+| Input: piece type returned by initializer      | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: position half                           | Cases             | top (rows 0–3), bottom (rows 4–7)             |
+| Output: piece type at position                 | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: piece color at an occupied position    | Cases             | BLACK, WHITE                                  |
+| Output: initial game state                     | Cases             | WHITE_TURN                                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
-**Black back rank (row 0) — Cases:**
-- `[0][0]` = ROOK
-- `[0][1]` = KNIGHT
-- `[0][2]` = BISHOP
-- `[0][3]` = QUEEN
-- `[0][4]` = KING
-- `[0][5]` = BISHOP
-- `[0][6]` = KNIGHT
-- `[0][7]` = ROOK
+**Piece types — Cases:**
+- ROOK
+- KNIGHT
+- BISHOP
+- QUEEN
+- KING
+- PAWN
+- NONE
 
-**Black pawn rank (row 1) — Cases:**
-- `[1][0]` = PAWN
-- `[1][1]` = PAWN
-- `[1][2]` = PAWN
-- `[1][3]` = PAWN
-- `[1][4]` = PAWN
-- `[1][5]` = PAWN
-- `[1][6]` = PAWN
-- `[1][7]` = PAWN
-
-**Empty positions (rows 2–5) — Cases:**
-- `NONE`
-
-**White pawn rank (row 6) — Cases:**
-- `[6][0]` = PAWN
-- `[6][1]` = PAWN
-- `[6][2]` = PAWN
-- `[6][3]` = PAWN
-- `[6][4]` = PAWN
-- `[6][5]` = PAWN
-- `[6][6]` = PAWN
-- `[6][7]` = PAWN
-
-**White back rank (row 7) — Cases:**
-- `[7][0]` = ROOK
-- `[7][1]` = KNIGHT
-- `[7][2]` = BISHOP
-- `[7][3]` = QUEEN
-- `[7][4]` = KING
-- `[7][5]` = BISHOP
-- `[7][6]` = KNIGHT
-- `[7][7]` = ROOK
+**Position half — Cases:**
+- top (rows 0–3)
+- bottom (rows 4–7)
 
 **Piece color — Cases:**
 - BLACK
@@ -78,222 +44,130 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-Each boundary value from Step 3 appears in at least one test case.
+- **TC1: Constructor_WhenInitializerHasPieceTypeAtPosition_PieceTypeMatches** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a layout with a single non-NONE piece type at one position; all other positions are NONE; board is constructed
+  - **Expected output**: `getSnapshot()[row][col].getType()` equals the piece type the initializer returned
+  - **Note**: TC2–TC7 are covered by this test case as a parameterized test
 
-- **TC1: Constructor_OnNewBoard_PieceTypeAtPositionIsCorrect** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][0]` has type `ROOK`
-  - **Note**: TC2–TC33 are covered by this test case as a parameterized test
-
-- **TC2: Constructor_OnNewBoard_TypeAtRow0Col1IsKnight** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][1]` has type `KNIGHT`
+- **TC2: Constructor_WhenInitializerHasRookAtPosition_PieceTypeIsRook** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns ROOK at some position
+  - **Expected output**: piece at that position has type ROOK
   - **Covered by**: TC1 (parameterized test)
 
-- **TC3: Constructor_OnNewBoard_TypeAtRow0Col2IsBishop** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][2]` has type `BISHOP`
+- **TC3: Constructor_WhenInitializerHasKnightAtPosition_PieceTypeIsKnight** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns KNIGHT at some position
+  - **Expected output**: piece at that position has type KNIGHT
   - **Covered by**: TC1 (parameterized test)
 
-- **TC4: Constructor_OnNewBoard_TypeAtRow0Col3IsQueen** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][3]` has type `QUEEN`
+- **TC4: Constructor_WhenInitializerHasBishopAtPosition_PieceTypeIsBishop** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns BISHOP at some position
+  - **Expected output**: piece at that position has type BISHOP
   - **Covered by**: TC1 (parameterized test)
 
-- **TC5: Constructor_OnNewBoard_TypeAtRow0Col4IsKing** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][4]` has type `KING`
+- **TC5: Constructor_WhenInitializerHasQueenAtPosition_PieceTypeIsQueen** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns QUEEN at some position
+  - **Expected output**: piece at that position has type QUEEN
   - **Covered by**: TC1 (parameterized test)
 
-- **TC6: Constructor_OnNewBoard_TypeAtRow0Col5IsBishop** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][5]` has type `BISHOP`
+- **TC6: Constructor_WhenInitializerHasKingAtPosition_PieceTypeIsKing** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns KING at some position
+  - **Expected output**: piece at that position has type KING
   - **Covered by**: TC1 (parameterized test)
 
-- **TC7: Constructor_OnNewBoard_TypeAtRow0Col6IsKnight** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][6]` has type `KNIGHT`
+- **TC7: Constructor_WhenInitializerHasPawnAtPosition_PieceTypeIsPawn** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns PAWN at some position
+  - **Expected output**: piece at that position has type PAWN
   - **Covered by**: TC1 (parameterized test)
 
-- **TC8: Constructor_OnNewBoard_TypeAtRow0Col7IsRook** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][7]` has type `ROOK`
+- **TC8: Constructor_WhenInitializerHasNoneAtPosition_PieceTypeIsNone** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns NONE at some position
+  - **Expected output**: piece at that position has type NONE
   - **Covered by**: TC1 (parameterized test)
 
-- **TC9: Constructor_OnNewBoard_TypeAtRow1Col0IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][0]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
+- **TC9: Constructor_WhenInitializerHasNonNoneTypeInTopHalf_PieceColorIsBlack** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a non-NONE piece type at a row 0–3 position; board is constructed
+  - **Expected output**: piece at that position has color BLACK
 
-- **TC10: Constructor_OnNewBoard_TypeAtRow1Col1IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][1]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
+- **TC10: Constructor_WhenInitializerHasNonNoneTypeInBottomHalf_PieceColorIsWhite** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
+  - **Expected output**: piece at that position has color WHITE
 
-- **TC11: Constructor_OnNewBoard_TypeAtRow1Col2IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][2]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC12: Constructor_OnNewBoard_TypeAtRow1Col3IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][3]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC13: Constructor_OnNewBoard_TypeAtRow1Col4IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][4]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC14: Constructor_OnNewBoard_TypeAtRow1Col5IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][5]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC15: Constructor_OnNewBoard_TypeAtRow1Col6IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][6]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC16: Constructor_OnNewBoard_TypeAtRow1Col7IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[1][7]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC17: Constructor_OnNewBoard_PositionAtRow3Col0IsNone** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: position `[3][0]` has type `NONE`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC18: Constructor_OnNewBoard_TypeAtRow6Col0IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][0]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC19: Constructor_OnNewBoard_TypeAtRow6Col1IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][1]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC20: Constructor_OnNewBoard_TypeAtRow6Col2IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][2]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC21: Constructor_OnNewBoard_TypeAtRow6Col3IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][3]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC22: Constructor_OnNewBoard_TypeAtRow6Col4IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][4]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC23: Constructor_OnNewBoard_TypeAtRow6Col5IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][5]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC24: Constructor_OnNewBoard_TypeAtRow6Col6IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][6]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC25: Constructor_OnNewBoard_TypeAtRow6Col7IsPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[6][7]` has type `PAWN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC26: Constructor_OnNewBoard_TypeAtRow7Col0IsRook** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][0]` has type `ROOK`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC27: Constructor_OnNewBoard_TypeAtRow7Col1IsKnight** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][1]` has type `KNIGHT`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC28: Constructor_OnNewBoard_TypeAtRow7Col2IsBishop** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][2]` has type `BISHOP`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC29: Constructor_OnNewBoard_TypeAtRow7Col3IsQueen** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][3]` has type `QUEEN`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC30: Constructor_OnNewBoard_TypeAtRow7Col4IsKing** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][4]` has type `KING`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC31: Constructor_OnNewBoard_TypeAtRow7Col5IsBishop** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][5]` has type `BISHOP`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC32: Constructor_OnNewBoard_TypeAtRow7Col6IsKnight** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][6]` has type `KNIGHT`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC33: Constructor_OnNewBoard_TypeAtRow7Col7IsRook** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][7]` has type `ROOK`
-  - **Covered by**: TC1 (parameterized test)
-
-- **TC34: Constructor_OnNewBoard_PieceColorAtPositionIsCorrect** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[0][0]` has color `BLACK`
-  - **Note**: TC35 is covered by this test case as a parameterized test
-
-- **TC35: Constructor_OnNewBoard_ColorAtRow7Col0IsWhite** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`
-  - **State of the system**: no existing board; call constructor
-  - **Expected output**: piece at `[7][0]` has color `WHITE`
-  - **Covered by**: TC34 (parameterized test)
-
-- **TC36: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
-  - **Method(s) under test**: `Board()`, `getCurrentGameState()`
-  - **State of the system**: no existing board; call constructor
+- **TC11: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`, `getCurrentGameState()`
+  - **State of the system**: board is freshly constructed
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
+
+---
+
+## Method: `createPiece(PieceType, PieceColor)` (private)
+
+### Step 1: Equivalence Classes
+
+- **Input: piece type** — the `PieceType` value passed to the method
+- **Input: piece color** — the `PieceColor` value passed to the method
+- **Output: type of the returned `Piece`** — should match the input type
+- **Output: color of the returned `Piece`** — should match the input color (not applicable for NONE)
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class              | Catalog data type | Parameters                                    |
+| ------------------------------ | ----------------- | --------------------------------------------- |
+| Input: piece type              | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: piece color             | Cases             | BLACK, WHITE                                  |
+| Output: returned piece type    | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: returned piece color   | Cases             | BLACK, WHITE                                  |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**Piece types — Cases:**
+- ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE
+
+**Piece colors — Cases:**
+- BLACK, WHITE
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+`createPiece` is private; all test cases are exercised indirectly through `Board(BoardInitializer)`.
+
+- **TC12: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :x: )
+  - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
+  - **State of the system**: initializer returns ROOK at a top-half position
+  - **Expected output**: piece has type ROOK and color BLACK
+  - **Covered by**: TC2 + TC9
+
+- **TC13: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :x: )
+  - **Covered by**: TC3
+
+- **TC14: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :x: )
+  - **Covered by**: TC4
+
+- **TC15: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :x: )
+  - **Covered by**: TC5
+
+- **TC16: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :x: )
+  - **Covered by**: TC6
+
+- **TC17: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :x: )
+  - **Covered by**: TC7
+
+- **TC18: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :x: )
+  - **Covered by**: TC8
+
+- **TC19: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :x: )
+  - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a non-NONE piece at a bottom-half position
+  - **Expected output**: piece has color WHITE
+  - **Covered by**: TC10
 
 ---
 
@@ -324,29 +198,29 @@ Each boundary value from Step 3 appears in at least one test case.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC37: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
+- **TC20: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board
+  - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the returned `Piece[][]` reference is not the same object as a second call to `getSnapshot()`
 
-- **TC38: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
+- **TC21: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board
+  - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[0]` is not the same array reference as a second `getSnapshot()[0]`
 
-- **TC39: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
+- **TC22: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board
+  - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the Piece object at `getSnapshot()[0][0]` is not the same reference as the Piece at a second `getSnapshot()[0][0]`, but has the same type and color
 
-- **TC40: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
+- **TC23: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board
+  - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[7][4]` has type `KING` and color `WHITE`
 
-- **TC41: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
+- **TC24: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a freshly constructed board; set `getSnapshot()[7][0]` to `null`
+  - **State of the system**: a board constructed with `StandardBoardInitializer`; set `getSnapshot()[7][0]` to `null`
   - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
 
 ---
@@ -373,15 +247,15 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC42: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
+- **TC25: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`
-  - **State of the system**: freshly constructed board
+  - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: returns `WHITE_TURN`
-  - **Covered by**: TC36
+  - **Covered by**: TC11
 
-- **TC43: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
+- **TC26: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `switchTurn()`
-  - **State of the system**: board after one `switchTurn()` call
+  - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` called once
   - **Expected output**: returns `BLACK_TURN`
 
 ---
@@ -412,15 +286,15 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC44: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC27: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
-  - **State of the system**: freshly constructed board; `currentGameState` is `WHITE_TURN`
-  - **Covered by**: TC43
+  - **State of the system**: a board constructed with `StandardBoardInitializer`; `currentGameState` is `WHITE_TURN`
+  - **Covered by**: TC26
   - **Expected output**: after `switchTurn()`, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC45: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC28: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
-  - **State of the system**: board where `switchTurn()` has been called once (state is `BLACK_TURN`)
+  - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` has been called once (state is `BLACK_TURN`)
   - **Expected output**: after a second `switchTurn()`, `getCurrentGameState()` returns `WHITE_TURN`
 
 ---
