@@ -1,13 +1,15 @@
 # BVA Analysis for BoardController
 
-Scope: **Game Initialization** — selection state, board snapshot delegation to `Board`, first-click policy. Placement and Chess960 generation live on `Board` via `BoardInitializer` implementations (`StandardBoardInitializer`, `Chess960FixedBoardInitializer`, `FischerRandomBoardInitializer`).
+Package: `ui.BoardController`
+
+Scope: **Game Initialization** — selection state, snapshot/turn delegation to `domain.Board`, first-click policy, optional `BoardView` wiring. The real `Board` implementation is another feature branch; **unit tests use EasyMock** (`createMock` / `createNiceMock`, `expect`, `replay`, `verify`) to stub `getSnapshot()`, `getCurrentGameState()`, and `getPieceAt()` with test-built `Piece[][]` grids.
 
 ### Step 1: Input and output equivalence classes
 
 | Concern           | Equivalence classes                                                                 |
 | ----------------- | ----------------------------------------------------------------------------------- |
 | Object life cycle | Fresh instance; no clicks yet                                                       |
-| Collaborators     | `Board` holds `Piece[][]` with `NonePiece` on empty squares; **no `BoardView`** in tests |
+| Collaborators     | `Board` (mocked); **no `BoardView`** in controller unit tests |
 
 ### Step 2: BVA catalog data types
 
@@ -94,12 +96,12 @@ Scope: **Game Initialization** — selection state, board snapshot delegation to
 **Chess960 (fixed layout via `Chess960FixedBoardInitializer`)**
 
 - **BC-TC11: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()`, `BoardController(StartingPositionKind.CHESS960)`
+  - **Method(s) under test**: `getBoardSnapshot()` with mock returning fixed Chess960 grid
   - **State of the system**: fixed Chess960 start
   - **Expected output**: white back rank bishops on opposite color parity
 
 - **BC-TC12: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardSnapshot()`, `BoardController(StartingPositionKind.CHESS960)`
+  - **Method(s) under test**: `getBoardSnapshot()` with mock returning fixed Chess960 grid
   - **State of the system**: fixed Chess960 start
   - **Expected output**: black back rank bishops on opposite color parity
 
@@ -144,7 +146,7 @@ Scope: **Game Initialization** — selection state, board snapshot delegation to
 - **BC-TC25: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
 - **BC-TC26: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
 
-  - **Method(s) under test**: `BoardController(long)`, `getBoardSnapshot()`
+  - **Method(s) under test**: `getBoardSnapshot()` with mock returning seed-`1L` Chess960 grid (built in test)
   - **State of the system**: `chess960Seed == 1L`
   - **Expected output**: same predicates as BC-TC11–BC-TC18 for the seeded layout
 
