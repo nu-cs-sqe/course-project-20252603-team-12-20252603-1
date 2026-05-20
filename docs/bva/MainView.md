@@ -62,7 +62,7 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
   - **Expected output**: `getGameStatsView().getCurrentPlayerLabelText()` equals `"Alice"`
 
-- **MV-TC5: Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob** ( :x: )
+- **MV-TC5: Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getGameStatsView().getGameStateLabelText()` equals `"Alice vs Bob"`
