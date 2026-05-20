@@ -4,9 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import domain.gamestate.GameState;
+import domain.piece.Bishop;
+import domain.piece.King;
+import domain.piece.Knight;
+import domain.piece.NonePiece;
+import domain.piece.Pawn;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
+import domain.piece.Rook;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -38,6 +48,30 @@ class BoardTest {
         Board board = new Board(initializer);
         assertEquals(expectedType, board.getSnapshot()[row][col].getType());
         EasyMock.verify(initializer);
+    }
+
+    static Stream<Arguments> pieceTypeAtPositionProvider() {
+        return Stream.of(
+                Arguments.of(new Rook(PieceColor.BLACK),   0, 0, PieceType.ROOK),
+                Arguments.of(new Knight(PieceColor.BLACK), 0, 1, PieceType.KNIGHT),
+                Arguments.of(new Bishop(PieceColor.BLACK), 0, 2, PieceType.BISHOP),
+                Arguments.of(new Queen(PieceColor.BLACK),  0, 3, PieceType.QUEEN),
+                Arguments.of(new King(PieceColor.BLACK),   0, 4, PieceType.KING),
+                Arguments.of(new Pawn(PieceColor.BLACK),   1, 0, PieceType.PAWN),
+                Arguments.of(new NonePiece(),              3, 0, PieceType.NONE),
+                Arguments.of(new Rook(PieceColor.BLACK),   0, 7, PieceType.ROOK)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("pieceTypeAtPositionProvider")
+    void Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook(
+            Piece piece, int row, int col, PieceType expectedType) {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[row][col] = piece;
+        Board board = new Board(layout);
+        assertEquals(expectedType, board.getSnapshot()[row][col].getType());
     }
 
     @Test

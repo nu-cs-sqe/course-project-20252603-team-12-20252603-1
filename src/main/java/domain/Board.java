@@ -17,6 +17,14 @@ public class Board {
     private final Piece[][] pieces = new Piece[8][8];
     private GameState currentGameState = GameState.WHITE_TURN;
 
+    public Board(Piece[][] initialPieces) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                pieces[row][col] = initialPieces[row][col].makeCopy();
+            }
+        }
+    }
+
     public Board(BoardInitializer initializer) {
         PieceType[][] layout = initializer.getBoardLayout();
         for (int row = 0; row < 8; row++) {

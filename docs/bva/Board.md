@@ -159,61 +159,68 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC12: `Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook`**
+- **TC12: `Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getType()` equals `ROOK`
+  - **Note**: TC13–TC18 and TC22 are covered by this test case as a parameterized test
 
-- **TC13: `Constructor_WhenPieceArrayHasKnightAtPosition_PieceTypeIsKnight`**
+- **TC13: `Constructor_WhenPieceArrayHasKnightAtPosition_PieceTypeIsKnight`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][1].getType()` equals `KNIGHT`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC14: `Constructor_WhenPieceArrayHasBishopAtPosition_PieceTypeIsBishop`**
+- **TC14: `Constructor_WhenPieceArrayHasBishopAtPosition_PieceTypeIsBishop`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][2].getType()` equals `BISHOP`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC15: `Constructor_WhenPieceArrayHasQueenAtPosition_PieceTypeIsQueen`**
+- **TC15: `Constructor_WhenPieceArrayHasQueenAtPosition_PieceTypeIsQueen`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][3].getType()` equals `QUEEN`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC16: `Constructor_WhenPieceArrayHasKingAtPosition_PieceTypeIsKing`**
+- **TC16: `Constructor_WhenPieceArrayHasKingAtPosition_PieceTypeIsKing`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `King(BLACK)` at `[0][4]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][4].getType()` equals `KING`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC17: `Constructor_WhenPieceArrayHasPawnAtPosition_PieceTypeIsPawn`**
+- **TC17: `Constructor_WhenPieceArrayHasPawnAtPosition_PieceTypeIsPawn`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[1][0].getType()` equals `PAWN`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC18: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`**
+- **TC18: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `NonePiece` at `[3][0]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[3][0].getType()` equals `NONE`
+  - **Covered by**: TC12 (parameterized test)
 
-- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`**
+- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`** ( :x: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[7][0]` (bottom half, which `Board(BoardInitializer)` would assign `WHITE`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[7][0].getColor()` equals `BLACK`
 
-- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`**
+- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`** ( :x: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` (top half, which `Board(BoardInitializer)` would assign `BLACK`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getColor()` equals `WHITE`
 
-- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`**
+- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`** ( :x: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: board constructed with an all-`NonePiece` `Piece[][]`
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
 
-- **TC22: `Constructor_WhenPieceArrayHasPieceAtRowZeroColSeven_PieceTypeMatches`**
+- **TC22: `Constructor_WhenPieceArrayHasPieceAtRowZeroColSeven_PieceTypeMatches`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][7]`; all other positions `NonePiece`; board is constructed — covers col 7 (max)
   - **Expected output**: `getSnapshot()[0][7].getType()` equals `ROOK`
-  - **Note**: TC12–TC18 and TC22 are covered by a single parameterized test in the implementation
+  - **Covered by**: TC12 (parameterized test)
 
 ---
 
