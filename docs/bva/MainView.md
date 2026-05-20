@@ -57,7 +57,7 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
   - **Expected output**: `getGameStatsView()` is a `GameStatsView` instance
 
-- **MV-TC4: Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice** ( :x: )
+- **MV-TC4: Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
   - **Expected output**: `getGameStatsView().getCurrentPlayerLabelText()` equals `"Alice"`

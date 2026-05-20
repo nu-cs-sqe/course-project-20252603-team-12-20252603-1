@@ -42,6 +42,28 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+
+    String expected = "Alice";
+    String actual = view.getGameStatsView().getCurrentPlayerLabelText();
+    assertEquals(expected, actual);
+    EasyMock.verify(boardMock);
+  }
+
+  @Test
+  void Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+
+    String expected = "Alice vs Bob";
+    String actual = view.getGameStatsView().getGameStateLabelText();
+    assertEquals(expected, actual);
+    EasyMock.verify(boardMock);
+  }
+
   private static Board replayNiceBoard() {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.replay(boardMock);
