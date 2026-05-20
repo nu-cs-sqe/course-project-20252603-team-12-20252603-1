@@ -211,7 +211,7 @@
   - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` (top half, which `Board(BoardInitializer)` would assign `BLACK`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getColor()` equals `WHITE`
 
-- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`** ( :x: )
+- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: board constructed with an all-`NonePiece` `Piece[][]`
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`

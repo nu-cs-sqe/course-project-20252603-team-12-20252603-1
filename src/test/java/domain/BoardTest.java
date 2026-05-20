@@ -93,6 +93,14 @@ class BoardTest {
     }
 
     @Test
+    void Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        Board board = new Board(layout);
+        assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
+    }
+
+    @Test
     void Constructor_WhenInitializerHasNonNoneTypeInTopHalf_PieceColorIsBlack() {
         PieceType[][] layout = new PieceType[8][8];
         for (PieceType[] r : layout) {
