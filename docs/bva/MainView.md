@@ -67,8 +67,8 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getGameStatsView().getGameStateLabelText()` equals `"Alice vs Bob"`
 
-- **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardView`)
+- **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :white_check_mark: )
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardView`)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, unit test does not call `setVisible(true)`
   - **Expected output**: content pane contains at least one `BoardView` and at least one `GameStatsView`
 

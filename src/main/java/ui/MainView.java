@@ -13,6 +13,20 @@ public class MainView extends JFrame {
     boardController = new BoardController(board);
     boardView = new BoardView();
     gameStatsView = new GameStatsView(player1Name, player2Name);
+    configureMainView();
+  }
+
+  private void configureMainView() {
+    addGameStatsView();
+    addBoardView();
+  }
+
+  private void addGameStatsView() {
+    getContentPane().add(gameStatsView);
+  }
+
+  private void addBoardView() {
+    getContentPane().add(boardView);
   }
 
   BoardController getBoardController() {

@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.Board;
 import domain.piece.NonePiece;
 import domain.piece.Piece;
+import java.awt.Container;
+import java.awt.Component;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -62,6 +64,28 @@ class MainViewTest {
     String actual = view.getGameStatsView().getGameStateLabelText();
     assertEquals(expected, actual);
     EasyMock.verify(boardMock);
+  }
+
+  @Test
+  void Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+
+    Container contentPane = view.getContentPane();
+    boolean hasBoardView = containsInstance(contentPane, BoardView.class);
+    boolean hasGameStatsView = containsInstance(contentPane, GameStatsView.class);
+    boolean actual = hasBoardView && hasGameStatsView;
+    assertTrue(actual);
+    EasyMock.verify(boardMock);
+  }
+
+  private static boolean containsInstance(Container container, Class<?> type) {
+    for (Component component : container.getComponents()) {
+      if (type.isInstance(component)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static Board replayNiceBoard() {
