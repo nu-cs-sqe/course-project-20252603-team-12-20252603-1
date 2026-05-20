@@ -109,6 +109,114 @@
 
 ---
 
+## Method: `Board(Piece[][])`
+
+### Step 1: Equivalence Classes
+
+- **Input: piece type of the `Piece` at each position** — the `PieceType` held by each object in the array
+- **Input: piece color of the `Piece` at each position** — the `PieceColor` held by each object in the array
+- **Input: row of each piece** — which row (0–7) the piece occupies in the array
+- **Input: column of each piece** — which column (0–7) the piece occupies in the array
+- **Output: piece type at position** — the type of the `Piece` stored on the board after construction
+- **Output: piece color at position** — the color of the `Piece` stored on the board after construction (must equal the input color, not derived from row)
+- **Output: initial game state** — the game state immediately after construction
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: piece type of the `Piece` at each position | Cases | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: piece color of the `Piece` at each position | Cases | BLACK, WHITE |
+| Input: row of each piece | Interval | [0, 7] |
+| Input: column of each piece | Interval | [0, 7] |
+| Output: piece type at position | Cases | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: piece color at position | Cases | BLACK, WHITE |
+| Output: initial game state | Cases | WHITE_TURN |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**Piece types — Cases:**
+- ROOK
+- KNIGHT
+- BISHOP
+- QUEEN
+- KING
+- PAWN
+- NONE
+
+**Piece colors — Cases:**
+- BLACK
+- WHITE
+
+**Row — Interval [0, 7]:**
+- 0 (min), 7 (max)
+
+**Column — Interval [0, 7]:**
+- 0 (min), 7 (max)
+
+**Game state — Cases:**
+- WHITE_TURN
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC12: `Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][0].getType()` equals `ROOK`
+
+- **TC13: `Constructor_WhenPieceArrayHasKnightAtPosition_PieceTypeIsKnight`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][1].getType()` equals `KNIGHT`
+
+- **TC14: `Constructor_WhenPieceArrayHasBishopAtPosition_PieceTypeIsBishop`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][2].getType()` equals `BISHOP`
+
+- **TC15: `Constructor_WhenPieceArrayHasQueenAtPosition_PieceTypeIsQueen`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][3].getType()` equals `QUEEN`
+
+- **TC16: `Constructor_WhenPieceArrayHasKingAtPosition_PieceTypeIsKing`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `King(BLACK)` at `[0][4]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][4].getType()` equals `KING`
+
+- **TC17: `Constructor_WhenPieceArrayHasPawnAtPosition_PieceTypeIsPawn`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[1][0].getType()` equals `PAWN`
+
+- **TC18: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `NonePiece` at `[3][0]`; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[3][0].getType()` equals `NONE`
+
+- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[7][0]` (bottom half, which `Board(BoardInitializer)` would assign `WHITE`); all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[7][0].getColor()` equals `BLACK`
+
+- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` (top half, which `Board(BoardInitializer)` would assign `BLACK`); all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][0].getColor()` equals `WHITE`
+
+- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: board constructed with an all-`NonePiece` `Piece[][]`
+  - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
+
+- **TC22: `Constructor_WhenPieceArrayHasPieceAtRowZeroColSeven_PieceTypeMatches`**
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][7]`; all other positions `NonePiece`; board is constructed — covers col 7 (max)
+  - **Expected output**: `getSnapshot()[0][7].getType()` equals `ROOK`
+  - **Note**: TC12–TC18 and TC22 are covered by a single parameterized test in the implementation
+
+---
+
 ## Method: `createPiece(PieceType, PieceColor)` (private)
 
 ### Step 1: Equivalence Classes
@@ -139,31 +247,31 @@
 
 `createPiece` is private; all test cases are exercised indirectly through `Board(BoardInitializer)`.
 
-- **TC12: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :white_check_mark: )
+- **TC23: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns ROOK at a top-half position
   - **Expected output**: piece has type ROOK and color BLACK
   - **Covered by**: TC2 + TC9
 
-- **TC13: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :white_check_mark: )
+- **TC24: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :white_check_mark: )
   - **Covered by**: TC3
 
-- **TC14: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :white_check_mark: )
+- **TC25: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :white_check_mark: )
   - **Covered by**: TC4
 
-- **TC15: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :white_check_mark: )
+- **TC26: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :white_check_mark: )
   - **Covered by**: TC5
 
-- **TC16: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :white_check_mark: )
+- **TC27: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :white_check_mark: )
   - **Covered by**: TC6
 
-- **TC17: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :white_check_mark: )
+- **TC28: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :white_check_mark: )
   - **Covered by**: TC7
 
-- **TC18: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
+- **TC29: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
   - **Covered by**: TC8
 
-- **TC19: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :white_check_mark: )
+- **TC30: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece at a bottom-half position
   - **Expected output**: piece has color WHITE
@@ -198,27 +306,27 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC20: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
+- **TC31: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the returned `Piece[][]` reference is not the same object as a second call to `getSnapshot()`
 
-- **TC21: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
+- **TC32: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[0]` is not the same array reference as a second `getSnapshot()[0]`
 
-- **TC22: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
+- **TC33: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the Piece object at `getSnapshot()[0][0]` is not the same reference as the Piece at a second `getSnapshot()[0][0]`, but has the same type and color
 
-- **TC23: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
+- **TC34: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[7][4]` has type `KING` and color `WHITE`
 
-- **TC24: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
+- **TC35: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; set `getSnapshot()[7][0]` to `null`
   - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
@@ -247,13 +355,13 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC25: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
+- **TC36: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: returns `WHITE_TURN`
   - **Covered by**: TC11
 
-- **TC26: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
+- **TC37: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `switchTurn()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` called once
   - **Expected output**: returns `BLACK_TURN`
@@ -286,13 +394,13 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC27: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC38: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `currentGameState` is `WHITE_TURN`
-  - **Covered by**: TC26
+  - **Covered by**: TC37
   - **Expected output**: after `switchTurn()`, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC28: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC39: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` has been called once (state is `BLACK_TURN`)
   - **Expected output**: after a second `switchTurn()`, `getCurrentGameState()` returns `WHITE_TURN`
