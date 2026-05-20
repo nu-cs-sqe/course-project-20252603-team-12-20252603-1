@@ -32,6 +32,16 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_OnAliceAndBobStandardMode_GameStatsViewWired() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+
+    boolean actual = view.getGameStatsView() instanceof GameStatsView;
+    assertTrue(actual);
+    EasyMock.verify(boardMock);
+  }
+
   private static Board replayNiceBoard() {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.replay(boardMock);

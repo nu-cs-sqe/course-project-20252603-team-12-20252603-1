@@ -52,7 +52,7 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getBoardView()` is a `BoardView` instance
 
-- **MV-TC3: Constructor_OnAliceAndBobStandardMode_GameStatsViewWired** ( :x: )
+- **MV-TC3: Constructor_OnAliceAndBobStandardMode_GameStatsViewWired** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
   - **Expected output**: `getGameStatsView()` is a `GameStatsView` instance

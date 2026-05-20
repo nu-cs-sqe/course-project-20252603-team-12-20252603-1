@@ -7,10 +7,12 @@ public class MainView extends JFrame {
 
   private final BoardController boardController;
   private final BoardView boardView;
+  private final GameStatsView gameStatsView;
 
   public MainView(String player1Name, String player2Name, GameStartMode mode, Board board) {
     boardController = new BoardController(board);
     boardView = new BoardView();
+    gameStatsView = new GameStatsView(player1Name, player2Name);
   }
 
   BoardController getBoardController() {
@@ -19,5 +21,9 @@ public class MainView extends JFrame {
 
   BoardView getBoardView() {
     return boardView;
+  }
+
+  GameStatsView getGameStatsView() {
+    return gameStatsView;
   }
 }
