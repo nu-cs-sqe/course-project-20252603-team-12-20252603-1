@@ -206,7 +206,7 @@
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[7][0]` (bottom half, which `Board(BoardInitializer)` would assign `WHITE`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[7][0].getColor()` equals `BLACK`
 
-- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`** ( :x: )
+- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` (top half, which `Board(BoardInitializer)` would assign `BLACK`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getColor()` equals `WHITE`

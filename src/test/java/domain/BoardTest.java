@@ -84,6 +84,15 @@ class BoardTest {
     }
 
     @Test
+    void Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[0][0] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        assertEquals(PieceColor.WHITE, board.getSnapshot()[0][0].getColor());
+    }
+
+    @Test
     void Constructor_WhenInitializerHasNonNoneTypeInTopHalf_PieceColorIsBlack() {
         PieceType[][] layout = new PieceType[8][8];
         for (PieceType[] r : layout) {
