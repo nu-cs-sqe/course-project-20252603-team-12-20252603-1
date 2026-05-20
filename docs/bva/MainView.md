@@ -1,6 +1,10 @@
 # BVA Analysis for MainView
 
-## Method: `MainView(String player1Name, String player2Name, GameStartMode mode)`
+Package: `ui.MainView`
+
+**Testing:** Unit tests inject a mock `domain.Board` (EasyMock). `MainView` does not construct `Board` or initializers—that is the caller’s responsibility (e.g. `WelcomeView` after PR #74).
+
+## Method: `MainView(String player1Name, String player2Name, GameStartMode mode, Board board)`
 
 ### Step 1: Inputs and outputs
 
@@ -9,6 +13,7 @@
 | `player1Name` | **Strings**                                                                                   |
 | `player2Name` | **Strings**                                                                                   |
 | `mode`        | **Cases** — `STANDARD`; `FISCHER_RANDOM`                                                      |
+| `board`       | **Pointers** — mock `Board` in unit tests; real `Board` from caller in integration            |
 | Frame         | newly constructed; no clicks; no moves applied                                                |
 | Outputs       | collaborators wired; stats labels; board displayed in content pane; game ready via controller |
 
@@ -37,9 +42,9 @@
 | MV-TC4–5 | Players shown; white / player 1 indicated at start     |
 | MV-TC6–7 | Board displayed and connected to controller            |
 
-- **MV-TC1: Constructor_OnAliceAndBobStandardMode_BoardControllerWired** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
+- **MV-TC1: Constructor_OnAliceAndBobStandardMode_BoardControllerWired** ( :white_check_mark: )
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, mock `Board` returns 8×8 snapshot, frame just constructed
   - **Expected output**: `getBoardController().getBoardSnapshot().length == 8`
 
 - **MV-TC2: Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired** ( :x: )
