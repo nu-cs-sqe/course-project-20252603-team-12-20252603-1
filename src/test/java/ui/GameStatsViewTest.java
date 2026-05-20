@@ -28,8 +28,8 @@ class GameStatsViewTest {
     void Constructor_OnBothNamesEmpty_CurrentPlayerLabelEmpty() {
         GameStatsView view = new GameStatsView("", "");
 
-        boolean expected = true;
-        boolean actual = view.getCurrentPlayerLabelText().isEmpty();
+        String expected = "";
+        String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
 
@@ -46,8 +46,8 @@ class GameStatsViewTest {
     void Constructor_OnOneNameEmptyOtherNonEmpty_CurrentPlayerLabelEmpty() {
         GameStatsView view = new GameStatsView("", "Bob");
 
-        boolean expected = true;
-        boolean actual = view.getCurrentPlayerLabelText().isEmpty();
+        String expected = "";
+        String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
 
