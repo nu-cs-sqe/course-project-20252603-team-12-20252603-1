@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+  <!-- Relax Google rules: no required / validated Javadoc. -->
+  <suppress checks=".*Javadoc.*" files=".*"/>
+  <!-- Allow short field names (e.g. x, y) in Location. -->
+  <suppress checks="MemberName" files=".*[/\\]domain[/\\]location[/\\]Location\.java$"/>
+  <!-- Test methods use a leading capital; Google MethodName expects lowercase. -->
+  <suppress checks="MethodName" files=".*[/\\]src[/\\]test[/\\].*\.java$"/>
+</suppressions>
