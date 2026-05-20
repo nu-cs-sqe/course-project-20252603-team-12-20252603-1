@@ -58,20 +58,29 @@ class BoardTest {
                 Arguments.of(new Queen(PieceColor.BLACK),  0, 3, PieceType.QUEEN),
                 Arguments.of(new King(PieceColor.BLACK),   0, 4, PieceType.KING),
                 Arguments.of(new Pawn(PieceColor.BLACK),   1, 0, PieceType.PAWN),
-                Arguments.of(new NonePiece(),              3, 0, PieceType.NONE),
+                Arguments.of(new NonePiece(),              7, 0, PieceType.NONE),
                 Arguments.of(new Rook(PieceColor.BLACK),   0, 7, PieceType.ROOK)
         );
     }
 
     @ParameterizedTest
     @MethodSource("pieceTypeAtPositionProvider")
-    void Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook(
+    void Constructor_WhenPieceArrayHasPieceAtPosition_PieceTypeIsPiece(
             Piece piece, int row, int col, PieceType expectedType) {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
         layout[row][col] = piece;
         Board board = new Board(layout);
         assertEquals(expectedType, board.getSnapshot()[row][col].getType());
+    }
+
+    @Test
+    void Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[7][0] = new Rook(PieceColor.BLACK);
+        Board board = new Board(layout);
+        assertEquals(PieceColor.BLACK, board.getSnapshot()[7][0].getColor());
     }
 
     @Test

@@ -197,11 +197,11 @@
 
 - **TC18: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
-  - **State of the system**: `Piece[][]` with a `NonePiece` at `[3][0]`; all other positions `NonePiece`; board is constructed
-  - **Expected output**: `getSnapshot()[3][0].getType()` equals `NONE`
+  - **State of the system**: `Piece[][]` with a `NonePiece` at `[7][0]`; all other positions `NonePiece`; board is constructed — covers row 7 (max)
+  - **Expected output**: `getSnapshot()[7][0].getType()` equals `NONE`
   - **Covered by**: TC12 (parameterized test)
 
-- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`** ( :x: )
+- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[7][0]` (bottom half, which `Board(BoardInitializer)` would assign `WHITE`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[7][0].getColor()` equals `BLACK`
