@@ -47,8 +47,8 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, mock `Board` returns 8×8 snapshot, frame just constructed
   - **Expected output**: `getBoardController().getBoardSnapshot().length == 8`
 
-- **MV-TC2: Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)`
+- **MV-TC2: Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired** ( :white_check_mark: )
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getBoardView()` is a `BoardView` instance
 

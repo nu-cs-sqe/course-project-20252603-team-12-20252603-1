@@ -1,6 +1,7 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.Board;
 import domain.piece.NonePiece;
@@ -19,6 +20,22 @@ class MainViewTest {
     int actual = view.getBoardController().getBoardSnapshot().length;
     assertEquals(expected, actual);
     EasyMock.verify(boardMock);
+  }
+
+  @Test
+  void Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+
+    boolean actual = view.getBoardView() instanceof BoardView;
+    assertTrue(actual);
+    EasyMock.verify(boardMock);
+  }
+
+  private static Board replayNiceBoard() {
+    Board boardMock = EasyMock.createNiceMock(Board.class);
+    EasyMock.replay(boardMock);
+    return boardMock;
   }
 
   private static Board stubSnapshot(Piece[][] snapshot) {
