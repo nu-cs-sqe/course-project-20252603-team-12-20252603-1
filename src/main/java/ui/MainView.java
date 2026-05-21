@@ -27,6 +27,11 @@ public class MainView extends JFrame {
 
   private void addBoardView() {
     getContentPane().add(boardView);
+    boardController.setBoardView(boardView);
+  }
+
+  BoardView getRegisteredBoardView() {
+    return boardController.getBoardView();
   }
 
   BoardController getBoardController() {

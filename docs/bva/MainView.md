@@ -53,18 +53,18 @@ Package: `ui.MainView`
   - **Expected output**: `getBoardView()` is a `BoardView` instance
 
 - **MV-TC3: Constructor_OnAliceAndBobStandardMode_GameStatsViewWired** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, mock `Board`, frame just constructed
   - **Expected output**: `getGameStatsView()` is a `GameStatsView` instance
 
 - **MV-TC4: Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
   - **Expected output**: `getGameStatsView().getCurrentPlayerLabelText()` equals `"Alice"`
 
 - **MV-TC5: Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, mock `Board`, frame just constructed
   - **Expected output**: `getGameStatsView().getGameStateLabelText()` equals `"Alice vs Bob"`
 
 - **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :white_check_mark: )
@@ -72,8 +72,8 @@ Package: `ui.MainView`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, unit test does not call `setVisible(true)`
   - **Expected output**: content pane contains at least one `BoardView` and at least one `GameStatsView`
 
-- **MV-TC7: Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)` (via `-addBoardView` → `setBoardView`)
+- **MV-TC7: Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance** ( :white_check_mark: )
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-addBoardView` → `setBoardView`)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getRegisteredBoardView() == getBoardView()`
 
@@ -86,12 +86,12 @@ Package: `ui.MainView`
 One smoke per use case: `MainView` chose the correct initializer; full placement rules stay in domain BVA.
 
 - **MV-TC8: Constructor_StandardMode_SnapshotMatchesStandardInitializer** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)` with `mode = STANDARD`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to `new Board(new StandardBoardInitializer()).getSnapshot()` (type and color per cell)
 
 - **MV-TC9: Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Random)` with `mode = FISCHER_RANDOM`, `chess960Random = new Random(1L)`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
   - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to `new Board(new FischerRandomBoardInitializer(new Random(1L))).getSnapshot()`
 
@@ -102,22 +102,22 @@ One smoke per use case: `MainView` chose the correct initializer; full placement
 Readiness is part of the user story; asserted through the wired `BoardController` (not click handling).
 
 - **MV-TC10: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)` with `mode = STANDARD`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
 - **MV-TC11: Constructor_StandardMode_HasSelectionFalse** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode)` with `mode = STANDARD`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 
 - **MV-TC12: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Random)` with `mode = FISCHER_RANDOM`, `chess960Random = new Random(1L)`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
 - **MV-TC13: Constructor_FischerRandomMode_HasSelectionFalse** ( :x: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Random)` with `mode = FISCHER_RANDOM`, `chess960Random = new Random(1L)`
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 

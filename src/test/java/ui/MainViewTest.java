@@ -79,6 +79,17 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+
+    BoardView expected = view.getBoardView();
+    BoardView actual = view.getRegisteredBoardView();
+    assertEquals(expected, actual);
+    EasyMock.verify(boardMock);
+  }
+
   private static boolean containsInstance(Container container, Class<?> type) {
     for (Component component : container.getComponents()) {
       if (type.isInstance(component)) {
