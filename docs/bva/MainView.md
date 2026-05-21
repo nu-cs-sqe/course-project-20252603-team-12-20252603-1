@@ -101,7 +101,7 @@ One smoke per use case: `MainView` chose the correct initializer; full placement
 
 Readiness is part of the user story; asserted through the wired `BoardController` (not click handling).
 
-- **MV-TC10: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :x: )
+- **MV-TC10: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`

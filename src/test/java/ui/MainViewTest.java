@@ -128,6 +128,19 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_StandardMode_CurrentGameStateWhiteTurn() {
+    Board boardMock = EasyMock.createNiceMock(Board.class);
+    EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+    EasyMock.replay(boardMock);
+    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+
+    GameState expected = GameState.WHITE_TURN;
+    GameState actual = view.getBoardController().getCurrentGameState();
+    assertEquals(expected, actual);
+    EasyMock.verify(boardMock);
+  }
+
   private static boolean containsInstance(Container container, Class<?> type) {
     for (Component component : container.getComponents()) {
       if (type.isInstance(component)) {
