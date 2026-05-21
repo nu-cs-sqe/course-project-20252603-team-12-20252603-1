@@ -88,7 +88,7 @@ One smoke per use case: `MainView` chose the correct initializer; full placement
 - **MV-TC8: Constructor_StandardMode_SnapshotMatchesStandardInitializer** ( :x: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to `new Board(new StandardBoardInitializer()).getSnapshot()` (type and color per cell)
+  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to the test-built standard starting grid (type and color per cell) on the injected mock `Board`
 
 - **MV-TC9: Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer** ( :x: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)

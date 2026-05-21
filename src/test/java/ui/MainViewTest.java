@@ -4,8 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.Board;
+import domain.piece.Bishop;
+import domain.piece.King;
+import domain.piece.Knight;
 import domain.piece.NonePiece;
+import domain.piece.Pawn;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
+import domain.piece.PieceType;
+import domain.piece.Queen;
+import domain.piece.Rook;
 import java.awt.Container;
 import java.awt.Component;
 import org.easymock.EasyMock;
@@ -90,6 +98,19 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_StandardMode_SnapshotMatchesStandardInitializer() {
+    Piece[][] standardGrid = newStandardStartingGrid();
+    Board boardMock = stubSnapshot(standardGrid);
+    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+
+    Piece[][] expected = standardGrid;
+    Piece[][] actual = view.getBoardController().getBoardSnapshot();
+    boolean matches = cellWiseSameTypeAndColor(expected, actual);
+    assertTrue(matches);
+    EasyMock.verify(boardMock);
+  }
+
   private static boolean containsInstance(Container container, Class<?> type) {
     for (Component component : container.getComponents()) {
       if (type.isInstance(component)) {
@@ -110,6 +131,46 @@ class MainViewTest {
     EasyMock.expect(boardMock.getSnapshot()).andReturn(snapshot);
     EasyMock.replay(boardMock);
     return boardMock;
+  }
+
+  private static boolean cellWiseSameTypeAndColor(Piece[][] expected, Piece[][] actual) {
+    for (int rank = 0; rank < 8; rank++) {
+      for (int file = 0; file < 8; file++) {
+        Piece e = expected[rank][file];
+        Piece a = actual[rank][file];
+        if (e.getType() != a.getType() || e.getColor() != a.getColor()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private static Piece[][] newStandardStartingGrid() {
+    Piece[][] grid = eightByEightGrid();
+    grid[0][0] = new Rook(PieceColor.WHITE);
+    grid[0][1] = new Knight(PieceColor.WHITE);
+    grid[0][2] = new Bishop(PieceColor.WHITE);
+    grid[0][3] = new Queen(PieceColor.WHITE);
+    grid[0][4] = new King(PieceColor.WHITE);
+    grid[0][5] = new Bishop(PieceColor.WHITE);
+    grid[0][6] = new Knight(PieceColor.WHITE);
+    grid[0][7] = new Rook(PieceColor.WHITE);
+    for (int file = 0; file < 8; file++) {
+      grid[1][file] = new Pawn(PieceColor.WHITE);
+    }
+    for (int file = 0; file < 8; file++) {
+      grid[6][file] = new Pawn(PieceColor.BLACK);
+    }
+    grid[7][0] = new Rook(PieceColor.BLACK);
+    grid[7][1] = new Knight(PieceColor.BLACK);
+    grid[7][2] = new Bishop(PieceColor.BLACK);
+    grid[7][3] = new Queen(PieceColor.BLACK);
+    grid[7][4] = new King(PieceColor.BLACK);
+    grid[7][5] = new Bishop(PieceColor.BLACK);
+    grid[7][6] = new Knight(PieceColor.BLACK);
+    grid[7][7] = new Rook(PieceColor.BLACK);
+    return grid;
   }
 
   private static Piece[][] eightByEightGrid() {
