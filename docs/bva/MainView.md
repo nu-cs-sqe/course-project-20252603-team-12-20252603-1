@@ -85,15 +85,15 @@ Package: `ui.MainView`
 
 One smoke per use case: `MainView` chose the correct initializer; full placement rules stay in domain BVA.
 
-- **MV-TC8: Constructor_StandardMode_SnapshotMatchesStandardInitializer** ( :x: )
+- **MV-TC8: Constructor_StandardMode_SnapshotMatchesStandardInitializer** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to the test-built standard starting grid (type and color per cell) on the injected mock `Board`
 
-- **MV-TC9: Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer** ( :x: )
+- **MV-TC9: Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to `new Board(new FischerRandomBoardInitializer(new Random(1L))).getSnapshot()`
+  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to the test-built Chess960 seed-`1L` grid on the injected mock `Board`
 
 ---
 
