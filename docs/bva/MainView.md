@@ -111,7 +111,7 @@ Readiness is part of the user story; asserted through the wired `BoardController
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 
-- **MV-TC12: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :x: )
+- **MV-TC12: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
