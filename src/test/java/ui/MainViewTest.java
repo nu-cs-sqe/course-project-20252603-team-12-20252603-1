@@ -165,6 +165,17 @@ class MainViewTest {
     EasyMock.verify(boardMock);
   }
 
+  @Test
+  void Constructor_FischerRandomMode_HasSelectionFalse() {
+    Board boardMock = replayNiceBoard();
+    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+
+    boolean expected = false;
+    boolean actual = view.getBoardController().hasSelection();
+    assertEquals(expected, actual);
+    EasyMock.verify(boardMock);
+  }
+
   private static boolean containsInstance(Container container, Class<?> type) {
     for (Component component : container.getComponents()) {
       if (type.isInstance(component)) {
