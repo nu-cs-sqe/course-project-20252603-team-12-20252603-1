@@ -28,6 +28,7 @@ public class BoardView extends JPanel {
     private BoardController boardController;
 
     public BoardView(BoardController boardController) {
+        addMouseListener(new BoardMouseListener());
     }
 
     @Override

@@ -48,4 +48,5 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-Djava.awt.headless=true")
 }
