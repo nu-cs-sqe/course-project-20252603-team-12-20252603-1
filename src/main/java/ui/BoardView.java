@@ -1,5 +1,6 @@
 package ui;
 
+import domain.location.Location;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.awt.Color;
@@ -29,6 +30,7 @@ public class BoardView extends JPanel {
     private BoardController boardController;
 
     public BoardView(BoardController boardController) {
+        this.boardController = boardController;
         addMouseListener(new BoardMouseListener());
         setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE));
     }
@@ -56,6 +58,9 @@ public class BoardView extends JPanel {
     private class BoardMouseListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
+            int file = e.getX() / TILE_SIZE;
+            int rank = (BOARD_SIZE - 1) - e.getY() / TILE_SIZE;
+            boardController.handleSquareClick(new Location(file, rank));
         }
     }
 }

@@ -2,10 +2,37 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import domain.Board;
+import domain.location.Location;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 class BoardViewTest {
+
+    @Test
+    void MouseClicked_AtLeftmostPixel_CallsHandleSquareClickWithFileZero() {
+        Board boardMock = EasyMock.createNiceMock(Board.class);
+        EasyMock.replay(boardMock);
+        BoardController mockController = EasyMock.createMock(BoardController.class);
+        Capture<Location> cap = EasyMock.newCapture();
+        mockController.handleSquareClick(EasyMock.capture(cap));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mockController);
+
+        BoardView view = new BoardView(mockController);
+        MouseListener listener = view.getMouseListeners()[0];
+        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, 1, false);
+        listener.mouseClicked(event);
+
+        int expected = 0;
+        int actual = cap.getValue().getX();
+        assertEquals(expected, actual);
+
+        EasyMock.verify(mockController);
+    }
 
     @Test
     void Constructor_WithValidController_PreferredHeightIsBoardSizeTimesTileSize() {

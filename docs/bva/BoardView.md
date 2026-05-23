@@ -100,7 +100,7 @@ Rank (y) boundaries:
 
 **File boundary — x dimension**
 
-- **BV-TC4: MouseClicked_AtLeftmostPixel_CallsHandleSquareClickWithFileZero** ( :x: )
+- **BV-TC4: MouseClicked_AtLeftmostPixel_CallsHandleSquareClickWithFileZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(0, 0)`
   - **Expected output**: `handleSquareClick(Location(0, 7))` called on the controller
