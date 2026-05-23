@@ -30,7 +30,7 @@ public class BoardView extends JPanel {
 
     public BoardView(BoardController boardController) {
         addMouseListener(new BoardMouseListener());
-        setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, 0));
+        setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE));
     }
 
     @Override

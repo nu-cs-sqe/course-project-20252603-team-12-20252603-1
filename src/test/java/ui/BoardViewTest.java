@@ -8,6 +8,19 @@ import org.junit.jupiter.api.Test;
 class BoardViewTest {
 
     @Test
+    void Constructor_WithValidController_PreferredHeightIsBoardSizeTimesTileSize() {
+        BoardController mockController = EasyMock.createNiceMock(BoardController.class);
+        EasyMock.replay(mockController);
+        BoardView view = new BoardView(mockController);
+
+        int expected = 600;
+        int actual = view.getPreferredSize().height;
+        assertEquals(expected, actual);
+
+        EasyMock.verify(mockController);
+    }
+
+    @Test
     void Constructor_WithValidController_PreferredWidthIsBoardSizeTimesTileSize() {
         BoardController mockController = EasyMock.createNiceMock(BoardController.class);
         EasyMock.replay(mockController);
