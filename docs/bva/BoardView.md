@@ -43,7 +43,7 @@ Scope: **Constructor** (mouse-listener registration and preferred-size wiring) a
   - **State of the system**: fresh `BoardView` constructed with a mocked controller
   - **Expected output**: `getMouseListeners().length == 1`
 
-- **BV-TC2: Constructor_WithValidController_PreferredWidthIsBoardSizeTimesTileSize** ( :x: )
+- **BV-TC2: Constructor_WithValidController_PreferredWidthIsBoardSizeTimesTileSize** ( :white_check_mark: )
   - **Method(s) under test**: `BoardView(BoardController)`
   - **State of the system**: fresh `BoardView`
   - **Expected output**: `getPreferredSize().width == BOARD_SIZE * TILE_SIZE`

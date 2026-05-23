@@ -3,6 +3,7 @@ package ui;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -29,6 +30,7 @@ public class BoardView extends JPanel {
 
     public BoardView(BoardController boardController) {
         addMouseListener(new BoardMouseListener());
+        setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, 0));
     }
 
     @Override
