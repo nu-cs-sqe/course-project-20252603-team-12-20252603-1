@@ -105,7 +105,7 @@ Rank (y) boundaries:
   - **State of the system**: click at pixel `(0, 0)`
   - **Expected output**: `handleSquareClick(Location(0, 7))` called on the controller
 
-- **BV-TC5: MouseClicked_AtLastPixelOfFirstTile_CallsHandleSquareClickWithFileZero** ( :x: )
+- **BV-TC5: MouseClicked_AtLastPixelOfFirstTile_CallsHandleSquareClickWithFileZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(TILE_SIZE − 1, 0)`
   - **Expected output**: `handleSquareClick(Location(0, 7))` called on the controller (same file, same rank as BV-TC4)
