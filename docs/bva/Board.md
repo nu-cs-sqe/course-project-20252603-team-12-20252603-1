@@ -413,3 +413,101 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Expected output**: after a second `switchTurn()`, `getCurrentGameState()` returns `WHITE_TURN`
 
 ---
+
+## Method: `getPieceAt(int rank, int file)`
+
+### Step 1: Equivalence Classes
+
+- **Input: rank** — which row (0–7) to access
+- **Input: file** — which column (0–7) to access
+- **Output: piece type at (rank, file)** — the type of the returned piece matches what was placed at that position
+- **Output: piece color at (rank, file)** — the color of the returned piece matches what was placed at that position
+- **Output: returned piece vs internal piece** — whether the returned piece is a defensive copy
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class                          | Catalog data type   | Parameters                                    |
+| ------------------------------------------ | ------------------- | --------------------------------------------- |
+| Input: rank                                | Interval            | [0, 7]                                        |
+| Input: file                                | Interval            | [0, 7]                                        |
+| Output: piece type at (rank, file)         | Cases               | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: piece color at (rank, file)        | Cases               | BLACK, WHITE                                  |
+| Output: returned piece vs internal piece   | Pairs of references | two references should refer to different objects with same contents |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**Rank — Interval [0, 7]:**
+- 0 (min), 7 (max)
+
+**File — Interval [0, 7]:**
+- 0 (min), 7 (max)
+
+**Piece type — Cases:**
+- ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE
+
+**Piece color — Cases:**
+- BLACK, WHITE
+
+**Pairs of references:**
+- Two references refer to different objects with the same contents (should happen)
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC40: GetPieceAt_WhenBoardHasRookAtPosition_PieceTypeMatches** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 0).getType()` equals `ROOK` — covers rank 0 (min), file 0 (min)
+  - **Note**: TC41–TC46 are covered by this test case as a parameterized test
+
+- **TC41: GetPieceAt_WhenBoardHasKnightAtPosition_PieceTypeIsKnight** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 1).getType()` equals `KNIGHT`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC42: GetPieceAt_WhenBoardHasBishopAtPosition_PieceTypeIsBishop** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 2).getType()` equals `BISHOP`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC43: GetPieceAt_WhenBoardHasQueenAtPosition_PieceTypeIsQueen** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 3).getType()` equals `QUEEN`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC44: GetPieceAt_WhenBoardHasKingAtPosition_PieceTypeIsKing** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `King(BLACK)` at `[0][4]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 4).getType()` equals `KING`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC45: GetPieceAt_WhenBoardHasPawnAtPosition_PieceTypeIsPawn** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(1, 0).getType()` equals `PAWN`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC46: GetPieceAt_WhenBoardHasNonePieceAtPosition_PieceTypeIsNone** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `NonePiece` at `[7][0]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(7, 0).getType()` equals `NONE`
+  - **Covered by**: TC40 (parameterized test)
+
+- **TC47: GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(0, 0).getColor()` equals `BLACK`
+
+- **TC48: GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Rook(WHITE)` at `[7][7]`; all other positions `NonePiece`
+  - **Expected output**: `getPieceAt(7, 7).getColor()` equals `WHITE` — covers rank 7 (max), file 7 (max)
+
+- **TC49: GetPieceAt_ReturnedPieceIsDifferentObject** ( :x: )
+  - **Method(s) under test**: `getPieceAt(int rank, int file)`
+  - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; `getPieceAt(0, 0)` called twice
+  - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
+
+---
