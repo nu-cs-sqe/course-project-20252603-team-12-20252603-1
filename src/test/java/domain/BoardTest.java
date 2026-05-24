@@ -236,4 +236,17 @@ class BoardTest {
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
     }
 
+    @Test
+    void GetPieceAt_ReturnedPieceIsDifferentObject() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[0][0] = new Rook(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Piece piece1 = board.getPieceAt(0, 0);
+        Piece piece2 = board.getPieceAt(0, 0);
+        assertNotSame(piece1, piece2);
+        assertEquals(piece1.getType(), piece2.getType());
+        assertEquals(piece1.getColor(), piece2.getColor());
+    }
+
 }

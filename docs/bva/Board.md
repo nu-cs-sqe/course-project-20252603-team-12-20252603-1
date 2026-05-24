@@ -505,7 +505,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **State of the system**: board constructed with `Rook(WHITE)` at `[7][7]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(7, 7).getColor()` equals `WHITE` — covers rank 7 (max), file 7 (max)
 
-- **TC49: GetPieceAt_ReturnedPieceIsDifferentObject** ( :x: )
+- **TC49: GetPieceAt_ReturnedPieceIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; `getPieceAt(0, 0)` called twice
   - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
