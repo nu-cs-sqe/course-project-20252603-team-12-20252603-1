@@ -500,7 +500,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 0).getColor()` equals `BLACK`
 
-- **TC48: GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite** ( :x: )
+- **TC48: GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(WHITE)` at `[7][7]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(7, 7).getColor()` equals `WHITE` — covers rank 7 (max), file 7 (max)

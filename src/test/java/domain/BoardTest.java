@@ -227,4 +227,13 @@ class BoardTest {
         assertEquals(PieceColor.BLACK, board.getPieceAt(0, 0).getColor());
     }
 
+    @Test
+    void GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
+    }
+
 }
