@@ -122,7 +122,7 @@ Rank (y) boundaries:
 
 **Rank boundary — y dimension**
 
-- **BV-TC8: MouseClicked_AtTopPixel_CallsHandleSquareClickWithRankSeven** ( :x: )
+- **BV-TC8: MouseClicked_AtTopPixel_CallsHandleSquareClickWithRankSeven** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(0, 0)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 7`
