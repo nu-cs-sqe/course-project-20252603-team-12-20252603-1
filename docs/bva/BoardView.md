@@ -137,7 +137,7 @@ Rank (y) boundaries:
   - **State of the system**: click at pixel `(0, TILE_SIZE)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 6`
 
-- **BV-TC11: MouseClicked_AtBottomPixel_CallsHandleSquareClickWithRankZero** ( :x: )
+- **BV-TC11: MouseClicked_AtBottomPixel_CallsHandleSquareClickWithRankZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(0, BOARD_SIZE*TILE_SIZE − 1)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 0`

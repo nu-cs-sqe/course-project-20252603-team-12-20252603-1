@@ -13,6 +13,26 @@ import org.junit.jupiter.api.Test;
 class BoardViewTest {
 
     @Test
+    void MouseClicked_AtBottomPixel_CallsHandleSquareClickWithRankZero() {
+        BoardController mockController = EasyMock.createMock(BoardController.class);
+        Capture<Location> cap = EasyMock.newCapture();
+        mockController.handleSquareClick(EasyMock.capture(cap));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mockController);
+
+        BoardView view = new BoardView(mockController);
+        MouseListener listener = view.getMouseListeners()[0];
+        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_CLICKED, 0, 0, 0, 599, 1, false);
+        listener.mouseClicked(event);
+
+        int expected = 0;
+        int actual = cap.getValue().getY();
+        assertEquals(expected, actual);
+
+        EasyMock.verify(mockController);
+    }
+
+    @Test
     void MouseClicked_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankSix() {
         BoardController mockController = EasyMock.createMock(BoardController.class);
         Capture<Location> cap = EasyMock.newCapture();
