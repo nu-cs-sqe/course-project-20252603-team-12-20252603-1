@@ -132,7 +132,7 @@ Rank (y) boundaries:
   - **State of the system**: click at pixel `(0, TILE_SIZE − 1)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 7` (boundary still within rank-7 tile)
 
-- **BV-TC10: MouseClicked_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankSix** ( :x: )
+- **BV-TC10: MouseClicked_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankSix** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(0, TILE_SIZE)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 6`
