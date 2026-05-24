@@ -218,4 +218,13 @@ class BoardTest {
         assertEquals(expectedType, board.getPieceAt(rank, file).getType());
     }
 
+    @Test
+    void GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[0][0] = new Rook(PieceColor.BLACK);
+        Board board = new Board(layout);
+        assertEquals(PieceColor.BLACK, board.getPieceAt(0, 0).getColor());
+    }
+
 }

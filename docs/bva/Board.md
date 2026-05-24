@@ -495,7 +495,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Expected output**: `getPieceAt(7, 0).getType()` equals `NONE`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC47: GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack** ( :x: )
+- **TC47: GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 0).getColor()` equals `BLACK`
