@@ -3,6 +3,7 @@ import org.gradle.api.plugins.quality.Checkstyle
 plugins {
     id("java")
     checkstyle
+    jacoco
 }
 
 group = "nu.csse.sqe"
