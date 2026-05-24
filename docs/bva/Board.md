@@ -453,43 +453,43 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC40: GetPieceAt_WhenBoardHasRookAtPosition_PieceTypeMatches** ( :x: )
+- **TC40: GetPieceAt_WhenBoardHasRookAtPosition_PieceTypeMatches** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 0).getType()` equals `ROOK` — covers rank 0 (min), file 0 (min)
   - **Note**: TC41–TC46 are covered by this test case as a parameterized test
 
-- **TC41: GetPieceAt_WhenBoardHasKnightAtPosition_PieceTypeIsKnight** ( :x: )
+- **TC41: GetPieceAt_WhenBoardHasKnightAtPosition_PieceTypeIsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 1).getType()` equals `KNIGHT`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC42: GetPieceAt_WhenBoardHasBishopAtPosition_PieceTypeIsBishop** ( :x: )
+- **TC42: GetPieceAt_WhenBoardHasBishopAtPosition_PieceTypeIsBishop** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 2).getType()` equals `BISHOP`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC43: GetPieceAt_WhenBoardHasQueenAtPosition_PieceTypeIsQueen** ( :x: )
+- **TC43: GetPieceAt_WhenBoardHasQueenAtPosition_PieceTypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 3).getType()` equals `QUEEN`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC44: GetPieceAt_WhenBoardHasKingAtPosition_PieceTypeIsKing** ( :x: )
+- **TC44: GetPieceAt_WhenBoardHasKingAtPosition_PieceTypeIsKing** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `King(BLACK)` at `[0][4]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 4).getType()` equals `KING`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC45: GetPieceAt_WhenBoardHasPawnAtPosition_PieceTypeIsPawn** ( :x: )
+- **TC45: GetPieceAt_WhenBoardHasPawnAtPosition_PieceTypeIsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(1, 0).getType()` equals `PAWN`
   - **Covered by**: TC40 (parameterized test)
 
-- **TC46: GetPieceAt_WhenBoardHasNonePieceAtPosition_PieceTypeIsNone** ( :x: )
+- **TC46: GetPieceAt_WhenBoardHasNonePieceAtPosition_PieceTypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `NonePiece` at `[7][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(7, 0).getType()` equals `NONE`

@@ -194,4 +194,28 @@ class BoardTest {
         board.switchTurn();
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
+
+    static Stream<Arguments> getPieceAtTypeProvider() {
+        return Stream.of(
+                Arguments.of(new Rook(PieceColor.BLACK),   0, 0, PieceType.ROOK),
+                Arguments.of(new Knight(PieceColor.BLACK), 0, 1, PieceType.KNIGHT),
+                Arguments.of(new Bishop(PieceColor.BLACK), 0, 2, PieceType.BISHOP),
+                Arguments.of(new Queen(PieceColor.BLACK),  0, 3, PieceType.QUEEN),
+                Arguments.of(new King(PieceColor.BLACK),   0, 4, PieceType.KING),
+                Arguments.of(new Pawn(PieceColor.BLACK),   1, 0, PieceType.PAWN),
+                Arguments.of(new NonePiece(),              7, 0, PieceType.NONE)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("getPieceAtTypeProvider")
+    void GetPieceAt_WhenBoardHasPieceAtPosition_PieceTypeMatches(
+            Piece piece, int rank, int file, PieceType expectedType) {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        layout[rank][file] = piece;
+        Board board = new Board(layout);
+        assertEquals(expectedType, board.getPieceAt(rank, file).getType());
+    }
+
 }

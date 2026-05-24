@@ -59,6 +59,10 @@ public class Board {
         }
     }
 
+    public Piece getPieceAt(int rank, int file) {
+        return pieces[rank][file].makeCopy();
+    }
+
     public Piece[][] getSnapshot() {
         Piece[][] snapshot = new Piece[8][8];
         for (int row = 0; row < 8; row++) {
