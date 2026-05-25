@@ -59,6 +59,7 @@ tasks.jacocoTestReport {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-Djava.awt.headless=true")
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
 
