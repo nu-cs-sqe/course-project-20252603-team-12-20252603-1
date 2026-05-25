@@ -104,6 +104,7 @@ package domain{
         }
 
         +enum PieceType{
+            NONE,
             PAWN,
             ROOK,
             KNIGHT,
@@ -172,7 +173,26 @@ package domain{
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
+        +class NonePiece{
+            +NonePiece()
+            +makeCopy(): Piece
+            +isValidMoveShape(from: Location, to: Location): boolean
+            +isSameColor(piece: Piece): boolean
+        }
 
+
+    }
+
+    +interface BoardInitializer{
+        +getBoardLayout(): PieceType[][]
+    }
+
+    +class StandardBoardInitializer{
+        +getBoardLayout(): PieceType[][]
+    }
+
+    +class FischerRandomBoardInitializer{
+        +getBoardLayout(): PieceType[][]
     }
 
     +class Board{
@@ -185,6 +205,7 @@ package domain{
         -whiteKingLocation: Location
 
         +Board()
+        +Board(initializer: BoardInitializer)
         +getSnapshot(): Piece[][]
 
         +movePiece(from: Square, to: Square): boolean
@@ -301,14 +322,20 @@ BoardController ..> Piece
 Bishop -u-|> Piece
 King -u-|> Piece
 Knight -u-|> Piece
+NonePiece -u-|> Piece
 Pawn -u-|> Piece
 Queen -u-|> Piece
 Rook -u-|> Piece
+
+StandardBoardInitializer ..|> BoardInitializer
+FischerRandomBoardInitializer ..|> BoardInitializer
+Board --> BoardInitializer
 
 Board --> "64" Piece
 Board ..> Bishop
 Board ..> King
 Board ..> Knight
+Board ..> NonePiece
 Board ..> Pawn
 Board ..> Queen
 Board ..> Rook
