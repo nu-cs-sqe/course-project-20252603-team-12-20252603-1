@@ -49,16 +49,18 @@
 **Planning Tracking**:
 1. [not started] Matthew: Implement `Board` constructor from `Piece[][]` to allow for testing and further dependency injection (strategy pattern works for initialization, but limits testing to default board states). Also should implement cyclomatic complexity testing (Jacoco and Pitest). ([#19](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/19))
 2. [not started] Alex: Implement final details of `BoardView` implementation + PR merging ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
-3. [not started] Didier: Merge [#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28) and [#21](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/21); coordinate `Board` / `BoardController` integration with Matthew’s branch
+3. [not started] Didier: Merge GameStatsView [#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28) and BoardController [#21](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/21); coordinate `Board` / `BoardController` integration with Matthew’s branch
 
 # Week 8 (05/18/2026-05/24/2026) 
 **Progress Tracking**:
 1. [done] Matthew: Implemented new Board constructor (with BVA, tests, and logic) with `Piece[][]` input to allow for dependency injection during testing. Implemented Jacoco and Pitest for project. ([#19](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/19), [#36](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/36))
 2. [done] Didier: Merged GameStatsView ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28)). Pushed MainView for review. ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)). Created i18n draft PR ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
-3. [done] Alex: TBD
+3. [done] Alex: Reviewed and merged GameStatsView ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28))
 
 **Planning Tracking**
 1. [not started] Matthew: Implement i18n in English and Spanish ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
+2. [50% done] Didier: Review feedback for MainView ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)) and review other PRs
+3. [80%] Alex: Continue working on BoardView ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
