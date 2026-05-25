@@ -12,17 +12,18 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class                              | Catalog data type | Parameters                                    |
-| ---------------------------------------------- | ----------------- | --------------------------------------------- |
-| Input: piece type returned by initializer      | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Input: position half                           | Cases             | top (rows 0–3), bottom (rows 4–7)             |
-| Output: piece type at position                 | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Output: piece color at an occupied position    | Cases             | BLACK, WHITE                                  |
-| Output: initial game state                     | Cases             | WHITE_TURN                                    |
+| Equivalence class                           | Catalog data type | Parameters                                    |
+| ------------------------------------------- | ----------------- | --------------------------------------------- |
+| Input: piece type returned by initializer   | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: position half                        | Cases             | top (rows 0–3), bottom (rows 4–7)             |
+| Output: piece type at position              | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: piece color at an occupied position | Cases             | BLACK, WHITE                                  |
+| Output: initial game state                  | Cases             | WHITE_TURN                                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Piece types — Cases:**
+
 - ROOK
 - KNIGHT
 - BISHOP
@@ -32,14 +33,17 @@
 - NONE
 
 **Position half — Cases:**
+
 - top (rows 0–3)
 - bottom (rows 4–7)
 
 **Piece color — Cases:**
+
 - BLACK
 - WHITE
 
 **Game state — Cases:**
+
 - WHITE_TURN
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -123,19 +127,20 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class | Catalog data type | Parameters |
-| --- | --- | --- |
-| Input: piece type of the `Piece` at each position | Cases | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Input: piece color of the `Piece` at each position | Cases | BLACK, WHITE |
-| Input: row of each piece | Interval | [0, 7] |
-| Input: column of each piece | Interval | [0, 7] |
-| Output: piece type at position | Cases | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Output: piece color at position | Cases | BLACK, WHITE |
-| Output: initial game state | Cases | WHITE_TURN |
+| Equivalence class                                  | Catalog data type | Parameters                                    |
+| -------------------------------------------------- | ----------------- | --------------------------------------------- |
+| Input: piece type of the `Piece` at each position  | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: piece color of the `Piece` at each position | Cases             | BLACK, WHITE                                  |
+| Input: row of each piece                           | Interval          | [0, 7]                                        |
+| Input: column of each piece                        | Interval          | [0, 7]                                        |
+| Output: piece type at position                     | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: piece color at position                    | Cases             | BLACK, WHITE                                  |
+| Output: initial game state                         | Cases             | WHITE_TURN                                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Piece types — Cases:**
+
 - ROOK
 - KNIGHT
 - BISHOP
@@ -145,16 +150,20 @@
 - NONE
 
 **Piece colors — Cases:**
+
 - BLACK
 - WHITE
 
 **Row — Interval [0, 7]:**
+
 - 0 (min), 7 (max)
 
 **Column — Interval [0, 7]:**
+
 - 0 (min), 7 (max)
 
 **Game state — Cases:**
+
 - WHITE_TURN
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -235,19 +244,21 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class              | Catalog data type | Parameters                                    |
-| ------------------------------ | ----------------- | --------------------------------------------- |
-| Input: piece type              | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Input: piece color             | Cases             | BLACK, WHITE                                  |
-| Output: returned piece type    | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Output: returned piece color   | Cases             | BLACK, WHITE                                  |
+| Equivalence class            | Catalog data type | Parameters                                    |
+| ---------------------------- | ----------------- | --------------------------------------------- |
+| Input: piece type            | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Input: piece color           | Cases             | BLACK, WHITE                                  |
+| Output: returned piece type  | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
+| Output: returned piece color | Cases             | BLACK, WHITE                                  |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Piece types — Cases:**
+
 - ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE
 
 **Piece colors — Cases:**
+
 - BLACK, WHITE
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -295,20 +306,22 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class                        | Catalog data type      | Parameters                                                       |
-| ---------------------------------------- | ---------------------- | ---------------------------------------------------------------- |
-| Output: returned outer array vs internal | Pairs of references    | two references should refer to different objects                 |
-| Output: returned row array vs internal   | Pairs of references    | two references should refer to different objects                 |
+| Equivalence class                        | Catalog data type      | Parameters                                                          |
+| ---------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
+| Output: returned outer array vs internal | Pairs of references    | two references should refer to different objects                    |
+| Output: returned row array vs internal   | Pairs of references    | two references should refer to different objects                    |
 | Output: returned Piece vs internal       | Pairs of references    | two references should refer to different objects with same contents |
-| Output: snapshot content                 | Collections (contents) | snapshot matches current board state                             |
+| Output: snapshot content                 | Collections (contents) | snapshot matches current board state                                |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Pairs of references:**
+
 - Two references refer to the same object (should NOT happen — this is what we test against)
 - Two reference arguments refer to different objects with the same contents (should happen)
 
 **Collections (contents):**
+
 - Collection contains the expected elements (content matches board state)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -357,6 +370,7 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Game state — Cases:**
+
 - WHITE_TURN (first possibility)
 - BLACK_TURN (second possibility)
 
@@ -392,10 +406,12 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Input game state — Cases:**
+
 - WHITE_TURN (first possibility)
 - BLACK_TURN (second possibility)
 
 **Output game state — Cases:**
+
 - BLACK_TURN (first possibility)
 - WHITE_TURN (second possibility)
 
@@ -426,29 +442,34 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class                          | Catalog data type   | Parameters                                    |
-| ------------------------------------------ | ------------------- | --------------------------------------------- |
-| Input: rank                                | Interval            | [0, 7]                                        |
-| Input: file                                | Interval            | [0, 7]                                        |
-| Output: piece type at (rank, file)         | Cases               | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Output: piece color at (rank, file)        | Cases               | BLACK, WHITE                                  |
-| Output: returned piece vs internal piece   | Pairs of references | two references should refer to different objects with same contents |
+| Equivalence class                        | Catalog data type   | Parameters                                                          |
+| ---------------------------------------- | ------------------- | ------------------------------------------------------------------- |
+| Input: rank                              | Interval            | [0, 7]                                                              |
+| Input: file                              | Interval            | [0, 7]                                                              |
+| Output: piece type at (rank, file)       | Cases               | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE                       |
+| Output: piece color at (rank, file)      | Cases               | BLACK, WHITE                                                        |
+| Output: returned piece vs internal piece | Pairs of references | two references should refer to different objects with same contents |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Rank — Interval [0, 7]:**
+
 - 0 (min), 7 (max)
 
 **File — Interval [0, 7]:**
+
 - 0 (min), 7 (max)
 
 **Piece type — Cases:**
+
 - ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE
 
 **Piece color — Cases:**
+
 - BLACK, WHITE
 
 **Pairs of references:**
+
 - Two references refer to different objects with the same contents (should happen)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -509,5 +530,115 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; `getPieceAt(0, 0)` called twice
   - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
+
+---
+
+## Method: `movePiece(Location from, Location to)`
+
+Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in order: destination not same color → move shape → path clear (non-jumpers) → not moving into check (deferred TCs until king-safety slice). Does **not** call `switchTurn()`; the controller switches turn after `true`. Uses `Board(Piece[][])` for injected layouts. Coordinates: `Location.getX()` is file, `Location.getY()` is rank; `getPieceAt(rank, file)` matches that convention.
+
+### Step 1: Equivalence Classes
+
+- **Input: `from` square** — occupied by moving piece; empty; out of bounds (invalid — not a BVA boundary per project null/out-of-range policy for public APIs if guarded)
+- **Input: `to` square** — empty; occupied by opponent; occupied by friendly; same square as `from`
+- **Input: moving piece type** — pawn, knight, rook, bishop, queen, king (shape and path rules differ)
+- **Input: board layout** — clear path; blocked sliding path; knight jump over piece
+- **Output: return value** — `true` (move applied); `false` (board unchanged)
+- **Output: origin after call** — `NonePiece` on success; unchanged on failure
+- **Output: destination after call** — moving piece on success; unchanged on failure
+- **Output: captured piece** — removed on legal capture; N/A on non-capture
+- **Output: `hasMoved()` on moved piece** — `true` after success
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class            | Catalog data type | Parameters                                      |
+| ---------------------------- | ----------------- | ----------------------------------------------- |
+| Input: destination occupancy | Cases             | empty (`NONE`), opponent piece, friendly piece  |
+| Input: move shape validity   | Cases             | valid shape, invalid shape                      |
+| Input: sliding path          | Cases             | clear, blocked                                  |
+| Input: piece jump capability | Boolean           | jumper (`KNIGHT`), non-jumper (sliders)         |
+| Output: return value         | Boolean           | `true`, `false`                                 |
+| Output: origin cell type     | Cases             | `NONE` after success; unchanged type on failure |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**Destination occupancy — Cases:**
+
+- Empty square (forward non-capture)
+- Opponent piece (capture)
+- Friendly piece (illegal)
+
+**Move shape — Cases:**
+
+- Valid pawn one-step forward (rank delta 1, same file, from starting rank)
+- Valid knight L-shape `(2,1)` absolute displacement
+- Invalid pawn move (wrong direction or distance for shape-only check)
+
+**Sliding path — Cases:**
+
+- No intervening pieces (rook horizontal move)
+- One intervening piece between rook and destination (blocked)
+
+**Return value — Boolean:**
+
+- `true` (success boundary)
+- `false` (rejection boundary)
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC50: MovePiece_LegalPawnForwardOneToEmptySquare_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at rank 6 file 4, empty at rank 5 file 4; `WHITE_TURN`
+  - **Expected output**: return value is `true`
+
+- **TC51: MovePiece_LegalPawnForwardOneToEmptySquare_OriginBecomesNone** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC50; `from = Location(4, 6)`, `to = Location(4, 5)`
+  - **Expected output**: `getPieceAt(6, 4).getType()` is `NONE` after the call
+
+- **TC52: MovePiece_LegalPawnForwardOneToEmptySquare_DestinationHasPawn** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC50
+  - **Expected output**: `getPieceAt(5, 4).getType()` is `PAWN` and color is `WHITE`
+
+- **TC53: MovePiece_LegalPawnForwardOneToEmptySquare_MovedPawnHasMovedTrue** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC50
+  - **Expected output**: `getPieceAt(5, 4).hasMoved()` is `true`
+
+- **TC54: MovePiece_LegalKnightJumpOverPiece_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Knight(WHITE)` at rank 7 file 6 with friendly pawn on rank 6 file 6; empty at rank 5 file 5 (valid L-shape)
+  - **Expected output**: return value is `true`
+
+- **TC55: MovePiece_DestinationOccupiedByFriendlyPiece_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Rook(WHITE)` at rank 7 file 0; another `Rook(WHITE)` at rank 7 file 3; empty between them
+  - **Expected output**: return value is `false`
+
+- **TC56: MovePiece_DestinationOccupiedByFriendlyPiece_BoardUnchanged** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC55; snapshot taken before call
+  - **Expected output**: cell-wise type and color match pre-move snapshot
+
+- **TC57: MovePiece_InvalidMoveShape_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Pawn(WHITE)` at rank 6 file 4; empty at rank 4 file 4 (two ranks forward without en passant/double-push rules in scope — illegal shape or blocked per implementation)
+  - **Expected output**: return value is `false`
+
+- **TC58: MovePiece_BlockedRookSlide_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Rook(WHITE)` at rank 7 file 0; `Pawn(WHITE)` at rank 7 file 1; empty at rank 7 file 3
+  - **Expected output**: return value is `false`
+
+- **TC59: MovePiece_LegalCapture_RemovesOpponentFromDestination** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Pawn(WHITE)` at rank 4 file 4; `Pawn(BLACK)` at rank 3 file 5 (diagonal capture shape); `WHITE_TURN`
+  - **Expected output**: return value is `true`; `getPieceAt(3, 5)` is white pawn; `getPieceAt(4, 4)` is `NONE`
+
+- **TC60: MovePiece_AfterFailedMove_GameStateUnchanged** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`, `getCurrentGameState()`
+  - **State of the system**: same as TC55 (friendly destination)
+  - **Expected output**: `getCurrentGameState()` still `WHITE_TURN` (movePiece does not switch turn)
 
 ---
