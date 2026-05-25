@@ -14,12 +14,15 @@ import domain.piece.Rook;
 
 public class Board {
 
-    private final Piece[][] pieces = new Piece[8][8];
+    private static final int BOARD_SIZE = 8;
+    private static final int BLACK_RANK_ROWS = 4;
+
+    private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
 
     public Board(Piece[][] initialPieces) {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 pieces[row][col] = initialPieces[row][col].makeCopy();
             }
         }
@@ -27,9 +30,9 @@ public class Board {
 
     public Board(BoardInitializer initializer) {
         PieceType[][] layout = initializer.getBoardLayout();
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                PieceColor color = (row < 4) ? PieceColor.BLACK : PieceColor.WHITE;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                PieceColor color = (row < BLACK_RANK_ROWS) ? PieceColor.BLACK : PieceColor.WHITE;
                 pieces[row][col] = createPiece(layout[row][col], color);
             }
         }
@@ -64,9 +67,9 @@ public class Board {
     }
 
     public Piece[][] getSnapshot() {
-        Piece[][] snapshot = new Piece[8][8];
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        Piece[][] snapshot = new Piece[BOARD_SIZE][BOARD_SIZE];
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 snapshot[row][col] = pieces[row][col].makeCopy();
             }
         }

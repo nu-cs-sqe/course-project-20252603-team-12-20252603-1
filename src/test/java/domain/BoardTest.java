@@ -171,7 +171,7 @@ class BoardTest {
     void GetSnapshot_ModifySnapshotDoesNotAffectBoard() {
         Board board = new Board(new StandardBoardInitializer());
         Piece[][] snapshot = board.getSnapshot();
-        snapshot[7][0] = null;
+        snapshot[7][0] = new NonePiece();
         Piece piece = board.getSnapshot()[7][0];
         assertEquals(PieceType.ROOK, piece.getType());
         assertEquals(PieceColor.WHITE, piece.getColor());
