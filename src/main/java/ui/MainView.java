@@ -11,7 +11,7 @@ public class MainView extends JFrame {
 
   public MainView(String player1Name, String player2Name, GameStartMode mode, Board board) {
     boardController = new BoardController(board);
-    boardView = new BoardView();
+    boardView = new BoardView(boardController);
     gameStatsView = new GameStatsView(player1Name, player2Name);
     configureMainView();
   }
