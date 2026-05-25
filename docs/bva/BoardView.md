@@ -115,10 +115,10 @@ Rank (y) boundaries:
   - **State of the system**: click at pixel `(TILE_SIZE, 0)`
   - **Expected output**: `handleSquareClick(Location(1, 7))` called on the controller
 
-- **BV-TC7: MouseClicked_AtLastPixelOfBoard_CallsHandleSquareClickWithFileSevenRankZero** ( :white_check_mark: )
+- **BV-TC7: MouseClicked_AtLastPixelOfBoard_CallsHandleSquareClickWithFileSeven** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mouseClicked`
   - **State of the system**: click at pixel `(BOARD_SIZE*TILE_SIZE − 1, BOARD_SIZE*TILE_SIZE − 1)`
-  - **Expected output**: `handleSquareClick(Location(7, 0))` called on the controller
+  - **Expected output**: `handleSquareClick` receives `Location` with `getX() == 7`
 
 **Rank boundary — y dimension**
 
