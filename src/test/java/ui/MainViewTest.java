@@ -14,12 +14,14 @@ import org.junit.jupiter.api.Test;
 
 class MainViewTest {
 
+  private static final int BOARD_SIZE = 8;
+
   @Test
   void Constructor_OnAliceAndBobStandardMode_BoardControllerWired() {
     Board boardMock = stubSnapshot(eightByEightGrid());
     MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
 
-    int expected = 8;
+    int expected = BOARD_SIZE;
     int actual = view.getBoardController().getBoardSnapshot().length;
     assertEquals(expected, actual);
     EasyMock.verify(boardMock);
@@ -154,9 +156,9 @@ class MainViewTest {
   }
 
   private static Piece[][] eightByEightGrid() {
-    Piece[][] grid = new Piece[8][8];
-    for (int rank = 0; rank < 8; rank++) {
-      for (int file = 0; file < 8; file++) {
+    Piece[][] grid = new Piece[BOARD_SIZE][BOARD_SIZE];
+    for (int rank = 0; rank < BOARD_SIZE; rank++) {
+      for (int file = 0; file < BOARD_SIZE; file++) {
         grid[rank][file] = new NonePiece();
       }
     }
