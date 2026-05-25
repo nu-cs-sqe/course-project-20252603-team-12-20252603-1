@@ -79,44 +79,28 @@ Package: `ui.MainView`
 
 ---
 
-## Method: `MainView` — injected board snapshot pass-through (MV-TC8–MV-TC9)
+## Method: `MainView` — game ready for first white move (MV-TC8–MV-TC11)
 
-### Step 4: Test cases (MV-TC8–MV-TC9)
-
-`MainView` does not run initializers; these smokes verify `BoardController` exposes the caller-injected mock snapshot unchanged. Initializer correctness stays in domain BVA.
-
-- **MV-TC8: Constructor_StandardMode_BoardSnapshotEqualsInjectedBoard** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
-  - **State of the system**: mock `Board` stubbed with a standard starting grid; frame just constructed
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal (type and color) to the stubbed grid
-
-- **MV-TC9: Constructor_FischerRandomMode_BoardSnapshotEqualsInjectedBoard** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
-  - **State of the system**: mock `Board` stubbed with a grid built from `FischerRandomBoardInitializer(new Random(1L))`; frame just constructed
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal (type and color) to the stubbed grid
-
----
-
-## Method: `MainView` — game ready for first white move (MV-TC10–MV-TC13)
+> MV-TC8/TC9 (snapshot pass-through) removed: redundant with MV-TC1 and did not exercise initializers.
 
 Readiness is part of the user story; asserted through the wired `BoardController` (not click handling).
 
-- **MV-TC10: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
+- **MV-TC8: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
-- **MV-TC11: Constructor_StandardMode_HasSelectionFalse** ( :white_check_mark: )
+- **MV-TC9: Constructor_StandardMode_HasSelectionFalse** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 
-- **MV-TC12: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
+- **MV-TC10: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
-- **MV-TC13: Constructor_FischerRandomMode_HasSelectionFalse** ( :white_check_mark: )
+- **MV-TC11: Constructor_FischerRandomMode_HasSelectionFalse** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
