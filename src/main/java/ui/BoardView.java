@@ -33,6 +33,7 @@ public class BoardView extends JPanel {
         this.boardController = boardController;
         addMouseListener(new BoardMouseListener());
         setPreferredSize(new Dimension(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE));
+        loadPieceImages();
     }
 
     @Override
@@ -52,6 +53,7 @@ public class BoardView extends JPanel {
     }
 
     private void loadPieceImages() {
+        // untestable: I/O / resource loading
     }
 
     private void loadOnePieceImage(PieceType pieceType, PieceColor color, String imagePath) {
