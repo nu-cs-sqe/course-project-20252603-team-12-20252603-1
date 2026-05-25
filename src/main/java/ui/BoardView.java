@@ -38,7 +38,11 @@ public class BoardView extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        // untestable: graphics rendering
         super.paintComponent(g);
+        drawBoard(g);
+        drawPieces(g);
+        drawSelectedSquare(g);
     }
 
     private void drawBoard(Graphics g) {
