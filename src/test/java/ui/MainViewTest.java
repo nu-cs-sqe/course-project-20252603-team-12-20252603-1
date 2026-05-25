@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.Board;
+import domain.FischerRandomBoardInitializer;
 import domain.gamestate.GameState;
 import domain.piece.Bishop;
 import domain.piece.King;
@@ -17,8 +18,6 @@ import domain.piece.Queen;
 import domain.piece.Rook;
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -104,7 +103,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_StandardMode_SnapshotMatchesStandardInitializer() {
+  void Constructor_StandardMode_BoardSnapshotEqualsInjectedBoard() {
     Piece[][] standardGrid = newStandardStartingGrid();
     Board boardMock = stubSnapshot(standardGrid);
     MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
@@ -117,7 +116,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer() {
+  void Constructor_FischerRandomMode_BoardSnapshotEqualsInjectedBoard() {
     Piece[][] chess960Grid = newChess960SeedOneGrid();
     Board boardMock = stubSnapshot(chess960Grid);
     MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
@@ -191,60 +190,20 @@ class MainViewTest {
   }
 
   private static Piece[][] newChess960SeedOneGrid() {
-    PieceType[] backRank = generateChess960BackRankTypes(new Random(1L));
+    FischerRandomBoardInitializer initializer =
+        new FischerRandomBoardInitializer(new Random(1L));
+    PieceType[][] layout = initializer.getBoardLayout();
     Piece[][] grid = eightByEightGrid();
-    placeBackRankPieces(grid, 0, PieceColor.WHITE, backRank);
-    placeBackRankPieces(grid, 7, PieceColor.BLACK, backRank);
-    for (int file = 0; file < 8; file++) {
-      grid[1][file] = new Pawn(PieceColor.WHITE);
-      grid[6][file] = new Pawn(PieceColor.BLACK);
-    }
-    return grid;
-  }
-
-  private static PieceType[] generateChess960BackRankTypes(Random rng) {
-    PieceType[] byFile = new PieceType[8];
-    for (int file = 0; file < 8; file++) {
-      byFile[file] = PieceType.NONE;
-    }
-
-    int[] lightFiles = {0, 2, 4, 6};
-    byFile[lightFiles[rng.nextInt(4)]] = PieceType.BISHOP;
-
-    int[] darkFiles = {1, 3, 5, 7};
-    byFile[darkFiles[rng.nextInt(4)]] = PieceType.BISHOP;
-
-    List<Integer> remaining = new ArrayList<>();
-    for (int file = 0; file < 8; file++) {
-      if (byFile[file] == PieceType.NONE) {
-        remaining.add(file);
+    for (int rank = 0; rank < 8; rank++) {
+      for (int file = 0; file < 8; file++) {
+        PieceType type = layout[rank][file];
+        if (type != PieceType.NONE) {
+          PieceColor color = rank <= 1 ? PieceColor.WHITE : PieceColor.BLACK;
+          grid[rank][file] = pieceFromType(type, color);
+        }
       }
     }
-
-    int queenIdx = rng.nextInt(3);
-    byFile[remaining.get(queenIdx)] = PieceType.QUEEN;
-    remaining.remove(queenIdx);
-
-    int knight1Idx = rng.nextInt(4);
-    byFile[remaining.get(knight1Idx)] = PieceType.KNIGHT;
-    remaining.remove(knight1Idx);
-
-    int knight2Idx = rng.nextInt(3);
-    byFile[remaining.get(knight2Idx)] = PieceType.KNIGHT;
-    remaining.remove(knight2Idx);
-
-    byFile[remaining.get(0)] = PieceType.ROOK;
-    byFile[remaining.get(1)] = PieceType.KING;
-    byFile[remaining.get(2)] = PieceType.ROOK;
-
-    return byFile;
-  }
-
-  private static void placeBackRankPieces(
-      Piece[][] grid, int rank, PieceColor color, PieceType[] typesByFile) {
-    for (int file = 0; file < 8; file++) {
-      grid[rank][file] = pieceFromType(typesByFile[file], color);
-    }
+    return grid;
   }
 
   private static Piece pieceFromType(PieceType type, PieceColor color) {

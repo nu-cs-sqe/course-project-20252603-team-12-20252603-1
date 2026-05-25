@@ -12,7 +12,7 @@ Package: `ui.MainView`
 | ------------- | --------------------------------------------------------------------------------------------- |
 | `player1Name` | **Strings**                                                                                   |
 | `player2Name` | **Strings**                                                                                   |
-| `mode`        | **Cases** — `STANDARD`; `FISCHER_RANDOM`                                                      |
+| `mode`        | **Cases** — `STANDARD`; `FISCHER_RANDOM` (API placeholder; not read until welcome branching)   |
 | `board`       | **Pointers** — mock `Board` in unit tests; real `Board` from caller in integration            |
 | Frame         | newly constructed; no clicks; no moves applied                                                |
 | Outputs       | collaborators wired; stats labels; board displayed in content pane; game ready via controller |
@@ -32,7 +32,7 @@ Package: `ui.MainView`
 
 - **Cases:** `STANDARD`; `FISCHER_RANDOM`.
 - **Strings:** `player1Name = "Alice"`, `player2Name = "Bob"`.
-- **Pointers (Fischer):** `chess960Random = new Random(1L)` in four-arg constructor for deterministic smoke.
+- **Pointers (Fischer):** caller supplies a `Board` already initialized (e.g. `FischerRandomBoardInitializer` with seed `1L`); `mode` is not read by `MainView` yet.
 
 ### Step 4: Test cases — UI composition (MV-TC1–MV-TC7)
 
@@ -79,21 +79,21 @@ Package: `ui.MainView`
 
 ---
 
-## Method: `MainView` — mode selects initializer (integration smokes)
+## Method: `MainView` — injected board snapshot pass-through (MV-TC8–MV-TC9)
 
 ### Step 4: Test cases (MV-TC8–MV-TC9)
 
-One smoke per use case: `MainView` chose the correct initializer; full placement rules stay in domain BVA.
+`MainView` does not run initializers; these smokes verify `BoardController` exposes the caller-injected mock snapshot unchanged. Initializer correctness stays in domain BVA.
 
-- **MV-TC8: Constructor_StandardMode_SnapshotMatchesStandardInitializer** ( :white_check_mark: )
+- **MV-TC8: Constructor_StandardMode_BoardSnapshotEqualsInjectedBoard** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to the test-built standard starting grid (type and color per cell) on the injected mock `Board`
+  - **State of the system**: mock `Board` stubbed with a standard starting grid; frame just constructed
+  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal (type and color) to the stubbed grid
 
-- **MV-TC9: Constructor_FischerRandomMode_SnapshotMatchesFischerRandomInitializer** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
-  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal to the test-built Chess960 seed-`1L` grid on the injected mock `Board`
+- **MV-TC9: Constructor_FischerRandomMode_BoardSnapshotEqualsInjectedBoard** ( :white_check_mark: )
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
+  - **State of the system**: mock `Board` stubbed with a grid built from `FischerRandomBoardInitializer(new Random(1L))`; frame just constructed
+  - **Expected output**: `getBoardController().getBoardSnapshot()` is cell-wise equal (type and color) to the stubbed grid
 
 ---
 
@@ -112,13 +112,13 @@ Readiness is part of the user story; asserted through the wired `BoardController
   - **Expected output**: `getBoardController().hasSelection() == false`
 
 - **MV-TC12: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
 - **MV-TC13: Constructor_FischerRandomMode_HasSelectionFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM` (future four-arg `Random` when caller supplies board from seeded initializer)
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, seed `1L`, no clicks yet
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 
 ---

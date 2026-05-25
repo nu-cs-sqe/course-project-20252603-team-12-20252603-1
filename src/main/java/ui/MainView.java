@@ -10,6 +10,10 @@ public class MainView extends JFrame {
   private final BoardView boardView;
   private final GameStatsView gameStatsView;
 
+  /**
+   * @param mode start mode from the welcome flow; reserved for future UI branching. Board layout is
+   *     supplied by the caller via {@code board} (initializer runs before this view is constructed).
+   */
   public MainView(String player1Name, String player2Name, GameStartMode mode, Board board) {
     boardController = new BoardController(board);
     boardView = new BoardView(boardController);
