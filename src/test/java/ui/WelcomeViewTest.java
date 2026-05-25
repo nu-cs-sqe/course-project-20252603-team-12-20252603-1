@@ -34,4 +34,14 @@ class WelcomeViewTest {
         String actual = view.getPlayer2Name();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void GetPlayer1Name_WhenFieldHasText_ReturnsEnteredName() {
+        WelcomeView view = new WelcomeView();
+        view.setPlayer1Name("Alice");
+
+        String expected = "Alice";
+        String actual = view.getPlayer1Name();
+        assertEquals(expected, actual);
+    }
 }

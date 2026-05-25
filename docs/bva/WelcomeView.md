@@ -41,7 +41,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer2Name()` returns `""`
 
-- **WV-TC3: GetPlayer1Name_WhenFieldHasText_ReturnsEnteredName** ( :x: )
+- **WV-TC3: GetPlayer1Name_WhenFieldHasText_ReturnsEnteredName** ( :white_check_mark: )
   - **Method(s) under test**: `getPlayer1Name()`
   - **State of the system**: `WelcomeView` constructed; `player1NameField` text set to `"Alice"` via package-private setter
   - **Expected output**: `getPlayer1Name()` returns `"Alice"`

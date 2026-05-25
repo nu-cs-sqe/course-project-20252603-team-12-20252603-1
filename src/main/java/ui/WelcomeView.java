@@ -9,10 +9,12 @@ public class WelcomeView extends JFrame {
     private JTextField player2NameField;
 
     public WelcomeView() {
+        player1NameField = new JTextField();
+        player2NameField = new JTextField();
     }
 
     public String getPlayer1Name() {
-        return "";
+        return player1NameField.getText();
     }
 
     public String getPlayer2Name() {
@@ -20,6 +22,7 @@ public class WelcomeView extends JFrame {
     }
 
     void setPlayer1Name(String name) {
+        player1NameField.setText(name);
     }
 
     void setPlayer2Name(String name) {
