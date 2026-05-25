@@ -2,7 +2,6 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import domain.Board;
 import domain.location.Location;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -154,8 +153,6 @@ class BoardViewTest {
 
     @Test
     void MouseClicked_AtLeftmostPixel_CallsHandleSquareClickWithFileZero() {
-        Board boardMock = EasyMock.createNiceMock(Board.class);
-        EasyMock.replay(boardMock);
         BoardController mockController = EasyMock.createMock(BoardController.class);
         Capture<Location> cap = EasyMock.newCapture();
         mockController.handleSquareClick(EasyMock.capture(cap));
