@@ -56,7 +56,7 @@
 1. [done] Matthew: Implemented new Board constructor (with BVA, tests, and logic) with `Piece[][]` input to allow for dependency injection during testing. Implemented Jacoco and Pitest for project. ([#19](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/19), [#36](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/36)). Opened PR draft and issue for integration testing (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/issues/40).
 2. [done] Didier: Merged GameStatsView ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28)). Pushed MainView for review. ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)). Created i18n draft PR ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
 3. [done] Alex: Reviewed and merged GameStatsView ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28))
-4. [not started]: Group: Decided on and documented decisions for integration testing (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/issues/40). 
+4. [not started]: Group: Decided on and documented decisions for integration testing (https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/issues/40)
 
 
 **Planning Tracking**
