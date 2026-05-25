@@ -4,6 +4,7 @@ plugins {
     id("java")
     checkstyle
     jacoco
+    id("info.solidsoft.pitest") version "1.15.0"
 }
 
 group = "nu.csse.sqe"
@@ -58,4 +59,18 @@ tasks.jacocoTestReport {
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+
+pitest {
+    targetClasses = setOf("domain.*", "ui.*")
+    targetTests = setOf("domain.*", "ui.*")
+    junit5PluginVersion = "1.2.1"
+    threads = 4
+    outputFormats = setOf("HTML")
+    timestampedReports = false
+    testSourceSets.set(listOf(sourceSets.test.get()))
+    mainSourceSets.set(listOf(sourceSets.main.get()))
+    jvmArgs.set(listOf("-Xmx1024m"))
+    useClasspathFile.set(true)
+    exportLineCoverage = true
 }
