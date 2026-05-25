@@ -8,69 +8,69 @@ import org.junit.jupiter.api.Test;
 
 class QueenTest {
 
-  @Test
-  void ConstructorOnWhiteQueenTypeIsQueen() {
-    Queen queen = new Queen(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteQueenTypeIsQueen() {
+        Queen queen = new Queen(PieceColor.WHITE);
 
-    PieceType expected = PieceType.QUEEN;
-    PieceType actual = queen.getType();
-    assertEquals(expected, actual);
-  }
+        PieceType expected = PieceType.QUEEN;
+        PieceType actual = queen.getType();
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void ConstructorOnWhiteQueenColorIsWhite() {
-    Queen queen = new Queen(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteQueenColorIsWhite() {
+        Queen queen = new Queen(PieceColor.WHITE);
 
-    PieceColor expected = PieceColor.WHITE;
-    PieceColor actual = queen.getColor();
-    assertEquals(expected, actual);
-  }
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = queen.getColor();
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void ConstructorOnWhiteQueenCanJumpIsFalse() {
-    Queen queen = new Queen(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteQueenCanJumpIsFalse() {
+        Queen queen = new Queen(PieceColor.WHITE);
 
-    assertFalse(queen.canJump());
-  }
+        assertFalse(queen.canJump());
+    }
 
-  @Test
-  void MakeCopyOnWhiteQueenCopyTypeIsQueen() {
-    Queen queen = new Queen(PieceColor.WHITE);
+    @Test
+    void MakeCopyOnWhiteQueenCopyTypeIsQueen() {
+        Queen queen = new Queen(PieceColor.WHITE);
 
-    PieceType expected = PieceType.QUEEN;
-    PieceType actual = queen.makeCopy().getType();
-    assertEquals(expected, actual);
-  }
+        PieceType expected = PieceType.QUEEN;
+        PieceType actual = queen.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackQueenCopyTypeIsQueen() {
-    Queen queen = new Queen(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackQueenCopyTypeIsQueen() {
+        Queen queen = new Queen(PieceColor.BLACK);
 
-    PieceType expected = PieceType.QUEEN;
-    PieceType actual = queen.makeCopy().getType();
-    assertEquals(expected, actual);
-  }
+        PieceType expected = PieceType.QUEEN;
+        PieceType actual = queen.makeCopy().getType();
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackQueenCopyColorIsBlack() {
-    Queen queen = new Queen(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackQueenCopyColorIsBlack() {
+        Queen queen = new Queen(PieceColor.BLACK);
 
-    PieceColor expected = PieceColor.BLACK;
-    PieceColor actual = queen.makeCopy().getColor();
-    assertEquals(expected, actual);
-  }
+        PieceColor expected = PieceColor.BLACK;
+        PieceColor actual = queen.makeCopy().getColor();
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackQueenCopyCanJumpIsFalse() {
-    Queen queen = new Queen(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackQueenCopyCanJumpIsFalse() {
+        Queen queen = new Queen(PieceColor.BLACK);
 
-    assertFalse(queen.makeCopy().canJump());
-  }
+        assertFalse(queen.makeCopy().canJump());
+    }
 
-  @Test
-  void MakeCopyOnBlackQueenCopyIsDifferentObject() {
-    Queen queen = new Queen(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackQueenCopyIsDifferentObject() {
+        Queen queen = new Queen(PieceColor.BLACK);
 
-    assertNotSame(queen, queen.makeCopy());
-  }
+        assertNotSame(queen, queen.makeCopy());
+    }
 }

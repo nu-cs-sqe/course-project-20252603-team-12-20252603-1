@@ -928,11 +928,15 @@ class BoardControllerTest {
             if (whiteBack.getType() != blackBack.getType()) {
                 return false;
             }
-            if (whiteBack.getColor() != PieceColor.WHITE || blackBack.getColor() != PieceColor.BLACK) {
+            if (!hasCorrectBackRankColors(whiteBack, blackBack)) {
                 return false;
             }
         }
         return true;
+    }
+
+    private static boolean hasCorrectBackRankColors(Piece white, Piece black) {
+        return white.getColor() == PieceColor.WHITE && black.getColor() == PieceColor.BLACK;
     }
 
     private static boolean chess960StandardPawnRows(Piece[][] snapshot) {
