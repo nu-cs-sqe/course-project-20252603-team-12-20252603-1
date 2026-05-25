@@ -15,8 +15,8 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -84,9 +84,10 @@ class MainViewTest {
     MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
 
     Container contentPane = view.getContentPane();
-    boolean hasBoardView = containsInstance(contentPane, BoardView.class);
-    boolean hasGameStatsView = containsInstance(contentPane, GameStatsView.class);
-    boolean actual = hasBoardView && hasGameStatsView;
+    BorderLayout layout = (BorderLayout) contentPane.getLayout();
+    boolean actual =
+        BorderLayout.NORTH.equals(layout.getConstraints(view.getGameStatsView()))
+            && BorderLayout.CENTER.equals(layout.getConstraints(view.getBoardView()));
     assertTrue(actual);
     EasyMock.verify(boardMock);
   }
@@ -174,15 +175,6 @@ class MainViewTest {
     boolean actual = view.getBoardController().hasSelection();
     assertEquals(expected, actual);
     EasyMock.verify(boardMock);
-  }
-
-  private static boolean containsInstance(Container container, Class<?> type) {
-    for (Component component : container.getComponents()) {
-      if (type.isInstance(component)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private static Board replayNiceBoard() {

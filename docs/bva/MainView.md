@@ -70,7 +70,7 @@ Package: `ui.MainView`
 - **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardView`)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, unit test does not call `setVisible(true)`
-  - **Expected output**: content pane contains at least one `BoardView` and at least one `GameStatsView`
+  - **Expected output**: `GameStatsView` in content pane `BorderLayout.NORTH`; `BoardView` in `BorderLayout.CENTER` (both visible when frame is shown)
 
 - **MV-TC7: Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-addBoardView` → `setBoardView`)

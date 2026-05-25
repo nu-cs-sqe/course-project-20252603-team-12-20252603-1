@@ -1,6 +1,7 @@
 package ui;
 
 import domain.Board;
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 public class MainView extends JFrame {
@@ -22,11 +23,11 @@ public class MainView extends JFrame {
   }
 
   private void addGameStatsView() {
-    getContentPane().add(gameStatsView);
+    getContentPane().add(gameStatsView, BorderLayout.NORTH);
   }
 
   private void addBoardView() {
-    getContentPane().add(boardView);
+    getContentPane().add(boardView, BorderLayout.CENTER);
     boardController.setBoardView(boardView);
   }
 
