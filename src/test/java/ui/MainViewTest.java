@@ -42,9 +42,7 @@ class MainViewTest {
     boolean layoutOk =
         BorderLayout.NORTH.equals(layout.getConstraints(view.getGameStatsView()))
             && BorderLayout.CENTER.equals(layout.getConstraints(view.getBoardView()));
-    boolean expected = true;
-    boolean actual = wired && layoutOk;
-    assertTrue(actual);
+    assertTrue(wired && layoutOk);
     EasyMock.verify(boardMock);
   }
 
