@@ -23,15 +23,19 @@ public class MainView extends JFrame {
 
   private void configureMainView() {
     addGameStatsView();
-    addBoardView();
+    addBoardViewToContentPane();
+    registerBoardViewWithController();
   }
 
   private void addGameStatsView() {
     getContentPane().add(gameStatsView, BorderLayout.NORTH);
   }
 
-  private void addBoardView() {
+  private void addBoardViewToContentPane() {
     getContentPane().add(boardView, BorderLayout.CENTER);
+  }
+
+  private void registerBoardViewWithController() {
     boardController.setBoardView(boardView);
   }
 

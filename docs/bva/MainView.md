@@ -68,12 +68,12 @@ Package: `ui.MainView`
   - **Expected output**: `getGameStatsView().getGameStateLabelText()` equals `"Alice vs Bob"`
 
 - **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardView`)
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardViewToContentPane`)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, unit test does not call `setVisible(true)`
   - **Expected output**: `GameStatsView` in content pane `BorderLayout.NORTH`; `BoardView` in `BorderLayout.CENTER` (both visible when frame is shown)
 
 - **MV-TC7: Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-addBoardView` → `setBoardView`)
+  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-registerBoardViewWithController`)
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
   - **Expected output**: `getRegisteredBoardView() == getBoardView()`
 
