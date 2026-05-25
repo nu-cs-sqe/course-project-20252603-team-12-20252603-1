@@ -12,6 +12,8 @@ package ui{
         -player2NameField: JTextField
 
         +WelcomeView()
+        +getPlayer1Name(): String
+        +getPlayer2Name(): String
         -createWelcomeScreenUI(): void
     }
 
