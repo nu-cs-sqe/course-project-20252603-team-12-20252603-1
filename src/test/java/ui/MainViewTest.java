@@ -95,7 +95,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_StandardMode_CurrentGameStateWhiteTurn() {
+  void Constructor_CurrentGameStateWhiteTurn() {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
     EasyMock.replay(boardMock);
@@ -108,31 +108,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_StandardMode_HasSelectionFalse() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    boolean expected = false;
-    boolean actual = view.getBoardController().hasSelection();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_FischerRandomMode_CurrentGameStateWhiteTurn() {
-    Board boardMock = EasyMock.createNiceMock(Board.class);
-    EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
-    EasyMock.replay(boardMock);
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    GameState expected = GameState.WHITE_TURN;
-    GameState actual = view.getBoardController().getCurrentGameState();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_FischerRandomMode_HasSelectionFalse() {
+  void Constructor_HasSelectionFalse() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 

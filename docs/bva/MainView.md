@@ -77,28 +77,20 @@ Package: `ui.MainView`
 
 ---
 
-## Method: `MainView` — game ready for first white move (MV-TC8–MV-TC11)
+## Method: `MainView` — game ready for first white move (MV-TC8–MV-TC9)
 
 > MV-TC8/TC9 (snapshot pass-through) removed: redundant with MV-TC1 and did not exercise initializers.
+>
+> MV-TC10/TC11 (Fischer-labeled readiness) removed: duplicate of MV-TC8/TC9 after `GameStartMode` was dropped from the constructor.
 
-Readiness is part of the user story; asserted through the wired `BoardController` (not click handling).
+Readiness is part of the user story; asserted through the wired `BoardController` (not click handling). Board layout mode is not a `MainView` input.
 
-- **MV-TC8: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
+- **MV-TC8: Constructor_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, Board)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board` returns `WHITE_TURN`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
-- **MV-TC9: Constructor_StandardMode_HasSelectionFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
-  - **Expected output**: `getBoardController().hasSelection() == false`
-
-- **MV-TC10: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board` returns `WHITE_TURN`, no clicks yet
-  - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
-
-- **MV-TC11: Constructor_FischerRandomMode_HasSelectionFalse** ( :white_check_mark: )
+- **MV-TC9: Constructor_HasSelectionFalse** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, Board)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
