@@ -58,6 +58,12 @@ public class BoardView extends JPanel {
 
     private void loadPieceImages() {
         // untestable: I/O / resource loading
+        PieceType[] types = {PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT,
+                             PieceType.BISHOP, PieceType.QUEEN, PieceType.KING};
+        for (PieceType type : types) {
+            loadOnePieceImage(type, PieceColor.WHITE, "pieces/white_" + type.name().toLowerCase() + ".png");
+            loadOnePieceImage(type, PieceColor.BLACK, "pieces/black_" + type.name().toLowerCase() + ".png");
+        }
     }
 
     private void loadOnePieceImage(PieceType pieceType, PieceColor color, String imagePath) {
