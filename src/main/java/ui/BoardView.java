@@ -55,12 +55,51 @@ public class BoardView extends JPanel {
     }
 
     private void loadOnePieceImage(PieceType pieceType, PieceColor color, String imagePath) {
+        // untestable: I/O / resource loading
+        java.net.URL resource = getClass().getClassLoader().getResource(imagePath);
+        if (resource == null) {
+            return;
+        }
+        Image image = new javax.swing.ImageIcon(resource).getImage();
+        if (color == PieceColor.WHITE) {
+            whitePieceImages.put(pieceType, image);
+        } else {
+            blackPieceImages.put(pieceType, image);
+        }
     }
 
     private void drawPieces(Graphics g) {
+        // untestable: graphics rendering
+        domain.piece.Piece[][] snapshot = boardController.getBoardSnapshot();
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                domain.piece.Piece piece = snapshot[rank][file];
+                if (piece.getType() == PieceType.NONE) {
+                    continue;
+                }
+                Map<PieceType, Image> images =
+                    piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
+                Image img = images.get(piece.getType());
+                if (img == null) {
+                    continue;
+                }
+                int screenRow = (BOARD_SIZE - 1) - rank;
+                g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+            }
+        }
     }
 
     private void drawSelectedSquare(Graphics g) {
+        // untestable: graphics rendering
+        java.util.Optional<domain.location.Location> sel = boardController.getSelectedLocation();
+        if (!sel.isPresent()) {
+            return;
+        }
+        domain.location.Location loc = sel.get();
+        selectedCol = loc.getX();
+        selectedRow = (BOARD_SIZE - 1) - loc.getY();
+        g.setColor(SELECTED_SQUARE_COLOR);
+        g.fillRect(selectedCol * TILE_SIZE, selectedRow * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     private class BoardMouseListener extends MouseAdapter {
