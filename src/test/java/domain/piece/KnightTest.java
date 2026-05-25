@@ -8,74 +8,74 @@ import org.junit.jupiter.api.Test;
 
 class KnightTest {
 
-  @Test
-  void ConstructorOnWhiteKnightTypeIsKnight() {
-    Knight knight = new Knight(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteKnightTypeIsKnight() {
+        Knight knight = new Knight(PieceColor.WHITE);
 
-    PieceType expected = PieceType.KNIGHT;
-    PieceType actual = knight.getType();
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.getType();
 
-    assertEquals(expected, actual);
-  }
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void ConstructorOnWhiteKnightColorIsWhite() {
-    Knight knight = new Knight(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteKnightColorIsWhite() {
+        Knight knight = new Knight(PieceColor.WHITE);
 
-    PieceColor expected = PieceColor.WHITE;
-    PieceColor actual = knight.getColor();
+        PieceColor expected = PieceColor.WHITE;
+        PieceColor actual = knight.getColor();
 
-    assertEquals(expected, actual);
-  }
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void ConstructorOnWhiteKnightCanJumpIsTrue() {
-    Knight knight = new Knight(PieceColor.WHITE);
+    @Test
+    void ConstructorOnWhiteKnightCanJumpIsTrue() {
+        Knight knight = new Knight(PieceColor.WHITE);
 
-    assertTrue(knight.canJump());
-  }
+        assertTrue(knight.canJump());
+    }
 
-  @Test
-  void MakeCopyOnWhiteKnightCopyTypeIsKnight() {
-    Knight knight = new Knight(PieceColor.WHITE);
+    @Test
+    void MakeCopyOnWhiteKnightCopyTypeIsKnight() {
+        Knight knight = new Knight(PieceColor.WHITE);
 
-    PieceType expected = PieceType.KNIGHT;
-    PieceType actual = knight.makeCopy().getType();
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.makeCopy().getType();
 
-    assertEquals(expected, actual);
-  }
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackKnightCopyTypeIsKnight() {
-    Knight knight = new Knight(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackKnightCopyTypeIsKnight() {
+        Knight knight = new Knight(PieceColor.BLACK);
 
-    PieceType expected = PieceType.KNIGHT;
-    PieceType actual = knight.makeCopy().getType();
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = knight.makeCopy().getType();
 
-    assertEquals(expected, actual);
-  }
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackKnightCopyColorIsBlack() {
-    Knight knight = new Knight(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackKnightCopyColorIsBlack() {
+        Knight knight = new Knight(PieceColor.BLACK);
 
-    PieceColor expected = PieceColor.BLACK;
-    PieceColor actual = knight.makeCopy().getColor();
+        PieceColor expected = PieceColor.BLACK;
+        PieceColor actual = knight.makeCopy().getColor();
 
-    assertEquals(expected, actual);
-  }
+        assertEquals(expected, actual);
+    }
 
-  @Test
-  void MakeCopyOnBlackKnightCopyCanJumpIsTrue() {
-    Knight knight = new Knight(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackKnightCopyCanJumpIsTrue() {
+        Knight knight = new Knight(PieceColor.BLACK);
 
-    assertTrue(knight.makeCopy().canJump());
-  }
+        assertTrue(knight.makeCopy().canJump());
+    }
 
-  @Test
-  void MakeCopyOnBlackKnightCopyIsDifferentObject() {
-    Knight knight = new Knight(PieceColor.BLACK);
+    @Test
+    void MakeCopyOnBlackKnightCopyIsDifferentObject() {
+        Knight knight = new Knight(PieceColor.BLACK);
 
-    assertNotSame(knight, knight.makeCopy());
-  }
+        assertNotSame(knight, knight.makeCopy());
+    }
 }
