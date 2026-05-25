@@ -18,7 +18,7 @@ public class WelcomeView extends JFrame {
     }
 
     public String getPlayer2Name() {
-        return "";
+        return player2NameField.getText();
     }
 
     void setPlayer1Name(String name) {
@@ -26,6 +26,7 @@ public class WelcomeView extends JFrame {
     }
 
     void setPlayer2Name(String name) {
+        player2NameField.setText(name);
     }
 
     private void createWelcomeScreenUI() {

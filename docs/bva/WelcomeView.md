@@ -46,7 +46,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **State of the system**: `WelcomeView` constructed; `player1NameField` text set to `"Alice"` via package-private setter
   - **Expected output**: `getPlayer1Name()` returns `"Alice"`
 
-- **WV-TC4: GetPlayer2Name_WhenFieldHasText_ReturnsEnteredName** ( :x: )
+- **WV-TC4: GetPlayer2Name_WhenFieldHasText_ReturnsEnteredName** ( :white_check_mark: )
   - **Method(s) under test**: `getPlayer2Name()`
   - **State of the system**: `WelcomeView` constructed; `player2NameField` text set to `"Bob"` via package-private setter
   - **Expected output**: `getPlayer2Name()` returns `"Bob"`
