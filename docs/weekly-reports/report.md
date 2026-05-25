@@ -55,8 +55,10 @@
 **Progress Tracking**:
 1. [done] Matthew: Implemented new Board constructor (with BVA, tests, and logic) with `Piece[][]` input to allow for dependency injection during testing. Implemented Jacoco and Pitest for project. ([#19](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/19), [#36](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/36))
 2. [done] Didier: Merged GameStatsView ([#28](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/28)). Pushed MainView for review. ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)). Created i18n draft PR ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
+3. [done] Alex: TBD
 
 **Planning Tracking**
+1. [not started] Matthew: Implement i18n in English and Spanish ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
