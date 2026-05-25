@@ -41,6 +41,14 @@ public class BoardView extends JPanel {
     }
 
     private void drawBoard(Graphics g) {
+        // untestable: graphics rendering
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                Color color = (row + col) % 2 == 0 ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
+                g.setColor(color);
+                g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+        }
     }
 
     private void loadPieceImages() {
