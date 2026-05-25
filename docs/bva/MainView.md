@@ -2,27 +2,26 @@
 
 Package: `ui.MainView`
 
-**Testing:** Unit tests inject a mock `domain.Board` (EasyMock). `MainView` does not construct `Board` or initializers—that is the caller’s responsibility (e.g. `WelcomeView` after PR #74).
+**Testing:** Unit tests inject a mock `domain.Board` (EasyMock). `MainView` does not construct `Board` or initializers—that is the caller’s responsibility (e.g. `WelcomeView` applies `StandardBoardInitializer` or `FischerRandomBoardInitializer` before passing the `Board`).
 
-## Method: `MainView(String player1Name, String player2Name, GameStartMode mode, Board board)`
+## Method: `MainView(String player1Name, String player2Name, Board board)`
 
 ### Step 1: Inputs and outputs
 
-| Input / state | Equivalence classes                                                                           |
-| ------------- | --------------------------------------------------------------------------------------------- |
-| `player1Name` | **Strings**                                                                                   |
-| `player2Name` | **Strings**                                                                                   |
-| `mode`        | **Cases** — `STANDARD`; `FISCHER_RANDOM` (API placeholder; not read until welcome branching)   |
-| `board`       | **Pointers** — mock `Board` in unit tests; real `Board` from caller in integration            |
-| Frame         | newly constructed; no clicks; no moves applied                                                |
+| Input / state | Equivalence classes                                                                |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `player1Name` | **Strings**                                                                        |
+| `player2Name` | **Strings**                                                                        |
+| `board`       | **Pointers** — mock `Board` in unit tests; real `Board` from caller in integration |
+| Frame         | newly constructed; no clicks; no moves applied                                       |
 | Outputs       | collaborators wired; stats labels; board displayed in content pane; game ready via controller |
 
 ### Step 2: Catalog types
 
 | Variable / output            | Catalog type                                                      |
 | ---------------------------- | ----------------------------------------------------------------- |
-| `mode`                       | **Cases**                                                         |
 | `player1Name`, `player2Name` | **Strings**                                                       |
+| `board`                      | **Pointers**                                                      |
 | Collaborators                | **Pointers**                                                      |
 | `boardView` registration     | **Pairs of references**                                           |
 | Content pane                 | **Collections** — size **> 1**                                    |
@@ -30,9 +29,8 @@ Package: `ui.MainView`
 
 ### Step 3: Concrete boundary values
 
-- **Cases:** `STANDARD`; `FISCHER_RANDOM`.
 - **Strings:** `player1Name = "Alice"`, `player2Name = "Bob"`.
-- **Pointers (Fischer):** caller supplies a `Board` already initialized (e.g. `FischerRandomBoardInitializer` with seed `1L`); `mode` is not read by `MainView` yet.
+- **Pointers:** mock `Board` (nice mock or stubbed snapshot); real `Board` from caller after initializer.
 
 ### Step 4: Test cases — UI composition (MV-TC1–MV-TC7)
 
@@ -43,38 +41,38 @@ Package: `ui.MainView`
 | MV-TC6–7 | Board displayed and connected to controller            |
 
 - **MV-TC1: Constructor_OnAliceAndBobStandardMode_BoardControllerWired** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, mock `Board` returns 8×8 snapshot, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board` returns 8×8 snapshot, frame just constructed
   - **Expected output**: `getBoardController().getBoardSnapshot().length == 8`
 
 - **MV-TC2: Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, frame just constructed
   - **Expected output**: `getBoardView()` is a `BoardView` instance
 
 - **MV-TC3: Constructor_OnAliceAndBobStandardMode_GameStatsViewWired** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, mock `Board`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, frame just constructed
   - **Expected output**: `getGameStatsView()` is a `GameStatsView` instance
 
 - **MV-TC4: Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, frame just constructed
   - **Expected output**: `getGameStatsView().getCurrentPlayerLabelText()` equals `"Alice"`
 
 - **MV-TC5: Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, mock `Board`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, frame just constructed
   - **Expected output**: `getGameStatsView().getGameStateLabelText()` equals `"Alice vs Bob"`
 
 - **MV-TC6: Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardViewToContentPane`)
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, unit test does not call `setVisible(true)`
+  - **Method(s) under test**: `MainView(String, String, Board)` (via `-configureMainView`, `-addGameStatsView`, `-addBoardViewToContentPane`)
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, unit test does not call `setVisible(true)`
   - **Expected output**: `GameStatsView` in content pane `BorderLayout.NORTH`; `BoardView` in `BorderLayout.CENTER` (both visible when frame is shown)
 
 - **MV-TC7: Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` (via `-registerBoardViewWithController`)
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = FISCHER_RANDOM`, frame just constructed
+  - **Method(s) under test**: `MainView(String, String, Board)` (via `-registerBoardViewWithController`)
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, frame just constructed
   - **Expected output**: `getRegisteredBoardView() == getBoardView()`
 
 ---
@@ -86,22 +84,22 @@ Package: `ui.MainView`
 Readiness is part of the user story; asserted through the wired `BoardController` (not click handling).
 
 - **MV-TC8: Constructor_StandardMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board` returns `WHITE_TURN`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
 - **MV-TC9: Constructor_StandardMode_HasSelectionFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = STANDARD`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, `mode = STANDARD`, no clicks yet
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 
 - **MV-TC10: Constructor_FischerRandomMode_CurrentGameStateWhiteTurn** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
+  - **Method(s) under test**: `MainView(String, String, Board)`
+  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board` returns `WHITE_TURN`, no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
 - **MV-TC11: Constructor_FischerRandomMode_HasSelectionFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, GameStartMode, Board)` with `mode = FISCHER_RANDOM`
+  - **Method(s) under test**: `MainView(String, String, Board)`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`, mock `Board`, no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
 

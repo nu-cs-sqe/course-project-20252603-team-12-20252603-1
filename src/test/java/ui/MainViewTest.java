@@ -19,7 +19,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobStandardMode_BoardControllerWired() {
     Board boardMock = stubSnapshot(eightByEightGrid());
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     int expected = BOARD_SIZE;
     int actual = view.getBoardController().getBoardSnapshot().length;
@@ -30,7 +30,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     boolean actual = view.getBoardView() instanceof BoardView;
     assertTrue(actual);
@@ -40,7 +40,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobStandardMode_GameStatsViewWired() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     boolean actual = view.getGameStatsView() instanceof GameStatsView;
     assertTrue(actual);
@@ -50,7 +50,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     String expected = "Alice";
     String actual = view.getGameStatsView().getCurrentPlayerLabelText();
@@ -61,7 +61,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     String expected = "Alice vs Bob";
     String actual = view.getGameStatsView().getGameStateLabelText();
@@ -72,7 +72,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     Container contentPane = view.getContentPane();
     BorderLayout layout = (BorderLayout) contentPane.getLayout();
@@ -86,7 +86,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     BoardView expected = view.getBoardView();
     BoardView actual = view.getRegisteredBoardView();
@@ -99,7 +99,7 @@ class MainViewTest {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
     EasyMock.replay(boardMock);
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     GameState expected = GameState.WHITE_TURN;
     GameState actual = view.getBoardController().getCurrentGameState();
@@ -110,7 +110,7 @@ class MainViewTest {
   @Test
   void Constructor_StandardMode_HasSelectionFalse() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.STANDARD, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     boolean expected = false;
     boolean actual = view.getBoardController().hasSelection();
@@ -123,7 +123,7 @@ class MainViewTest {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
     EasyMock.replay(boardMock);
-    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     GameState expected = GameState.WHITE_TURN;
     GameState actual = view.getBoardController().getCurrentGameState();
@@ -134,7 +134,7 @@ class MainViewTest {
   @Test
   void Constructor_FischerRandomMode_HasSelectionFalse() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", GameStartMode.FISCHER_RANDOM, boardMock);
+    MainView view = new MainView("Alice", "Bob", boardMock);
 
     boolean expected = false;
     boolean actual = view.getBoardController().hasSelection();
