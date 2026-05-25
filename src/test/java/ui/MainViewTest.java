@@ -28,62 +28,38 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBob_CurrentPlayerLabelIsAlice() {
+  void Constructor_OnAliceAndBob_WiresStatsBoardAndLayout() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 
-    String expected = "Alice";
-    String actual = view.getGameStatsView().getCurrentPlayerLabelText();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_OnAliceAndBob_MatchupLabelIsAliceVsBob() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    String expected = "Alice vs Bob";
-    String actual = view.getGameStatsView().getGameStateLabelText();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_OnAliceAndBob_ContentPaneLayoutNorthAndCenter() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
+    boolean wired =
+        view.getGameStatsView() instanceof GameStatsView
+            && view.getBoardView() instanceof BoardView
+            && "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
+            && "Alice vs Bob".equals(view.getGameStatsView().getGameStateLabelText());
     Container contentPane = view.getContentPane();
     BorderLayout layout = (BorderLayout) contentPane.getLayout();
-    boolean actual =
+    boolean layoutOk =
         BorderLayout.NORTH.equals(layout.getConstraints(view.getGameStatsView()))
             && BorderLayout.CENTER.equals(layout.getConstraints(view.getBoardView()));
+    boolean expected = true;
+    boolean actual = wired && layoutOk;
     assertTrue(actual);
     EasyMock.verify(boardMock);
   }
 
   @Test
-  void Constructor_CurrentGameStateWhiteTurn() {
+  void Constructor_InitialReadinessFromInjectedBoard() {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
     EasyMock.replay(boardMock);
     MainView view = new MainView("Alice", "Bob", boardMock);
 
-    GameState expected = GameState.WHITE_TURN;
-    GameState actual = view.getBoardController().getCurrentGameState();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_HasSelectionFalse() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    boolean expected = false;
-    boolean actual = view.getBoardController().hasSelection();
-    assertEquals(expected, actual);
+    boolean expected = true;
+    boolean actual =
+        view.getBoardController().getCurrentGameState() == GameState.WHITE_TURN
+            && !view.getBoardController().hasSelection();
+    assertTrue(actual);
     EasyMock.verify(boardMock);
   }
 
