@@ -2,20 +2,20 @@
 
 Package: `ui.BoardController`
 
-Scope: **Game Initialization** — selection state, snapshot/turn delegation to `domain.Board`, first-click policy, optional `BoardView` wiring. The real `Board` implementation is another feature branch; **unit tests use EasyMock** (`createMock` / `createNiceMock`, `expect`, `replay`, `verify`) to stub `getSnapshot()`, `getCurrentGameState()`, and `getPieceAt()` with test-built `Piece[][]` grids.
+Scope: **Game Initialization** and **Make a Legal Move (one turn)** — selection state, snapshot/turn delegation to `domain.Board`, first-click policy, second-click move completion, optional `BoardView` wiring. **Unit tests use EasyMock** (`createMock` / `createNiceMock`, `expect`, `replay`, `verify`) to stub `getSnapshot()`, `getCurrentGameState()`, `getPieceAt()`, and (for move completion) `movePiece(Location, Location)` / `switchTurn()` with test-built `Piece[][]` grids.
 
 ### Step 1: Input and output equivalence classes
 
-| Concern           | Equivalence classes                                                                 |
-| ----------------- | ----------------------------------------------------------------------------------- |
-| Object life cycle | Fresh instance; no clicks yet                                                       |
+| Concern           | Equivalence classes                                           |
+| ----------------- | ------------------------------------------------------------- |
+| Object life cycle | Fresh instance; no clicks yet                                 |
 | Collaborators     | `Board` (mocked); **no `BoardView`** in controller unit tests |
 
 ### Step 2: BVA catalog data types
 
-| Variable / output     | Catalog type | Rationale                                      |
-| --------------------- | ------------ | ---------------------------------------------- |
-| `lastSelectedLoc`     | Optional     | `Optional.empty()` vs `Optional.of(Location)` |
+| Variable / output | Catalog type | Rationale                                     |
+| ----------------- | ------------ | --------------------------------------------- |
+| `lastSelectedLoc` | Optional     | `Optional.empty()` vs `Optional.of(Location)` |
 
 ### Step 3: Concrete boundary values
 
@@ -40,16 +40,16 @@ Scope: **Game Initialization** — selection state, snapshot/turn delegation to 
 
 ### Step 1: Input and output equivalence classes
 
-| Input (implicit) | Classes                                                          |
-| ---------------- | ---------------------------------------------------------------- |
+| Input (implicit) | Classes                                                        |
+| ---------------- | -------------------------------------------------------------- |
 | Underlying board | Standard init; fixed Chess960 init; seeded Fischer Random init |
 
-| Output    | Classes                                                                        |
-| --------- | ------------------------------------------------------------------------------ |
-| Grid      | Always 8×8                                                                     |
-| Cells     | `Piece` per cell; empty squares use `PieceType.NONE` (`NonePiece`)             |
-| Counts    | 16 white and 16 black pieces at standard start                                 |
-| Readiness | All non-`NONE` pieces `hasMoved() == false`; turn `WHITE_TURN` via `Board`     |
+| Output    | Classes                                                                    |
+| --------- | -------------------------------------------------------------------------- |
+| Grid      | Always 8×8                                                                 |
+| Cells     | `Piece` per cell; empty squares use `PieceType.NONE` (`NonePiece`)         |
+| Counts    | 16 white and 16 black pieces at standard start                             |
+| Readiness | All non-`NONE` pieces `hasMoved() == false`; turn `WHITE_TURN` via `Board` |
 
 ### Step 4: Test cases
 
@@ -145,7 +145,6 @@ Scope: **Game Initialization** — selection state, snapshot/turn delegation to 
 - **BC-TC24: GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows** ( :white_check_mark: )
 - **BC-TC25: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
 - **BC-TC26: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
-
   - **Method(s) under test**: `getBoardSnapshot()` with mock returning seed-`1L` Chess960 grid (built in test)
   - **State of the system**: `chess960Seed == 1L`
   - **Expected output**: same predicates as BC-TC11–BC-TC18 for the seeded layout
@@ -156,16 +155,16 @@ Scope: **Game Initialization** — selection state, snapshot/turn delegation to 
 
 ### Step 1: Input and output equivalence classes
 
-| Output                    | Equivalence classes                                      |
-| ------------------------- | -------------------------------------------------------- |
-| `hasSelection()`          | `true` / `false`                                         |
-| `getSelectedLocation()`   | `Optional.empty()` / `Optional.of(Location)`              |
+| Output                  | Equivalence classes                          |
+| ----------------------- | -------------------------------------------- |
+| `hasSelection()`        | `true` / `false`                             |
+| `getSelectedLocation()` | `Optional.empty()` / `Optional.of(Location)` |
 
 ### Step 2: BVA catalog data types
 
-| Concern           | Catalog type                          |
-| ----------------- | ------------------------------------- |
-| Selection state   | Optional: empty vs present            |
+| Concern         | Catalog type               |
+| --------------- | -------------------------- |
+| Selection state | Optional: empty vs present |
 
 ### Step 4: Test cases
 
@@ -177,13 +176,13 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 
 ### Step 1: Input and output equivalence classes
 
-| Input           | Classes                                       |
-| --------------- | --------------------------------------------- |
-| `loc`           | In-bounds; out-of-bounds                      |
-| Square at start | `NonePiece`; white piece; black piece         |
+| Input           | Classes                               |
+| --------------- | ------------------------------------- |
+| `loc`           | In-bounds; out-of-bounds              |
+| Square at start | `NonePiece`; white piece; black piece |
 
-| Effect            | Classes                                              |
-| ----------------- | ---------------------------------------------------- |
+| Effect            | Classes                                                |
+| ----------------- | ------------------------------------------------------ |
 | Selection / guard | White may select; black or empty must not change board |
 
 ### Step 4: Test cases
@@ -267,3 +266,91 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: Chess960 fixed start; white piece click
   - **Expected output**: `GameState.WHITE_TURN`
+
+---
+
+## Method: `handleSquareClick(loc: Location)` — move completion (second click)
+
+Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is present. Depends on `Board.movePiece` returning `true`/`false`. Team policy for illegal destination: **clear selection** after failed move (document in implementation notes).
+
+### Step 1: Input and output equivalence classes
+
+| Input                       | Classes                                                                  |
+| --------------------------- | ------------------------------------------------------------------------ |
+| Selection state             | `Optional.of(origin)` vs `Optional.empty()` (first click — above)        |
+| Destination at second click | Legal empty; legal capture; illegal shape/path; friendly square          |
+| Active turn                 | `WHITE_TURN` (black move completion deferred to Alternating Turns story) |
+
+| Output / side effect        | Classes                                                             |
+| --------------------------- | ------------------------------------------------------------------- |
+| `Board.movePiece`           | Called once with selected origin and clicked destination on attempt |
+| `Board.switchTurn`          | Called only after `movePiece` returns `true`                        |
+| Selection after success     | Cleared (`hasSelection()` false)                                    |
+| Selection after failed move | Cleared (team policy)                                               |
+| `BoardView.repaint`         | Invoked when view is set                                            |
+| Snapshot                    | Updated only when real board used; unchanged when mock rejects move |
+
+### Step 2: BVA catalog data types
+
+| Variable / output       | Catalog type | Rationale                          |
+| ----------------------- | ------------ | ---------------------------------- |
+| `lastSelectedLoc`       | Optional     | present only for second-click path |
+| `movePiece` return      | Boolean      | success vs rejection               |
+| `getCurrentGameState()` | Cases        | `WHITE_TURN`, `BLACK_TURN`         |
+
+### Step 4: Test cases
+
+- **BC-TC43: HandleSquareClick_WithSelection_LegalDestination_CallsMovePiece** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` with mocked `Board`
+  - **State of the system**: white pawn selected at `Location(4, 6)`; second click `Location(4, 5)`; mock `movePiece(from, to)` returns `true`
+  - **Expected output**: `movePiece` invoked once with matching `from`/`to`; `verify(boardMock)` passes
+
+- **BC-TC44: HandleSquareClick_WithSelection_LegalDestination_CallsSwitchTurn** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` with mocked `Board`
+  - **State of the system**: same as BC-TC43; `movePiece` returns `true`
+  - **Expected output**: `switchTurn()` called once after successful move
+
+- **BC-TC45: HandleSquareClick_WithSelection_LegalDestination_ClearsSelection** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: same as BC-TC43
+  - **Expected output**: `hasSelection()` is `false` after second click
+
+- **BC-TC46: HandleSquareClick_WithSelection_LegalDestination_TurnBecomesBlack** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: integration-style test with real `Board(Piece[][])` and legal white pawn move; or mock returning `BLACK_TURN` after `switchTurn`
+  - **Expected output**: `getCurrentGameState()` is `BLACK_TURN`
+
+- **BC-TC47: HandleSquareClick_WithSelection_LegalDestination_RepaintsBoardView** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` with `BoardView` test double or spy
+  - **State of the system**: `setBoardView` called; successful move
+  - **Expected output**: `repaint()` invoked at least once after successful move
+
+- **BC-TC48: HandleSquareClick_WithSelection_IllegalDestination_DoesNotCallSwitchTurn** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` with mocked `Board`
+  - **State of the system**: white piece selected; second click illegal; mock `movePiece` returns `false`
+  - **Expected output**: `switchTurn()` never called; `verify(boardMock)` passes
+
+- **BC-TC49: HandleSquareClick_WithSelection_IllegalDestination_TurnRemainsWhite** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: same as BC-TC48; mock `getCurrentGameState()` returns `WHITE_TURN`
+  - **Expected output**: `getCurrentGameState()` is `WHITE_TURN`
+
+- **BC-TC50: HandleSquareClick_WithSelection_IllegalDestination_ClearsSelection** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: same as BC-TC48
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC51: HandleSquareClick_WithSelection_OnFriendlyPiece_ChangesSelection** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: white rook selected at `Location(0, 7)`; second click white knight at `Location(1, 6)`; `movePiece` not called
+  - **Expected output**: `getSelectedLocation()` present with knight coordinates; `hasSelection()` true
+
+- **BC-TC52: HandleSquareClick_WithSelection_OnFriendlyPiece_DoesNotSwitchTurn** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: same as BC-TC51
+  - **Expected output**: `getCurrentGameState()` is `WHITE_TURN`; `switchTurn()` not called
+
+- **BC-TC53: HandleSquareClick_AfterSuccessfulMove_SnapshotReflectsNewPosition** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: real `Board` with standard start; select white pawn at `(4,6)`; click `(4,5)`
+  - **Expected output**: snapshot shows pawn on rank 5 file 4 and `NONE` on rank 6 file 4
