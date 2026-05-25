@@ -34,6 +34,7 @@ tasks.withType<Checkstyle>().configureEach {
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.easymock:easymock:5.6.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.easymock:easymock:5.4.0")
 }
@@ -58,6 +59,7 @@ tasks.jacocoTestReport {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-Djava.awt.headless=true")
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
 
