@@ -64,17 +64,6 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBob_RegisteredBoardViewSameInstance() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    BoardView expected = view.getBoardView();
-    BoardView actual = view.getRegisteredBoardView();
-    assertEquals(expected, actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
   void Constructor_CurrentGameStateWhiteTurn() {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);

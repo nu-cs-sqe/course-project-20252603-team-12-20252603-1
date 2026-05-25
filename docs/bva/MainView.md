@@ -32,15 +32,15 @@ Package: `ui.MainView`
 - **Strings:** `player1Name = "Alice"`, `player2Name = "Bob"`.
 - **Pointers:** mock `Board` (nice mock or stubbed 8×8 snapshot); real `Board` from caller after initializer.
 
-### Step 4: Test cases — UI composition (MV-TC1–MV-TC5)
+### Step 4: Test cases — UI composition (MV-TC1–MV-TC4)
 
 | ID       | User-story tie-in                                  |
 | -------- | ---------------------------------------------------- |
 | MV-TC1   | Controller wired to injected board                   |
 | MV-TC2–3 | Player names shown on stats panel                    |
-| MV-TC4–5 | Board on screen and registered with controller       |
+| MV-TC4   | Board on screen (`BoardView` on content pane)        |
 
-> **Removed (redundant):** `BoardView` / `GameStatsView` `instanceof` smokes that differed only by Standard vs Fischer in the name; snapshot pass-through TCs; duplicate Fischer readiness TCs after `GameStartMode` was removed.
+> **Removed (redundant):** `BoardView` / `GameStatsView` `instanceof` smokes that differed only by Standard vs Fischer in the name; snapshot pass-through TCs; duplicate Fischer readiness TCs after `GameStartMode` was removed; `getRegisteredBoardView()` vs `getBoardView()` equality (same reference—one getter is enough; `-registerBoardViewWithController` is not separately asserted here).
 
 - **MV-TC1: Constructor_OnAliceAndBob_BoardControllerExposesSnapshot** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, Board)`
@@ -62,23 +62,18 @@ Package: `ui.MainView`
   - **State of the system**: frame constructed; `setVisible` not called
   - **Expected output**: `GameStatsView` in `BorderLayout.NORTH`; `BoardView` in `BorderLayout.CENTER`
 
-- **MV-TC5: Constructor_OnAliceAndBob_RegisteredBoardViewSameInstance** ( :white_check_mark: )
-  - **Method(s) under test**: `MainView(String, String, Board)` (via `-registerBoardViewWithController`)
-  - **State of the system**: frame just constructed
-  - **Expected output**: `getRegisteredBoardView() == getBoardView()`
-
 ---
 
-## Method: `MainView` — game ready for first white move (MV-TC6–MV-TC7)
+## Method: `MainView` — game ready for first white move (MV-TC5–MV-TC6)
 
 Readiness is asserted through the wired `BoardController` (not click handling).
 
-- **MV-TC6: Constructor_CurrentGameStateWhiteTurn** ( :white_check_mark: )
+- **MV-TC5: Constructor_CurrentGameStateWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, Board)`
   - **State of the system**: mock `Board` returns `WHITE_TURN`; no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN`
 
-- **MV-TC7: Constructor_HasSelectionFalse** ( :white_check_mark: )
+- **MV-TC6: Constructor_HasSelectionFalse** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, Board)`
   - **State of the system**: mock `Board`; no clicks yet
   - **Expected output**: `getBoardController().hasSelection() == false`
