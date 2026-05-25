@@ -36,7 +36,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer1Name()` returns `""`
 
-- **WV-TC2: Constructor_OnFreshWelcomeView_Player2NameIsEmpty** ( :x: )
+- **WV-TC2: Constructor_OnFreshWelcomeView_Player2NameIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView()`, `getPlayer2Name()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer2Name()` returns `""`

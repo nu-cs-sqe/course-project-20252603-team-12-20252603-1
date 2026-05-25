@@ -25,4 +25,13 @@ class WelcomeViewTest {
         String actual = view.getPlayer1Name();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnFreshWelcomeView_Player2NameIsEmpty() {
+        WelcomeView view = new WelcomeView();
+
+        String expected = "";
+        String actual = view.getPlayer2Name();
+        assertEquals(expected, actual);
+    }
 }
