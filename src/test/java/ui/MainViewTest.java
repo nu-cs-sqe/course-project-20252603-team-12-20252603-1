@@ -53,10 +53,13 @@ class MainViewTest {
     EasyMock.replay(boardMock);
     MainView view = new MainView("Alice", "Bob", boardMock);
 
-    boolean actual =
-        view.getBoardController().getCurrentGameState() == GameState.WHITE_TURN
-            && !view.getBoardController().hasSelection();
-    assertTrue(actual);
+    GameState expectedState = GameState.WHITE_TURN;
+    GameState actualState = view.getBoardController().getCurrentGameState();
+    assertEquals(expectedState, actualState);
+
+    boolean expectedSelection = false;
+    boolean actualSelection = view.getBoardController().hasSelection();
+    assertEquals(expectedSelection, actualSelection);
     EasyMock.verify(boardMock);
   }
 
