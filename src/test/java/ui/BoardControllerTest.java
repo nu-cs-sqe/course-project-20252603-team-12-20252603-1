@@ -3,6 +3,8 @@ package ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Board;
+import domain.FischerRandomBoardInitializer;
+import domain.StandardBoardInitializer;
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.piece.Bishop;
@@ -15,7 +17,6 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -182,7 +183,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -195,7 +196,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -208,7 +209,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -221,7 +222,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -260,7 +261,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE);
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -273,7 +274,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -286,7 +287,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.WHITE);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -299,7 +300,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = bishopsOnOppositeColorSquaresOnRank(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -312,7 +313,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.WHITE);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -325,7 +326,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 7, PieceColor.BLACK);
+        boolean actual = kingStrictlyBetweenOwnRooksOnRank(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -364,7 +365,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.WHITE);
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.WHITE);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -377,7 +378,7 @@ class BoardControllerTest {
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
-        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 7, PieceColor.BLACK);
+        boolean actual = chess960BackRankMajorPieceCounts(snapshot, 0, PieceColor.BLACK);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -385,9 +386,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForWhitePieceClick(standardGrid, 1, 0);
+        Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -400,9 +401,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForWhitePieceClick(standardGrid, 1, 0);
+        Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -415,9 +416,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForWhitePieceClickWithSnapshot(standardGrid, 1, 0);
+        Board boardMock = boardForWhitePieceClickWithSnapshot(standardGrid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -430,10 +431,10 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForSquareClick(standardGrid, 6, 0);
+        Board boardMock = boardForSquareClick(standardGrid, 1, 0);
         BoardController controller = new BoardController(boardMock);
 
-        controller.handleSquareClick(new Location(0, 6));
+        controller.handleSquareClick(new Location(0, 1));
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
@@ -444,10 +445,10 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForSquareClick(standardGrid, 6, 0);
+        Board boardMock = boardForSquareClick(standardGrid, 1, 0);
         BoardController controller = new BoardController(boardMock);
 
-        controller.handleSquareClick(new Location(0, 6));
+        controller.handleSquareClick(new Location(0, 1));
 
         GameState expected = GameState.WHITE_TURN;
         GameState actual = controller.getCurrentGameState();
@@ -458,10 +459,10 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForSquareClick(standardGrid, 6, 0);
+        Board boardMock = boardForSquareClick(standardGrid, 1, 0);
         BoardController controller = new BoardController(boardMock);
 
-        controller.handleSquareClick(new Location(0, 6));
+        controller.handleSquareClick(new Location(0, 1));
 
         boolean expected = true;
         boolean actual = cellWiseSameTypeAndColor(standardGrid, controller.getBoardSnapshot());
@@ -573,9 +574,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
-        Board boardMock = boardForWhitePieceClick(chess960Grid, 1, 0);
+        Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -588,9 +589,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
-        Board boardMock = boardForWhitePieceClick(chess960Grid, 1, 0);
+        Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -603,9 +604,9 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
-        Board boardMock = boardForWhitePieceClick(chess960Grid, 1, 0);
+        Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
         BoardController controller = new BoardController(boardMock);
-        Location clicked = new Location(0, 1);
+        Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
 
@@ -668,139 +669,40 @@ class BoardControllerTest {
     }
 
     private static Piece[][] newStandardStartingGrid() {
-        Piece[][] grid = emptyGrid();
-        grid[0][0] = new Rook(PieceColor.WHITE);
-        grid[0][1] = new Knight(PieceColor.WHITE);
-        grid[0][2] = new Bishop(PieceColor.WHITE);
-        grid[0][3] = new Queen(PieceColor.WHITE);
-        grid[0][4] = new King(PieceColor.WHITE);
-        grid[0][5] = new Bishop(PieceColor.WHITE);
-        grid[0][6] = new Knight(PieceColor.WHITE);
-        grid[0][7] = new Rook(PieceColor.WHITE);
-        for (int file = 0; file < 8; file++) {
-            grid[1][file] = new Pawn(PieceColor.WHITE);
-        }
-
-        for (int file = 0; file < 8; file++) {
-            grid[6][file] = new Pawn(PieceColor.BLACK);
-        }
-
-        grid[7][0] = new Rook(PieceColor.BLACK);
-        grid[7][1] = new Knight(PieceColor.BLACK);
-        grid[7][2] = new Bishop(PieceColor.BLACK);
-        grid[7][3] = new Queen(PieceColor.BLACK);
-        grid[7][4] = new King(PieceColor.BLACK);
-        grid[7][5] = new Bishop(PieceColor.BLACK);
-        grid[7][6] = new Knight(PieceColor.BLACK);
-        grid[7][7] = new Rook(PieceColor.BLACK);
-        return grid;
+        return new Board(new StandardBoardInitializer()).getSnapshot();
     }
 
     private static Piece[][] newChess960FixedStartingGrid() {
         Piece[][] grid = emptyGrid();
-        grid[0][0] = new Rook(PieceColor.WHITE);
-        grid[0][1] = new Bishop(PieceColor.WHITE);
-        grid[0][2] = new Knight(PieceColor.WHITE);
-        grid[0][3] = new Queen(PieceColor.WHITE);
-        grid[0][4] = new King(PieceColor.WHITE);
-        grid[0][5] = new Knight(PieceColor.WHITE);
-        grid[0][6] = new Bishop(PieceColor.WHITE);
-        grid[0][7] = new Rook(PieceColor.WHITE);
+        grid[0][0] = new Rook(PieceColor.BLACK);
+        grid[0][1] = new Bishop(PieceColor.BLACK);
+        grid[0][2] = new Knight(PieceColor.BLACK);
+        grid[0][3] = new Queen(PieceColor.BLACK);
+        grid[0][4] = new King(PieceColor.BLACK);
+        grid[0][5] = new Knight(PieceColor.BLACK);
+        grid[0][6] = new Bishop(PieceColor.BLACK);
+        grid[0][7] = new Rook(PieceColor.BLACK);
         for (int file = 0; file < 8; file++) {
-            grid[1][file] = new Pawn(PieceColor.WHITE);
+            grid[1][file] = new Pawn(PieceColor.BLACK);
         }
 
         for (int file = 0; file < 8; file++) {
-            grid[6][file] = new Pawn(PieceColor.BLACK);
+            grid[6][file] = new Pawn(PieceColor.WHITE);
         }
 
-        grid[7][0] = new Rook(PieceColor.BLACK);
-        grid[7][1] = new Bishop(PieceColor.BLACK);
-        grid[7][2] = new Knight(PieceColor.BLACK);
-        grid[7][3] = new Queen(PieceColor.BLACK);
-        grid[7][4] = new King(PieceColor.BLACK);
-        grid[7][5] = new Knight(PieceColor.BLACK);
-        grid[7][6] = new Bishop(PieceColor.BLACK);
-        grid[7][7] = new Rook(PieceColor.BLACK);
+        grid[7][0] = new Rook(PieceColor.WHITE);
+        grid[7][1] = new Bishop(PieceColor.WHITE);
+        grid[7][2] = new Knight(PieceColor.WHITE);
+        grid[7][3] = new Queen(PieceColor.WHITE);
+        grid[7][4] = new King(PieceColor.WHITE);
+        grid[7][5] = new Knight(PieceColor.WHITE);
+        grid[7][6] = new Bishop(PieceColor.WHITE);
+        grid[7][7] = new Rook(PieceColor.WHITE);
         return grid;
     }
 
     private static Piece[][] newChess960SeedOneGrid() {
-        PieceType[] backRank = generateChess960BackRankTypes(new Random(1L));
-        Piece[][] grid = emptyGrid();
-        placeBackRankPieces(grid, 0, PieceColor.WHITE, backRank);
-        placeBackRankPieces(grid, 7, PieceColor.BLACK, backRank);
-        for (int file = 0; file < 8; file++) {
-            grid[1][file] = new Pawn(PieceColor.WHITE);
-            grid[6][file] = new Pawn(PieceColor.BLACK);
-        }
-        return grid;
-    }
-
-    private static PieceType[] generateChess960BackRankTypes(Random rng) {
-        PieceType[] byFile = new PieceType[8];
-        for (int file = 0; file < 8; file++) {
-            byFile[file] = PieceType.NONE;
-        }
-
-        int[] lightFiles = {0, 2, 4, 6};
-        int lightBishopFile = lightFiles[rng.nextInt(4)];
-        byFile[lightBishopFile] = PieceType.BISHOP;
-
-        int[] darkFiles = {1, 3, 5, 7};
-        int darkBishopFile = darkFiles[rng.nextInt(4)];
-        byFile[darkBishopFile] = PieceType.BISHOP;
-
-        List<Integer> remaining = new ArrayList<>();
-        for (int file = 0; file < 8; file++) {
-            if (byFile[file] == PieceType.NONE) {
-                remaining.add(file);
-            }
-        }
-
-        int queenIdx = rng.nextInt(3);
-        byFile[remaining.get(queenIdx)] = PieceType.QUEEN;
-        remaining.remove(queenIdx);
-
-        int knight1Idx = rng.nextInt(4);
-        byFile[remaining.get(knight1Idx)] = PieceType.KNIGHT;
-        remaining.remove(knight1Idx);
-
-        int knight2Idx = rng.nextInt(3);
-        byFile[remaining.get(knight2Idx)] = PieceType.KNIGHT;
-        remaining.remove(knight2Idx);
-
-        byFile[remaining.get(0)] = PieceType.ROOK;
-        byFile[remaining.get(1)] = PieceType.KING;
-        byFile[remaining.get(2)] = PieceType.ROOK;
-
-        return byFile;
-    }
-
-    private static void placeBackRankPieces(
-            Piece[][] grid, int rank, PieceColor color, PieceType[] typesByFile) {
-        for (int file = 0; file < 8; file++) {
-            grid[rank][file] = pieceFromType(typesByFile[file], color);
-        }
-    }
-
-    private static Piece pieceFromType(PieceType type, PieceColor color) {
-        switch (type) {
-            case ROOK:
-                return new Rook(color);
-            case KNIGHT:
-                return new Knight(color);
-            case BISHOP:
-                return new Bishop(color);
-            case QUEEN:
-                return new Queen(color);
-            case KING:
-                return new King(color);
-            case PAWN:
-                return new Pawn(color);
-            default:
-                return new NonePiece();
-        }
+        return new Board(new FischerRandomBoardInitializer(new Random(1L))).getSnapshot();
     }
 
     private static boolean selectedLocationMatches(
@@ -920,8 +822,8 @@ class BoardControllerTest {
 
     private static boolean chess960BackRanksMirrorPieceTypes(Piece[][] snapshot) {
         for (int file = 0; file < 8; file++) {
-            Piece whiteBack = snapshot[0][file];
-            Piece blackBack = snapshot[7][file];
+            Piece blackBack = snapshot[0][file];
+            Piece whiteBack = snapshot[7][file];
             if (whiteBack.getType() == PieceType.NONE || blackBack.getType() == PieceType.NONE) {
                 return false;
             }
@@ -941,12 +843,12 @@ class BoardControllerTest {
 
     private static boolean chess960StandardPawnRows(Piece[][] snapshot) {
         for (int file = 0; file < 8; file++) {
-            Piece whitePawn = snapshot[1][file];
-            Piece blackPawn = snapshot[6][file];
-            if (whitePawn.getType() != PieceType.PAWN || whitePawn.getColor() != PieceColor.WHITE) {
+            Piece blackPawn = snapshot[1][file];
+            Piece whitePawn = snapshot[6][file];
+            if (blackPawn.getType() != PieceType.PAWN || blackPawn.getColor() != PieceColor.BLACK) {
                 return false;
             }
-            if (blackPawn.getType() != PieceType.PAWN || blackPawn.getColor() != PieceColor.BLACK) {
+            if (whitePawn.getType() != PieceType.PAWN || whitePawn.getColor() != PieceColor.WHITE) {
                 return false;
             }
         }
