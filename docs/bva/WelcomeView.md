@@ -4,6 +4,8 @@ Package: `ui.WelcomeView`
 
 Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`getPlayer2Name()`** (getter delegation to JTextField). `createWelcomeScreenUI` is **untestable** (Swing UI assembly side-effect) and is excluded from this BVA.
 
+**Headless guard:** `WelcomeView` extends `JFrame`, which cannot be instantiated in a headless JVM. All TCs use a `@BeforeAll assumeTrue(!GraphicsEnvironment.isHeadless())` guard so they skip cleanly on headless CI and run on machines with a display.
+
 ---
 
 ## Method / behavior: `WelcomeView()`
@@ -29,7 +31,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
 
 ### Step 4: Test cases
 
-- **WV-TC1: Constructor_OnFreshWelcomeView_Player1NameIsEmpty** ( :x: )
+- **WV-TC1: Constructor_OnFreshWelcomeView_Player1NameIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView()`, `getPlayer1Name()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer1Name()` returns `""`
