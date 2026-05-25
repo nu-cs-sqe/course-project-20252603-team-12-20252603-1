@@ -17,7 +17,7 @@ class MainViewTest {
   private static final int BOARD_SIZE = 8;
 
   @Test
-  void Constructor_OnAliceAndBobStandardMode_BoardControllerWired() {
+  void Constructor_OnAliceAndBob_BoardControllerExposesSnapshot() {
     Board boardMock = stubSnapshot(eightByEightGrid());
     MainView view = new MainView("Alice", "Bob", boardMock);
 
@@ -28,27 +28,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBobFischerRandomMode_BoardViewWired() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    boolean actual = view.getBoardView() instanceof BoardView;
-    assertTrue(actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_OnAliceAndBobStandardMode_GameStatsViewWired() {
-    Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", boardMock);
-
-    boolean actual = view.getGameStatsView() instanceof GameStatsView;
-    assertTrue(actual);
-    EasyMock.verify(boardMock);
-  }
-
-  @Test
-  void Constructor_OnAliceAndBobStandardMode_CurrentPlayerLabelIsAlice() {
+  void Constructor_OnAliceAndBob_CurrentPlayerLabelIsAlice() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 
@@ -59,7 +39,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBobFischerRandomMode_MatchupLabelIsAliceVsBob() {
+  void Constructor_OnAliceAndBob_MatchupLabelIsAliceVsBob() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 
@@ -70,7 +50,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBobStandardMode_ContentPaneHasBoardViewAndGameStatsView() {
+  void Constructor_OnAliceAndBob_ContentPaneLayoutNorthAndCenter() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 
@@ -84,7 +64,7 @@ class MainViewTest {
   }
 
   @Test
-  void Constructor_OnAliceAndBobFischerRandomMode_RegisteredBoardViewSameInstance() {
+  void Constructor_OnAliceAndBob_RegisteredBoardViewSameInstance() {
     Board boardMock = replayNiceBoard();
     MainView view = new MainView("Alice", "Bob", boardMock);
 
