@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import domain.location.Location;
 import org.junit.jupiter.api.Test;
 
 class KnightTest {
@@ -77,5 +78,17 @@ class KnightTest {
         Knight knight = new Knight(PieceColor.BLACK);
 
         assertNotSame(knight, knight.makeCopy());
+    }
+
+    @Test
+    void IsValidMoveShape_OnKnight_TwoOneMoveIsTrue() {
+        Knight knight = new Knight(PieceColor.WHITE);
+
+        Location from = new Location(6, 7);
+        Location to = new Location(5, 5);
+
+        boolean expected = true;
+        boolean actual = knight.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
     }
 }

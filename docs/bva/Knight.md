@@ -94,7 +94,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC9: IsValidMoveShape_OnKnight_TwoOneMoveIsTrue** ( :x: )
+- **TC9: IsValidMoveShape_OnKnight_TwoOneMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(5, 5)`
   - **Expected output**: returns `true`
