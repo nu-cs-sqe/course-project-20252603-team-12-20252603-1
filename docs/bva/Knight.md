@@ -82,3 +82,31 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: absolute displacement | Cases | `(2,1)`, `(1,2)`, other invalid |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC9: IsValidMoveShape_OnKnight_TwoOneMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(5, 5)`
+  - **Expected output**: returns `true`
+
+- **TC10: IsValidMoveShape_OnKnight_OneTwoMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(4, 6)`
+  - **Expected output**: returns `true`
+
+- **TC11: IsValidMoveShape_OnKnight_StraightMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(6, 5)`
+  - **Expected output**: returns `false`
+
+---
