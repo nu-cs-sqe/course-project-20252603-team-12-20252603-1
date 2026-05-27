@@ -91,4 +91,16 @@ class KnightTest {
         boolean actual = knight.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnKnight_OneTwoMoveIsTrue() {
+        Knight knight = new Knight(PieceColor.WHITE);
+
+        Location from = new Location(6, 7);
+        Location to = new Location(4, 6);
+
+        boolean expected = true;
+        boolean actual = knight.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }

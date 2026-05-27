@@ -99,7 +99,7 @@
   - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(5, 5)`
   - **Expected output**: returns `true`
 
-- **TC10: IsValidMoveShape_OnKnight_OneTwoMoveIsTrue** ( :x: )
+- **TC10: IsValidMoveShape_OnKnight_OneTwoMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: knight; `from = Location(6, 7)`, `to = Location(4, 6)`
   - **Expected output**: returns `true`

@@ -17,6 +17,7 @@ public class Knight extends Piece {
   public boolean isValidMoveShape(Location from, Location to) {
     int absRankDelta = Math.abs(to.getY() - from.getY());
     int absFileDelta = Math.abs(to.getX() - from.getX());
-    return absRankDelta == 2 && absFileDelta == 1;
+    return (absRankDelta == 2 && absFileDelta == 1)
+        || (absRankDelta == 1 && absFileDelta == 2);
   }
 }
