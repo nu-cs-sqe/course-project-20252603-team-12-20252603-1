@@ -42,7 +42,10 @@ public class BoardController {
       return;
     }
     if (lastSelectedLoc.isPresent()) {
-      board.movePiece(lastSelectedLoc.get(), loc);
+      boolean moved = board.movePiece(lastSelectedLoc.get(), loc);
+      if (moved) {
+        board.switchTurn();
+      }
       return;
     }
     int file = loc.getX();
