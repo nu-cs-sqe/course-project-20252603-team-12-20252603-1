@@ -659,6 +659,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
                 .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
+        boardMock.switchTurn();
+        EasyMock.expectLastCall();
         EasyMock.replay(boardMock);
         BoardController controller = new BoardController(boardMock);
 
