@@ -100,7 +100,7 @@
   - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(4, 5)`
   - **Expected output**: returns `true`
 
-- **TC10: IsValidMoveShape_OnWhitePawn_DiagonalForwardIsTrue** ( :x: )
+- **TC10: IsValidMoveShape_OnWhitePawn_DiagonalForwardIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(5, 5)`
   - **Expected output**: returns `true`

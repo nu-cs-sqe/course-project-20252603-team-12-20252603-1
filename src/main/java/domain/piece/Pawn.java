@@ -18,6 +18,8 @@ public class Pawn extends Piece {
     int rankDelta = to.getY() - from.getY();
     int fileDelta = to.getX() - from.getX();
     int forward = getColor() == PieceColor.WHITE ? -1 : 1;
-    return fileDelta == 0 && rankDelta == forward;
+    boolean isForwardMove = fileDelta == 0 && rankDelta == forward;
+    boolean isDiagonalMove = Math.abs(fileDelta) == 1 && rankDelta == forward;
+    return isForwardMove || isDiagonalMove;
   }
 }
