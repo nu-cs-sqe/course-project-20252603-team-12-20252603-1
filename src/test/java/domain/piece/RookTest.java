@@ -98,4 +98,16 @@ class RookTest {
         boolean actual = rook.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnRook_DiagonalMoveIsFalse() {
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        Location from = new Location(0, 7);
+        Location to = new Location(3, 4);
+
+        boolean expected = false;
+        boolean actual = rook.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }
