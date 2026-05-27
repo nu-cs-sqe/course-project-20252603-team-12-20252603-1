@@ -82,3 +82,31 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: displacement shape | Cases | horizontal, vertical, diagonal, other invalid |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC9: IsValidMoveShape_OnQueen_HorizontalMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(7, 7)`
+  - **Expected output**: returns `true`
+
+- **TC10: IsValidMoveShape_OnQueen_DiagonalMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(6, 4)`
+  - **Expected output**: returns `true`
+
+- **TC11: IsValidMoveShape_OnQueen_KnightLikeMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(4, 5)`
+  - **Expected output**: returns `false`
+
+---
