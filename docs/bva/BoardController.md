@@ -424,7 +424,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: `setBoardView` called with a view mock; selected white pawn; `movePiece` returns `true`
   - **Expected output**: `repaint()` invoked once after successful move; `verify(boardViewMock)` passes
 
-- **BC-TC50: HandleSquareClick_WithSelection_IllegalDestination_DoesNotCallSwitchTurn** ( :x: )
+- **BC-TC50: HandleSquareClick_WithSelection_IllegalDestination_DoesNotCallSwitchTurn** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` with mocked `Board`
   - **State of the system**: white piece selected; second click illegal; mock `movePiece` returns `false`
   - **Expected output**: `switchTurn()` never called; `verify(boardMock)` passes
