@@ -64,7 +64,12 @@ public class Board {
     }
 
     public Piece getPieceAt(int rank, int file) {
-        return pieces[rank][file].makeCopy();
+        Piece sourcePiece = pieces[rank][file];
+        Piece copiedPiece = sourcePiece.makeCopy();
+        if (sourcePiece.hasMoved()) {
+            copiedPiece.changeToMoved();
+        }
+        return copiedPiece;
     }
 
     public Piece[][] getSnapshot() {
@@ -83,7 +88,9 @@ public class Board {
         int toRank = to.getY();
         int toFile = to.getX();
 
-        pieces[toRank][toFile] = pieces[fromRank][fromFile].makeCopy();
+        Piece movedPiece = pieces[fromRank][fromFile].makeCopy();
+        movedPiece.changeToMoved();
+        pieces[toRank][toFile] = movedPiece;
         pieces[fromRank][fromFile] = new NonePiece();
         return true;
     }
