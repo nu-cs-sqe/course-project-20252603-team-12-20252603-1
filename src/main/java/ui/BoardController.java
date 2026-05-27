@@ -41,6 +41,10 @@ public class BoardController {
     if (!isInBounds(loc)) {
       return;
     }
+    if (lastSelectedLoc.isPresent()) {
+      board.movePiece(lastSelectedLoc.get(), loc);
+      return;
+    }
     int file = loc.getX();
     int rank = loc.getY();
     Piece at = board.getPieceAt(rank, file);

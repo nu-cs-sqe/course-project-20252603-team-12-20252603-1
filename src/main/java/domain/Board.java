@@ -1,6 +1,7 @@
 package domain;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -74,5 +75,9 @@ public class Board {
             }
         }
         return snapshot;
+    }
+
+    public boolean movePiece(Location from, Location to) {
+        return false;
     }
 }

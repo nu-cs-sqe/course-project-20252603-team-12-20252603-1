@@ -399,7 +399,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
 
 ### Step 4: Test cases
 
-- **BC-TC45: HandleSquareClick_WithSelection_LegalDestination_CallsMovePiece** ( :x: )
+- **BC-TC45: HandleSquareClick_WithSelection_LegalDestination_CallsMovePiece** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` with mocked `Board`
   - **State of the system**: white pawn selected at `Location(4, 6)`; second click `Location(4, 5)`; mock `movePiece(from, to)` returns `true`
   - **Expected output**: `movePiece` invoked once with matching `from`/`to`; `verify(boardMock)` passes
