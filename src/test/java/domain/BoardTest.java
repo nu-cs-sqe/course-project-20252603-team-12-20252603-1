@@ -329,4 +329,23 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MovePiece_LegalKnightJumpOverPiece_ReturnsTrue() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][6] = new Knight(PieceColor.WHITE);
+        layout[6][6] = new Pawn(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(6, 7);
+        Location to = new Location(5, 5);
+
+        boolean expected = true;
+        boolean actual = board.movePiece(from, to);
+        assertEquals(expected, actual);
+    }
+
 }

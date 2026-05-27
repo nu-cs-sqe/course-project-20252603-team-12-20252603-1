@@ -611,7 +611,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: same as TC50
   - **Expected output**: `getPieceAt(5, 4).hasMoved()` is `true`
 
-- **TC54: MovePiece_LegalKnightJumpOverPiece_ReturnsTrue** ( :x: )
+- **TC54: MovePiece_LegalKnightJumpOverPiece_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Knight(WHITE)` at `[7][6]`, `Pawn(WHITE)` at `[6][6]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(6, 7)`, `to = Location(5, 5)` (absolute displacement `(1, 2)`)
   - **Expected output**: return value is `true`
