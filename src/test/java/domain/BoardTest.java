@@ -427,6 +427,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MovePiece_LegalRookSlideToEmptySquare_ReturnsTrue() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][0] = new Rook(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(0, 7);
+        Location to = new Location(3, 7);
+
+        boolean expected = true;
+        boolean actual = board.movePiece(from, to);
+        assertEquals(expected, actual);
+    }
+
     private boolean boardsMatchByTypeAndColor(Piece[][] left, Piece[][] right) {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
