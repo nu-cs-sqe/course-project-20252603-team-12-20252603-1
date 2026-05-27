@@ -449,7 +449,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: same as BC-TC53
   - **Expected output**: `getCurrentGameState()` is `WHITE_TURN`; `switchTurn()` not called
 
-- **BC-TC55: HandleSquareClick_WithSelection_OutOfBoundsDestination_DoesNotCallMovePiece** ( :x: )
+- **BC-TC55: HandleSquareClick_WithSelection_OutOfBoundsDestination_DoesNotCallMovePiece** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: white pawn selected at `Location(4, 6)`; second click out of bounds at `Location(8, 5)`
   - **Expected output**: `movePiece` and `switchTurn` are not called; selection remains on the original pawn
