@@ -88,7 +88,7 @@ public class Board {
         if (toPiece.getType() != PieceType.NONE && fromPiece.isSameColor(toPiece)) {
             return false;
         }
-        if (!isValidMoveShape(fromPiece, fromRank, fromFile, toRank, toFile, toPiece)) {
+        if (!isValidMoveShape(fromPiece, from, to, toPiece)) {
             return false;
         }
         if (!hasNoObstacle(fromPiece, fromRank, fromFile, toRank, toFile)) {
@@ -102,31 +102,20 @@ public class Board {
         return true;
     }
 
-    private boolean isValidMoveShape(Piece piece, int fromRank, int fromFile, int toRank, int toFile, Piece toPiece) {
-        int rankDelta = toRank - fromRank;
-        int fileDelta = toFile - fromFile;
-        int absRankDelta = Math.abs(rankDelta);
-        int absFileDelta = Math.abs(fileDelta);
+    private boolean isValidMoveShape(Piece piece, Location from, Location to, Piece toPiece) {
+        if (!piece.isValidMoveShape(from, to)) {
+            return false;
+        }
+        if (piece.getType() != PieceType.PAWN) {
+            return true;
+        }
 
-        PieceType type = piece.getType();
-        if (type == PieceType.KNIGHT) {
-            return (absRankDelta == 2 && absFileDelta == 1)
-                    || (absRankDelta == 1 && absFileDelta == 2);
-        }
-        if (type == PieceType.ROOK) {
-            return (rankDelta == 0 && fileDelta != 0)
-                    || (fileDelta == 0 && rankDelta != 0);
-        }
-        if (type == PieceType.PAWN) {
-            int forward = piece.getColor() == PieceColor.WHITE ? -1 : 1;
-            boolean isForwardMove = fileDelta == 0 && rankDelta == forward && toPiece.getType() == PieceType.NONE;
-            boolean isDiagonalCapture = absFileDelta == 1
-                    && rankDelta == forward
-                    && toPiece.getType() != PieceType.NONE
-                    && !piece.isSameColor(toPiece);
-            return isForwardMove || isDiagonalCapture;
-        }
-        return false;
+        int fileDelta = to.getX() - from.getX();
+        boolean isForwardMove = fileDelta == 0 && toPiece.getType() == PieceType.NONE;
+        boolean isDiagonalCapture = Math.abs(fileDelta) == 1
+                && toPiece.getType() != PieceType.NONE
+                && !piece.isSameColor(toPiece);
+        return isForwardMove || isDiagonalCapture;
     }
 
     private boolean hasNoObstacle(Piece piece, int fromRank, int fromFile, int toRank, int toFile) {

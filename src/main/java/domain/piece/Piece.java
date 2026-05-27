@@ -46,9 +46,7 @@ public abstract class Piece {
 
   public abstract Piece makeCopy();
 
-  public boolean isValidMoveShape(Location from, Location to) {
-    return false;
-  }
+  public abstract boolean isValidMoveShape(Location from, Location to);
 
   @Override
   public String toString() {
