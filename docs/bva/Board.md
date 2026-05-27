@@ -641,7 +641,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, empty at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)`
   - **Expected output**: return value is `true`
 
-- **TC60: MovePiece_LegalCapture_ReturnsTrue** ( :x: )
+- **TC60: MovePiece_LegalCapture_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[4][4]`, `Pawn(BLACK)` at `[3][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 4)`, `to = Location(5, 3)`
   - **Expected output**: return value is `true`
