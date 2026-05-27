@@ -616,7 +616,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: `Board(Piece[][])` with `Knight(WHITE)` at `[7][6]`, `Pawn(WHITE)` at `[6][6]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(6, 7)`, `to = Location(5, 5)` (absolute displacement `(1, 2)`)
   - **Expected output**: return value is `true`
 
-- **TC55: MovePiece_DestinationOccupiedByFriendlyPiece_ReturnsFalse** ( :x: )
+- **TC55: MovePiece_DestinationOccupiedByFriendlyPiece_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, `Rook(WHITE)` at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)`
   - **Expected output**: return value is `false` (rejected at step 1: destination same color)

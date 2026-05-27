@@ -88,7 +88,13 @@ public class Board {
         int toRank = to.getY();
         int toFile = to.getX();
 
-        Piece movedPiece = pieces[fromRank][fromFile].makeCopy();
+        Piece fromPiece = pieces[fromRank][fromFile];
+        Piece toPiece = pieces[toRank][toFile];
+        if (toPiece.getType() != PieceType.NONE && fromPiece.isSameColor(toPiece)) {
+            return false;
+        }
+
+        Piece movedPiece = fromPiece.makeCopy();
         movedPiece.changeToMoved();
         pieces[toRank][toFile] = movedPiece;
         pieces[fromRank][fromFile] = new NonePiece();
