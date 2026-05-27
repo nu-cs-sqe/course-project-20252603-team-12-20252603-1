@@ -616,6 +616,21 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void SetBoardView_NoPreviousView_StoresBoardView() {
+        Board boardMock = replayNiceBoard();
+        BoardView boardViewMock = EasyMock.createNiceMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.setBoardView(boardViewMock);
+
+        BoardView expected = boardViewMock;
+        BoardView actual = controller.getBoardView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);
