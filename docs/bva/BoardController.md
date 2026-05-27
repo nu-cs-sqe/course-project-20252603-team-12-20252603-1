@@ -429,7 +429,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: white piece selected; second click illegal; mock `movePiece` returns `false`
   - **Expected output**: `switchTurn()` never called; `verify(boardMock)` passes
 
-- **BC-TC51: HandleSquareClick_WithSelection_IllegalDestination_TurnRemainsWhite** ( :x: )
+- **BC-TC51: HandleSquareClick_WithSelection_IllegalDestination_TurnRemainsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: same as BC-TC50; mock `getCurrentGameState()` returns `WHITE_TURN`
   - **Expected output**: `getCurrentGameState()` is `WHITE_TURN`

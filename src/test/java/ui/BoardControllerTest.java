@@ -771,6 +771,28 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void HandleSquareClick_WithSelection_IllegalDestination_TurnRemainsWhite() {
+        Location origin = new Location(4, 6);
+        Location destination = new Location(4, 4);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(false);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+        EasyMock.replay(boardMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.handleSquareClick(destination);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);
