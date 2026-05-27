@@ -105,7 +105,7 @@
   - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(5, 5)`
   - **Expected output**: returns `true`
 
-- **TC11: IsValidMoveShape_OnWhitePawn_SidewaysIsFalse** ( :x: )
+- **TC11: IsValidMoveShape_OnWhitePawn_SidewaysIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(5, 6)`
   - **Expected output**: returns `false`

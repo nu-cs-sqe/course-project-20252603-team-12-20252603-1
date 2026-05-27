@@ -98,4 +98,16 @@ class PawnTest {
         boolean actual = pawn.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnWhitePawn_SidewaysIsFalse() {
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        Location from = new Location(4, 6);
+        Location to = new Location(5, 6);
+
+        boolean expected = false;
+        boolean actual = pawn.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }
