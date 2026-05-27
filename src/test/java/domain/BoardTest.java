@@ -269,4 +269,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MovePiece_LegalPawnForwardOneToEmptySquare_OriginBecomesNone() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(4, 6);
+        Location to = new Location(4, 5);
+
+        board.movePiece(from, to);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(6, 4).getType();
+        assertEquals(expected, actual);
+    }
+
 }

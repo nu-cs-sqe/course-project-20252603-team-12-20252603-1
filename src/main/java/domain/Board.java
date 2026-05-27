@@ -78,6 +78,10 @@ public class Board {
     }
 
     public boolean movePiece(Location from, Location to) {
+        int fromRank = from.getY();
+        int fromFile = from.getX();
+
+        pieces[fromRank][fromFile] = new NonePiece();
         return true;
     }
 }

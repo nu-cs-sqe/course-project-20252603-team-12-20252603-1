@@ -591,12 +591,12 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC50: MovePiece_LegalPawnForwardOneToEmptySquare_ReturnsTrue** ( :x: )
+- **TC50: MovePiece_LegalPawnForwardOneToEmptySquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[6][4]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 6)`, `to = Location(4, 5)`
   - **Expected output**: return value is `true`
 
-- **TC51: MovePiece_LegalPawnForwardOneToEmptySquare_OriginBecomesNone** ( :x: )
+- **TC51: MovePiece_LegalPawnForwardOneToEmptySquare_OriginBecomesNone** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: same as TC50
   - **Expected output**: `getPieceAt(6, 4).getType()` is `NONE` after the call
