@@ -646,12 +646,12 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[4][4]`, `Pawn(BLACK)` at `[3][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 4)`, `to = Location(5, 3)`
   - **Expected output**: return value is `true`
 
-- **TC61: MovePiece_LegalCapture_OriginBecomesNone** ( :x: )
+- **TC61: MovePiece_LegalCapture_OriginBecomesNone** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: same as TC60
   - **Expected output**: `getPieceAt(4, 4).getType()` is `NONE` after the call
 
-- **TC62: MovePiece_LegalCapture_DestinationHasWhitePawn** ( :x: )
+- **TC62: MovePiece_LegalCapture_DestinationHasWhitePawn** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: same as TC60
   - **Expected output**: `getPieceAt(3, 5).getType()` is `PAWN` and color is `WHITE`

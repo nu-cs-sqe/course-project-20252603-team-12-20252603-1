@@ -464,6 +464,52 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MovePiece_LegalCapture_OriginBecomesNone() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[4][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(4, 4);
+        Location to = new Location(5, 3);
+
+        board.movePiece(from, to);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(4, 4).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MovePiece_LegalCapture_DestinationHasWhitePawn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[4][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(4, 4);
+        Location to = new Location(5, 3);
+
+        board.movePiece(from, to);
+
+        PieceType expectedType = PieceType.PAWN;
+        PieceType actualType = board.getPieceAt(3, 5).getType();
+        assertEquals(expectedType, actualType);
+
+        PieceColor expectedColor = PieceColor.WHITE;
+        PieceColor actualColor = board.getPieceAt(3, 5).getColor();
+        assertEquals(expectedColor, actualColor);
+    }
+
     private boolean boardsMatchByTypeAndColor(Piece[][] left, Piece[][] right) {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
