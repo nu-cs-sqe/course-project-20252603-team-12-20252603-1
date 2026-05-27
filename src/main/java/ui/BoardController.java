@@ -45,6 +45,7 @@ public class BoardController {
       boolean moved = board.movePiece(lastSelectedLoc.get(), loc);
       if (moved) {
         board.switchTurn();
+        lastSelectedLoc = Optional.empty();
       }
       return;
     }

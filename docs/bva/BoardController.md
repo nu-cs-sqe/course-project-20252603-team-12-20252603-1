@@ -409,7 +409,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: same as BC-TC45; `movePiece` returns `true`
   - **Expected output**: `switchTurn()` called once after successful move
 
-- **BC-TC47: HandleSquareClick_WithSelection_LegalDestination_ClearsSelection** ( :x: )
+- **BC-TC47: HandleSquareClick_WithSelection_LegalDestination_ClearsSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: same as BC-TC45
   - **Expected output**: `hasSelection()` is `false` after second click
