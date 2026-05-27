@@ -96,6 +96,9 @@ public class Board {
         if (!isValidMoveShape(fromPiece, fromRank, fromFile, toRank, toFile, toPiece)) {
             return false;
         }
+        if (!hasNoObstacle(fromPiece, fromRank, fromFile, toRank, toFile)) {
+            return false;
+        }
 
         Piece movedPiece = fromPiece.makeCopy();
         movedPiece.changeToMoved();
@@ -129,5 +132,24 @@ public class Board {
             return isForwardMove || isDiagonalCapture;
         }
         return false;
+    }
+
+    private boolean hasNoObstacle(Piece piece, int fromRank, int fromFile, int toRank, int toFile) {
+        if (piece.canJump()) {
+            return true;
+        }
+
+        int rankStep = Integer.compare(toRank, fromRank);
+        int fileStep = Integer.compare(toFile, fromFile);
+        int rank = fromRank + rankStep;
+        int file = fromFile + fileStep;
+        while (rank != toRank || file != toFile) {
+            if (pieces[rank][file].getType() != PieceType.NONE) {
+                return false;
+            }
+            rank += rankStep;
+            file += fileStep;
+        }
+        return true;
     }
 }

@@ -631,7 +631,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[6][4]`, empty at `[6][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 6)`, `to = Location(5, 6)` (sideways move; pawn `isValidMoveShape` is `false`)
   - **Expected output**: return value is `false` (rejected at step 2: invalid move shape)
 
-- **TC58: MovePiece_BlockedRookSlide_ReturnsFalse** ( :x: )
+- **TC58: MovePiece_BlockedRookSlide_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, `Pawn(WHITE)` at `[7][1]`, empty at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)` (valid rook shape, blocked path)
   - **Expected output**: return value is `false` (rejected at step 3: obstacle on path)
