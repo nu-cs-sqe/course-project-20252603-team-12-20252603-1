@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+import domain.location.Location;
 import org.junit.jupiter.api.Test;
 
 class BishopTest {
@@ -72,5 +73,17 @@ class BishopTest {
         Bishop bishop = new Bishop(PieceColor.BLACK);
 
         assertNotSame(bishop, bishop.makeCopy());
+    }
+
+    @Test
+    void IsValidMoveShape_OnBishop_DiagonalMoveIsTrue() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        Location from = new Location(2, 7);
+        Location to = new Location(5, 4);
+
+        boolean expected = true;
+        boolean actual = bishop.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
     }
 }

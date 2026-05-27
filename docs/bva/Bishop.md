@@ -94,7 +94,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC9: IsValidMoveShape_OnBishop_DiagonalMoveIsTrue** ( :x: )
+- **TC9: IsValidMoveShape_OnBishop_DiagonalMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: bishop; `from = Location(2, 7)`, `to = Location(5, 4)`
   - **Expected output**: returns `true`
