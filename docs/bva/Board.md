@@ -656,7 +656,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: same as TC60
   - **Expected output**: `getPieceAt(3, 5).getType()` is `PAWN` and color is `WHITE`
 
-- **TC63: MovePiece_AfterFailedMove_GameStateUnchanged** ( :x: )
+- **TC63: MovePiece_AfterFailedMove_GameStateUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`, `getCurrentGameState()`
   - **State of the system**: same as TC55; `from = Location(0, 7)`, `to = Location(3, 7)`
   - **Expected output**: `getCurrentGameState()` is still `WHITE_TURN` after the failed move

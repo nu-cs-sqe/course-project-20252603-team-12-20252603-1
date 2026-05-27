@@ -510,6 +510,27 @@ class BoardTest {
         assertEquals(expectedColor, actualColor);
     }
 
+    @Test
+    void MovePiece_AfterFailedMove_GameStateUnchanged() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][0] = new Rook(PieceColor.WHITE);
+        layout[7][3] = new Rook(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(0, 7);
+        Location to = new Location(3, 7);
+
+        board.movePiece(from, to);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
     private boolean boardsMatchByTypeAndColor(Piece[][] left, Piece[][] right) {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
