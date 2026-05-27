@@ -390,6 +390,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MovePiece_InvalidMoveShape_ReturnsFalse() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(4, 6);
+        Location to = new Location(5, 6);
+
+        boolean expected = false;
+        boolean actual = board.movePiece(from, to);
+        assertEquals(expected, actual);
+    }
+
     private boolean boardsMatchByTypeAndColor(Piece[][] left, Piece[][] right) {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {

@@ -93,11 +93,41 @@ public class Board {
         if (toPiece.getType() != PieceType.NONE && fromPiece.isSameColor(toPiece)) {
             return false;
         }
+        if (!isValidMoveShape(fromPiece, fromRank, fromFile, toRank, toFile, toPiece)) {
+            return false;
+        }
 
         Piece movedPiece = fromPiece.makeCopy();
         movedPiece.changeToMoved();
         pieces[toRank][toFile] = movedPiece;
         pieces[fromRank][fromFile] = new NonePiece();
         return true;
+    }
+
+    private boolean isValidMoveShape(Piece piece, int fromRank, int fromFile, int toRank, int toFile, Piece toPiece) {
+        int rankDelta = toRank - fromRank;
+        int fileDelta = toFile - fromFile;
+        int absRankDelta = Math.abs(rankDelta);
+        int absFileDelta = Math.abs(fileDelta);
+
+        PieceType type = piece.getType();
+        if (type == PieceType.KNIGHT) {
+            return (absRankDelta == 2 && absFileDelta == 1)
+                    || (absRankDelta == 1 && absFileDelta == 2);
+        }
+        if (type == PieceType.ROOK) {
+            return (rankDelta == 0 && fileDelta != 0)
+                    || (fileDelta == 0 && rankDelta != 0);
+        }
+        if (type == PieceType.PAWN) {
+            int forward = piece.getColor() == PieceColor.WHITE ? -1 : 1;
+            boolean isForwardMove = fileDelta == 0 && rankDelta == forward && toPiece.getType() == PieceType.NONE;
+            boolean isDiagonalCapture = absFileDelta == 1
+                    && rankDelta == forward
+                    && toPiece.getType() != PieceType.NONE
+                    && !piece.isSameColor(toPiece);
+            return isForwardMove || isDiagonalCapture;
+        }
+        return false;
     }
 }

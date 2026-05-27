@@ -626,7 +626,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: same as TC55; `getSnapshot()` taken before `movePiece`
   - **Expected output**: cell-wise type and color match pre-move snapshot
 
-- **TC57: MovePiece_InvalidMoveShape_ReturnsFalse** ( :x: )
+- **TC57: MovePiece_InvalidMoveShape_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[6][4]`, empty at `[6][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 6)`, `to = Location(5, 6)` (sideways move; pawn `isValidMoveShape` is `false`)
   - **Expected output**: return value is `false` (rejected at step 2: invalid move shape)
