@@ -621,7 +621,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, `Rook(WHITE)` at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)`
   - **Expected output**: return value is `false` (rejected at step 1: destination same color)
 
-- **TC56: MovePiece_DestinationOccupiedByFriendlyPiece_BoardUnchanged** ( :x: )
+- **TC56: MovePiece_DestinationOccupiedByFriendlyPiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: same as TC55; `getSnapshot()` taken before `movePiece`
   - **Expected output**: cell-wise type and color match pre-move snapshot
