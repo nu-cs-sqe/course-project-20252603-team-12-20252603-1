@@ -386,7 +386,7 @@ class BoardTest {
 
         Piece[][] afterMove = board.getSnapshot();
         boolean expected = true;
-        boolean actual = boardsMatchByTypeAndColor(beforeMove, afterMove);
+        boolean actual = boardsMatchByTypeColorAndMovedState(beforeMove, afterMove);
         assertEquals(expected, actual);
     }
 
@@ -531,7 +531,23 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
-    private boolean boardsMatchByTypeAndColor(Piece[][] left, Piece[][] right) {
+    @Test
+    void GetSnapshot_AfterMove_MovedPieceHasMovedTrue() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+        board.movePiece(new Location(4, 6), new Location(4, 5));
+
+        boolean expected = true;
+        boolean actual = board.getSnapshot()[5][4].hasMoved();
+        assertEquals(expected, actual);
+    }
+
+    private boolean boardsMatchByTypeColorAndMovedState(Piece[][] left, Piece[][] right) {
         for (int rank = 0; rank < 8; rank++) {
             for (int file = 0; file < 8; file++) {
                 Piece leftPiece = left[rank][file];
@@ -540,6 +556,9 @@ class BoardTest {
                     return false;
                 }
                 if (leftPiece.getColor() != rightPiece.getColor()) {
+                    return false;
+                }
+                if (leftPiece.hasMoved() != rightPiece.hasMoved()) {
                     return false;
                 }
             }

@@ -64,19 +64,14 @@ public class Board {
     }
 
     public Piece getPieceAt(int rank, int file) {
-        Piece sourcePiece = pieces[rank][file];
-        Piece copiedPiece = sourcePiece.makeCopy();
-        if (sourcePiece.hasMoved()) {
-            copiedPiece.changeToMoved();
-        }
-        return copiedPiece;
+        return copyPiecePreservingState(pieces[rank][file]);
     }
 
     public Piece[][] getSnapshot() {
         Piece[][] snapshot = new Piece[BOARD_SIZE][BOARD_SIZE];
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                snapshot[row][col] = pieces[row][col].makeCopy();
+                snapshot[row][col] = copyPiecePreservingState(pieces[row][col]);
             }
         }
         return snapshot;
@@ -151,5 +146,13 @@ public class Board {
             file += fileStep;
         }
         return true;
+    }
+
+    private Piece copyPiecePreservingState(Piece sourcePiece) {
+        Piece copiedPiece = sourcePiece.makeCopy();
+        if (sourcePiece.hasMoved()) {
+            copiedPiece.changeToMoved();
+        }
+        return copiedPiece;
     }
 }
