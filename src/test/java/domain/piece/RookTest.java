@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+import domain.location.Location;
 import org.junit.jupiter.api.Test;
 
 class RookTest {
@@ -72,5 +73,17 @@ class RookTest {
         Rook rook = new Rook(PieceColor.BLACK);
 
         assertNotSame(rook, rook.makeCopy());
+    }
+
+    @Test
+    void IsValidMoveShape_OnRook_HorizontalMoveIsTrue() {
+        Rook rook = new Rook(PieceColor.WHITE);
+
+        Location from = new Location(0, 7);
+        Location to = new Location(3, 7);
+
+        boolean expected = true;
+        boolean actual = rook.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
     }
 }
