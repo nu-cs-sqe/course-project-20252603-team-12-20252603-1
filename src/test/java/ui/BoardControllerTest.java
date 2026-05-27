@@ -707,6 +707,30 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void HandleSquareClick_WithSelection_LegalDestination_TurnBecomesBlack() {
+        Location origin = new Location(4, 6);
+        Location destination = new Location(4, 5);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
+        boardMock.switchTurn();
+        EasyMock.expectLastCall();
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN);
+        EasyMock.replay(boardMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.handleSquareClick(destination);
+
+        GameState expected = GameState.BLACK_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);

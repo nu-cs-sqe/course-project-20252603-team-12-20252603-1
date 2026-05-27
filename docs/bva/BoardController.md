@@ -414,7 +414,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: same as BC-TC45
   - **Expected output**: `hasSelection()` is `false` after second click
 
-- **BC-TC48: HandleSquareClick_WithSelection_LegalDestination_TurnBecomesBlack** ( :x: )
+- **BC-TC48: HandleSquareClick_WithSelection_LegalDestination_TurnBecomesBlack** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: controller unit test with mocked `Board`; selected white pawn; `movePiece` returns `true`; `getCurrentGameState()` returns `BLACK_TURN` after `switchTurn()`
   - **Expected output**: `getCurrentGameState()` is `BLACK_TURN`
