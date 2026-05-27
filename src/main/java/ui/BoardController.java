@@ -25,6 +25,10 @@ public class BoardController {
     this.boardView = boardView;
   }
 
+  BoardView getBoardView() {
+    return boardView;
+  }
+
   public boolean hasSelection() {
     return lastSelectedLoc.isPresent();
   }
