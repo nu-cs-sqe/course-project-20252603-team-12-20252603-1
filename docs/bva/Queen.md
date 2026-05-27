@@ -104,7 +104,12 @@
   - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(6, 4)`
   - **Expected output**: returns `true`
 
-- **TC11: IsValidMoveShape_OnQueen_KnightLikeMoveIsFalse** ( :white_check_mark: )
+- **TC11: IsValidMoveShape_OnQueen_VerticalMoveIsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(3, 4)`
+  - **Expected output**: returns `true`
+
+- **TC12: IsValidMoveShape_OnQueen_KnightLikeMoveIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(4, 5)`
   - **Expected output**: returns `false`

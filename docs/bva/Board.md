@@ -119,10 +119,12 @@
 
 - **Input: piece type of the `Piece` at each position** — the `PieceType` held by each object in the array
 - **Input: piece color of the `Piece` at each position** — the `PieceColor` held by each object in the array
+- **Input: moved state of the `Piece` at each position** — whether `hasMoved()` is true or false
 - **Input: row of each piece** — which row (0–7) the piece occupies in the array
 - **Input: column of each piece** — which column (0–7) the piece occupies in the array
 - **Output: piece type at position** — the type of the `Piece` stored on the board after construction
 - **Output: piece color at position** — the color of the `Piece` stored on the board after construction (must equal the input color, not derived from row)
+- **Output: moved state at position** — the `hasMoved()` value stored on the board after construction
 - **Output: initial game state** — the game state immediately after construction
 
 ### Step 2: Data Types (from BVA Catalog)
@@ -131,10 +133,12 @@
 | -------------------------------------------------- | ----------------- | --------------------------------------------- |
 | Input: piece type of the `Piece` at each position  | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
 | Input: piece color of the `Piece` at each position | Cases             | BLACK, WHITE                                  |
+| Input: moved state of each piece                   | Boolean           | true, false                                   |
 | Input: row of each piece                           | Interval          | [0, 7]                                        |
 | Input: column of each piece                        | Interval          | [0, 7]                                        |
 | Output: piece type at position                     | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
 | Output: piece color at position                    | Cases             | BLACK, WHITE                                  |
+| Output: moved state at position                    | Boolean           | true, false                                   |
 | Output: initial game state                         | Cases             | WHITE_TURN                                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -153,6 +157,11 @@
 
 - BLACK
 - WHITE
+
+**Moved state — Boolean:**
+
+- true
+- false
 
 **Row — Interval [0, 7]:**
 
@@ -230,6 +239,11 @@
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][7]`; all other positions `NonePiece`; board is constructed — covers col 7 (max)
   - **Expected output**: `getSnapshot()[0][7].getType()` equals `ROOK`
   - **Covered by**: TC12 (parameterized test)
+
+- **TC22A: `Constructor_WhenPieceArrayHasMovedPiece_HasMovedIsPreserved`** ( :white_check_mark: )
+  - **Method(s) under test**: `Board(Piece[][])`
+  - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` whose `hasMoved()` is true; all other positions `NonePiece`; board is constructed
+  - **Expected output**: `getSnapshot()[0][0].hasMoved()` is `true`
 
 ---
 
