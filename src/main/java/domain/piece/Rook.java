@@ -17,6 +17,7 @@ public class Rook extends Piece {
   public boolean isValidMoveShape(Location from, Location to) {
     int rankDelta = to.getY() - from.getY();
     int fileDelta = to.getX() - from.getX();
-    return rankDelta == 0 && fileDelta != 0;
+    return (rankDelta == 0 && fileDelta != 0)
+        || (fileDelta == 0 && rankDelta != 0);
   }
 }

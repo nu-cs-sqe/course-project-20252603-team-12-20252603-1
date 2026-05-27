@@ -99,7 +99,7 @@
   - **State of the system**: rook; `from = Location(0, 7)`, `to = Location(3, 7)`
   - **Expected output**: returns `true`
 
-- **TC10: IsValidMoveShape_OnRook_VerticalMoveIsTrue** ( :x: )
+- **TC10: IsValidMoveShape_OnRook_VerticalMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: rook; `from = Location(0, 7)`, `to = Location(0, 4)`
   - **Expected output**: returns `true`
