@@ -99,7 +99,7 @@
   - **State of the system**: bishop; `from = Location(2, 7)`, `to = Location(5, 4)`
   - **Expected output**: returns `true`
 
-- **TC10: IsValidMoveShape_OnBishop_HorizontalMoveIsFalse** ( :x: )
+- **TC10: IsValidMoveShape_OnBishop_HorizontalMoveIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: bishop; `from = Location(2, 7)`, `to = Location(5, 7)`
   - **Expected output**: returns `false`

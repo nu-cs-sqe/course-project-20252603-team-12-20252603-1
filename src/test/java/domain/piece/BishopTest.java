@@ -86,4 +86,16 @@ class BishopTest {
         boolean actual = bishop.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnBishop_HorizontalMoveIsFalse() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+
+        Location from = new Location(2, 7);
+        Location to = new Location(5, 7);
+
+        boolean expected = false;
+        boolean actual = bishop.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }
