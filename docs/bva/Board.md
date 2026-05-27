@@ -348,7 +348,7 @@
 
 - **TC35: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
-  - **State of the system**: a board constructed with `StandardBoardInitializer`; set `getSnapshot()[7][0]` to `null`
+  - **State of the system**: a board constructed with `StandardBoardInitializer`; replace `getSnapshot()[7][0]` with `new NonePiece()`
   - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
 
 ---
@@ -535,19 +535,22 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ## Method: `movePiece(Location from, Location to)`
 
-Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in order: destination not same color → move shape → path clear (non-jumpers) → not moving into check (deferred TCs until king-safety slice). Does **not** call `switchTurn()`; the controller switches turn after `true`. Uses `Board(Piece[][])` for injected layouts. Coordinates: `Location.getX()` is file, `Location.getY()` is rank; `getPieceAt(rank, file)` matches that convention.
+Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in order: destination not same color → move shape → path clear (non-jumpers) → not moving into check (stubbed or vacuous in this slice; king-safety TCs come later). Does **not** call `switchTurn()`; the controller switches turn after `true`. Uses `Board(Piece[][])` for injected layouts; layouts omit kings so `checkNotMoveIntoCheck` is not exercised until a later slice. Coordinates: `Location.getX()` is file, `Location.getY()` is rank; `getPieceAt(rank, file)` matches that convention.
+
+**Deferred to later slices (no TC in this section):** empty `from`, same-square move, out-of-bounds `Location`, wrong turn, pawn double-push, en passant, promotion, castling, win/draw state updates.
 
 ### Step 1: Equivalence Classes
 
-- **Input: `from` square** — occupied by moving piece; empty; out of bounds (invalid — not a BVA boundary per project null/out-of-range policy for public APIs if guarded)
-- **Input: `to` square** — empty; occupied by opponent; occupied by friendly; same square as `from`
-- **Input: moving piece type** — pawn, knight, rook, bishop, queen, king (shape and path rules differ)
-- **Input: board layout** — clear path; blocked sliding path; knight jump over piece
+- **Input: `from` square** — occupied by the moving piece
+- **Input: `to` square** — empty; occupied by opponent; occupied by friendly
+- **Input: moving piece type** — pawn, knight, rook (shape and path rules differ in this slice)
+- **Input: board layout** — clear sliding path; blocked sliding path; knight jump over piece
 - **Output: return value** — `true` (move applied); `false` (board unchanged)
 - **Output: origin after call** — `NonePiece` on success; unchanged on failure
 - **Output: destination after call** — moving piece on success; unchanged on failure
-- **Output: captured piece** — removed on legal capture; N/A on non-capture
+- **Output: captured piece** — opponent removed on legal capture; N/A on non-capture
 - **Output: `hasMoved()` on moved piece** — `true` after success
+- **Output: game state** — unchanged by `movePiece` on both success and failure in this slice
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -559,6 +562,7 @@ Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in 
 | Input: piece jump capability | Boolean           | jumper (`KNIGHT`), non-jumper (sliders)         |
 | Output: return value         | Boolean           | `true`, `false`                                 |
 | Output: origin cell type     | Cases             | `NONE` after success; unchanged type on failure |
+| Output: game state           | Cases             | unchanged (`WHITE_TURN` in these TCs)           |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -570,13 +574,14 @@ Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in 
 
 **Move shape — Cases:**
 
-- Valid pawn one-step forward (rank delta 1, same file, from starting rank)
+- Valid pawn one-step forward (rank delta 1 toward rank 0, same file)
+- Valid pawn diagonal capture (rank delta 1, file delta 1, opponent on destination)
 - Valid knight L-shape `(2,1)` absolute displacement
-- Invalid pawn move (wrong direction or distance for shape-only check)
+- Invalid pawn sideways move to empty square (`isValidMoveShape` returns `false` at step 2)
 
 **Sliding path — Cases:**
 
-- No intervening pieces (rook horizontal move)
+- No intervening pieces (rook horizontal slide to empty square)
 - One intervening piece between rook and destination (blocked)
 
 **Return value — Boolean:**
@@ -588,12 +593,12 @@ Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in 
 
 - **TC50: MovePiece_LegalPawnForwardOneToEmptySquare_ReturnsTrue** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at rank 6 file 4, empty at rank 5 file 4; `WHITE_TURN`
+  - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[6][4]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 6)`, `to = Location(4, 5)`
   - **Expected output**: return value is `true`
 
 - **TC51: MovePiece_LegalPawnForwardOneToEmptySquare_OriginBecomesNone** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: same as TC50; `from = Location(4, 6)`, `to = Location(4, 5)`
+  - **State of the system**: same as TC50
   - **Expected output**: `getPieceAt(6, 4).getType()` is `NONE` after the call
 
 - **TC52: MovePiece_LegalPawnForwardOneToEmptySquare_DestinationHasPawn** ( :x: )
@@ -608,37 +613,52 @@ Scope: **Make a Legal Move (one turn)** — domain execution only. Validates in 
 
 - **TC54: MovePiece_LegalKnightJumpOverPiece_ReturnsTrue** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Knight(WHITE)` at rank 7 file 6 with friendly pawn on rank 6 file 6; empty at rank 5 file 5 (valid L-shape)
+  - **State of the system**: `Board(Piece[][])` with `Knight(WHITE)` at `[7][6]`, `Pawn(WHITE)` at `[6][6]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(6, 7)`, `to = Location(5, 5)` (absolute displacement `(1, 2)`)
   - **Expected output**: return value is `true`
 
 - **TC55: MovePiece_DestinationOccupiedByFriendlyPiece_ReturnsFalse** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Rook(WHITE)` at rank 7 file 0; another `Rook(WHITE)` at rank 7 file 3; empty between them
-  - **Expected output**: return value is `false`
+  - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, `Rook(WHITE)` at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)`
+  - **Expected output**: return value is `false` (rejected at step 1: destination same color)
 
 - **TC56: MovePiece_DestinationOccupiedByFriendlyPiece_BoardUnchanged** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: same as TC55; snapshot taken before call
+  - **State of the system**: same as TC55; `getSnapshot()` taken before `movePiece`
   - **Expected output**: cell-wise type and color match pre-move snapshot
 
 - **TC57: MovePiece_InvalidMoveShape_ReturnsFalse** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Pawn(WHITE)` at rank 6 file 4; empty at rank 4 file 4 (two ranks forward without en passant/double-push rules in scope — illegal shape or blocked per implementation)
-  - **Expected output**: return value is `false`
+  - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[6][4]`, empty at `[6][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 6)`, `to = Location(5, 6)` (sideways move; pawn `isValidMoveShape` is `false`)
+  - **Expected output**: return value is `false` (rejected at step 2: invalid move shape)
 
 - **TC58: MovePiece_BlockedRookSlide_ReturnsFalse** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Rook(WHITE)` at rank 7 file 0; `Pawn(WHITE)` at rank 7 file 1; empty at rank 7 file 3
-  - **Expected output**: return value is `false`
+  - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, `Pawn(WHITE)` at `[7][1]`, empty at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)` (valid rook shape, blocked path)
+  - **Expected output**: return value is `false` (rejected at step 3: obstacle on path)
 
-- **TC59: MovePiece_LegalCapture_RemovesOpponentFromDestination** ( :x: )
+- **TC59: MovePiece_LegalRookSlideToEmptySquare_ReturnsTrue** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`
-  - **State of the system**: `Pawn(WHITE)` at rank 4 file 4; `Pawn(BLACK)` at rank 3 file 5 (diagonal capture shape); `WHITE_TURN`
-  - **Expected output**: return value is `true`; `getPieceAt(3, 5)` is white pawn; `getPieceAt(4, 4)` is `NONE`
+  - **State of the system**: `Board(Piece[][])` with `Rook(WHITE)` at `[7][0]`, empty at `[7][3]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(0, 7)`, `to = Location(3, 7)`
+  - **Expected output**: return value is `true`
 
-- **TC60: MovePiece_AfterFailedMove_GameStateUnchanged** ( :x: )
+- **TC60: MovePiece_LegalCapture_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: `Board(Piece[][])` with `Pawn(WHITE)` at `[4][4]`, `Pawn(BLACK)` at `[3][5]`, all other cells `NonePiece`; `WHITE_TURN`; `from = Location(4, 4)`, `to = Location(5, 3)`
+  - **Expected output**: return value is `true`
+
+- **TC61: MovePiece_LegalCapture_OriginBecomesNone** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC60
+  - **Expected output**: `getPieceAt(4, 4).getType()` is `NONE` after the call
+
+- **TC62: MovePiece_LegalCapture_DestinationHasWhitePawn** ( :x: )
+  - **Method(s) under test**: `movePiece(Location, Location)`
+  - **State of the system**: same as TC60
+  - **Expected output**: `getPieceAt(3, 5).getType()` is `PAWN` and color is `WHITE`
+
+- **TC63: MovePiece_AfterFailedMove_GameStateUnchanged** ( :x: )
   - **Method(s) under test**: `movePiece(Location, Location)`, `getCurrentGameState()`
-  - **State of the system**: same as TC55 (friendly destination)
-  - **Expected output**: `getCurrentGameState()` still `WHITE_TURN` (movePiece does not switch turn)
+  - **State of the system**: same as TC55; `from = Location(0, 7)`, `to = Location(3, 7)`
+  - **Expected output**: `getCurrentGameState()` is still `WHITE_TURN` after the failed move
 
 ---
