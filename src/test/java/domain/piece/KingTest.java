@@ -86,4 +86,16 @@ class KingTest {
         boolean actual = king.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnKing_TwoStepMoveIsFalse() {
+        King king = new King(PieceColor.WHITE);
+
+        Location from = new Location(4, 7);
+        Location to = new Location(4, 5);
+
+        boolean expected = false;
+        boolean actual = king.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }
