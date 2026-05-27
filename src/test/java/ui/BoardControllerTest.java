@@ -631,6 +631,23 @@ class BoardControllerTest {
         EasyMock.verify(boardMock, boardViewMock);
     }
 
+    @Test
+    void SetBoardView_ExistingView_ReplacesBoardView() {
+        Board boardMock = replayNiceBoard();
+        BoardView originalViewMock = EasyMock.createNiceMock(BoardView.class);
+        BoardView replacementViewMock = EasyMock.createNiceMock(BoardView.class);
+        EasyMock.replay(originalViewMock, replacementViewMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.setBoardView(originalViewMock);
+        controller.setBoardView(replacementViewMock);
+
+        BoardView expected = replacementViewMock;
+        BoardView actual = controller.getBoardView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, originalViewMock, replacementViewMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);

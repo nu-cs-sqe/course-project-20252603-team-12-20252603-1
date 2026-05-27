@@ -349,7 +349,7 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **State of the system**: controller constructed with injected `Board`; no view assigned yet; package-visible `getBoardView()` used only as a test observation point
   - **Expected output**: `getBoardView()` returns the same `BoardView` reference passed to `setBoardView`
 
-- **BC-TC44: SetBoardView_ExistingView_ReplacesBoardView** ( :x: )
+- **BC-TC44: SetBoardView_ExistingView_ReplacesBoardView** ( :white_check_mark: )
   - **Method(s) under test**: `setBoardView(BoardView)`
   - **State of the system**: controller has one view assigned; `setBoardView` called again with a different `BoardView`
   - **Expected output**: `getBoardView()` returns the second `BoardView` reference
