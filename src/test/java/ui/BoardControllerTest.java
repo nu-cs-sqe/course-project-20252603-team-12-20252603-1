@@ -852,6 +852,29 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void HandleSquareClick_WithSelection_OnFriendlyPiece_DoesNotSwitchTurn() {
+        Location origin = new Location(0, 7);
+        Location destination = new Location(1, 7);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Rook(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new Knight(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
+        EasyMock.replay(boardMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.handleSquareClick(destination);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);
