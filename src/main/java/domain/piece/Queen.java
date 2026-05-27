@@ -17,6 +17,10 @@ public class Queen extends Piece {
   public boolean isValidMoveShape(Location from, Location to) {
     int rankDelta = to.getY() - from.getY();
     int fileDelta = to.getX() - from.getX();
-    return rankDelta == 0 && fileDelta != 0;
+    int absRankDelta = Math.abs(rankDelta);
+    int absFileDelta = Math.abs(fileDelta);
+    boolean isHorizontalMove = rankDelta == 0 && fileDelta != 0;
+    boolean isDiagonalMove = absRankDelta != 0 && absRankDelta == absFileDelta;
+    return isHorizontalMove || isDiagonalMove;
   }
 }

@@ -99,7 +99,7 @@
   - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(7, 7)`
   - **Expected output**: returns `true`
 
-- **TC10: IsValidMoveShape_OnQueen_DiagonalMoveIsTrue** ( :x: )
+- **TC10: IsValidMoveShape_OnQueen_DiagonalMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(6, 4)`
   - **Expected output**: returns `true`

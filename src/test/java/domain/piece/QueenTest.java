@@ -86,4 +86,16 @@ class QueenTest {
         boolean actual = queen.isValidMoveShape(from, to);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsValidMoveShape_OnQueen_DiagonalMoveIsTrue() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        Location from = new Location(3, 7);
+        Location to = new Location(6, 4);
+
+        boolean expected = true;
+        boolean actual = queen.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
 }
