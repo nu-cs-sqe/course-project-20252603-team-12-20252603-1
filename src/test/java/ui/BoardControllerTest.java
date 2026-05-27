@@ -731,6 +731,28 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void HandleSquareClick_WithSelection_LegalDestination_RepaintsBoardView() {
+        Location origin = new Location(4, 6);
+        Location destination = new Location(4, 5);
+        Board boardMock = EasyMock.createNiceMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall();
+        EasyMock.replay(boardMock, boardViewMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.setBoardView(boardViewMock);
+        controller.handleSquareClick(destination);
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);

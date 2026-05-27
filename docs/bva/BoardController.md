@@ -419,7 +419,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: controller unit test with mocked `Board`; selected white pawn; `movePiece` returns `true`; `getCurrentGameState()` returns `BLACK_TURN` after `switchTurn()`
   - **Expected output**: `getCurrentGameState()` is `BLACK_TURN`
 
-- **BC-TC49: HandleSquareClick_WithSelection_LegalDestination_RepaintsBoardView** ( :x: )
+- **BC-TC49: HandleSquareClick_WithSelection_LegalDestination_RepaintsBoardView** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` with mocked `BoardView`
   - **State of the system**: `setBoardView` called with a view mock; selected white pawn; `movePiece` returns `true`
   - **Expected output**: `repaint()` invoked once after successful move; `verify(boardViewMock)` passes
