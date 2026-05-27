@@ -82,3 +82,32 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: `from` to `to` displacement | Cases | one-step forward, one-step diagonal forward, sideways/other invalid |
+| Input: pawn color | Cases | `WHITE`, `BLACK` |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC9: IsValidMoveShape_OnWhitePawn_OneStepForwardIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(4, 5)`
+  - **Expected output**: returns `true`
+
+- **TC10: IsValidMoveShape_OnWhitePawn_DiagonalForwardIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(5, 5)`
+  - **Expected output**: returns `true`
+
+- **TC11: IsValidMoveShape_OnWhitePawn_SidewaysIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(5, 6)`
+  - **Expected output**: returns `false`
+
+---
