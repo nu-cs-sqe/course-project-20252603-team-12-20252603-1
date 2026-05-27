@@ -82,3 +82,31 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: `from` to `to` displacement | Cases | horizontal non-zero, vertical non-zero, diagonal/zero invalid |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC9: IsValidMoveShape_OnRook_HorizontalMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: rook; `from = Location(0, 7)`, `to = Location(3, 7)`
+  - **Expected output**: returns `true`
+
+- **TC10: IsValidMoveShape_OnRook_VerticalMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: rook; `from = Location(0, 7)`, `to = Location(0, 4)`
+  - **Expected output**: returns `true`
+
+- **TC11: IsValidMoveShape_OnRook_DiagonalMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: rook; `from = Location(0, 7)`, `to = Location(3, 4)`
+  - **Expected output**: returns `false`
+
+---
