@@ -94,7 +94,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC9: IsValidMoveShape_OnQueen_HorizontalMoveIsTrue** ( :x: )
+- **TC9: IsValidMoveShape_OnQueen_HorizontalMoveIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: queen; `from = Location(3, 7)`, `to = Location(7, 7)`
   - **Expected output**: returns `true`

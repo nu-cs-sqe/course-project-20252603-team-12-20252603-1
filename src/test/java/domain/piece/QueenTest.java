@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+import domain.location.Location;
 import org.junit.jupiter.api.Test;
 
 class QueenTest {
@@ -72,5 +73,17 @@ class QueenTest {
         Queen queen = new Queen(PieceColor.BLACK);
 
         assertNotSame(queen, queen.makeCopy());
+    }
+
+    @Test
+    void IsValidMoveShape_OnQueen_HorizontalMoveIsTrue() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        Location from = new Location(3, 7);
+        Location to = new Location(7, 7);
+
+        boolean expected = true;
+        boolean actual = queen.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
     }
 }
