@@ -895,6 +895,33 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void HandleSquareClick_AfterSuccessfulMove_SnapshotReflectsNewPosition() {
+        Location origin = new Location(4, 6);
+        Location destination = new Location(4, 5);
+        Piece[][] postMoveGrid = newStandardStartingGrid();
+        postMoveGrid[6][4] = new NonePiece();
+        postMoveGrid[5][4] = new Pawn(PieceColor.WHITE);
+        Board boardMock = EasyMock.createNiceMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
+        EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
+        EasyMock.expect(boardMock.getSnapshot()).andReturn(postMoveGrid);
+        EasyMock.replay(boardMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = snapshotHasWhitePawnMovedFromE2ToE3(controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
     private static Board replayNiceBoard() {
         Board boardMock = EasyMock.createNiceMock(Board.class);
         EasyMock.replay(boardMock);
@@ -1040,6 +1067,14 @@ class BoardControllerTest {
             }
         }
         return true;
+    }
+
+    private static boolean snapshotHasWhitePawnMovedFromE2ToE3(Piece[][] snapshot) {
+        Piece origin = snapshot[6][4];
+        Piece destination = snapshot[5][4];
+        return origin.getType() == PieceType.NONE
+                && destination.getType() == PieceType.PAWN
+                && destination.getColor() == PieceColor.WHITE;
     }
 
     private static boolean bishopsOnOppositeColorSquaresOnRank(

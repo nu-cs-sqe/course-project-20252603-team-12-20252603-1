@@ -454,7 +454,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: white pawn selected at `Location(4, 6)`; second click out of bounds at `Location(8, 5)`
   - **Expected output**: `movePiece` and `switchTurn` are not called; selection remains on the original pawn
 
-- **BC-TC56: HandleSquareClick_AfterSuccessfulMove_SnapshotReflectsNewPosition** ( :x: )
+- **BC-TC56: HandleSquareClick_AfterSuccessfulMove_SnapshotReflectsNewPosition** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: controller unit test with mocked `Board`; selected white pawn; `movePiece` returns `true`; later `getSnapshot()` returns a test-built post-move grid
   - **Expected output**: snapshot shows pawn on rank 5 file 4 and `NONE` on rank 6 file 4
