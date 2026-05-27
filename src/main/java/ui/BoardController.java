@@ -47,6 +47,8 @@ public class BoardController {
         board.switchTurn();
         lastSelectedLoc = Optional.empty();
         repaintBoardView();
+      } else {
+        lastSelectedLoc = Optional.empty();
       }
       return;
     }

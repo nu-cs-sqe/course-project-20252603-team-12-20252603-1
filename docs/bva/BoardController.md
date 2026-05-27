@@ -434,7 +434,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: same as BC-TC50; mock `getCurrentGameState()` returns `WHITE_TURN`
   - **Expected output**: `getCurrentGameState()` is `WHITE_TURN`
 
-- **BC-TC52: HandleSquareClick_WithSelection_IllegalDestination_ClearsSelection** ( :x: )
+- **BC-TC52: HandleSquareClick_WithSelection_IllegalDestination_ClearsSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: same as BC-TC50
   - **Expected output**: `hasSelection()` is `false`
