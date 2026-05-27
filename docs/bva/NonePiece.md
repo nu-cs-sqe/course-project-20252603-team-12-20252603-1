@@ -52,3 +52,21 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: any displacement | Cases | representative non-zero move |
+| Output: return value | Boolean | `false` only |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC6: IsValidMoveShape_OnNonePiece_AnyMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: `NonePiece`; `from = Location(0, 0)`, `to = Location(0, 1)`
+  - **Expected output**: returns `false`
+
+---
