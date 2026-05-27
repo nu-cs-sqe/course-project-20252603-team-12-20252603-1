@@ -601,7 +601,7 @@ Scope: **Make a Legal Move (phase 1)** — domain execution only. Validates in o
   - **State of the system**: same as TC50
   - **Expected output**: `getPieceAt(6, 4).getType()` is `NONE` after the call
 
-- **TC52: MovePiece_LegalPawnForwardOneToEmptySquare_DestinationHasPawn** ( :x: )
+- **TC52: MovePiece_LegalPawnForwardOneToEmptySquare_DestinationHasPawn** ( :white_check_mark: )
   - **Method(s) under test**: `movePiece(Location, Location)`
   - **State of the system**: same as TC50
   - **Expected output**: `getPieceAt(5, 4).getType()` is `PAWN` and color is `WHITE`

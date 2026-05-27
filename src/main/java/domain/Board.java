@@ -80,7 +80,10 @@ public class Board {
     public boolean movePiece(Location from, Location to) {
         int fromRank = from.getY();
         int fromFile = from.getX();
+        int toRank = to.getY();
+        int toFile = to.getX();
 
+        pieces[toRank][toFile] = pieces[fromRank][fromFile].makeCopy();
         pieces[fromRank][fromFile] = new NonePiece();
         return true;
     }
