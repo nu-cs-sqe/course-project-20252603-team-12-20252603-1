@@ -24,7 +24,7 @@ public class Board {
     public Board(Piece[][] initialPieces) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                pieces[row][col] = initialPieces[row][col].makeCopy();
+                pieces[row][col] = copyPiecePreservingState(initialPieces[row][col]);
             }
         }
     }

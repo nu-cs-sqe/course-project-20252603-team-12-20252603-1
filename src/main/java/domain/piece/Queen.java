@@ -20,7 +20,8 @@ public class Queen extends Piece {
     int absRankDelta = Math.abs(rankDelta);
     int absFileDelta = Math.abs(fileDelta);
     boolean isHorizontalMove = rankDelta == 0 && fileDelta != 0;
+    boolean isVerticalMove = fileDelta == 0 && rankDelta != 0;
     boolean isDiagonalMove = absRankDelta != 0 && absRankDelta == absFileDelta;
-    return isHorizontalMove || isDiagonalMove;
+    return isHorizontalMove || isVerticalMove || isDiagonalMove;
   }
 }

@@ -100,6 +100,18 @@ class QueenTest {
     }
 
     @Test
+    void IsValidMoveShape_OnQueen_VerticalMoveIsTrue() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        Location from = new Location(3, 7);
+        Location to = new Location(3, 4);
+
+        boolean expected = true;
+        boolean actual = queen.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void IsValidMoveShape_OnQueen_KnightLikeMoveIsFalse() {
         Queen queen = new Queen(PieceColor.WHITE);
 

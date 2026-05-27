@@ -94,6 +94,23 @@ class BoardTest {
     }
 
     @Test
+    void Constructor_WhenPieceArrayHasMovedPiece_HasMovedIsPreserved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        Rook rook = new Rook(PieceColor.WHITE);
+        rook.changeToMoved();
+        layout[0][0] = rook;
+
+        Board board = new Board(layout);
+
+        boolean expected = true;
+        boolean actual = board.getSnapshot()[0][0].hasMoved();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
