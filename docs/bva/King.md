@@ -94,7 +94,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC8: IsValidMoveShape_OnKing_OneStepDiagonalIsTrue** ( :x: )
+- **TC8: IsValidMoveShape_OnKing_OneStepDiagonalIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: king; `from = Location(4, 7)`, `to = Location(5, 6)`
   - **Expected output**: returns `true`

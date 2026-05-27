@@ -1,5 +1,7 @@
 package domain.piece;
 
+import domain.location.Location;
+
 public abstract class Piece {
 
   private final PieceType type;
@@ -43,6 +45,10 @@ public abstract class Piece {
   }
 
   public abstract Piece makeCopy();
+
+  public boolean isValidMoveShape(Location from, Location to) {
+    return false;
+  }
 
   @Override
   public String toString() {
