@@ -82,3 +82,26 @@
   - **Expected output**: returned piece is a different object from the original
 
 ---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+|-----------|--------------|-------------------|
+| Input: absolute displacement | Cases | equal row/col non-zero, other invalid |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC9: IsValidMoveShape_OnBishop_DiagonalMoveIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: bishop; `from = Location(2, 7)`, `to = Location(5, 4)`
+  - **Expected output**: returns `true`
+
+- **TC10: IsValidMoveShape_OnBishop_HorizontalMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: bishop; `from = Location(2, 7)`, `to = Location(5, 7)`
+  - **Expected output**: returns `false`
+
+---
