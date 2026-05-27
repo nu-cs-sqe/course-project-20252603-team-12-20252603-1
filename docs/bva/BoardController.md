@@ -439,7 +439,7 @@ Scope: **Make a Legal Move (one turn)** — applies when `lastSelectedLoc` is pr
   - **State of the system**: same as BC-TC50
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC53: HandleSquareClick_WithSelection_OnFriendlyPiece_ChangesSelection** ( :x: )
+- **BC-TC53: HandleSquareClick_WithSelection_OnFriendlyPiece_ChangesSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white rook selected at `Location(0, 7)`; second click white knight at `Location(1, 7)`; `movePiece` not called
   - **Expected output**: `getSelectedLocation()` present with knight coordinates; `hasSelection()` true

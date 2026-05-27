@@ -656,6 +656,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
         EasyMock.replay(boardMock);
         BoardController controller = new BoardController(boardMock);
@@ -674,6 +676,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
         boardMock.switchTurn();
         EasyMock.expectLastCall();
@@ -694,6 +698,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
         EasyMock.replay(boardMock);
         BoardController controller = new BoardController(boardMock);
@@ -714,6 +720,8 @@ class BoardControllerTest {
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
         boardMock.switchTurn();
@@ -739,6 +747,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(true);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
         boardViewMock.repaint();
@@ -761,6 +771,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(false);
         EasyMock.replay(boardMock);
         BoardController controller = new BoardController(boardMock);
@@ -778,6 +790,8 @@ class BoardControllerTest {
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(false);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
@@ -801,6 +815,8 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
         EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
                 .andReturn(new Pawn(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new NonePiece());
         EasyMock.expect(boardMock.movePiece(origin, destination)).andReturn(false);
         EasyMock.replay(boardMock);
         BoardController controller = new BoardController(boardMock);
@@ -810,6 +826,28 @@ class BoardControllerTest {
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnFriendlyPiece_ChangesSelection() {
+        Location origin = new Location(0, 7);
+        Location destination = new Location(1, 7);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(origin.getY(), origin.getX()))
+                .andReturn(new Rook(PieceColor.WHITE));
+        EasyMock.expect(boardMock.getPieceAt(destination.getY(), destination.getX()))
+                .andReturn(new Knight(PieceColor.WHITE));
+        EasyMock.replay(boardMock);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(origin);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = selectedLocationMatches(controller.getSelectedLocation(), destination);
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }

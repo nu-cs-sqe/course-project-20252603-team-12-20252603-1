@@ -42,6 +42,14 @@ public class BoardController {
       return;
     }
     if (lastSelectedLoc.isPresent()) {
+      int file = loc.getX();
+      int rank = loc.getY();
+      Piece at = board.getPieceAt(rank, file);
+      if (at.getType() != PieceType.NONE && at.getColor() == PieceColor.WHITE) {
+        lastSelectedLoc = Optional.of(loc);
+        repaintBoardView();
+        return;
+      }
       boolean moved = board.movePiece(lastSelectedLoc.get(), loc);
       if (moved) {
         board.switchTurn();
