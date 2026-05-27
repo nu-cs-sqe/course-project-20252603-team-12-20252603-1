@@ -64,7 +64,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC6: IsValidMoveShape_OnNonePiece_AnyMoveIsFalse** ( :x: )
+- **TC6: IsValidMoveShape_OnNonePiece_AnyMoveIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: `NonePiece`; `from = Location(0, 0)`, `to = Location(0, 1)`
   - **Expected output**: returns `false`
