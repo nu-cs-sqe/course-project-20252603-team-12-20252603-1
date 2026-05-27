@@ -11,6 +11,7 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import domain.location.Location;
 
 public class Board {
 
@@ -74,5 +75,9 @@ public class Board {
             }
         }
         return snapshot;
+    }
+
+    public boolean movePiece(Location from, Location to) {
+        return true;
     }
 }

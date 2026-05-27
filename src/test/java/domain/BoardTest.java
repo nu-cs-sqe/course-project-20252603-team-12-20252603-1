@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
+import domain.location.Location;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -247,6 +248,25 @@ class BoardTest {
         assertNotSame(piece1, piece2);
         assertEquals(piece1.getType(), piece2.getType());
         assertEquals(piece1.getColor(), piece2.getColor());
+    }
+
+    @Test
+    void MovePiece_LegalPawnForwardOneToEmptySquare_ReturnsTrue() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+
+        Board board = new Board(layout);
+
+        Location from = new Location(4, 6);
+        Location to = new Location(4, 5);
+
+        boolean actual = board.movePiece(from, to);
+
+        boolean expected = true;
+        assertEquals(expected, actual);
     }
 
 }
