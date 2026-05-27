@@ -95,7 +95,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC9: IsValidMoveShape_OnWhitePawn_OneStepForwardIsTrue** ( :x: )
+- **TC9: IsValidMoveShape_OnWhitePawn_OneStepForwardIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
   - **State of the system**: white pawn; `from = Location(4, 6)`, `to = Location(4, 5)`
   - **Expected output**: returns `true`

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+import domain.location.Location;
 import org.junit.jupiter.api.Test;
 
 class PawnTest {
@@ -72,5 +73,17 @@ class PawnTest {
         Pawn pawn = new Pawn(PieceColor.BLACK);
 
         assertNotSame(pawn, pawn.makeCopy());
+    }
+
+    @Test
+    void IsValidMoveShape_OnWhitePawn_OneStepForwardIsTrue() {
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        Location from = new Location(4, 6);
+        Location to = new Location(4, 5);
+
+        boolean expected = true;
+        boolean actual = pawn.isValidMoveShape(from, to);
+        assertEquals(expected, actual);
     }
 }
