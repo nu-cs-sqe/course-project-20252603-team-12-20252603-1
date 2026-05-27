@@ -3,13 +3,14 @@
 ## Design Review Notes
 
 - The design document defines `King` as a subclass of `Piece` with three public methods: `King(PieceColor color)`, `makeCopy()`, and `isValidMoveShape(Location from, Location to)`.
-- The board design notes separate obstacle handling from move-shape validation and model jump capability at the `Piece` level. This BVA analysis focuses on constructor state and copy behavior only.
+- The board design notes separate obstacle handling from move-shape validation and model jump capability at the `Piece` level.
 - The current checkout does not contain the domain implementation, and `docs/requirements/game-rules.md` is still a placeholder. The analysis below uses the UML design plus standard chess rules: a king moves one square in any direction (horizontal, vertical, or diagonal).
 
 ## Specification
 
 - **`public King(PieceColor color)`**: creates a king with the provided color. The created piece has type `KING`, reports the same color through `getColor()`, and reports that it cannot jump through `canJump()`.
 - **`public Piece makeCopy()`**: returns a new `Piece` object representing the same kind of piece as the original king. The returned piece is a distinct object, still has type `KING`, has the same color as the original, and cannot jump.
+- **`public boolean isValidMoveShape(Location from, Location to)`**: returns `true` exactly when the king moves one square horizontally, vertically, or diagonally. Returns `false` for zero displacement and larger displacements.
 
 ---
 
@@ -79,5 +80,28 @@
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece is a different object from the original
+
+---
+
+## Method: `isValidMoveShape(Location from, Location to)`
+
+### Step 1-3: Analysis
+
+| Parameter | Catalog clue | Values considered |
+| --------- | ------------ | ----------------- |
+| Input: absolute displacement | Cases | one-square king move, two-or-more-square move |
+| Output: return value | Boolean | `true`, `false` |
+
+### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
+
+- **TC8: IsValidMoveShape_OnKing_OneStepDiagonalIsTrue** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: king; `from = Location(4, 7)`, `to = Location(5, 6)`
+  - **Expected output**: returns `true`
+
+- **TC9: IsValidMoveShape_OnKing_TwoStepMoveIsFalse** ( :x: )
+  - **Method(s) under test**: `isValidMoveShape(Location from, Location to)`
+  - **State of the system**: king; `from = Location(4, 7)`, `to = Location(4, 5)`
+  - **Expected output**: returns `false`
 
 ---
