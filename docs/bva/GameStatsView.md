@@ -155,7 +155,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **State of the system**: current label shows active player `"Alice"`; user action does not complete a move, such as selection only, rejected illegal destination, opponent/empty first click, or out-of-bounds click
   - **Expected output**: current-player label remains `"Alice"`; the UI is not updated to the opponent name
 
-- **GS-TC16: UpdateCurrentPlayerLabel_AfterChess960LegalMove_UsesSameOpponentNameRule** ( :x: )
+- **GS-TC16: UpdateCurrentPlayerLabel_AfterChess960LegalMove_UsesSameOpponentNameRule** ( implemented in GS-TC14 )
   - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
   - **State of the system**: valid Chess960 game; current label shows active player `"Alice"`; a legal move succeeds and the turn switches
-  - **Expected output**: current-player label text is `"Bob"`; Chess960 setup does not change the view update rule
+  - **Expected output**: current-player label text is `"Bob"`; Chess960 setup does not change the view update rule, and setup mode is not a `GameStatsView` input
