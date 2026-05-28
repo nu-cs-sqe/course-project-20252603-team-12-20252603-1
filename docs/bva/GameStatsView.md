@@ -150,10 +150,10 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `BLACK_TURN`
   - **Expected output**: current-player label text is `"Bob"`
 
-- **GS-TC15: UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName** ( :white_check_mark: )
-  - **Method(s) under test**: `updateCurrentPlayerLabel(String)` integration contract
-  - **State of the system**: current label shows active player `"Alice"`; user action does not complete a move, such as selection only, rejected illegal destination, opponent/empty first click, or out-of-bounds click
-  - **Expected output**: current-player label remains `"Alice"`; the UI is not updated to the opponent name
+- **GS-TC15: UpdateCurrentPlayerLabel_OnWhiteTurn_LabelShowsPlayerOneName** ( :white_check_mark: )
+  - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
+  - **State of the system**: current game state is `WHITE_TURN`
+  - **Expected output**: current-player label text is player one name `"Alice"`
 
 - **GS-TC16: UpdateCurrentPlayerLabel_AfterChess960LegalMove_UsesSameOpponentNameRule** ( implemented in GS-TC14 )
   - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`

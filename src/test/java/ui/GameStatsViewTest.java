@@ -144,7 +144,7 @@ class GameStatsViewTest {
     }
 
     @Test
-    void UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName() {
+    void UpdateCurrentPlayerLabel_OnWhiteTurn_LabelShowsPlayerOneName() {
         GameStatsView view = new GameStatsView("Alice", "Bob");
 
         view.updateCurrentPlayerLabel(GameState.WHITE_TURN);
