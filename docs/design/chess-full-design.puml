@@ -1,5 +1,5 @@
 @startuml
-title Class Diagram for Chess Game (with a mostly complete domain layer and a draft for the UI Layer)
+title Class Diagram for Chess Game
 
 package ui{
 
@@ -7,34 +7,63 @@ package ui{
         +{static} main(args: String[]): void
     }
 
+    +class AppController{
+        -currentFrame: JFrame
+
+        +start(): void
+        -onGameStart(player1Name: String, player2Name: String, isChess960: boolean): void
+        -onGameOver(result: GameState): void
+        -show(frame: JFrame): void
+    }
+
+    note right of AppController
+        Orchestrates all screen transitions.
+        Owns the wiring between views and controllers.
+        Views fire callbacks; AppController decides what to show next.
+    end note
+
     +class WelcomeView{
         -player1NameField: JTextField
         -player2NameField: JTextField
+        -standardRadioButton: JRadioButton
+        -chess960RadioButton: JRadioButton
 
         +WelcomeView()
+        +getPlayer1Name(): String
+        +getPlayer2Name(): String
+        +isChess960Selected(): boolean
+        +setStartGameAction(action: Runnable): void
+        ~clickStartGame(): void
         -createWelcomeScreenUI(): void
     }
 
+    +class EndGameView{
+        +EndGameView(result: GameState)
+        +setPlayAgainAction(action: Runnable): void
+        -createEndGameUI(): void
+    }
+
+    +class MainView{
+        -boardController: BoardController
+        -boardView: BoardView
+        -gameStatsView: GameStatsView
+
+        +MainView(player1Name: String, player2Name: String, board: Board)
+        +setGameOverAction(action: Consumer<GameState>): void
+        -configureMainView(): void
+        -addGameStatsView(): void
+        -addBoardView(): void
+        -registerBoardViewWithController(): void
+    }
+
     +class GameStatsView{
-        -currentPlayerLabel:JLabel
+        -{static}{final} MATCHUP_SEPARATOR: String
+        -currentPlayerLabel: JLabel
         -gameStateLabel: JLabel
 
         +GameStatsView(player1Name: String, player2Name: String)
         +updateCurrentPlayerLabel(playerName: String): void
         +updateGameStateLabel(gameState: GameState): void
-    }
-
-    +class MainView{
-        -boardView: BoardView
-        -boardController: BoardController
-        -gameStatsView: GameStatsView
-        -player1Name: String
-        -player2Name: String
-
-        +MainView(player1Name: String, player2Name: String)
-        -configureMainView(): void
-        -addGameStatsView(): void
-        -addBoardView(): void
     }
 
     +class BoardView{
@@ -43,9 +72,6 @@ package ui{
         -{static}{final} LIGHT_SQUARE_COLOR: Color
         -{static}{final} DARK_SQUARE_COLOR: Color
         -{static}{final} SELECTED_SQUARE_COLOR: Color
-
-        -selectedRow: int
-        -selectedCol: int
 
         -whitePieceImages: Map<PieceType, Image>
         -blackPieceImages: Map<PieceType, Image>
@@ -56,8 +82,8 @@ package ui{
         #paintComponent(g: Graphics): void
 
         -drawBoard(g: Graphics): void
-        -loadPieceIMages(): void
-        -loadOnePieceIMage(pieceType: PieceType, color: Color, imagePath: String): void
+        -loadPieceImages(): void
+        -loadOnePieceImage(pieceType: PieceType, color: PieceColor, imagePath: String): void
         -drawPieces(g: Graphics): void
         -drawSelectedSquare(g: Graphics): void
     }
@@ -67,30 +93,37 @@ package ui{
     }
 
     +class BoardController{
-        -boardView: BoardView
+        -{static}{final} BOARD_SIZE: int
         -board: Board
+        -boardView: BoardView
+        -lastSelectedLoc: Optional<Location>
+        -gameOverAction: Consumer<GameState>
 
-        -lastSelectedLoc: Location
-
-        +BoardController()
+        +BoardController(board: Board)
         +setBoardView(boardView: BoardView): void
+        +setGameOverAction(action: Consumer<GameState>): void
 
         +handleSquareClick(loc: Location): void
-        -determineAction(currentSelectedLoc: Location): void
+        -determineAction(loc: Location): void
+
+        +hasSelection(): boolean
+        +getSelectedLocation(): Optional<Location>
+        +getBoardSnapshot(): Piece[][]
+        +getCurrentGameState(): GameState
 
         -repaintBoardView(): void
-
-        +getBoardSnapshot(): Piece[][]
+        -{static} isInBounds(loc: Location): boolean
     }
 
     note right of BoardController::determineAction
-        The current selected location could be:
-        1) choosing a piece to move
-        2) choosing the destination location for a previously chosen piece to move to
-        3) invalid selection (empty or opponent's piece)
+        A click can be:
+        1) selecting a piece to move
+        2) choosing the destination for a previously selected piece
+        3) invalid selection (empty square or opponent's piece)
         4) part of a castling action
 
-        This method will determine which of the above cases it is.
+        After a move, checks getCurrentGameState().
+        If terminal (WHITE_WIN / BLACK_WIN / DRAW), fires gameOverAction.
     end note
 
 }
@@ -179,8 +212,6 @@ package domain{
             +isValidMoveShape(from: Location, to: Location): boolean
             +isSameColor(piece: Piece): boolean
         }
-
-
     }
 
     +interface BoardInitializer{
@@ -192,71 +223,46 @@ package domain{
     }
 
     +class FischerRandomBoardInitializer{
+        -random: Random
+        +FischerRandomBoardInitializer(random: Random)
         +getBoardLayout(): PieceType[][]
     }
 
     +class Board{
-        -{final} TOTAL_ROWS: int
-        -{final} TOTAL_COLS: int
+        -{static}{final} BOARD_SIZE: int
+        -{static}{final} BLACK_RANK_ROWS: int
         -pieces: Piece[][]
         -currentGameState: GameState
 
-        -blackKingLocation: Location
-        -whiteKingLocation: Location
-
-        +Board()
+        +Board(initialPieces: Piece[][])
         +Board(initializer: BoardInitializer)
+
+        +getCurrentGameState(): GameState
+        +getPieceAt(rank: int, file: int): Piece
         +getSnapshot(): Piece[][]
 
-        +movePiece(from: Square, to: Square): boolean
-        -isDestinationNotSameColor(from: Square, to: Square): boolean
-        -isMoveValidShape(from: Square, to: Square): boolean
-        -hasNoObstacle(from: Square, to: Square): boolean
-        -checkNotMoveIntoCheck(from: Square, to: Square): boolean
-
-        -capture(from: Location, to: Location): boolean
+        +movePiece(from: Location, to: Location): boolean
+        -isDestinationNotSameColor(from: Location, to: Location): boolean
+        -isMoveValidShape(from: Location, to: Location): boolean
+        -hasNoObstacle(from: Location, to: Location): boolean
+        -checkNotMoveIntoCheck(from: Location, to: Location): boolean
 
         +promotePawn(location: Location, newPieceType: PieceType): boolean
         +castle(kingFrom: Location, kingTo: Location, rookFrom: Location, rookTo: Location): boolean
 
+        +switchTurn(): void
         -updateGameState(): void
         -checkCheckmate(): void
         -checkStalemate(): void
-
-        -updateWhiteKingLocation(location: Location): void
-        -updateBlackKingLocation(location: Location): void
-
-        +switchTurn(): void
-        +getCurrentGameState(): GameState
-
-        -initializeBoard(): void
     }
 
     note left of Board::movePiece
-        First call isDestinationNotSameColor,
-        then isMoveValidShape,
-        then hasNoObstacle,
-        then checkNotMoveIntoCheck.
+        Returns true if move succeeded.
+        Calls in order: isDestinationNotSameColor,
+        isMoveValidShape, hasNoObstacle,
+        checkNotMoveIntoCheck.
+        On success, calls updateGameState().
     end note
-
-    note left of Board::isDestinationNotSameColor
-        First use 'from' and 'to' locations to get the Piece objects from the array.
-        Then use the Piece object's isSameColor method.
-
-        Chess rule: can't move to a location occupied by a piece of the same color.
-    end note
-
-    note left of Board::isValidShape
-        First 'from' location to get the Piece obejct form the array.
-        Then use the Piece object's isValidMoveShape method.
-    end note
-
-    note left of Board::hasNoObstacle
-        Check whether the piece can jump.
-        If no, check whether there is any piece
-        (obstacle) on the way.
-    end note
-
 
     +enum GameState{
         WHITE_TURN
@@ -292,19 +298,31 @@ package java{
   }
 }
 
-Main ..> WelcomeView
+' --- Entry point ---
+Main ..> AppController
 
+' --- AppController wires all screen transitions ---
+AppController --> WelcomeView
+AppController --> MainView
+AppController --> EndGameView
+AppController ..> Board
+AppController ..> BoardInitializer
+AppController ..> GameState
+
+' --- View inheritance ---
 WelcomeView -u-|> JFrame
-
+EndGameView -u-|> JFrame
 MainView -u-|> JFrame
-MainView --> BoardView
+GameStatsView -u-|> JPanel
+BoardView -u-|> JPanel
+BoardMouseListener -u-|> MouseAdapter
+
+' --- MainView internal composition ---
 MainView --> BoardController
+MainView --> BoardView
 MainView --> GameStatsView
 
-GameStatsView -u-|> JPanel
-GameStatsView --> GameState
-
-BoardView -u-|> JPanel
+' --- BoardView ---
 BoardView --> "3" Color
 BoardView --> "*" PieceType
 BoardView --> "*" Image
@@ -312,13 +330,16 @@ BoardView --> BoardController
 BoardView ..> Graphics
 BoardView --+ BoardMouseListener
 
-BoardMouseListener -u-|> MouseAdapter
-
-BoardController --> BoardView
+' --- BoardController ---
 BoardController --> Board
 BoardController ..> Location
 BoardController ..> Piece
+BoardController ..> GameState
 
+' --- GameStatsView ---
+GameStatsView ..> GameState
+
+' --- Piece hierarchy ---
 Bishop -u-|> Piece
 King -u-|> Piece
 Knight -u-|> Piece
@@ -327,10 +348,10 @@ Pawn -u-|> Piece
 Queen -u-|> Piece
 Rook -u-|> Piece
 
+' --- Board and initializers ---
 StandardBoardInitializer ..|> BoardInitializer
 FischerRandomBoardInitializer ..|> BoardInitializer
-Board --> BoardInitializer
-
+Board ..> BoardInitializer
 Board --> "64" Piece
 Board ..> Bishop
 Board ..> King
@@ -342,7 +363,9 @@ Board ..> Rook
 Board ..> PieceColor
 Board --> GameState
 
+' --- Piece internals ---
 Piece --> PieceType
 Piece --> PieceColor
 Piece ..> Location
+
 @enduml
