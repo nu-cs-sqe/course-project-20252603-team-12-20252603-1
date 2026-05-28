@@ -51,10 +51,15 @@ public class GameStatsView extends JPanel {
   }
 
   void updateCurrentPlayerLabel(GameState currentGameState) {
-    if (currentGameState == GameState.WHITE_TURN) {
-      updateCurrentPlayerLabel(player1Name);
-    } else {
-      updateCurrentPlayerLabel(player2Name);
+    switch (currentGameState) {
+      case WHITE_TURN:
+        updateCurrentPlayerLabel(player1Name);
+        break;
+      case BLACK_TURN:
+        updateCurrentPlayerLabel(player2Name);
+        break;
+      default:
+        throw new IllegalArgumentException("Current player label requires an active turn");
     }
   }
 }

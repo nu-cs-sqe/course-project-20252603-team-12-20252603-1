@@ -91,7 +91,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 | Input / state | Equivalence classes |
 | --- | --- |
 | `playerName` | empty `""`; whitespace-only; normal player name; long player name |
-| `currentGameState` | `WHITE_TURN`; `BLACK_TURN` |
+| `currentGameState` | `WHITE_TURN`; `BLACK_TURN`; terminal state (`WHITE_WIN`, `BLACK_WIN`, `DRAW`) |
 | Previous label text | same value as new label; different value from new label; updated more than once |
 | Game event that causes update | successful legal move |
 | Game event that should not cause update | click that does not complete a move: selection only, rejected move, opponent or empty square first click, out-of-bounds click |
@@ -103,7 +103,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 | Variable / output | Catalog type | Notes |
 | --- | --- | --- |
 | `playerName` | **Strings** | Empty, whitespace-only, short, long |
-| `currentGameState` | **Cases** | White turn vs black turn |
+| `currentGameState` | **Cases** | White turn, black turn, terminal/non-turn state |
 | Prior/current label text | **States** | Before update vs after update |
 | Turn transition | **Cases** | Turn changed, turn unchanged |
 | Move result | **Cases** | Successful move, no move completed |
@@ -112,7 +112,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 ### Step 3: Choose boundary values
 
 - Names: `"Alice"`; `"Bob"`; `""`; `"   "`; `"a".repeat(500)`.
-- Current game state: `WHITE_TURN`; `BLACK_TURN`.
+- Current game state: `WHITE_TURN`; `BLACK_TURN`; representative terminal state `WHITE_WIN`.
 - Turn-display boundaries: successful move changes the label; no completed move leaves the label unchanged.
 - Move-result boundaries: legal move; rejected move; selection-only click.
 - Setup boundaries: standard opening position and valid Chess960 opening position.
@@ -159,3 +159,8 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
   - **State of the system**: valid Chess960 game; current label shows active player `"Alice"`; a legal move succeeds and the turn switches
   - **Expected output**: current-player label text is `"Bob"`; Chess960 setup does not change the view update rule, and setup mode is not a `GameStatsView` input
+
+- **GS-TC17: UpdateCurrentPlayerLabel_OnTerminalGameState_ThrowsException** ( :white_check_mark: )
+  - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
+  - **State of the system**: current game state is terminal / non-turn state `WHITE_WIN`
+  - **Expected output**: throws `IllegalArgumentException`; terminal states are not mapped to either player's active-turn label

@@ -1,6 +1,7 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import domain.gamestate.GameState;
 import org.junit.jupiter.api.Test;
@@ -152,5 +153,14 @@ class GameStatsViewTest {
         String expected = "Alice";
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void UpdateCurrentPlayerLabel_OnTerminalGameState_ThrowsException() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> view.updateCurrentPlayerLabel(GameState.WHITE_WIN));
     }
 }
