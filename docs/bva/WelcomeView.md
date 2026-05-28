@@ -76,7 +76,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `isChess960Selected()` returns `false`
 
-- **WV-TC6: IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue** ( :x: )
+- **WV-TC6: IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isChess960Selected()`
   - **State of the system**: `WelcomeView` constructed; `chess960CheckBox` checked via package-private setter
   - **Expected output**: `isChess960Selected()` returns `true`

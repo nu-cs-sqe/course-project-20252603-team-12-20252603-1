@@ -63,4 +63,14 @@ class WelcomeViewTest {
         boolean actual = view.isChess960Selected();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue() {
+        WelcomeView view = new WelcomeView();
+        view.setChess960Selected(true);
+
+        boolean expected = true;
+        boolean actual = view.isChess960Selected();
+        assertEquals(expected, actual);
+    }
 }

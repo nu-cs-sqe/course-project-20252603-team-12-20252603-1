@@ -13,6 +13,7 @@ public class WelcomeView extends JFrame {
     public WelcomeView() {
         player1NameField = new JTextField();
         player2NameField = new JTextField();
+        chess960CheckBox = new JCheckBox();
         createWelcomeScreenUI();
     }
 
@@ -33,10 +34,11 @@ public class WelcomeView extends JFrame {
     }
 
     public boolean isChess960Selected() {
-        return false;
+        return chess960CheckBox.isSelected();
     }
 
     void setChess960Selected(boolean selected) {
+        chess960CheckBox.setSelected(selected);
     }
 
     private void createWelcomeScreenUI() {
