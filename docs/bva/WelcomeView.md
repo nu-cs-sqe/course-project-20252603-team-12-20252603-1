@@ -47,6 +47,39 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **Expected output**: `getPlayer1Name()` returns `"Alice"`
 
 - **WV-TC4: GetPlayer2Name_WhenFieldHasText_ReturnsEnteredName** ( :white_check_mark: )
+
+---
+
+## Method / behavior: `isChess960Selected()`
+
+### Step 1: Input and output equivalence classes
+
+| Concern | Equivalence classes |
+| ------- | ------------------- |
+| `chess960CheckBox` state | Unchecked (default) → `false`; checked → `true` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `isChess960Selected()` result | Boolean | `false` (unchecked) vs `true` (checked) — two-state boundary |
+
+### Step 3: Concrete boundary values
+
+- `false`: JCheckBox default — user has not selected Chess960.
+- `true`: user has checked the box.
+
+### Step 4: Test cases
+
+- **WV-TC5: IsChess960Selected_OnFreshWelcomeView_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `WelcomeView()`, `isChess960Selected()`
+  - **State of the system**: freshly constructed `WelcomeView`
+  - **Expected output**: `isChess960Selected()` returns `false`
+
+- **WV-TC6: IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isChess960Selected()`
+  - **State of the system**: `WelcomeView` constructed; `chess960CheckBox` checked via package-private setter
+  - **Expected output**: `isChess960Selected()` returns `true`
   - **Method(s) under test**: `getPlayer2Name()`
   - **State of the system**: `WelcomeView` constructed; `player2NameField` text set to `"Bob"` via package-private setter
   - **Expected output**: `getPlayer2Name()` returns `"Bob"`
