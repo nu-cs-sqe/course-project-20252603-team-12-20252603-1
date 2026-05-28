@@ -132,11 +132,7 @@ public class WelcomeView extends JFrame {
         startButton.setBorderPainted(false);
         startButton.setMaximumSize(new java.awt.Dimension(180, 42));
         startButton.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-        startButton.addActionListener(e -> {
-            if (startGameAction != null) {
-                startGameAction.run();
-            }
-        });
+        startButton.addActionListener(e -> clickStartGame());
         panel.add(startButton);
 
         setTitle("Chess");
