@@ -10,15 +10,20 @@ package ui{
     +class AppController{
         -currentFrame: JFrame
 
+        +AppController()
         +start(): void
         -onGameStart(player1Name: String, player2Name: String, isChess960: boolean): void
         -onGameOver(result: GameState): void
-        -show(frame: JFrame): void
+        -onPlayAgain(): void
+        -transitionTo(frame: JFrame): void
     }
 
     note right of AppController
-        Orchestrates all screen transitions.
-        Owns the wiring between views and controllers.
+        Constructor creates and wires the initial WelcomeView,
+        storing it in currentFrame so the field is never absent.
+        start() makes currentFrame visible (called once from Main).
+        All subsequent screen changes go through transitionTo(),
+        which disposes the current frame and shows the new one.
         Views fire callbacks; AppController decides what to show next.
     end note
 
