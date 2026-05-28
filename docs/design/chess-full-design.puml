@@ -10,12 +10,14 @@ package ui{
     +class WelcomeView{
         -player1NameField: JTextField
         -player2NameField: JTextField
-        -chess960CheckBox: JCheckBox
+        -standardRadioButton: JRadioButton
+        -chess960RadioButton: JRadioButton
 
         +WelcomeView()
         +getPlayer1Name(): String
         +getPlayer2Name(): String
         +isChess960Selected(): boolean
+        +setStartGameAction(action: Runnable): void
         -createWelcomeScreenUI(): void
     }
 
