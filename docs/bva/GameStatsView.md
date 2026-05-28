@@ -150,7 +150,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `BLACK_TURN`
   - **Expected output**: current-player label text is `"Bob"`
 
-- **GS-TC15: UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName** ( :x: )
+- **GS-TC15: UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)` integration contract
   - **State of the system**: current label shows active player `"Alice"`; user action does not complete a move, such as selection only, rejected illegal destination, opponent/empty first click, or out-of-bounds click
   - **Expected output**: current-player label remains `"Alice"`; the UI is not updated to the opponent name

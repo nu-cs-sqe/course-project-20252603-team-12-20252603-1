@@ -142,4 +142,15 @@ class GameStatsViewTest {
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+
+        view.updateCurrentPlayerLabel(GameState.WHITE_TURN);
+
+        String expected = "Alice";
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
 }
