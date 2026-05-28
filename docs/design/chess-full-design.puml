@@ -10,10 +10,12 @@ package ui{
     +class WelcomeView{
         -player1NameField: JTextField
         -player2NameField: JTextField
+        -chess960CheckBox: JCheckBox
 
         +WelcomeView()
         +getPlayer1Name(): String
         +getPlayer2Name(): String
+        +isChess960Selected(): boolean
         -createWelcomeScreenUI(): void
     }
 
@@ -33,7 +35,7 @@ package ui{
         -player1Name: String
         -player2Name: String
 
-        +MainView(player1Name: String, player2Name: String)
+        +MainView(player1Name: String, player2Name: String, chess960: boolean)
         -configureMainView(): void
         -addGameStatsView(): void
         -addBoardView(): void
@@ -74,7 +76,7 @@ package ui{
 
         -lastSelectedLoc: Location
 
-        +BoardController()
+        +BoardController(initializer: BoardInitializer)
         +setBoardView(boardView: BoardView): void
 
         +handleSquareClick(loc: Location): void
@@ -318,6 +320,7 @@ BoardMouseListener -u-|> MouseAdapter
 
 BoardController --> BoardView
 BoardController --> Board
+BoardController ..> BoardInitializer
 BoardController ..> Location
 BoardController ..> Piece
 
