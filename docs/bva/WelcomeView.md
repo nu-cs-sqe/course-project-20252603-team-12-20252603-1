@@ -2,9 +2,11 @@
 
 Package: `ui.WelcomeView`
 
-Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`getPlayer2Name()`** (getter delegation to JTextField). `createWelcomeScreenUI` is **untestable** (Swing UI assembly side-effect) and is excluded from this BVA.
+Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPlayer2Name()`** (getter delegation to JTextField), **`isChess960Selected()`** (radio button state), and **`setStartGameAction(Runnable)`** (action wiring). `createWelcomeScreenUI` is **untestable** (Swing UI assembly side-effect) and is excluded from this BVA.
 
 **Headless guard:** `WelcomeView` extends `JFrame`, which cannot be instantiated in a headless JVM. All TCs use a `@BeforeAll assumeTrue(!GraphicsEnvironment.isHeadless())` guard so they skip cleanly on headless CI and run on machines with a display.
+
+**Radio button note:** Game mode is selected via `standardRadioButton` / `chess960RadioButton` in a `ButtonGroup`. Standard is selected by default. `isChess960Selected()` delegates to `chess960RadioButton.isSelected()`. Tests use a package-private `setChess960Selected(boolean)` setter to flip state without navigating the component tree.
 
 ---
 
@@ -47,6 +49,9 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **Expected output**: `getPlayer1Name()` returns `"Alice"`
 
 - **WV-TC4: GetPlayer2Name_WhenFieldHasText_ReturnsEnteredName** ( :white_check_mark: )
+  - **Method(s) under test**: `getPlayer2Name()`
+  - **State of the system**: `WelcomeView` constructed; `player2NameField` text set to `"Bob"` via package-private setter
+  - **Expected output**: `getPlayer2Name()` returns `"Bob"`
 
 ---
 
@@ -56,18 +61,18 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
 
 | Concern | Equivalence classes |
 | ------- | ------------------- |
-| `chess960CheckBox` state | Unchecked (default) → `false`; checked → `true` |
+| `chess960RadioButton` state | Unselected (default, `standardRadioButton` selected) → `false`; selected → `true` |
 
 ### Step 2: BVA catalog data types
 
 | Variable / output | Catalog type | Notes |
 | ----------------- | ------------ | ----- |
-| `isChess960Selected()` result | Boolean | `false` (unchecked) vs `true` (checked) — two-state boundary |
+| `isChess960Selected()` result | Boolean | `false` (standard selected by default) vs `true` (Chess960 selected) — two-state boundary |
 
 ### Step 3: Concrete boundary values
 
-- `false`: JCheckBox default — user has not selected Chess960.
-- `true`: user has checked the box.
+- `false`: `standardRadioButton` selected by default on construction.
+- `true`: `chess960RadioButton` selected.
 
 ### Step 4: Test cases
 
@@ -76,10 +81,35 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `isChess960Selected()` returns `false`
 
-- **WV-TC6: IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue** ( :white_check_mark: )
+- **WV-TC6: IsChess960Selected_WhenChess960RadioIsSelected_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isChess960Selected()`
-  - **State of the system**: `WelcomeView` constructed; `chess960CheckBox` checked via package-private setter
+  - **State of the system**: `WelcomeView` constructed; `chess960RadioButton` selected via package-private setter
   - **Expected output**: `isChess960Selected()` returns `true`
-  - **Method(s) under test**: `getPlayer2Name()`
-  - **State of the system**: `WelcomeView` constructed; `player2NameField` text set to `"Bob"` via package-private setter
-  - **Expected output**: `getPlayer2Name()` returns `"Bob"`
+
+---
+
+## Method / behavior: `setStartGameAction(Runnable action)`
+
+### Step 1: Input and output equivalence classes
+
+| Concern | Equivalence classes |
+| ------- | ------------------- |
+| Action registration | Runnable registered → invoked when Start Game is clicked |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| Invocation count | Integer | 0 (not clicked) vs 1 (clicked once) |
+
+### Step 3: Concrete boundary values
+
+- 0: action not yet invoked (button not clicked).
+- 1: button clicked once → action invoked exactly once.
+
+### Step 4: Test cases
+
+- **WV-TC7: SetStartGameAction_WhenStartGameClicked_ActionIsInvoked** ( :x: )
+  - **Method(s) under test**: `setStartGameAction(Runnable)`
+  - **State of the system**: `WelcomeView` constructed; a counting `Runnable` registered; Start Game triggered via package-private `clickStartGame()`
+  - **Expected output**: Runnable invoked exactly once
