@@ -1,141 +1,158 @@
 # BVA Analysis for GameStatsView
 
-Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
+Package: `ui.GameStatsView`
 
-**API contract:** All `String` parameters are **non-null**. Callers (e.g. game setup / controller code) must not pass `null`. `GameStatsView` does not validate null; invalid null input is **out of scope** (unrepresentable boundary — not tested here).
+Scope: **Game Initialization** and **Move Piece current-player display**. `GameStatsView` is a view, so this BVA intentionally stays small: it checks visible label text, not board rules. `GameStatsView` does not own board state, legal-move validation, selection, move count, check detection, or piece movement. Its responsibility in the move story is to display the player whose turn is active after the controller/domain layer decides whether a move succeeded.
+
+**API contract:** All `String` parameters are **non-null**. Callers must not pass `null`. Invalid `null` input is out of scope and is not a BVA boundary for this class.
+
+## Move Story Analysis
+
+For the move-piece story, the main `GameStatsView` action is `updateCurrentPlayerLabel(String)`: after `BoardController` successfully completes a legal move and switches `WHITE_TURN` to `BLACK_TURN` or `BLACK_TURN` to `WHITE_TURN`, the UI layer should call this method with the next active player's display name.
+
+Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-square clicks, and out-of-bounds clicks should not change the current-player label because no successful move occurred and the turn did not switch. Those behaviors are mainly `BoardController` / `MainView` integration responsibilities; this BVA documents the expected `GameStatsView` label result for that story boundary.
 
 ## Method / behavior: `GameStatsView(String player1Name, String player2Name)`
 
-### Step 1: Input and output equivalence classes
+### Step 1: Identify inputs and outputs
 
-| Input / concern                          | Equivalence classes                                                                                                                                                     |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `player1Name`                            | empty `""`; whitespace-only; short ASCII; long string; non-ASCII (e.g. accented or CJK). **`null` — unrepresentable** (caller contract)                                |
-| `player2Name`                            | same dimensions as `player1Name`                                                                                                                                        |
-| **Pairs** (`player1Name`, `player2Name`) | both empty; one empty / one non-empty (`("", "Bob")` representative); both non-empty and equal; both non-empty and different                                            |
-| Initial labels                           | Constructor leaves the panel in a **consistent** initial state: current-player label shows player 1 name; matchup label uses `"<p1> vs <p2>"` via `formatMatchupLine` |
+| Input / output | Equivalence classes |
+| --- | --- |
+| `player1Name` | empty `""`; whitespace-only; short non-empty; long string |
+| `player2Name` | empty `""`; whitespace-only; short non-empty; long string |
+| Pair of names | both empty; one empty and one non-empty; equal non-empty names; distinct non-empty names |
+| Initial current-player label | shows `player1Name`, because a new game starts with white / player one active |
+| Matchup label | shows `"<player1Name> vs <player2Name>"`; separator remains even when one or both names are empty |
 
-### Step 2: BVA catalog data types
+### Step 2: Identify data types
 
-| Variable / output             | Catalog type           | Notes                                                                   |
-| ----------------------------- | ---------------------- | ----------------------------------------------------------------------- |
-| Each name parameter           | **Strings**            | empty; same length differ in last char; one shorter prefix of the other |
-| Pair of names                 | **Pairs of variables** | smallest/largest length pairs if you cap length                         |
-| Label text after construction | **String** / **Cases** | `<p1> vs <p2>` concatenation (empty names yield empty side, separator kept) |
-| Swing tree                    | **IMPLEMENTATION**     | focus tests on **public text outcomes**, not pixel layout               |
+| Variable / output | Catalog type | Notes |
+| --- | --- | --- |
+| `player1Name`, `player2Name` | **Strings** | Empty, whitespace-only, short, long |
+| Pair of names | **Pairs of variables** | The two names combine to form the matchup label |
+| Initial current-player label | **Cases** | New standard and Chess960 games both begin with player one / white active |
+| Matchup label text | **Strings** | Concatenation of both names with `" vs "` |
 
-### Step 3: Concrete boundary values (catalog-aligned)
+### Step 3: Choose boundary values
 
-- Strings: `""`; `" "` or `"\t"`; `"A"`; `"Alice"`; a long repeated `'a'` (constructor names only in this scope).
-- Pairs: `("", "")`; `("", "Bob")`; `("Pat", "Pat")`; `("Alice", "Bob")`.
-- **`null`:** not a valid input — documented caller contract; no unit test.
+- Strings: `""`; `"   "`; `"A"`; `"Alice"`; `"a".repeat(500)`.
+- Name pairs: `("", "")`; `("", "Bob")`; `("Pat", "Pat")`; `("Alice", "Bob")`.
+- Game start cases: standard start and Chess960 start use the same labels; no separate view test is needed for setup mode.
+- `null` is not a valid input under the class contract and should not be tested.
 
-### Step 4: Test cases (each-choice; avoid combinatorial explosion)
+### Step 4: Test cases
 
 - **GS-TC1: Constructor_OnBothNamesNonEmpty_CurrentPlayerLabelShowsPlayerOneName** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: `player1Name` and `player2Name` are short distinct non-empty strings
-  - **Expected output**: `currentPlayerLabel` shows player 1’s name — **one assertion**
+  - **State of the system**: standard new game; `player1Name == "Alice"` and `player2Name == "Bob"`
+  - **Expected output**: current-player label text is `"Alice"`
 
 - **GS-TC2: Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: same as GS-TC1
-  - **Expected output**: `gameStateLabel` shows `"Alice vs Bob"` for `"Alice"`, `"Bob"` — **one assertion**
+  - **State of the system**: standard new game; `player1Name == "Alice"` and `player2Name == "Bob"`
+  - **Expected output**: matchup label text is `"Alice vs Bob"`
 
 - **GS-TC3: Constructor_OnBothNamesEmpty_CurrentPlayerLabelEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: both names are `""`
-  - **Expected output**: `currentPlayerLabel` text is empty
+  - **State of the system**: standard new game; both names are `""`
+  - **Expected output**: current-player label text is `""`
 
 - **GS-TC4: Constructor_OnBothNamesEmpty_MatchupLabelShowsVersusSeparator** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: both names are `""`
-  - **Expected output**: `gameStateLabel` shows `" vs "` (`"" + " vs " + ""`)
+  - **State of the system**: standard new game; both names are `""`
+  - **Expected output**: matchup label text is `" vs "`
 
 - **GS-TC5: Constructor_OnOneNameEmptyOtherNonEmpty_CurrentPlayerLabelEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: `player1Name == ""`, `player2Name == "Bob"`
-  - **Expected output**: `currentPlayerLabel` text is empty
+  - **State of the system**: standard new game; `player1Name == ""` and `player2Name == "Bob"`
+  - **Expected output**: current-player label text is `""`
 
 - **GS-TC6: Constructor_OnOneNameEmptyOtherNonEmpty_MatchupLabelShowsVersusLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: `player1Name == ""`, `player2Name == "Bob"`
-  - **Expected output**: `gameStateLabel` shows `" vs Bob"`
+  - **State of the system**: standard new game; `player1Name == ""` and `player2Name == "Bob"`
+  - **Expected output**: matchup label text is `" vs Bob"`
 
 - **GS-TC7: Constructor_OnEqualNames_CurrentPlayerLabelShowsName** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: both names are the same non-empty string (`"Pat"`, `"Pat"`)
-  - **Expected output**: `currentPlayerLabel` shows `"Pat"`
+  - **State of the system**: standard new game; both names are `"Pat"`
+  - **Expected output**: current-player label text is `"Pat"`
 
 - **GS-TC8: Constructor_OnEqualNames_MatchupLabelShowsVersusLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: both names are `"Pat"`, `"Pat"`
-  - **Expected output**: `gameStateLabel` shows `"Pat vs Pat"`
-
-- **GS-TC9: Constructor_OnNullName_N/A** ( N/A )
-  - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: `null` name argument
-  - **Expected output**: not specified — **callers must not pass null**; no defensive check in `GameStatsView`
-
-- **GS-TC10: Constructor_OnPlayerTwoEmptyPlayerOneNonEmpty_N/A** ( N/A )
-  - **Method(s) under test**: `GameStatsView(String, String)`
-  - **State of the system**: `("Bob", "")` swapped pair vs GS-TC5
-  - **Expected output**: same `<p1> vs <p2>` rule as GS-TC6 (`"Bob vs "`); redundant with formatting logic already covered by GS-TC5–GS-TC6
+  - **State of the system**: standard new game; both names are `"Pat"`
+  - **Expected output**: matchup label text is `"Pat vs Pat"`
 
 ---
 
 ## Method: `updateCurrentPlayerLabel(String playerName)`
 
-### Step 1: Input and output equivalence classes
+### Step 1: Identify inputs and outputs
 
-| Input            | Classes                                                                                            |
-| ---------------- | -------------------------------------------------------------------------------------------------- |
-| `playerName`     | `""`; whitespace-only; normal name; very long. **`null` — unrepresentable** (caller contract)     |
-| Prior label text | non-empty from construction, then overwritten (**overwriting previous contents**)                |
+| Input / state | Equivalence classes |
+| --- | --- |
+| `playerName` | empty `""`; whitespace-only; normal player name; long player name |
+| Previous label text | same value as new label; different value from new label; updated more than once |
+| Game event that causes update | successful legal move |
+| Game event that should not cause update | click that does not complete a move: selection only, rejected move, opponent or empty square first click, out-of-bounds click |
+| Setup mode | standard start; Chess960 start |
+| Output | current-player label shows exactly the latest supplied active-player name |
 
-### Step 2: BVA catalog data types
+### Step 2: Identify data types
 
-| Concern          | Catalog type                                                                                  |
-| ---------------- | --------------------------------------------------------------------------------------------- |
-| `playerName`     | **Strings** (empty, whitespace-only, long); **null** unrepresentable per API contract         |
-| Repeated updates | **Overwriting the previous contents** (shorter then longer replacement)                       |
-| `JLabel` display | **Streaming / fixed UI string** — displayed text is the output per call                       |
+| Variable / output | Catalog type | Notes |
+| --- | --- | --- |
+| `playerName` | **Strings** | Empty, whitespace-only, short, long |
+| Prior/current label text | **States** | Before update vs after update |
+| Turn transition | **Cases** | Turn changed, turn unchanged |
+| Move result | **Cases** | Successful move, no move completed |
+| Setup mode | **Cases** | Standard and Chess960 use the same label update rule |
 
-### Step 3: Concrete boundary values
+### Step 3: Choose boundary values
 
-- `""` vs non-empty overwrite; whitespace-only string verbatim.
-- Two calls: `"Alice"` then `"Bob"`.
-- Long string (500 ASCII chars): full text shown (no truncation in this story).
-- **`null`:** not a valid input — documented caller contract; no unit test.
+- Names: `"Alice"`; `"Bob"`; `""`; `"   "`; `"a".repeat(500)`.
+- Turn-display boundaries: successful move changes the label; no completed move leaves the label unchanged.
+- Move-result boundaries: legal move; rejected move; selection-only click.
+- Setup boundaries: standard opening position and valid Chess960 opening position.
+- `null` is not a valid input under the class contract and should not be tested.
 
 ### Step 4: Test cases
 
-- **GS-TC11: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :white_check_mark: )
+- **GS-TC9: UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: constructed view; argument is a normal non-empty name
-  - **Expected output**: `currentPlayerLabel` shows exactly that string (delegates to `JLabel.setText`)
+  - **State of the system**: constructed view currently shows `"Alice"`; update argument is `"Carol"`
+  - **Expected output**: current-player label text is `"Carol"`
 
-- **GS-TC12: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :white_check_mark: )
+- **GS-TC10: UpdateCurrentPlayerLabel_OnEmptyString_LabelShowsEmptyPolicy** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: label previously non-empty; argument is `""`
-  - **Expected output**: `currentPlayerLabel` text is empty
+  - **State of the system**: constructed view currently shows a non-empty name; update argument is `""`
+  - **Expected output**: current-player label text is `""`
 
-- **GS-TC13: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :white_check_mark: )
+- **GS-TC11: UpdateCurrentPlayerLabel_OnWhitespaceOnly_LabelShowsWhitespacePolicy** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: argument is `"   "`
-  - **Expected output**: label text equals the argument verbatim (no trim)
+  - **State of the system**: constructed view; update argument is `"   "`
+  - **Expected output**: current-player label text is exactly `"   "`
 
-- **GS-TC14: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :white_check_mark: )
+- **GS-TC12: UpdateCurrentPlayerLabel_SecondCallOverwritesFirst_LabelShowsLatest** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)` twice
-  - **State of the system**: first `"Alice"`, then `"Bob"`
-  - **Expected output**: final label text is `"Bob"`
+  - **State of the system**: first update argument is `"Alice"`; second update argument is `"Bob"`
+  - **Expected output**: current-player label text is `"Bob"`
 
-- **GS-TC15: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :white_check_mark: )
+- **GS-TC13: UpdateCurrentPlayerLabel_OnLongName_NoExceptionAndLabelUpdated** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: argument is 500 ASCII `'a'` characters
-  - **Expected output**: no exception; label text equals the full argument
+  - **State of the system**: constructed view; update argument is 500 ASCII `'a'` characters
+  - **Expected output**: current-player label text equals the full long name
 
-- **GS-TC16: UpdateCurrentPlayerLabel_OnNullName_N/A** ( N/A )
+- **GS-TC14: UpdateCurrentPlayerLabel_AfterSuccessfulMove_LabelShowsOpponentPlayerName** ( :x: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: `playerName` is `null`
-  - **Expected output**: not specified — **callers must not pass null**
+  - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `"Bob"`
+  - **Expected output**: current-player label text is `"Bob"`
+
+- **GS-TC15: UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName** ( :x: )
+  - **Method(s) under test**: `updateCurrentPlayerLabel(String)` integration contract
+  - **State of the system**: current label shows active player `"Alice"`; user action does not complete a move, such as selection only, rejected illegal destination, opponent/empty first click, or out-of-bounds click
+  - **Expected output**: current-player label remains `"Alice"`; the UI is not updated to the opponent name
+
+- **GS-TC16: UpdateCurrentPlayerLabel_AfterChess960LegalMove_UsesSameOpponentNameRule** ( :x: )
+  - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
+  - **State of the system**: valid Chess960 game; current label shows active player `"Alice"`; a legal move succeeds and the turn switches
+  - **Expected output**: current-player label text is `"Bob"`; Chess960 setup does not change the view update rule
