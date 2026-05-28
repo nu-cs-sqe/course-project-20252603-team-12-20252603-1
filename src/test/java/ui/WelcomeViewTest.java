@@ -11,7 +11,6 @@ class WelcomeViewTest {
 
     @BeforeAll
     static void requireDisplay() {
-        System.setProperty("java.awt.headless", "false");
         assumeTrue(
             !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
             "Skipping WelcomeView tests: no display available");
