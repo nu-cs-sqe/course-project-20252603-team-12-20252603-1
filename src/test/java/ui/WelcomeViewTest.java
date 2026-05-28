@@ -54,4 +54,13 @@ class WelcomeViewTest {
         String actual = view.getPlayer2Name();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void IsChess960Selected_OnFreshWelcomeView_ReturnsFalse() {
+        WelcomeView view = new WelcomeView();
+
+        boolean expected = false;
+        boolean actual = view.isChess960Selected();
+        assertEquals(expected, actual);
+    }
 }

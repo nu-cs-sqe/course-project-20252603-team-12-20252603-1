@@ -71,7 +71,7 @@ Scope: **Constructor** (field initialization) and **`getPlayer1Name()`** / **`ge
 
 ### Step 4: Test cases
 
-- **WV-TC5: IsChess960Selected_OnFreshWelcomeView_ReturnsFalse** ( :x: )
+- **WV-TC5: IsChess960Selected_OnFreshWelcomeView_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView()`, `isChess960Selected()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `isChess960Selected()` returns `false`
