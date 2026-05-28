@@ -65,7 +65,7 @@ class WelcomeViewTest {
     }
 
     @Test
-    void IsChess960Selected_WhenCheckBoxIsChecked_ReturnsTrue() {
+    void IsChess960Selected_WhenChess960RadioIsSelected_ReturnsTrue() {
         WelcomeView view = new WelcomeView();
         view.setChess960Selected(true);
 
