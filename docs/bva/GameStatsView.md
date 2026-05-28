@@ -8,7 +8,7 @@ Scope: **Game Initialization** and **Move Piece current-player display**. `GameS
 
 ## Move Story Analysis
 
-For the move-piece story, the main `GameStatsView` action is `updateCurrentPlayerLabel(String)`: after `BoardController` successfully completes a legal move and switches `WHITE_TURN` to `BLACK_TURN` or `BLACK_TURN` to `WHITE_TURN`, the UI layer should call this method with the next active player's display name.
+For the move-piece story, the main `GameStatsView` action is updating the current-player label from the active `GameState`: after `BoardController` successfully completes a legal move and switches `WHITE_TURN` to `BLACK_TURN` or `BLACK_TURN` to `WHITE_TURN`, the UI layer should ask the stats view to show the matching player name.
 
 Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-square clicks, and out-of-bounds clicks should not change the current-player label because no successful move occurred and the turn did not switch. Those behaviors are mainly `BoardController` / `MainView` integration responsibilities; this BVA documents the expected `GameStatsView` label result for that story boundary.
 
@@ -91,6 +91,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 | Input / state | Equivalence classes |
 | --- | --- |
 | `playerName` | empty `""`; whitespace-only; normal player name; long player name |
+| `currentGameState` | `WHITE_TURN`; `BLACK_TURN` |
 | Previous label text | same value as new label; different value from new label; updated more than once |
 | Game event that causes update | successful legal move |
 | Game event that should not cause update | click that does not complete a move: selection only, rejected move, opponent or empty square first click, out-of-bounds click |
@@ -102,6 +103,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 | Variable / output | Catalog type | Notes |
 | --- | --- | --- |
 | `playerName` | **Strings** | Empty, whitespace-only, short, long |
+| `currentGameState` | **Cases** | White turn vs black turn |
 | Prior/current label text | **States** | Before update vs after update |
 | Turn transition | **Cases** | Turn changed, turn unchanged |
 | Move result | **Cases** | Successful move, no move completed |
@@ -110,6 +112,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
 ### Step 3: Choose boundary values
 
 - Names: `"Alice"`; `"Bob"`; `""`; `"   "`; `"a".repeat(500)`.
+- Current game state: `WHITE_TURN`; `BLACK_TURN`.
 - Turn-display boundaries: successful move changes the label; no completed move leaves the label unchanged.
 - Move-result boundaries: legal move; rejected move; selection-only click.
 - Setup boundaries: standard opening position and valid Chess960 opening position.
@@ -143,8 +146,8 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **Expected output**: current-player label text equals the full long name
 
 - **GS-TC14: UpdateCurrentPlayerLabel_AfterSuccessfulMove_LabelShowsOpponentPlayerName** ( :x: )
-  - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `"Bob"`
+  - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
+  - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `BLACK_TURN`
   - **Expected output**: current-player label text is `"Bob"`
 
 - **GS-TC15: UpdateCurrentPlayerLabel_WhenNoMoveCompletes_LabelRemainsActivePlayerName** ( :x: )
@@ -153,6 +156,6 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **Expected output**: current-player label remains `"Alice"`; the UI is not updated to the opponent name
 
 - **GS-TC16: UpdateCurrentPlayerLabel_AfterChess960LegalMove_UsesSameOpponentNameRule** ( :x: )
-  - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
+  - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
   - **State of the system**: valid Chess960 game; current label shows active player `"Alice"`; a legal move succeeds and the turn switches
   - **Expected output**: current-player label text is `"Bob"`; Chess960 setup does not change the view update rule
