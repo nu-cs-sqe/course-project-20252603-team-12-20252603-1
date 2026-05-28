@@ -109,7 +109,7 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
 
 ### Step 4: Test cases
 
-- **WV-TC7: SetStartGameAction_WhenStartGameClicked_ActionIsInvoked** ( :x: )
+- **WV-TC7: SetStartGameAction_WhenStartGameClicked_ActionIsInvoked** ( :white_check_mark: )
   - **Method(s) under test**: `setStartGameAction(Runnable)`
   - **State of the system**: `WelcomeView` constructed; a counting `Runnable` registered; Start Game triggered via package-private `clickStartGame()`
   - **Expected output**: Runnable invoked exactly once

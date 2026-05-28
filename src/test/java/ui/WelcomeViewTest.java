@@ -73,4 +73,16 @@ class WelcomeViewTest {
         boolean actual = view.isChess960Selected();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void SetStartGameAction_WhenStartGameClicked_ActionIsInvoked() {
+        WelcomeView view = new WelcomeView();
+        int[] callCount = {0};
+        view.setStartGameAction(() -> callCount[0]++);
+        view.clickStartGame();
+
+        int expected = 1;
+        int actual = callCount[0];
+        assertEquals(expected, actual);
+    }
 }
