@@ -113,3 +113,8 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
   - **Method(s) under test**: `setStartGameAction(Runnable)`
   - **State of the system**: `WelcomeView` constructed; a counting `Runnable` registered; Start Game triggered via package-private `clickStartGame()`
   - **Expected output**: Runnable invoked exactly once
+
+- **WV-TC8: ClickStartGame_WhenNoActionRegistered_DoesNotThrow** ( :white_check_mark: )
+  - **Method(s) under test**: `clickStartGame()`
+  - **State of the system**: `WelcomeView` constructed; no action registered; `clickStartGame()` called
+  - **Expected output**: no exception thrown
