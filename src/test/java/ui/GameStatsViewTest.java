@@ -2,6 +2,7 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import domain.gamestate.GameState;
 import org.junit.jupiter.api.Test;
 
 class GameStatsViewTest {
@@ -127,6 +128,17 @@ class GameStatsViewTest {
         view.updateCurrentPlayerLabel(longName);
 
         String expected = longName;
+        String actual = view.getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void UpdateCurrentPlayerLabel_AfterSuccessfulMove_LabelShowsOpponentPlayerName() {
+        GameStatsView view = new GameStatsView("Alice", "Bob");
+
+        view.updateCurrentPlayerLabel(GameState.BLACK_TURN);
+
+        String expected = "Bob";
         String actual = view.getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }

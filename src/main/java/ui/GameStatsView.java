@@ -1,5 +1,6 @@
 package ui;
 
+import domain.gamestate.GameState;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -12,6 +13,8 @@ public class GameStatsView extends JPanel {
 
   private static final String MATCHUP_SEPARATOR = " vs ";
 
+  private final String player1Name;
+  private final String player2Name;
   private final JLabel currentPlayerLabel;
   private final JLabel gameStateLabel;
 
@@ -20,6 +23,8 @@ public class GameStatsView extends JPanel {
    * @param player2Name non-null player two name (may be empty)
    */
   public GameStatsView(String player1Name, String player2Name) {
+    this.player1Name = player1Name;
+    this.player2Name = player2Name;
     currentPlayerLabel = new JLabel(player1Name);
     gameStateLabel = new JLabel(formatMatchupLine(player1Name, player2Name));
     add(currentPlayerLabel);
@@ -43,5 +48,13 @@ public class GameStatsView extends JPanel {
    */
   public void updateCurrentPlayerLabel(String playerName) {
     currentPlayerLabel.setText(playerName);
+  }
+
+  void updateCurrentPlayerLabel(GameState currentGameState) {
+    if (currentGameState == GameState.WHITE_TURN) {
+      updateCurrentPlayerLabel(player1Name);
+    } else {
+      updateCurrentPlayerLabel(player2Name);
+    }
   }
 }

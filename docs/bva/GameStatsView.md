@@ -145,7 +145,7 @@ Selection-only clicks, rejected illegal moves, opponent-piece clicks, empty-squa
   - **State of the system**: constructed view; update argument is 500 ASCII `'a'` characters
   - **Expected output**: current-player label text equals the full long name
 
-- **GS-TC14: UpdateCurrentPlayerLabel_AfterSuccessfulMove_LabelShowsOpponentPlayerName** ( :x: )
+- **GS-TC14: UpdateCurrentPlayerLabel_AfterSuccessfulMove_LabelShowsOpponentPlayerName** ( :white_check_mark: )
   - **Method(s) under test**: `updateCurrentPlayerLabel(GameState)`
   - **State of the system**: current label shows active player `"Alice"`; a legal move succeeds and the controller/domain layer switches the turn to `BLACK_TURN`
   - **Expected output**: current-player label text is `"Bob"`
