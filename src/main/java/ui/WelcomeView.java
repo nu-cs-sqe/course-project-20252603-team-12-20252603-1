@@ -43,12 +43,14 @@ public class WelcomeView extends JFrame {
 
     private void createWelcomeScreenUI() {
         // untestable: Swing UI assembly
-        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(3, 2, 10, 10));
+        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(4, 2, 10, 10));
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.add(new javax.swing.JLabel("Player 1 Name:"));
         panel.add(player1NameField);
         panel.add(new javax.swing.JLabel("Player 2 Name:"));
         panel.add(player2NameField);
+        panel.add(new javax.swing.JLabel("Play Chess960:"));
+        panel.add(chess960CheckBox);
 
         javax.swing.JButton startButton = new javax.swing.JButton("Start Game");
         panel.add(new javax.swing.JLabel());
