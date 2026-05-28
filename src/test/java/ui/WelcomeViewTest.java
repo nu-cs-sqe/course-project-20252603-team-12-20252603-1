@@ -84,4 +84,10 @@ class WelcomeViewTest {
         int actual = callCount[0];
         assertEquals(expected, actual);
     }
+
+    @Test
+    void ClickStartGame_WhenNoActionRegistered_DoesNotThrow() {
+        WelcomeView view = new WelcomeView();
+        view.clickStartGame();
+    }
 }
