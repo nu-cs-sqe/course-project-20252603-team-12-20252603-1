@@ -17,9 +17,12 @@ public class MainView extends JFrame {
   }
 
   private void configureMainView() {
+    setTitle("Chess");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     addGameStatsView();
     addBoardViewToContentPane();
     registerBoardViewWithController();
+    pack();
   }
 
   private void addGameStatsView() {

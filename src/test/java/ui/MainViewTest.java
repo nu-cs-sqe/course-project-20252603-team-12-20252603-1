@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
+import javax.swing.JFrame;
 
 class MainViewTest {
 
@@ -37,12 +38,15 @@ class MainViewTest {
             && view.getBoardView() instanceof BoardView
             && "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
             && "Alice vs Bob".equals(view.getGameStatsView().getGameStateLabelText());
+    boolean frameConfigured =
+      "Chess".equals(view.getTitle())
+        && view.getDefaultCloseOperation() == JFrame.EXIT_ON_CLOSE;
     Container contentPane = view.getContentPane();
     BorderLayout layout = (BorderLayout) contentPane.getLayout();
     boolean layoutOk =
         BorderLayout.NORTH.equals(layout.getConstraints(view.getGameStatsView()))
             && BorderLayout.CENTER.equals(layout.getConstraints(view.getBoardView()));
-    assertTrue(wired && layoutOk);
+    assertTrue(wired && frameConfigured && layoutOk);
     EasyMock.verify(boardMock);
   }
 
