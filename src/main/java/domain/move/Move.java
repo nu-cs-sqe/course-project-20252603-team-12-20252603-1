@@ -12,10 +12,7 @@ public class Move {
     private final Optional<PieceType> promotionType;
 
     public Move(Location from, Location to) {
-        this.from = from;
-        this.to = to;
-        this.type = MoveType.NORMAL;
-        this.promotionType = Optional.empty();
+        this(from, to, MoveType.NORMAL);
     }
 
     public Move(Location from, Location to, MoveType type) {
