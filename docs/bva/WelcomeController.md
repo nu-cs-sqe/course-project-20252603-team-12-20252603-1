@@ -61,6 +61,7 @@
 - **Input: player1Name** — the text in the player 1 name field at the moment start is triggered
 - **Input: player2Name** — the text in the player 2 name field at the moment start is triggered
 - **Output: WelcomeView disposed** — whether the `WelcomeView` is closed and disposed after start is triggered
+- **Output: error message** — whether an error message is displayed to the user when validation fails
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -69,6 +70,7 @@
 | Input: player1Name           | String            | —                                     |
 | Input: player2Name           | String            | —                                     |
 | Output: WelcomeView disposed | Boolean           | true (disposed), false (not disposed) |
+| Output: error message        | Boolean           | true (shown), false (not shown)       |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -84,6 +86,10 @@
 - `false` (0) — at least one name is empty; validation rejects the start
 - `true` (1) — both names are non-empty; game proceeds
 
+**error message — Boolean:**
+- `false` (0) — both names non-empty; no error shown
+- `true` (1) — at least one name is empty; error message displayed
+
 ### Step 4: Test Cases (Each-Choice Strategy)
 
 - **TC3: StartGame_NonEmptyNames_WelcomeViewDisposed** ( :white_check_mark: )
@@ -91,10 +97,10 @@
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: the `WelcomeView` is disposed (`isDisplayable()` is `false`)
 
-- **TC4: StartGame_EmptyPlayer1Name_GameDoesNotStart** ( :x: )
+- **TC4: StartGame_EmptyPlayer1Name_GameDoesNotStart** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
-  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`)
+  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
 
 - **TC5: StartGame_EmptyPlayer2Name_GameDoesNotStart** ( :x: )
   - **Method(s) under test**: `startGame()`
