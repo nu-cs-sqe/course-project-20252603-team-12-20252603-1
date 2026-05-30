@@ -48,4 +48,12 @@ class MoveTest {
 
         assertEquals(type, move.getType());
     }
+
+    @ParameterizedTest
+    @EnumSource(PieceType.class)
+    void Constructor_FourArg_WhenPromotionPieceMatches_PromotionTypeContainsPiece(PieceType piece) {
+        Move move = new Move(new Location(1, 2), new Location(3, 4), MoveType.PROMOTION, piece);
+
+        assertEquals(Optional.of(piece), move.getPromotionType());
+    }
 }

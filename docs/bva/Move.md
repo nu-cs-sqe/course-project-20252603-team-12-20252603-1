@@ -139,31 +139,31 @@
 - **TC14: Constructor_FourArg_WhenTypeIsCastlingQueenside_MoveTypeIsCastlingQueenside** ( :white_check_mark: )
   - **Covered by**: TC10 (parameterized test)
 
-- **TC15: Constructor_FourArg_WhenPromotionPieceMatches_PromotionTypeContainsPiece** ( :x: )
+- **TC15: Constructor_FourArg_WhenPromotionPieceMatches_PromotionTypeContainsPiece** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to, MoveType type, PieceType promotionPiece)`, `getPromotionType()`
   - **State of the system**: `new Move(from, to, MoveType.PROMOTION, piece)` constructed with each `PieceType` value
   - **Expected output**: `getPromotionType()` returns `Optional.of(piece)` matching the passed-in `PieceType`
   - **Note**: TC16–TC21 are covered by this test case as a parameterized test
 
-- **TC16: Constructor_FourArg_WhenPromotionPieceIsRook_PromotionTypeIsRook** ( :x: )
+- **TC16: Constructor_FourArg_WhenPromotionPieceIsRook_PromotionTypeIsRook** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC17: Constructor_FourArg_WhenPromotionPieceIsKnight_PromotionTypeIsKnight** ( :x: )
+- **TC17: Constructor_FourArg_WhenPromotionPieceIsKnight_PromotionTypeIsKnight** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC18: Constructor_FourArg_WhenPromotionPieceIsBishop_PromotionTypeIsBishop** ( :x: )
+- **TC18: Constructor_FourArg_WhenPromotionPieceIsBishop_PromotionTypeIsBishop** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC19: Constructor_FourArg_WhenPromotionPieceIsQueen_PromotionTypeIsQueen** ( :x: )
+- **TC19: Constructor_FourArg_WhenPromotionPieceIsQueen_PromotionTypeIsQueen** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC20: Constructor_FourArg_WhenPromotionPieceIsKing_PromotionTypeIsKing** ( :x: )
+- **TC20: Constructor_FourArg_WhenPromotionPieceIsKing_PromotionTypeIsKing** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC21: Constructor_FourArg_WhenPromotionPieceIsPawn_PromotionTypeIsPawn** ( :x: )
+- **TC21: Constructor_FourArg_WhenPromotionPieceIsPawn_PromotionTypeIsPawn** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
-- **TC22: Constructor_FourArg_WhenPromotionPieceIsNone_PromotionTypeIsNone** ( :x: )
+- **TC22: Constructor_FourArg_WhenPromotionPieceIsNone_PromotionTypeIsNone** ( :white_check_mark: )
   - **Covered by**: TC15 (parameterized test)
 
 ---
