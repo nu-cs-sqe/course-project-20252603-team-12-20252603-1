@@ -64,25 +64,25 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC3: Constructor_ThreeArg_WhenMoveTypeMatches_MoveTypeIsCorrect** ( :x: )
+- **TC3: Constructor_ThreeArg_WhenMoveTypeMatches_MoveTypeIsCorrect** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to, MoveType type)`, `getType()`
   - **State of the system**: `new Move(from, to, type)` constructed with each `MoveType` value
   - **Expected output**: `getType()` returns the same `MoveType` that was passed in
   - **Note**: TC4–TC8 are covered by this test case as a parameterized test
 
-- **TC4: Constructor_ThreeArg_WhenTypeIsNormal_MoveTypeIsNormal** ( :x: )
+- **TC4: Constructor_ThreeArg_WhenTypeIsNormal_MoveTypeIsNormal** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC5: Constructor_ThreeArg_WhenTypeIsEnPassant_MoveTypeIsEnPassant** ( :x: )
+- **TC5: Constructor_ThreeArg_WhenTypeIsEnPassant_MoveTypeIsEnPassant** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC6: Constructor_ThreeArg_WhenTypeIsCastlingKingside_MoveTypeIsCastlingKingside** ( :x: )
+- **TC6: Constructor_ThreeArg_WhenTypeIsCastlingKingside_MoveTypeIsCastlingKingside** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC7: Constructor_ThreeArg_WhenTypeIsCastlingQueenside_MoveTypeIsCastlingQueenside** ( :x: )
+- **TC7: Constructor_ThreeArg_WhenTypeIsCastlingQueenside_MoveTypeIsCastlingQueenside** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC8: Constructor_ThreeArg_WhenTypeIsPromotion_MoveTypeIsPromotion** ( :x: )
+- **TC8: Constructor_ThreeArg_WhenTypeIsPromotion_MoveTypeIsPromotion** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
 - **TC9: Constructor_ThreeArg_WhenTypeIsPromotion_PromotionTypeIsEmpty** ( :x: )

@@ -18,6 +18,13 @@ public class Move {
         this.promotionType = Optional.empty();
     }
 
+    public Move(Location from, Location to, MoveType type) {
+        this.from = from;
+        this.to = to;
+        this.type = type;
+        this.promotionType = Optional.empty();
+    }
+
     public Location getFrom() {
         return from;
     }
