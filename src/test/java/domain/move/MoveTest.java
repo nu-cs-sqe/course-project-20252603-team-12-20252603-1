@@ -95,4 +95,13 @@ class MoveTest {
         assertEquals(3, result.getTo().getX());
         assertEquals(4, result.getTo().getY());
     }
+
+    @Test
+    void WithPromotionType_OriginalMoveTypeIsUnchanged() {
+        Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
+
+        original.withPromotionType(PieceType.QUEEN);
+
+        assertEquals(MoveType.NORMAL, original.getType());
+    }
 }

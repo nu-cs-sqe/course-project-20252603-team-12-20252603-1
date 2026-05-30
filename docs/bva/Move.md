@@ -277,7 +277,7 @@
   - **State of the system**: original move is `new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getTo()` has `x=3`, `y=4`
 
-- **TC37: WithPromotionType_OriginalMoveTypeIsUnchanged** ( :x: )
+- **TC37: WithPromotionType_OriginalMoveTypeIsUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getType()`
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: original move's `getType()` still returns `NORMAL`
