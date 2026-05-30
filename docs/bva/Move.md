@@ -272,7 +272,7 @@
   - **State of the system**: original move is `new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getFrom()` has `x=1`, `y=2`
 
-- **TC36: WithPromotionType_ReturnedMoveToMatchesOriginal** ( :x: )
+- **TC36: WithPromotionType_ReturnedMoveToMatchesOriginal** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getTo()`
   - **State of the system**: original move is `new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getTo()` has `x=3`, `y=4`
