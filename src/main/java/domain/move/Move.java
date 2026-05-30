@@ -25,6 +25,13 @@ public class Move {
         this.promotionType = Optional.empty();
     }
 
+    public Move(Location from, Location to, MoveType type, PieceType promotionPiece) {
+        this.from = from;
+        this.to = to;
+        this.type = type;
+        this.promotionType = Optional.of(promotionPiece);
+    }
+
     public Location getFrom() {
         return from;
     }

@@ -121,22 +121,22 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC10: Constructor_FourArg_WhenMoveTypeMatches_MoveTypeIsCorrect** ( :x: )
+- **TC10: Constructor_FourArg_WhenMoveTypeMatches_MoveTypeIsCorrect** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to, MoveType type, PieceType promotionPiece)`, `getType()`
   - **State of the system**: `new Move(from, to, type, PieceType.QUEEN)` constructed with each `MoveType` value
   - **Expected output**: `getType()` returns the same `MoveType` that was passed in
   - **Note**: TC11–TC14 are covered by this test case as a parameterized test
 
-- **TC11: Constructor_FourArg_WhenTypeIsNormal_MoveTypeIsNormal** ( :x: )
+- **TC11: Constructor_FourArg_WhenTypeIsNormal_MoveTypeIsNormal** ( :white_check_mark: )
   - **Covered by**: TC10 (parameterized test)
 
-- **TC12: Constructor_FourArg_WhenTypeIsEnPassant_MoveTypeIsEnPassant** ( :x: )
+- **TC12: Constructor_FourArg_WhenTypeIsEnPassant_MoveTypeIsEnPassant** ( :white_check_mark: )
   - **Covered by**: TC10 (parameterized test)
 
-- **TC13: Constructor_FourArg_WhenTypeIsCastlingKingside_MoveTypeIsCastlingKingside** ( :x: )
+- **TC13: Constructor_FourArg_WhenTypeIsCastlingKingside_MoveTypeIsCastlingKingside** ( :white_check_mark: )
   - **Covered by**: TC10 (parameterized test)
 
-- **TC14: Constructor_FourArg_WhenTypeIsCastlingQueenside_MoveTypeIsCastlingQueenside** ( :x: )
+- **TC14: Constructor_FourArg_WhenTypeIsCastlingQueenside_MoveTypeIsCastlingQueenside** ( :white_check_mark: )
   - **Covered by**: TC10 (parameterized test)
 
 - **TC15: Constructor_FourArg_WhenPromotionPieceMatches_PromotionTypeContainsPiece** ( :x: )

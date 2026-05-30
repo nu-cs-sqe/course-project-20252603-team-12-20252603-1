@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import domain.location.Location;
+import domain.piece.PieceType;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,5 +39,13 @@ class MoveTest {
         Move move = new Move(new Location(1, 2), new Location(3, 4), MoveType.PROMOTION);
 
         assertFalse(move.getPromotionType().isPresent());
+    }
+
+    @ParameterizedTest
+    @EnumSource(MoveType.class)
+    void Constructor_FourArg_WhenMoveTypeMatches_MoveTypeIsCorrect(MoveType type) {
+        Move move = new Move(new Location(1, 2), new Location(3, 4), type, PieceType.QUEEN);
+
+        assertEquals(type, move.getType());
     }
 }
