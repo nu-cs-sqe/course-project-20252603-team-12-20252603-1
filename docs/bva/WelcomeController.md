@@ -20,7 +20,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC1: Constructor_FreshInstance_WelcomeViewNotVisible** ( :x: )
+- **TC1: Constructor_FreshInstance_WelcomeViewNotVisible** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeController()`
   - **State of the system**: freshly constructed controller; `show()` has not been called
   - **Expected output**: `welcomeView.isVisible()` is `false`
