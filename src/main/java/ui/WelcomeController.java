@@ -1,5 +1,8 @@
 package ui;
 
+import domain.BoardInitializer;
+import domain.StandardBoardInitializer;
+
 public class WelcomeController {
 
     private final WelcomeView welcomeView;
@@ -20,6 +23,10 @@ public class WelcomeController {
         }
         welcomeView.setVisible(false);
         welcomeView.dispose();
+    }
+
+    BoardInitializer selectedInitializer() {
+        return new StandardBoardInitializer();
     }
 
     WelcomeView getWelcomeView() {

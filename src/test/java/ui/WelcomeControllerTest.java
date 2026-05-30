@@ -1,8 +1,10 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import domain.StandardBoardInitializer;
 import org.junit.jupiter.api.Test;
 
 class WelcomeControllerTest {
@@ -50,6 +52,12 @@ class WelcomeControllerTest {
         controller.startGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
+    }
+
+    @Test
+    void SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer() {
+        WelcomeController controller = new WelcomeController();
+        assertInstanceOf(StandardBoardInitializer.class, controller.selectedInitializer());
     }
 
     @Test

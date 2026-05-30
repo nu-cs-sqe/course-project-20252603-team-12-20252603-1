@@ -146,7 +146,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC7: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :x: )
+- **TC7: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :white_check_mark: )
   - **Method(s) under test**: `selectedInitializer()`
   - **State of the system**: chess960 not selected (default); `selectedInitializer()` called
   - **Expected output**: returned value is an instance of `StandardBoardInitializer`
