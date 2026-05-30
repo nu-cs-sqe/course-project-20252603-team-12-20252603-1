@@ -240,31 +240,31 @@
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getType()` returns `PROMOTION`
 
-- **TC27: WithPromotionType_WhenCalledWithPieceType_ReturnedMovePromotionTypeMatchesPiece** ( :x: )
+- **TC27: WithPromotionType_WhenCalledWithPieceType_ReturnedMovePromotionTypeMatchesPiece** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getPromotionType()`
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(piece)` called with each `PieceType` value
   - **Expected output**: returned move's `getPromotionType()` returns `Optional.of(piece)` matching the passed-in `PieceType`
   - **Note**: TC28–TC33 are covered by this test case as a parameterized test
 
-- **TC28: WithPromotionType_WhenCalledWithQueen_ReturnedMovePromotionTypeIsQueen** ( :x: )
+- **TC28: WithPromotionType_WhenCalledWithQueen_ReturnedMovePromotionTypeIsQueen** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC29: WithPromotionType_WhenCalledWithRook_ReturnedMovePromotionTypeIsRook** ( :x: )
+- **TC29: WithPromotionType_WhenCalledWithRook_ReturnedMovePromotionTypeIsRook** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC30: WithPromotionType_WhenCalledWithKnight_ReturnedMovePromotionTypeIsKnight** ( :x: )
+- **TC30: WithPromotionType_WhenCalledWithKnight_ReturnedMovePromotionTypeIsKnight** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC31: WithPromotionType_WhenCalledWithBishop_ReturnedMovePromotionTypeIsBishop** ( :x: )
+- **TC31: WithPromotionType_WhenCalledWithBishop_ReturnedMovePromotionTypeIsBishop** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC32: WithPromotionType_WhenCalledWithKing_ReturnedMovePromotionTypeIsKing** ( :x: )
+- **TC32: WithPromotionType_WhenCalledWithKing_ReturnedMovePromotionTypeIsKing** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC33: WithPromotionType_WhenCalledWithPawn_ReturnedMovePromotionTypeIsPawn** ( :x: )
+- **TC33: WithPromotionType_WhenCalledWithPawn_ReturnedMovePromotionTypeIsPawn** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC34: WithPromotionType_WhenCalledWithNone_ReturnedMovePromotionTypeIsNone** ( :x: )
+- **TC34: WithPromotionType_WhenCalledWithNone_ReturnedMovePromotionTypeIsNone** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
 - **TC35: WithPromotionType_ReturnedMoveFromMatchesOriginal** ( :x: )
