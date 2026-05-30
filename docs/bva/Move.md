@@ -31,7 +31,7 @@
   - **State of the system**: `new Move(new Location(1, 2), new Location(3, 4))` constructed
   - **Expected output**: `getType()` returns `NORMAL`
 
-- **TC2: Constructor_TwoArg_PromotionTypeIsEmpty** ( :x: )
+- **TC2: Constructor_TwoArg_PromotionTypeIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to)`, `getPromotionType()`
   - **State of the system**: `new Move(new Location(1, 2), new Location(3, 4))` constructed
   - **Expected output**: `getPromotionType()` returns `Optional.empty()`

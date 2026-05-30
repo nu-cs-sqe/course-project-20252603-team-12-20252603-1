@@ -1,8 +1,10 @@
 package domain.move;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import domain.location.Location;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class MoveTest {
@@ -12,5 +14,12 @@ class MoveTest {
         Move move = new Move(new Location(1, 2), new Location(3, 4));
 
         assertEquals(MoveType.NORMAL, move.getType());
+    }
+
+    @Test
+    void Constructor_TwoArg_PromotionTypeIsEmpty() {
+        Move move = new Move(new Location(1, 2), new Location(3, 4));
+
+        assertFalse(move.getPromotionType().isPresent());
     }
 }
