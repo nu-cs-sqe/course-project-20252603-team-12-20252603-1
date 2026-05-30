@@ -32,4 +32,11 @@ class MoveTest {
 
         assertEquals(type, move.getType());
     }
+
+    @Test
+    void Constructor_ThreeArg_WhenTypeIsPromotion_PromotionTypeIsEmpty() {
+        Move move = new Move(new Location(1, 2), new Location(3, 4), MoveType.PROMOTION);
+
+        assertFalse(move.getPromotionType().isPresent());
+    }
 }

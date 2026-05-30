@@ -85,7 +85,7 @@
 - **TC8: Constructor_ThreeArg_WhenTypeIsPromotion_MoveTypeIsPromotion** ( :white_check_mark: )
   - **Covered by**: TC3 (parameterized test)
 
-- **TC9: Constructor_ThreeArg_WhenTypeIsPromotion_PromotionTypeIsEmpty** ( :x: )
+- **TC9: Constructor_ThreeArg_WhenTypeIsPromotion_PromotionTypeIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to, MoveType type)`, `getPromotionType()`
   - **State of the system**: `new Move(from, to, MoveType.PROMOTION)` constructed — edge case: `PROMOTION` type passed but no piece supplied
   - **Expected output**: `getPromotionType()` returns `Optional.empty()`
