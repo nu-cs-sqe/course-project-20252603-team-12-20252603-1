@@ -75,4 +75,14 @@ class MoveTest {
 
         assertEquals(Optional.of(piece), result.getPromotionType());
     }
+
+    @Test
+    void WithPromotionType_ReturnedMoveFromMatchesOriginal() {
+        Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
+
+        Move result = original.withPromotionType(PieceType.QUEEN);
+
+        assertEquals(1, result.getFrom().getX());
+        assertEquals(2, result.getFrom().getY());
+    }
 }

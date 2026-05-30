@@ -267,7 +267,7 @@
 - **TC34: WithPromotionType_WhenCalledWithNone_ReturnedMovePromotionTypeIsNone** ( :white_check_mark: )
   - **Covered by**: TC27 (parameterized test)
 
-- **TC35: WithPromotionType_ReturnedMoveFromMatchesOriginal** ( :x: )
+- **TC35: WithPromotionType_ReturnedMoveFromMatchesOriginal** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getFrom()`
   - **State of the system**: original move is `new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getFrom()` has `x=1`, `y=2`
