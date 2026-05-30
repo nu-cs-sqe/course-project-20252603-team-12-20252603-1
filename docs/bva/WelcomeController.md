@@ -86,7 +86,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC3: StartGame_NonEmptyNames_WelcomeViewDisposed** ( :x: )
+- **TC3: StartGame_NonEmptyNames_WelcomeViewDisposed** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: the `WelcomeView` is disposed (`isDisplayable()` is `false`)

@@ -12,6 +12,11 @@ public class WelcomeController {
         welcomeView.setVisible(true);
     }
 
+    void startGame() {
+        welcomeView.setVisible(false);
+        welcomeView.dispose();
+    }
+
     WelcomeView getWelcomeView() {
         return welcomeView;
     }

@@ -18,4 +18,13 @@ class WelcomeControllerTest {
         controller.show();
         assertTrue(controller.getWelcomeView().isVisible());
     }
+
+    @Test
+    void StartGame_NonEmptyNames_WelcomeViewDisposed() {
+        WelcomeController controller = new WelcomeController();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.startGame();
+        assertFalse(controller.getWelcomeView().isDisplayable());
+    }
 }
