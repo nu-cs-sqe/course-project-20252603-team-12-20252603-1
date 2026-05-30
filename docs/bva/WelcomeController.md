@@ -47,7 +47,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC2: Show_WhenCalled_WelcomeViewBecomesVisible** ( :x: )
+- **TC2: Show_WhenCalled_WelcomeViewBecomesVisible** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: freshly constructed controller; `show()` called
   - **Expected output**: `welcomeView.isVisible()` is `true`

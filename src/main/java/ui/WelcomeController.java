@@ -8,6 +8,10 @@ public class WelcomeController {
         welcomeView = new WelcomeView();
     }
 
+    public void show() {
+        welcomeView.setVisible(true);
+    }
+
     WelcomeView getWelcomeView() {
         return welcomeView;
     }
