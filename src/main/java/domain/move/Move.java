@@ -47,4 +47,8 @@ public class Move {
     public Optional<PieceType> getPromotionType() {
         return promotionType;
     }
+
+    public Move withPromotionType(PieceType piece) {
+        return new Move(from, to, MoveType.PROMOTION, piece);
+    }
 }

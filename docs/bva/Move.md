@@ -187,13 +187,13 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC23: GetPromotionType_WhenConstructedWithTwoArg_ReturnsEmpty** ( :x: )
+- **TC23: GetPromotionType_WhenConstructedWithTwoArg_ReturnsEmpty** ( :white_check_mark: )
   - **Covered by**: TC2
 
-- **TC24: GetPromotionType_WhenConstructedWithThreeArg_ReturnsEmpty** ( :x: )
+- **TC24: GetPromotionType_WhenConstructedWithThreeArg_ReturnsEmpty** ( :white_check_mark: )
   - **Covered by**: TC9
 
-- **TC25: GetPromotionType_WhenConstructedWithFourArg_ReturnsPresentOptional** ( :x: )
+- **TC25: GetPromotionType_WhenConstructedWithFourArg_ReturnsPresentOptional** ( :white_check_mark: )
   - **Covered by**: TC15
 
 ---
@@ -235,7 +235,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC26: WithPromotionType_WhenCalledOnNormalMove_ReturnedMoveTypeIsPromotion** ( :x: )
+- **TC26: WithPromotionType_WhenCalledOnNormalMove_ReturnedMoveTypeIsPromotion** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getType()`
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: returned move's `getType()` returns `PROMOTION`

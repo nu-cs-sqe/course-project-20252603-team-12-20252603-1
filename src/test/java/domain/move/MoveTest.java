@@ -56,4 +56,13 @@ class MoveTest {
 
         assertEquals(Optional.of(piece), move.getPromotionType());
     }
+
+    @Test
+    void WithPromotionType_WhenCalledOnNormalMove_ReturnedMoveTypeIsPromotion() {
+        Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
+
+        Move result = original.withPromotionType(PieceType.QUEEN);
+
+        assertEquals(MoveType.PROMOTION, result.getType());
+    }
 }
