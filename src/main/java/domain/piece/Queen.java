@@ -8,6 +8,10 @@ public class Queen extends Piece {
 
   @Override
   public Piece makeCopy() {
-    return new Queen(getColor());
+    Queen copy = new Queen(getColor());
+    if (hasMoved()) {
+      copy.changeToMoved();
+    }
+    return copy;
   }
 }
