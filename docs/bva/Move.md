@@ -282,7 +282,7 @@
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: original move's `getType()` still returns `NORMAL`
 
-- **TC38: WithPromotionType_OriginalMovePromotionTypeIsUnchanged** ( :x: )
+- **TC38: WithPromotionType_OriginalMovePromotionTypeIsUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `withPromotionType(PieceType piece)`, `getPromotionType()`
   - **State of the system**: original move is `new Move(from, to, MoveType.NORMAL)`; `withPromotionType(PieceType.QUEEN)` called
   - **Expected output**: original move's `getPromotionType()` still returns `Optional.empty()`

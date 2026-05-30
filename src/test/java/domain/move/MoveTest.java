@@ -104,4 +104,13 @@ class MoveTest {
 
         assertEquals(MoveType.NORMAL, original.getType());
     }
+
+    @Test
+    void WithPromotionType_OriginalMovePromotionTypeIsUnchanged() {
+        Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
+
+        original.withPromotionType(PieceType.QUEEN);
+
+        assertFalse(original.getPromotionType().isPresent());
+    }
 }
