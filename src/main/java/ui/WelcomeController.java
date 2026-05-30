@@ -1,7 +1,10 @@
 package ui;
 
+import domain.Board;
 import domain.BoardInitializer;
+import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import java.util.Random;
 
 public class WelcomeController {
 
@@ -17,16 +20,26 @@ public class WelcomeController {
     }
 
     void startGame() {
-        if (welcomeView.getPlayer1Name().isEmpty() || welcomeView.getPlayer2Name().isEmpty()) {
+        String player1Name = welcomeView.getPlayer1Name();
+        String player2Name = welcomeView.getPlayer2Name();
+        if (player1Name.isEmpty() || player2Name.isEmpty()) {
             welcomeView.showError("Player names cannot be empty.");
             return;
         }
+        BoardController boardController = new BoardController(new Board(selectedInitializer()));
+        closeWelcomeView();
+        new MainView(player1Name, player2Name, boardController).setVisible(true);
+    }
+
+    private void closeWelcomeView() {
         welcomeView.setVisible(false);
         welcomeView.dispose();
     }
 
     BoardInitializer selectedInitializer() {
-        return new StandardBoardInitializer();
+        return welcomeView.isChess960Selected()
+            ? new FischerRandomBoardInitializer(new Random())
+            : new StandardBoardInitializer();
     }
 
     WelcomeView getWelcomeView() {

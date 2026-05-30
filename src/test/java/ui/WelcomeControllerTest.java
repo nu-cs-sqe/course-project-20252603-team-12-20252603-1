@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +59,13 @@ class WelcomeControllerTest {
     void SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer() {
         WelcomeController controller = new WelcomeController();
         assertInstanceOf(StandardBoardInitializer.class, controller.selectedInitializer());
+    }
+
+    @Test
+    void SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer() {
+        WelcomeController controller = new WelcomeController();
+        controller.getWelcomeView().setChess960Selected(true);
+        assertInstanceOf(FischerRandomBoardInitializer.class, controller.selectedInitializer());
     }
 
     @Test

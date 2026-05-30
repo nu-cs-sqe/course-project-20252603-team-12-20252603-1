@@ -151,7 +151,7 @@
   - **State of the system**: chess960 not selected (default); `selectedInitializer()` called
   - **Expected output**: returned value is an instance of `StandardBoardInitializer`
 
-- **TC8: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :x: )
+- **TC8: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :white_check_mark: )
   - **Method(s) under test**: `selectedInitializer()`
   - **State of the system**: chess960 selected; `selectedInitializer()` called
   - **Expected output**: returned value is an instance of `FischerRandomBoardInitializer`

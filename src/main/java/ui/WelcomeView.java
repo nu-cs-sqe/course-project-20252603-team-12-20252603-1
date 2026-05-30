@@ -10,6 +10,7 @@ public class WelcomeView extends JFrame {
     private final JTextField player2NameField;
     private final JLabel errorLabel;
     private Runnable startGameAction = () -> {};
+    private boolean chess960Selected = false;
 
     public WelcomeView() {
         player1NameField = new JTextField();
@@ -31,6 +32,14 @@ public class WelcomeView extends JFrame {
 
     void setPlayer2Name(String name) {
         player2NameField.setText(name);
+    }
+
+    public boolean isChess960Selected() {
+        return chess960Selected;
+    }
+
+    void setChess960Selected(boolean selected) {
+        chess960Selected = selected;
     }
 
     public void setStartGameAction(Runnable action) {
