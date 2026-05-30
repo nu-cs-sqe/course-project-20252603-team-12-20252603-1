@@ -41,4 +41,15 @@ class WelcomeControllerTest {
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
 
+    @Test
+    void StartGame_EmptyPlayer2Name_GameDoesNotStart() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("");
+        controller.startGame();
+        assertTrue(controller.getWelcomeView().isDisplayable());
+        assertNotEquals("", controller.getWelcomeView().getErrorText());
+    }
+
 }

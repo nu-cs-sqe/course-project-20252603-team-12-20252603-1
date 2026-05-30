@@ -102,7 +102,7 @@
   - **State of the system**: `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
 
-- **TC5: StartGame_EmptyPlayer2Name_GameDoesNotStart** ( :x: )
+- **TC5: StartGame_EmptyPlayer2Name_GameDoesNotStart** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `player1Name = "Alice"`, `player2Name = ""`; `startGame()` called
-  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`)
+  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)

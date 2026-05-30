@@ -13,7 +13,7 @@ public class WelcomeController {
     }
 
     void startGame() {
-        if (welcomeView.getPlayer1Name().isEmpty()) {
+        if (welcomeView.getPlayer1Name().isEmpty() || welcomeView.getPlayer2Name().isEmpty()) {
             welcomeView.showError("Player names cannot be empty.");
             return;
         }
