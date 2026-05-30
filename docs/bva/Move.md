@@ -26,7 +26,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC1: Constructor_TwoArg_MoveTypeIsNormal** ( :x: )
+- **TC1: Constructor_TwoArg_MoveTypeIsNormal** ( :white_check_mark: )
   - **Method(s) under test**: `Move(Location from, Location to)`, `getType()`
   - **State of the system**: `new Move(new Location(1, 2), new Location(3, 4))` constructed
   - **Expected output**: `getType()` returns `NORMAL`
