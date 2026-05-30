@@ -9,6 +9,7 @@ public class WelcomeView extends JFrame {
     private final JTextField player1NameField;
     private final JTextField player2NameField;
     private final JLabel errorLabel;
+    private Runnable startGameAction = () -> {};
 
     public WelcomeView() {
         player1NameField = new JTextField();
@@ -30,6 +31,14 @@ public class WelcomeView extends JFrame {
 
     void setPlayer2Name(String name) {
         player2NameField.setText(name);
+    }
+
+    public void setStartGameAction(Runnable action) {
+        this.startGameAction = action;
+    }
+
+    void clickStartGame() {
+        startGameAction.run();
     }
 
     public void showError(String message) {

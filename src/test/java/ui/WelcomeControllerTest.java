@@ -52,4 +52,14 @@ class WelcomeControllerTest {
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
 
+    @Test
+    void Constructor_ActionWired_ClickingStartGameCallsStartGame() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+        assertFalse(controller.getWelcomeView().isDisplayable());
+    }
+
 }

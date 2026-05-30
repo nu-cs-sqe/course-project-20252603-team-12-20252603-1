@@ -6,6 +6,7 @@ public class WelcomeController {
 
     public WelcomeController() {
         welcomeView = new WelcomeView();
+        welcomeView.setStartGameAction(this::startGame);
     }
 
     public void show() {
