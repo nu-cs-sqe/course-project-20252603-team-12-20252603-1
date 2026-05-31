@@ -116,7 +116,7 @@ public class BoardView extends JPanel {
 
     private class BoardMouseListener extends MouseAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             int file = e.getX() / TILE_SIZE;
             int rank = (BOARD_SIZE - 1) - e.getY() / TILE_SIZE;
             boardController.handleSquareClick(new Location(file, rank));
