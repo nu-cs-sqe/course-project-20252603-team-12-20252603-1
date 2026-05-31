@@ -67,7 +67,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC2: GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList ( :x: )
+- MG-TC2: GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: from (3,3) holds NonePiece
   - Expected output: returned move list size is 0

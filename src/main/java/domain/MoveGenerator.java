@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import domain.piece.Piece;
+import domain.piece.PieceType;
 
 public class MoveGenerator {
 
@@ -18,6 +19,10 @@ public class MoveGenerator {
     }
 
     public List<Move> generateLegalMoves(Location from) {
+        Piece piece = board[from.getY()][from.getX()];
+        if (piece.getType() == PieceType.NONE) {
+            return new ArrayList<>();
+        }
         return new ArrayList<>();
     }
 }

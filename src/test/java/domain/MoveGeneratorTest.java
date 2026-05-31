@@ -1,5 +1,6 @@
 package domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import domain.location.Location;
@@ -21,6 +22,17 @@ class MoveGeneratorTest {
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
         assertNotNull(moveGenerator.generateLegalMoves(new Location(4, 4)));
+    }
+
+    @Test
+    void GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList() {
+        Piece[][] board = emptyBoard();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 0;
+        int actual = moveGenerator.generateLegalMoves(new Location(3, 3)).size();
+
+        assertEquals(expected, actual);
     }
 
     private static Piece[][] emptyBoard() {
