@@ -49,6 +49,25 @@ class BoardControllerTest {
     }
 
     @Test
+    void GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
+        EasyMock.replay(boardMock);
+
+        BoardController controller = new BoardController(boardMock);
+        controller.handleSquareClick(selected);
+
+        int expected = 0;
+        int actual = controller.getLegalMovesForSelection().size();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Location selected = new Location(0, 6);
