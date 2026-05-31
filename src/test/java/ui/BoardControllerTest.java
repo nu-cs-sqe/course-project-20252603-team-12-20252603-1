@@ -7,6 +7,7 @@ import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import domain.gamestate.GameState;
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -43,6 +44,17 @@ class BoardControllerTest {
 
         Optional<Location> expected = Optional.empty();
         Optional<Location> actual = controller.getSelectedLocation();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetLegalMovesForSelection_NoSelection_ReturnsEmptyList() {
+        Board boardMock = replayNiceBoard();
+        BoardController controller = new BoardController(boardMock);
+
+        int expected = 0;
+        int actual = controller.getLegalMovesForSelection().size();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }

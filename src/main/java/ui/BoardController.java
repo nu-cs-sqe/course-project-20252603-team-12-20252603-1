@@ -3,9 +3,12 @@ package ui;
 import domain.Board;
 import domain.gamestate.GameState;
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BoardController {
@@ -35,6 +38,10 @@ public class BoardController {
 
   public Optional<Location> getSelectedLocation() {
     return lastSelectedLoc;
+  }
+
+  public List<Move> getLegalMovesForSelection() {
+    return new ArrayList<>();
   }
 
   public void handleSquareClick(Location loc) {
