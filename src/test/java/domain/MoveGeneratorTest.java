@@ -166,6 +166,18 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = moveGenerator.hasLegalMovesForColor(PieceColor.WHITE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
