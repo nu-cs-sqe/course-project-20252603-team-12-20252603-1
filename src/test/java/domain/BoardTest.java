@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -234,6 +238,124 @@ class BoardTest {
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
+    }
+
+    @Test
+    void GetLegalMoves_WhenCalled_MatchesMoveGenerator() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[3][5] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Optional<Location> enPassantTarget = Optional.of(new Location(2, 4));
+        board.setEnPassantTarget(enPassantTarget);
+        Location from = new Location(5, 3);
+
+        List<Move> expected =
+            new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
+        List<Move> actual = board.getLegalMoves(from);
+
+        int expectedSize = expected.size();
+        int actualSize = actual.size();
+        assertEquals(expectedSize, actualSize);
+    }
+
+    @Test
+    void GetLegalMoves_OnCenterKnight_ReturnsEightMoves() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[4][4] = new Knight(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Location from = new Location(4, 4);
+
+        int expected = 8;
+        int actual = board.getLegalMoves(from).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetLegalMoves_OnEmptySquare_ReturnsEmptyList() {
+        Piece[][] layout = emptyPieceGrid();
+        Board board = new Board(layout);
+        Location from = new Location(3, 3);
+
+        int expected = 0;
+        int actual = board.getLegalMoves(from).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_AfterBlackMove_GameStateIsWhiteTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[1][4] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        board.switchTurn();
+        Move move = new Move(new Location(4, 1), new Location(4, 2));
+
+        board.makeMove(move);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_AfterWhiteMove_GameStateIsBlackTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        GameState expected = GameState.BLACK_TURN;
+        GameState actual = board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_SourceSquareIsEmpty() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(6, 4).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_PieceAtDestination() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.PAWN;
+        PieceType actual = board.getPieceAt(5, 4).getType();
+        assertEquals(expected, actual);
+    }
+
+    private static Piece[][] emptyPieceGrid() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        return layout;
     }
 
     @Test
