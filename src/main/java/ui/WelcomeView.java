@@ -10,7 +10,7 @@ public class WelcomeView extends JFrame {
     private JTextField player2NameField;
     private JRadioButton standardRadioButton;
     private JRadioButton chess960RadioButton;
-    private Runnable startGameAction;
+    private Runnable startGameAction = () -> {};
 
     public WelcomeView() {
         player1NameField   = new JTextField();
@@ -51,9 +51,7 @@ public class WelcomeView extends JFrame {
     }
 
     void clickStartGame() {
-        if (startGameAction != null) {
-            startGameAction.run();
-        }
+        startGameAction.run();
     }
 
     private void createWelcomeScreenUI() {
