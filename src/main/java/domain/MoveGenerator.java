@@ -45,7 +45,28 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.QUEEN) {
             return generateSlidingMoves(from, piece, EIGHT_DIRECTIONS);
         }
+        if (piece.getType() == PieceType.KING) {
+            return generateKingMoves(from, piece);
+        }
         return new ArrayList<>();
+    }
+
+    private List<Move> generateKingMoves(Location from, Piece king) {
+        List<Move> moves = new ArrayList<>();
+        int rank = from.getY();
+        int file = from.getX();
+        for (int[] offset : EIGHT_DIRECTIONS) {
+            int targetRank = rank + offset[0];
+            int targetFile = file + offset[1];
+            if (!isOnBoard(targetRank, targetFile)) {
+                continue;
+            }
+            Piece target = board[targetRank][targetFile];
+            if (target.getType() == PieceType.NONE || target.getColor() != king.getColor()) {
+                moves.add(new Move(from, new Location(targetFile, targetRank)));
+            }
+        }
+        return moves;
     }
 
     private List<Move> generateSlidingMoves(Location from, Piece piece, int[][] directions) {
