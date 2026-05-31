@@ -29,7 +29,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable ( :x: )
+- MG-TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable ( :white_check_mark: )
   - Method(s) under test: MoveGenerator(Piece[][], Optional<Location>), generateLegalMoves(Location)
   - State of the system: 8x8 board, white knight at (4,4), enPassantTarget is Optional.empty()
   - Expected output: generateLegalMoves(new Location(4,4)) returns a non-null list
