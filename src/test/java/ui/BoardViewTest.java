@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class BoardViewTest {
 
     @Test
-    void MouseClicked_AtBottomPixel_CallsHandleSquareClickWithRankZero() {
+    void MousePressed_AtBottomPixel_CallsHandleSquareClickWithRankSeven() {
         BoardController mockController = EasyMock.createMock(BoardController.class);
         Capture<Location> cap = EasyMock.newCapture();
         mockController.handleSquareClick(EasyMock.capture(cap));
@@ -21,10 +21,10 @@ class BoardViewTest {
 
         BoardView view = new BoardView(mockController);
         MouseListener listener = view.getMouseListeners()[0];
-        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_CLICKED, 0, 0, 0, 599, 1, false);
-        listener.mouseClicked(event);
+        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 599, 1, false);
+        listener.mousePressed(event);
 
-        int expected = 0;
+        int expected = 7;
         int actual = cap.getValue().getY();
         assertEquals(expected, actual);
 
@@ -32,7 +32,7 @@ class BoardViewTest {
     }
 
     @Test
-    void MouseClicked_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankSix() {
+    void MousePressed_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankOne() {
         BoardController mockController = EasyMock.createMock(BoardController.class);
         Capture<Location> cap = EasyMock.newCapture();
         mockController.handleSquareClick(EasyMock.capture(cap));
@@ -41,10 +41,10 @@ class BoardViewTest {
 
         BoardView view = new BoardView(mockController);
         MouseListener listener = view.getMouseListeners()[0];
-        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_CLICKED, 0, 0, 0, 75, 1, false);
-        listener.mouseClicked(event);
+        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 75, 1, false);
+        listener.mousePressed(event);
 
-        int expected = 6;
+        int expected = 1;
         int actual = cap.getValue().getY();
         assertEquals(expected, actual);
 
