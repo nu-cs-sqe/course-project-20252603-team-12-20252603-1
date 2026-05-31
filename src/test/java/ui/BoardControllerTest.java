@@ -7,6 +7,7 @@ import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import domain.gamestate.GameState;
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -43,6 +44,57 @@ class BoardControllerTest {
 
         Optional<Location> expected = Optional.empty();
         Optional<Location> actual = controller.getSelectedLocation();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
+        EasyMock.replay(boardMock);
+
+        BoardController controller = new BoardController(boardMock);
+        controller.handleSquareClick(selected);
+
+        int expected = 0;
+        int actual = controller.getLegalMovesForSelection().size();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        List<Move> boardMoves = List.of(new Move(selected, destination));
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.WHITE_TURN);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(boardMoves);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = new BoardController(boardMock);
+        controller.handleSquareClick(selected);
+
+        List<Move> expected = boardMoves;
+        List<Move> actual = controller.getLegalMovesForSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetLegalMovesForSelection_NoSelection_ReturnsEmptyList() {
+        Board boardMock = replayNiceBoard();
+        BoardController controller = new BoardController(boardMock);
+
+        int expected = 0;
+        int actual = controller.getLegalMovesForSelection().size();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
