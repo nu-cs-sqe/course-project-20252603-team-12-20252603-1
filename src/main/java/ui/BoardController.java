@@ -41,7 +41,10 @@ public class BoardController {
   }
 
   public List<Move> getLegalMovesForSelection() {
-    return new ArrayList<>();
+    if (!lastSelectedLoc.isPresent()) {
+      return new ArrayList<>();
+    }
+    return board.getLegalMoves(lastSelectedLoc.get());
   }
 
   public void handleSquareClick(Location loc) {
