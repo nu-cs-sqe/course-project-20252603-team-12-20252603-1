@@ -27,6 +27,18 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnRookAtCenter_ReturnsFourteenMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 14;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Bishop(PieceColor.WHITE);

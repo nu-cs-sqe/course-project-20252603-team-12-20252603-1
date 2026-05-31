@@ -36,6 +36,9 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.BISHOP) {
             return generateSlidingMoves(from, piece, BISHOP_DIRS);
         }
+        if (piece.getType() == PieceType.ROOK) {
+            return generateSlidingMoves(from, piece, ROOK_DIRS);
+        }
         return new ArrayList<>();
     }
 
