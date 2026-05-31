@@ -80,6 +80,7 @@ public class Board {
 
     public void makeMove(Move move) {
         applyMoveToInternalState(move);
+        switchTurn();
     }
 
     private void applyMoveToInternalState(Move move) {

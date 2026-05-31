@@ -558,7 +558,7 @@ Scope: apply a **normal** move to internal board state and toggle turn. Win, dra
   - **State of the system**: white pawn moves from `(4,6)` to `(4,5)`
   - **Expected output**: after move, `getPieceAt(6, 4)` returns type `NONE`
 
-- **TC52: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :x: )
+- **TC52: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
   - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
