@@ -30,10 +30,12 @@ package ui {
         +getPlayer1Name(): String
         +getPlayer2Name(): String
         +isChess960Selected(): boolean
-        +setChess960Selected(selected: boolean): void
         +setStartGameAction(action: Runnable): void
         +showError(message: String): void
         +getErrorText(): String
+        ~setPlayer1Name(name: String): void
+        ~setPlayer2Name(name: String): void
+        ~setChess960Selected(selected: boolean): void
         ~clickStartGame(): void
         -createWelcomeScreenUI(): void
     }
@@ -44,6 +46,8 @@ package ui {
         -gameStatsView: GameStatsView
 
         +MainView(player1Name: String, player2Name: String, boardController: BoardController)
+        ~getBoardController(): BoardController
+        ~getBoardView(): BoardView
         +getGameStatsView(): GameStatsView
         -configureMainView(): void
         -addGameStatsView(): void
@@ -87,15 +91,11 @@ package ui {
 
     +class BoardController {
         -{static}{final} BOARD_SIZE: int
-        -player1Name: String
-        -player2Name: String
         -board: Board
         -boardView: BoardView
-        -mainView: MainView
         -lastSelectedLoc: Optional<Location>
 
-        +BoardController(player1Name: String, player2Name: String, board: Board)
-        +show(): void
+        +BoardController(board: Board)
         +setBoardView(boardView: BoardView): void
         ~getBoardView(): BoardView
         ~getMainView(): MainView
@@ -408,7 +408,6 @@ BoardView --+ BoardMouseListener
 ' --- BoardController ---
 BoardController --> Board
 BoardController --> BoardView
-BoardController --> MainView
 BoardController ..> Move
 BoardController ..> MoveType
 BoardController ..> Location
