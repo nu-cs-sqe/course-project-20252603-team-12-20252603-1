@@ -204,3 +204,53 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - Method(s) under test: isInCheck(PieceColor)
   - State of the system: white king present and no black piece attacks it
   - Expected output: isInCheck(PieceColor.WHITE) is false
+
+---
+
+## Method / behavior: check filtering (`generateLegalMoves`, `generateAllLegalMovesForColor`, `hasLegalMovesForColor`)
+
+Scope: After generating **pseudo-legal** moves, filter out any move that leaves the moving side's king in check (chess-master `filterLegalMoves` / `applyMoveToBoard` / `leavesOwnKingInCheck`). Uses only **NORMAL** move simulation for currently implemented piece rules (no en passant/castling/promotion in this slice).
+
+### Step 1: Inputs and outputs
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| Pin | Pinned piece — move off pin line exposes king vs move along pin line stays legal |
+| King in check | King has escape squares vs king has no legal moves |
+| Output | Filtered move list excludes moves that leave own king attacked |
+
+### Step 2: Catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| Pin exposure | Cases — move exposes king vs does not |
+| King in check | Cases — in check vs not |
+| Filtered move list | Collections — empty, reduced, unchanged |
+
+### Step 3: Concrete boundary values
+
+- **Pinned bishop:** white king `(2,2)`, white bishop `(2,3)`, black rook `(2,7)` on c-file; pseudo move to `(3,4)` exposes king.
+- **King in check:** white king `(4,4)`, black rook `(4,0)` on same file; 6 escape squares off the e-file.
+- **In check with escape:** same board — side still has at least one legal move.
+
+### Step 4: Test cases
+
+- **MG-TC14: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :x: )
+  - Method(s) under test: `generateLegalMoves(Location)`
+  - State of the system: pinned white bishop at `(2,3)`; king `(2,2)`; black rook `(2,7)`
+  - Expected output: no returned move has destination `(3,4)`
+
+- **MG-TC15: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :x: )
+  - Method(s) under test: `generateLegalMoves(Location)`
+  - State of the system: white king at `(4,4)`; black rook at `(4,0)`
+  - Expected output: returned move list size is `6`
+
+- **MG-TC16: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :x: )
+  - Method(s) under test: `generateLegalMoves(Location)`
+  - State of the system: white king at `(4,4)`; black rook at `(4,0)`
+  - Expected output: no returned move has destination `(4,3)`
+
+- **MG-TC17: HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue** ( :x: )
+  - Method(s) under test: `hasLegalMovesForColor(PieceColor)`
+  - State of the system: white king in check from rook but can escape off the file
+  - Expected output: `hasLegalMovesForColor(PieceColor.WHITE)` is `true`
