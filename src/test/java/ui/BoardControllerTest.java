@@ -603,6 +603,20 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(0, 6));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
