@@ -346,8 +346,8 @@
 
 - **Input: from location** — board location to generate legal moves from
 - **Input: piece at from** — empty square vs movable piece
-- **Input: enPassantTarget state** — empty vs present on the board (passed through to `MoveGenerator`)
-- **Output: legal move list size** — number of legal moves returned for the source piece
+- **Input: enPassantTarget state** — empty vs present on the board (passed through when wiring `LegalMoveGenerator` in production)
+- **Output: legal move list** — list returned by the injected `LegalMoveGenerator` collaborator
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -356,7 +356,8 @@
 | Input: from location | Pairs of variables | file/rank in [0, 7] |
 | Input: piece at from | Cases | NONE, KNIGHT |
 | Input: enPassantTarget | Optional | empty, present |
-| Output: legal move list size | Counts | 0, 8 |
+| Output: legal move list | Collections | empty list, list with moves |
+| Collaborator | Pointers | mocked `LegalMoveGenerator` in unit tests |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -375,18 +376,18 @@
 
 - **TC50: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :x: )
   - **Method(s) under test**: `getLegalMoves(Location)`
-  - **State of the system**: board with `NonePiece` at `(3,3)`; `enPassantTarget` is empty
-  - **Expected output**: returned list size is `0`
+  - **State of the system**: board with injected mock `LegalMoveGenerator` stubbed to return an empty list for `(3,3)`
+  - **Expected output**: returned list size is `0`; mock `generateLegalMoves(Location)` is invoked once
 
 - **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :x: )
   - **Method(s) under test**: `getLegalMoves(Location)`
-  - **State of the system**: board with white knight at `(4,4)` and all other squares `NonePiece`; `enPassantTarget` is empty
-  - **Expected output**: returned list size is `8`
+  - **State of the system**: board with injected mock `LegalMoveGenerator` stubbed to return eight moves for `(4,4)`
+  - **Expected output**: returned list size is `8`; mock `generateLegalMoves(Location)` is invoked once
 
-- **TC52: GetLegalMoves_WithEnPassantTargetSet_DelegatesEnPassantState** ( :x: )
+- **TC52: GetLegalMoves_WhenCalled_DelegatesToLegalMoveGenerator** ( :x: )
   - **Method(s) under test**: `getLegalMoves(Location)`
-  - **State of the system**: white pawn at `(5,3)`, black pawn at `(4,3)`, `enPassantTarget` is `(4,2)` (set via package-private test hook until `makeMove` exists)
-  - **Expected output**: returned list size matches `MoveGenerator` with the same board and en passant target (delegates `enPassantTarget`, not `Optional.empty()`)
+  - **State of the system**: board with `enPassantTarget` set; injected mock `LegalMoveGenerator`
+  - **Expected output**: `getLegalMoves` returns the stubbed list and invokes the collaborator (production wiring to pass `enPassantTarget` lands with `MoveGenerator` integration)
 
 ---
 
