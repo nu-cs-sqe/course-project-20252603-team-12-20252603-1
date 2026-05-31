@@ -29,6 +29,14 @@ public class MoveGenerator {
         this.enPassantTarget = enPassantTarget;
     }
 
+    public boolean isInCheck(PieceColor color) {
+        Location kingLocation = findKing(color, board);
+        if (kingLocation == null) {
+            return false;
+        }
+        return isSquareAttackedBy(kingLocation, opponent(color), board);
+    }
+
     public boolean hasLegalMovesForColor(PieceColor color) {
         for (int rank = 0; rank < BOARD_SIZE; rank++) {
             for (int file = 0; file < BOARD_SIZE; file++) {
@@ -170,5 +178,116 @@ public class MoveGenerator {
 
     private static boolean isOnBoard(int rank, int file) {
         return rank >= 0 && rank < BOARD_SIZE && file >= 0 && file < BOARD_SIZE;
+    }
+
+    private static boolean isSquareAttackedBy(
+            Location square, PieceColor attackerColor, Piece[][] board) {
+        return isSliderAttacking(square, attackerColor, board, ROOK_DIRS,
+                PieceType.ROOK, PieceType.QUEEN)
+            || isSliderAttacking(square, attackerColor, board, BISHOP_DIRS,
+                PieceType.BISHOP, PieceType.QUEEN)
+            || isKnightAttacking(square, attackerColor, board)
+            || isPawnAttacking(square, attackerColor, board)
+            || isKingAttacking(square, attackerColor, board);
+    }
+
+    private static boolean isSliderAttacking(
+            Location square,
+            PieceColor attackerColor,
+            Piece[][] board,
+            int[][] directions,
+            PieceType... sliderTypes) {
+        int rank = square.getY();
+        int file = square.getX();
+        for (int[] direction : directions) {
+            int currentRank = rank + direction[0];
+            int currentFile = file + direction[1];
+            while (isOnBoard(currentRank, currentFile)) {
+                Piece piece = board[currentRank][currentFile];
+                if (piece.getType() == PieceType.NONE) {
+                    currentRank += direction[0];
+                    currentFile += direction[1];
+                    continue;
+                }
+                if (piece.getColor() == attackerColor) {
+                    for (PieceType sliderType : sliderTypes) {
+                        if (piece.getType() == sliderType) {
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isKnightAttacking(
+            Location square, PieceColor attackerColor, Piece[][] board) {
+        int rank = square.getY();
+        int file = square.getX();
+        for (int[] offset : KNIGHT_OFFSETS) {
+            int targetRank = rank + offset[0];
+            int targetFile = file + offset[1];
+            if (!isOnBoard(targetRank, targetFile)) {
+                continue;
+            }
+            Piece piece = board[targetRank][targetFile];
+            if (piece.getType() == PieceType.KNIGHT && piece.getColor() == attackerColor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isPawnAttacking(
+            Location square, PieceColor attackerColor, Piece[][] board) {
+        int rank = square.getY();
+        int file = square.getX();
+        int pawnRank = rank + (attackerColor == PieceColor.WHITE ? 1 : -1);
+        for (int df : new int[] {-1, 1}) {
+            int pawnFile = file + df;
+            if (isOnBoard(pawnRank, pawnFile)) {
+                Piece piece = board[pawnRank][pawnFile];
+                if (piece.getType() == PieceType.PAWN && piece.getColor() == attackerColor) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isKingAttacking(
+            Location square, PieceColor attackerColor, Piece[][] board) {
+        int rank = square.getY();
+        int file = square.getX();
+        for (int[] offset : EIGHT_DIRECTIONS) {
+            int targetRank = rank + offset[0];
+            int targetFile = file + offset[1];
+            if (!isOnBoard(targetRank, targetFile)) {
+                continue;
+            }
+            Piece piece = board[targetRank][targetFile];
+            if (piece.getType() == PieceType.KING && piece.getColor() == attackerColor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Location findKing(PieceColor color, Piece[][] board) {
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece piece = board[rank][file];
+                if (piece.getType() == PieceType.KING && piece.getColor() == color) {
+                    return new Location(file, rank);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static PieceColor opponent(PieceColor color) {
+        return color == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
     }
 }

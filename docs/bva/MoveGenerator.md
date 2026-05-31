@@ -195,7 +195,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC12: IsInCheck_WhenRookAttacksKing_ReturnsTrue ( :x: )
+- MG-TC12: IsInCheck_WhenRookAttacksKing_ReturnsTrue ( :white_check_mark: )
   - Method(s) under test: isInCheck(PieceColor)
   - State of the system: white king on same file as black rook with empty squares between
   - Expected output: isInCheck(PieceColor.WHITE) is true

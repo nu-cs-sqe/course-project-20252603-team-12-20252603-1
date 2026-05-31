@@ -30,6 +30,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void IsInCheck_WhenRookAttacksKing_ReturnsTrue() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = moveGenerator.isInCheck(PieceColor.WHITE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Knight(PieceColor.WHITE);
