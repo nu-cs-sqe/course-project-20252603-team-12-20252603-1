@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -165,6 +166,56 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = moveGenerator.hasLegalMovesForColor(PieceColor.WHITE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveTo(
+                moveGenerator.generateLegalMoves(new Location(4, 4)), 4, 3);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 6;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing() {
+        Piece[][] board = emptyBoard();
+        board[2][2] = new King(PieceColor.WHITE);
+        board[3][2] = new Bishop(PieceColor.WHITE);
+        board[7][2] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveTo(moveGenerator.generateLegalMoves(new Location(2, 3)), 3, 4);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList() {
         Piece[][] board = emptyBoard();
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
@@ -173,6 +224,15 @@ class MoveGeneratorTest {
         int actual = moveGenerator.generateLegalMoves(new Location(3, 3)).size();
 
         assertEquals(expected, actual);
+    }
+
+    private static boolean hasMoveTo(java.util.List<Move> moves, int file, int rank) {
+        for (Move move : moves) {
+            if (move.getTo().getX() == file && move.getTo().getY() == rank) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Piece[][] emptyBoard() {
