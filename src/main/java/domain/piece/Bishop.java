@@ -8,6 +8,10 @@ public class Bishop extends Piece {
 
   @Override
   public Piece makeCopy() {
-    return new Bishop(getColor());
+    Bishop copy = new Bishop(getColor());
+    if (hasMoved()) {
+      copy.changeToMoved();
+    }
+    return copy;
   }
 }

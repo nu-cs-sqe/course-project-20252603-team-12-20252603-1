@@ -8,6 +8,10 @@ public class Rook extends Piece {
 
   @Override
   public Piece makeCopy() {
-    return new Rook(getColor());
+    Rook copy = new Rook(getColor());
+    if (hasMoved()) {
+      copy.changeToMoved();
+    }
+    return copy;
   }
 }

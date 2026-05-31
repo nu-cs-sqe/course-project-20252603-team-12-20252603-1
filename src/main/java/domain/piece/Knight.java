@@ -8,6 +8,10 @@ public class Knight extends Piece {
 
   @Override
   public Piece makeCopy() {
-    return new Knight(getColor());
+    Knight copy = new Knight(getColor());
+    if (hasMoved()) {
+      copy.changeToMoved();
+    }
+    return copy;
   }
 }
