@@ -5,6 +5,7 @@ import domain.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import domain.piece.NonePiece;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -69,6 +70,11 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.NONE) {
             return new ArrayList<>();
         }
+        List<Move> pseudoLegal = generatePseudoLegalMoves(from, piece);
+        return filterLegalMoves(pseudoLegal, piece.getColor());
+    }
+
+    private List<Move> generatePseudoLegalMoves(Location from, Piece piece) {
         if (piece.getType() == PieceType.KNIGHT) {
             return generateKnightMoves(from, piece);
         }
@@ -88,6 +94,42 @@ public class MoveGenerator {
             return generatePawnMoves(from, piece);
         }
         return new ArrayList<>();
+    }
+
+    private List<Move> filterLegalMoves(List<Move> pseudoLegal, PieceColor movingColor) {
+        List<Move> legal = new ArrayList<>();
+        for (Move move : pseudoLegal) {
+            if (!leavesOwnKingInCheck(move, movingColor)) {
+                legal.add(move);
+            }
+        }
+        return legal;
+    }
+
+    private boolean leavesOwnKingInCheck(Move move, PieceColor movingColor) {
+        Piece[][] boardAfter = applyMoveToBoard(board, move);
+        return new MoveGenerator(boardAfter, Optional.empty()).isInCheck(movingColor);
+    }
+
+    static Piece[][] applyMoveToBoard(Piece[][] original, Move move) {
+        Piece[][] copy = deepCopy(original);
+        int fromRank = move.getFrom().getY();
+        int fromFile = move.getFrom().getX();
+        int toRank = move.getTo().getY();
+        int toFile = move.getTo().getX();
+        copy[toRank][toFile] = copy[fromRank][fromFile];
+        copy[fromRank][fromFile] = new NonePiece();
+        return copy;
+    }
+
+    private static Piece[][] deepCopy(Piece[][] original) {
+        Piece[][] copy = new Piece[BOARD_SIZE][BOARD_SIZE];
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                copy[rank][file] = original[rank][file].makeCopy();
+            }
+        }
+        return copy;
     }
 
     private List<Move> generatePawnMoves(Location from, Piece pawn) {
