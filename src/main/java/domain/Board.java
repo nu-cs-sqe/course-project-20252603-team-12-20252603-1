@@ -14,6 +14,7 @@ import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
 import java.util.List;
+import java.util.Optional;
 
 public class Board {
 
@@ -22,6 +23,7 @@ public class Board {
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
+    private Optional<Location> enPassantTarget = Optional.empty();
     private LegalMoveGenerator legalMoveGenerator;
 
     public Board(Piece[][] initialPieces) {
@@ -82,6 +84,10 @@ public class Board {
 
     void setLegalMoveGenerator(LegalMoveGenerator legalMoveGenerator) {
         this.legalMoveGenerator = legalMoveGenerator;
+    }
+
+    void setEnPassantTarget(Optional<Location> enPassantTarget) {
+        this.enPassantTarget = enPassantTarget;
     }
 
     public List<Move> getLegalMoves(Location from) {

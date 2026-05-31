@@ -384,7 +384,7 @@
   - **State of the system**: board with injected mock `LegalMoveGenerator` stubbed to return eight moves for `(4,4)`
   - **Expected output**: returned list size is `8`; mock `generateLegalMoves(Location)` is invoked once
 
-- **TC52: GetLegalMoves_WhenCalled_DelegatesToLegalMoveGenerator** ( :x: )
+- **TC52: GetLegalMoves_WhenCalled_DelegatesToLegalMoveGenerator** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMoves(Location)`
   - **State of the system**: board with `enPassantTarget` set; injected mock `LegalMoveGenerator`
   - **Expected output**: `getLegalMoves` returns the stubbed list and invokes the collaborator (production wiring to pass `enPassantTarget` lands with `MoveGenerator` integration)
