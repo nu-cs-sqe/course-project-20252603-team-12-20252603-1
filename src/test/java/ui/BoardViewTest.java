@@ -52,7 +52,7 @@ class BoardViewTest {
     }
 
     @Test
-    void MouseClicked_AtLastPixelOfTopTileRow_CallsHandleSquareClickWithRankSeven() {
+    void MousePressed_AtLastPixelOfTopTileRow_CallsHandleSquareClickWithRankZero() {
         BoardController mockController = EasyMock.createMock(BoardController.class);
         Capture<Location> cap = EasyMock.newCapture();
         mockController.handleSquareClick(EasyMock.capture(cap));
@@ -61,10 +61,10 @@ class BoardViewTest {
 
         BoardView view = new BoardView(mockController);
         MouseListener listener = view.getMouseListeners()[0];
-        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_CLICKED, 0, 0, 0, 74, 1, false);
-        listener.mouseClicked(event);
+        MouseEvent event = new MouseEvent(view, MouseEvent.MOUSE_PRESSED, 0, 0, 0, 74, 1, false);
+        listener.mousePressed(event);
 
-        int expected = 7;
+        int expected = 0;
         int actual = cap.getValue().getY();
         assertEquals(expected, actual);
 
