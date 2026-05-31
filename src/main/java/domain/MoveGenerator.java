@@ -11,6 +11,9 @@ import domain.piece.PieceType;
 public class MoveGenerator {
 
     private static final int BOARD_SIZE = 8;
+    private static final int[][] EIGHT_DIRECTIONS = {
+        {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}
+    };
     private static final int[][] ROOK_DIRS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     private static final int[][] BISHOP_DIRS = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
     private static final int[][] KNIGHT_OFFSETS = {
@@ -38,6 +41,9 @@ public class MoveGenerator {
         }
         if (piece.getType() == PieceType.ROOK) {
             return generateSlidingMoves(from, piece, ROOK_DIRS);
+        }
+        if (piece.getType() == PieceType.QUEEN) {
+            return generateSlidingMoves(from, piece, EIGHT_DIRECTIONS);
         }
         return new ArrayList<>();
     }

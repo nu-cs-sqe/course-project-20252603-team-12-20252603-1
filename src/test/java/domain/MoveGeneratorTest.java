@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import domain.location.Location;
 import domain.piece.Bishop;
 import domain.piece.Knight;
+import domain.piece.Queen;
 import domain.piece.Rook;
 import domain.piece.NonePiece;
 import domain.piece.Piece;
@@ -24,6 +25,18 @@ class MoveGeneratorTest {
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
         assertNotNull(moveGenerator.generateLegalMoves(new Location(4, 4)));
+    }
+
+    @Test
+    void GenerateLegalMoves_OnQueenAtCenter_ReturnsTwentySevenMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Queen(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 27;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+
+        assertEquals(expected, actual);
     }
 
     @Test
