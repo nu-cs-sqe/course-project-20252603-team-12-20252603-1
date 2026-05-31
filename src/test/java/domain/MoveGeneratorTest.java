@@ -11,6 +11,7 @@ import domain.piece.Queen;
 import domain.piece.Rook;
 import domain.piece.NonePiece;
 import domain.piece.Piece;
+import domain.piece.Pawn;
 import domain.piece.PieceColor;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,18 @@ class MoveGeneratorTest {
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
         assertNotNull(moveGenerator.generateLegalMoves(new Location(4, 4)));
+    }
+
+    @Test
+    void GenerateLegalMoves_OnWhitePawnAtStart_ReturnsOneAndTwoStepMoves() {
+        Piece[][] board = emptyBoard();
+        board[6][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 2;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 6)).size();
+
+        assertEquals(expected, actual);
     }
 
     @Test

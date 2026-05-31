@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import domain.piece.Piece;
+import domain.piece.PieceColor;
 import domain.piece.PieceType;
 
 public class MoveGenerator {
@@ -48,7 +49,36 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.KING) {
             return generateKingMoves(from, piece);
         }
+        if (piece.getType() == PieceType.PAWN) {
+            return generatePawnMoves(from, piece);
+        }
         return new ArrayList<>();
+    }
+
+    private List<Move> generatePawnMoves(Location from, Piece pawn) {
+        List<Move> moves = new ArrayList<>();
+        int rank = from.getY();
+        int file = from.getX();
+        PieceColor color = pawn.getColor();
+        int direction = (color == PieceColor.WHITE) ? -1 : 1;
+        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
+
+        int oneAhead = rank + direction;
+        if (!isOnBoard(oneAhead, file)) {
+            return moves;
+        }
+        if (board[oneAhead][file].getType() != PieceType.NONE) {
+            return moves;
+        }
+        moves.add(new Move(from, new Location(file, oneAhead)));
+
+        int twoAhead = rank + 2 * direction;
+        if (rank == startRank
+                && isOnBoard(twoAhead, file)
+                && board[twoAhead][file].getType() == PieceType.NONE) {
+            moves.add(new Move(from, new Location(file, twoAhead)));
+        }
+        return moves;
     }
 
     private List<Move> generateKingMoves(Location from, Piece king) {
