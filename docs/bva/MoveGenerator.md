@@ -127,7 +127,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC9: GenerateAllLegalMovesForColor_OnSingleWhiteKnight_ReturnsEightMoves ( :x: )
+- MG-TC9: GenerateAllLegalMovesForColor_OnSingleWhiteKnight_ReturnsEightMoves ( :white_check_mark: )
   - Method(s) under test: generateAllLegalMovesForColor(PieceColor)
   - State of the system: only movable white piece is knight at (4,4)
   - Expected output: returned move list size is 8 for PieceColor.WHITE
