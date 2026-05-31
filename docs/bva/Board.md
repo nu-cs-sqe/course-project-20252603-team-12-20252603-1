@@ -511,3 +511,61 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
 
 ---
+
+## Method: `makeMove(Move move)`
+
+Scope: apply a **normal** move to internal board state and toggle turn. Win, draw, en passant, castling, and promotion are deferred to later slices.
+
+### Step 1: Equivalence Classes
+
+- **Input: move** — `Move` with from/to locations and `MoveType.NORMAL`
+- **Input: board state before move** — piece at source square; destination empty or capturable
+- **Input: current game state** — `WHITE_TURN` or `BLACK_TURN`
+- **Output: piece at destination** — moved piece type and color match the piece that was at source
+- **Output: piece at source** — `NonePiece` after move
+- **Output: game state after move** — toggled to the opposite turn
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: move from/to | Pairs of variables | file/rank in [0, 7] |
+| Input: move type | Cases | NORMAL |
+| Input: game state before | Cases | WHITE_TURN, BLACK_TURN |
+| Output: destination piece type | Cases | PAWN, etc. |
+| Output: source piece type | Cases | NONE |
+| Output: game state after | Cases | BLACK_TURN, WHITE_TURN |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**move — Pairs of variables:**
+- White pawn `(4,6)` → `(4,5)` on empty board
+- Black pawn `(4,1)` → `(4,2)` on empty board
+
+**game state — Cases:**
+- `WHITE_TURN` before move → `BLACK_TURN` after
+- `BLACK_TURN` before move → `WHITE_TURN` after
+
+### Step 4: Test Cases
+
+- **TC50: MakeMove_OnNormalMove_PieceAtDestination** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
+  - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
+
+- **TC51: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn moves from `(4,6)` to `(4,5)`
+  - **Expected output**: after move, `getPieceAt(6, 4)` returns type `NONE`
+
+- **TC52: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
+  - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
+
+- **TC53: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
+  - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
+
+---
