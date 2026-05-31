@@ -163,7 +163,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - State of the system: white knight at (4,4)
   - Expected output: hasLegalMovesForColor(PieceColor.WHITE) is true
 
-- MG-TC11: HasLegalMovesForColor_OnNoPiecesForColor_ReturnsFalse ( :x: )
+- MG-TC11: HasLegalMovesForColor_OnNoPiecesForColor_ReturnsFalse ( :white_check_mark: )
   - Method(s) under test: hasLegalMovesForColor(PieceColor)
   - State of the system: board has no black pieces
   - Expected output: hasLegalMovesForColor(PieceColor.BLACK) is false
