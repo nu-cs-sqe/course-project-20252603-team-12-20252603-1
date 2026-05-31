@@ -1,264 +1,352 @@
 @startuml
-title Class Diagram for Chess Game (with a mostly complete domain layer and a draft for the UI Layer)
+title Class Diagram for Chess Game
 
-package ui{
+package ui {
 
-    +class Main{
+    +class Main {
         +{static} main(args: String[]): void
     }
 
-    +class WelcomeView{
+    +class WelcomeController {
+        -welcomeView: WelcomeView
+
+        +WelcomeController()
+        +show(): void
+        ~getWelcomeView(): WelcomeView
+
+        -startGame(): void
+        -selectedInitializer(): BoardInitializer
+        -closeWelcomeView(): void
+    }
+
+    +class WelcomeView {
         -player1NameField: JTextField
         -player2NameField: JTextField
+        -standardRadioButton: JRadioButton
+        -chess960RadioButton: JRadioButton
+        -errorLabel: JLabel
 
         +WelcomeView()
+        +getPlayer1Name(): String
+        +getPlayer2Name(): String
+        +isChess960Selected(): boolean
+        +setStartGameAction(action: Runnable): void
+        +showError(message: String): void
+        +getErrorText(): String
+        ~setPlayer1Name(name: String): void
+        ~setPlayer2Name(name: String): void
+        ~setChess960Selected(selected: boolean): void
+        ~clickStartGame(): void
         -createWelcomeScreenUI(): void
     }
 
-    +class GameStatsView{
-        -currentPlayerLabel:JLabel
-        -gameStateLabel: JLabel
-
-        +GameStatsView(player1Name: String, player2Name: String)
-        +updateCurrentPlayerLabel(playerName: String): void
-        +updateGameStateLabel(gameState: GameState): void
-    }
-
-    +class MainView{
-        -boardView: BoardView
+    +class MainView {
         -boardController: BoardController
+        -boardView: BoardView
         -gameStatsView: GameStatsView
-        -player1Name: String
-        -player2Name: String
 
-        +MainView(player1Name: String, player2Name: String)
+        +MainView(player1Name: String, player2Name: String, boardController: BoardController)
+        ~getBoardController(): BoardController
+        ~getBoardView(): BoardView
+        +getGameStatsView(): GameStatsView
         -configureMainView(): void
         -addGameStatsView(): void
         -addBoardView(): void
     }
 
-    +class BoardView{
+    +class GameStatsView {
+        -currentPlayerLabel: JLabel
+
+        +GameStatsView(player1Name: String, player2Name: String)
+        +updateCurrentPlayerLabel(playerName: String): void
+    }
+
+    +class BoardView {
         -{static}{final} BOARD_SIZE: int
         -{static}{final} TILE_SIZE: int
         -{static}{final} LIGHT_SQUARE_COLOR: Color
         -{static}{final} DARK_SQUARE_COLOR: Color
         -{static}{final} SELECTED_SQUARE_COLOR: Color
-
-        -selectedRow: int
-        -selectedCol: int
+        -{static}{final} LEGAL_MOVE_DOT_COLOR: Color
+        -{static}{final} LEGAL_CAPTURE_COLOR: Color
+        -{static}{final} LEGAL_MOVE_ALPHA: float
 
         -whitePieceImages: Map<PieceType, Image>
         -blackPieceImages: Map<PieceType, Image>
-
         -boardController: BoardController
 
         +BoardView(boardController: BoardController)
         #paintComponent(g: Graphics): void
-
         -drawBoard(g: Graphics): void
-        -loadPieceIMages(): void
-        -loadOnePieceIMage(pieceType: PieceType, color: Color, imagePath: String): void
-        -drawPieces(g: Graphics): void
         -drawSelectedSquare(g: Graphics): void
+        -drawLegalMoveHighlights(g: Graphics): void
+        -drawPieces(g: Graphics): void
+        -loadPieceImages(): void
+        -loadOnePieceImage(pieceType: PieceType, color: PieceColor, imagePath: String): void
     }
 
-    -class BoardMouseListener{
-        +mouseClicked(e: MouseEvent): void
+    -class BoardMouseListener {
+        +mousePressed(e: MouseEvent): void
     }
 
-    +class BoardController{
-        -boardView: BoardView
+    +class BoardController {
+        -{static}{final} BOARD_SIZE: int
         -board: Board
+        -boardView: BoardView
+        -lastSelectedLoc: Optional<Location>
 
-        -lastSelectedLoc: Location
-
-        +BoardController()
+        +BoardController(board: Board)
         +setBoardView(boardView: BoardView): void
-
+        ~getBoardView(): BoardView
+        ~getMainView(): MainView
         +handleSquareClick(loc: Location): void
-        -determineAction(currentSelectedLoc: Location): void
-
-        -repaintBoardView(): void
-
+        +hasSelection(): boolean
+        +getSelectedLocation(): Optional<Location>
+        +getLegalMovesForSelection(): List<Move>
         +getBoardSnapshot(): Piece[][]
+        +getCurrentGameState(): GameState
+
+        -handleSourceClick(loc: Location, currentColor: PieceColor): void
+        -handleDestinationClick(dest: Location, currentColor: PieceColor): void
+        -executeMove(move: Move, currentColor: PieceColor): void
+        -findMoveToDestination(moves: List<Move>, dest: Location): Optional<Move>
+        -promptForPromotionPiece(color: PieceColor): PieceType
+        -isGameOver(): boolean
+        -showEndGame(): void
+        -buildEndGameMessage(): String
+        -updateCurrentPlayerLabel(): void
+        -repaintBoardView(): void
+        -{static} isInBounds(loc: Location): boolean
     }
 
-    note right of BoardController::determineAction
-        The current selected location could be:
-        1) choosing a piece to move
-        2) choosing the destination location for a previously chosen piece to move to
-        3) invalid selection (empty or opponent's piece)
-        4) part of a castling action
-
-        This method will determine which of the above cases it is.
+    note right of BoardController::handleSquareClick
+        Dispatches to handleSourceClick when no piece is
+        selected, or handleDestinationClick when one is.
+        handleDestinationClick validates the destination
+        against getLegalMoves, then calls executeMove.
+        executeMove prompts for promotion if needed, calls
+        board.makeMove, and triggers showEndGame if the
+        game state becomes terminal.
     end note
+
+    ~class PromotionDialog {
+        -dialog: JDialog
+        -color: PieceColor
+        -chosenType: PieceType
+
+        ~PromotionDialog(parent: JFrame, color: PieceColor)
+        ~showAndGetChoice(): PieceType
+        -buildUi(): void
+        -buildPromotionButton(type: PieceType): JButton
+        -loadImage(type: PieceType): Image
+    }
+
+    ~class EndGameView {
+        ~EndGameView(resultMessage: String)
+        ~setPlayAgainAction(action: Runnable): void
+        ~clickPlayAgain(): void
+        -buildUi(resultMessage: String): void
+    }
+
+    ~class EndGameController {
+        -endGameView: EndGameView
+        -mainView: JFrame
+
+        ~EndGameController(resultMessage: String, mainView: JFrame)
+        ~show(): void
+        -playAgain(): void
+    }
 
 }
 
-package domain{
+package domain {
 
-    package piece{
-        +enum PieceColor{
-            WHITE,
+    package move {
+
+        +class Move {
+            -{final} from: Location
+            -{final} to: Location
+            -{final} type: MoveType
+            -{final} promotionType: Optional<PieceType>
+
+            +Move(from: Location, to: Location)
+            +Move(from: Location, to: Location, type: MoveType)
+            +Move(from: Location, to: Location, type: MoveType, promotionPiece: PieceType)
+            +getFrom(): Location
+            +getTo(): Location
+            +getType(): MoveType
+            +getPromotionType(): Optional<PieceType>
+            +withPromotionType(piece: PieceType): Move
+        }
+
+        +enum MoveType {
+            NORMAL
+            EN_PASSANT
+            CASTLING_KINGSIDE
+            CASTLING_QUEENSIDE
+            PROMOTION
+        }
+
+    }
+
+    package piece {
+
+        +enum PieceColor {
+            WHITE
             BLACK
         }
 
-        +enum PieceType{
-            NONE,
-            PAWN,
-            ROOK,
-            KNIGHT,
-            BISHOP,
-            QUEEN,
+        +enum PieceType {
+            NONE
+            PAWN
+            ROOK
+            KNIGHT
+            BISHOP
+            QUEEN
             KING
         }
 
-        +abstract class Piece{
+        +abstract class Piece {
             -{final} type: PieceType
             -{final} color: PieceColor
             -{final} canJump: boolean
             -hasMoved: boolean
 
-            +Piece(type: PieceType, color: PieceColor)
-
+            +Piece(type: PieceType, color: PieceColor, canJump: boolean)
             +getType(): PieceType
             +getColor(): PieceColor
-
             +isSameColor(piece: Piece): boolean
             +canJump(): boolean
             +hasMoved(): boolean
-
             +changeToMoved(): void
             +resetHasMoved(): void
-
             +toString(): String
-
-            +{abstract}makeCopy(): Piece
-            +{abstract}isValidMoveShape(from: Location, to: Location): boolean
+            +{abstract} makeCopy(): Piece
+            +{abstract} isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class Bishop{
+        +class Bishop {
             +Bishop(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class King{
+        +class King {
             +King(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class Knight{
+        +class Knight {
             +Knight(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class Pawn{
+        +class Pawn {
             +Pawn(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class Queen{
+        +class Queen {
             +Queen(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class Rook{
+        +class Rook {
             +Rook(color: PieceColor)
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
         }
 
-        +class NonePiece{
+        +class NonePiece {
             +NonePiece()
             +makeCopy(): Piece
             +isValidMoveShape(from: Location, to: Location): boolean
             +isSameColor(piece: Piece): boolean
         }
 
-
     }
 
-    +interface BoardInitializer{
+    +interface BoardInitializer {
         +getBoardLayout(): PieceType[][]
     }
 
-    +class StandardBoardInitializer{
+    +class StandardBoardInitializer {
         +getBoardLayout(): PieceType[][]
     }
 
-    +class FischerRandomBoardInitializer{
+    +class FischerRandomBoardInitializer {
+        -random: Random
+        +FischerRandomBoardInitializer(random: Random)
         +getBoardLayout(): PieceType[][]
     }
 
-    +class Board{
-        -{final} TOTAL_ROWS: int
-        -{final} TOTAL_COLS: int
+    +class Board {
+        -{static}{final} BOARD_SIZE: int
         -pieces: Piece[][]
         -currentGameState: GameState
+        -enPassantTarget: Optional<Location>
+        -halfMoveClock: int
 
-        -blackKingLocation: Location
-        -whiteKingLocation: Location
-
-        +Board()
         +Board(initializer: BoardInitializer)
-        +getSnapshot(): Piece[][]
-
-        +movePiece(from: Square, to: Square): boolean
-        -isDestinationNotSameColor(from: Square, to: Square): boolean
-        -isMoveValidShape(from: Square, to: Square): boolean
-        -hasNoObstacle(from: Square, to: Square): boolean
-        -checkNotMoveIntoCheck(from: Square, to: Square): boolean
-
-        -capture(from: Location, to: Location): boolean
-
-        +promotePawn(location: Location, newPieceType: PieceType): boolean
-        +castle(kingFrom: Location, kingTo: Location, rookFrom: Location, rookTo: Location): boolean
-
-        -updateGameState(): void
-        -checkCheckmate(): void
-        -checkStalemate(): void
-
-        -updateWhiteKingLocation(location: Location): void
-        -updateBlackKingLocation(location: Location): void
-
-        +switchTurn(): void
+        +Board(initialPieces: Piece[][])
         +getCurrentGameState(): GameState
+        +getPieceAt(rank: int, file: int): Piece
+        +getSnapshot(): Piece[][]
+        +getEnPassantTarget(): Optional<Location>
+        +getLegalMoves(from: Location): List<Move>
+        +makeMove(move: Move): void
 
-        -initializeBoard(): void
+        -currentPlayerColor(): PieceColor
+        -isCapture(move: Move): boolean
+        -applyMoveToInternalState(move: Move): void
+        -executeCastling(rank: int, kingFile: int, kingDestFile: int, rookDestFile: int, kingside: boolean): void
+        -findCastlingRookFile(rank: int, kingFile: int, kingside: boolean): int
+        -updateEnPassantTarget(move: Move, movedPiece: Piece): void
+        -updateGameState(justMovedColor: PieceColor): void
+        -isInsufficientMaterial(): boolean
     }
 
-    note left of Board::movePiece
-        First call isDestinationNotSameColor,
-        then isMoveValidShape,
-        then hasNoObstacle,
-        then checkNotMoveIntoCheck.
+    note left of Board::makeMove
+        Applies the move via applyMoveToInternalState,
+        then updates enPassantTarget and halfMoveClock,
+        then calls updateGameState which sets currentGameState
+        to WHITE_TURN, BLACK_TURN, WHITE_WIN, BLACK_WIN, or DRAW.
+        Draw conditions: stalemate, insufficient material,
+        fifty-move rule.
     end note
 
-    note left of Board::isDestinationNotSameColor
-        First use 'from' and 'to' locations to get the Piece objects from the array.
-        Then use the Piece object's isSameColor method.
+    +class MoveGenerator {
+        -{static}{final} BOARD_SIZE: int
+        -board: Piece[][]
+        -enPassantTarget: Optional<Location>
 
-        Chess rule: can't move to a location occupied by a piece of the same color.
+        +MoveGenerator(board: Piece[][], enPassantTarget: Optional<Location>)
+        +generateLegalMoves(from: Location): List<Move>
+        +generateAllLegalMovesForColor(color: PieceColor): List<Move>
+        +hasLegalMovesForColor(color: PieceColor): boolean
+        +isInCheck(color: PieceColor): boolean
+
+        ~{static} applyMoveToBoard(original: Piece[][], move: Move): Piece[][]
+        ~{static} isSquareAttackedBy(square: Location, attackerColor: PieceColor, board: Piece[][]): boolean
+        ~{static} findKing(color: PieceColor, board: Piece[][]): Location
+        ~{static} createPiece(type: PieceType, color: PieceColor): Piece
+        ~{static} opponent(color: PieceColor): PieceColor
+    }
+
+    note right of MoveGenerator::generateLegalMoves
+        Generates pseudo-legal moves for the piece at 'from',
+        then filters out any that leave the moving side's king
+        in check (via applyMoveToBoard + isInCheck simulation).
+        Special moves: en passant, castling (kingside and
+        queenside), and promotion candidates for pawns
+        reaching the back rank.
     end note
 
-    note left of Board::isValidShape
-        First 'from' location to get the Piece obejct form the array.
-        Then use the Piece object's isValidMoveShape method.
-    end note
-
-    note left of Board::hasNoObstacle
-        Check whether the piece can jump.
-        If no, check whether there is any piece
-        (obstacle) on the way.
-    end note
-
-
-    +enum GameState{
+    +enum GameState {
         WHITE_TURN
         BLACK_TURN
         WHITE_WIN
@@ -266,7 +354,7 @@ package domain{
         DRAW
     }
 
-    +class Location{
+    +class Location {
         -{final} x: int
         -{final} y: int
 
@@ -277,48 +365,99 @@ package domain{
 
 }
 
-package java{
-  +class JFrame{
-  }
-  +class JPanel{
-  }
-  +class Color{
-  }
-  +class Image{
-  }
-  +class Graphics{
-  }
-  +class MouseAdapter{
-  }
+package java {
+    +class JFrame {}
+    +class JPanel {}
+    +class Color {}
+    +class Image {}
+    +class Graphics {}
+    +class MouseAdapter {}
 }
 
-Main ..> WelcomeView
+' --- Entry point ---
+Main ..> WelcomeController
 
+' --- WelcomeController ---
+WelcomeController --> WelcomeView
+WelcomeController ..> BoardController
+WelcomeController ..> Board
+WelcomeController ..> BoardInitializer
+
+' --- View inheritance ---
 WelcomeView -u-|> JFrame
-
 MainView -u-|> JFrame
-MainView --> BoardView
+EndGameView -u-|> JFrame
+GameStatsView -u-|> JPanel
+BoardView -u-|> JPanel
+BoardMouseListener -u-|> MouseAdapter
+
+' --- MainView ---
 MainView --> BoardController
+MainView --> BoardView
 MainView --> GameStatsView
 
-GameStatsView -u-|> JPanel
-GameStatsView --> GameState
-
-BoardView -u-|> JPanel
+' --- BoardView ---
 BoardView --> "3" Color
 BoardView --> "*" PieceType
 BoardView --> "*" Image
 BoardView --> BoardController
 BoardView ..> Graphics
+BoardView ..> Move
 BoardView --+ BoardMouseListener
 
-BoardMouseListener -u-|> MouseAdapter
-
-BoardController --> BoardView
+' --- BoardController ---
 BoardController --> Board
+BoardController --> BoardView
+BoardController ..> Move
+BoardController ..> MoveType
 BoardController ..> Location
 BoardController ..> Piece
+BoardController ..> PieceType
+BoardController ..> PieceColor
+BoardController ..> GameState
+BoardController ..> PromotionDialog
+BoardController ..> EndGameController
 
+' --- EndGameController ---
+EndGameController --> EndGameView
+EndGameController ..> WelcomeController
+
+' --- Board ---
+Board --> "64" Piece
+Board --> GameState
+Board ..> Move
+Board ..> Location
+Board ..> MoveGenerator
+Board ..> PieceColor
+Board ..> PieceType
+Board ..> NonePiece
+Board ..> BoardInitializer
+
+' --- MoveGenerator ---
+MoveGenerator ..> Move
+MoveGenerator ..> MoveType
+MoveGenerator ..> Location
+MoveGenerator ..> Piece
+MoveGenerator ..> PieceColor
+MoveGenerator ..> PieceType
+MoveGenerator ..> NonePiece
+MoveGenerator ..> Bishop
+MoveGenerator ..> King
+MoveGenerator ..> Knight
+MoveGenerator ..> Pawn
+MoveGenerator ..> Queen
+MoveGenerator ..> Rook
+
+' --- Move ---
+Move --> Location
+Move --> MoveType
+Move ..> PieceType
+
+' --- Initializers ---
+StandardBoardInitializer ..|> BoardInitializer
+FischerRandomBoardInitializer ..|> BoardInitializer
+
+' --- Piece hierarchy ---
 Bishop -u-|> Piece
 King -u-|> Piece
 Knight -u-|> Piece
@@ -327,22 +466,9 @@ Pawn -u-|> Piece
 Queen -u-|> Piece
 Rook -u-|> Piece
 
-StandardBoardInitializer ..|> BoardInitializer
-FischerRandomBoardInitializer ..|> BoardInitializer
-Board --> BoardInitializer
-
-Board --> "64" Piece
-Board ..> Bishop
-Board ..> King
-Board ..> Knight
-Board ..> NonePiece
-Board ..> Pawn
-Board ..> Queen
-Board ..> Rook
-Board ..> PieceColor
-Board --> GameState
-
+' --- Piece internals ---
 Piece --> PieceType
 Piece --> PieceColor
 Piece ..> Location
+
 @enduml

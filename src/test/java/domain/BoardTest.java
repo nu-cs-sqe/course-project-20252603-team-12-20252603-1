@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -239,6 +241,47 @@ class BoardTest {
     }
 
     @Test
+    void GetLegalMoves_WhenCalled_MatchesMoveGenerator() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[3][5] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Optional<Location> enPassantTarget = Optional.of(new Location(2, 4));
+        board.setEnPassantTarget(enPassantTarget);
+        Location from = new Location(5, 3);
+
+        List<Move> expected =
+            new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
+        List<Move> actual = board.getLegalMoves(from);
+
+        int expectedSize = expected.size();
+        int actualSize = actual.size();
+        assertEquals(expectedSize, actualSize);
+    }
+
+    @Test
+    void GetLegalMoves_OnCenterKnight_ReturnsEightMoves() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[4][4] = new Knight(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Location from = new Location(4, 4);
+
+        int expected = 8;
+        int actual = board.getLegalMoves(from).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GetLegalMoves_OnEmptySquare_ReturnsEmptyList() {
+        Piece[][] layout = emptyPieceGrid();
+        Board board = new Board(layout);
+        Location from = new Location(3, 3);
+
+        int expected = 0;
+        int actual = board.getLegalMoves(from).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void MakeMove_AfterBlackMove_GameStateIsWhiteTurn() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
@@ -253,7 +296,6 @@ class BoardTest {
 
         GameState expected = GameState.WHITE_TURN;
         GameState actual = board.getCurrentGameState();
-
         assertEquals(expected, actual);
     }
 
@@ -271,7 +313,6 @@ class BoardTest {
 
         GameState expected = GameState.BLACK_TURN;
         GameState actual = board.getCurrentGameState();
-
         assertEquals(expected, actual);
     }
 
@@ -289,7 +330,6 @@ class BoardTest {
 
         PieceType expected = PieceType.NONE;
         PieceType actual = board.getPieceAt(6, 4).getType();
-
         assertEquals(expected, actual);
     }
 
@@ -307,8 +347,15 @@ class BoardTest {
 
         PieceType expected = PieceType.PAWN;
         PieceType actual = board.getPieceAt(5, 4).getType();
-
         assertEquals(expected, actual);
+    }
+
+    private static Piece[][] emptyPieceGrid() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        return layout;
     }
 
     @Test

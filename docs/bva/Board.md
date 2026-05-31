@@ -340,6 +340,57 @@
 
 ---
 
+## Method: `getLegalMoves(Location from)`
+
+### Step 1: Equivalence Classes
+
+- **Input: from location** — board location to generate legal moves from
+- **Input: piece at from** — empty square vs movable piece
+- **Input: enPassantTarget state** — empty vs present on the board (passed to `MoveGenerator` in production)
+- **Output: legal move list** — list returned by `MoveGenerator.generateLegalMoves(from)`
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: from location | Pairs of variables | file/rank in [0, 7] |
+| Input: piece at from | Cases | NONE, KNIGHT |
+| Input: enPassantTarget | Optional | empty, present |
+| Output: legal move list | Collections | empty list, list with moves |
+| Collaborator | Pointers | `MoveGenerator` (same class used in production) |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**from location — Pairs of variables:**
+- (3,3) empty square
+- (4,4) knight at center
+
+**enPassantTarget — Optional:**
+- `Optional.empty()` for basic delegation tests
+
+**legal move list size — Counts:**
+- 0
+- 8
+
+### Step 4: Test Cases
+
+- **TC50: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with `NonePiece` at `(3,3)`; no other pieces
+  - **Expected output**: returned list size is `0`
+
+- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: lone white knight at `(4,4)` on otherwise empty board
+  - **Expected output**: returned list size is `8`
+
+- **TC52: GetLegalMoves_WhenCalled_MatchesMoveGenerator** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with white pawn at `(5,3)` and `enPassantTarget` set
+  - **Expected output**: returned list size matches `new MoveGenerator(snapshot, enPassantTarget).generateLegalMoves(from)`
+
+---
+
 ## Method: `getCurrentGameState()`
 
 ### Step 1: Equivalence Classes
