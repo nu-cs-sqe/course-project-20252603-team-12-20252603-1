@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -234,6 +236,24 @@ class BoardTest {
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_PieceAtDestination() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.PAWN;
+        PieceType actual = board.getPieceAt(5, 4).getType();
+
+        assertEquals(expected, actual);
     }
 
     @Test

@@ -1,6 +1,8 @@
 package domain;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -74,5 +76,19 @@ public class Board {
             }
         }
         return snapshot;
+    }
+
+    public void makeMove(Move move) {
+        applyMoveToInternalState(move);
+    }
+
+    private void applyMoveToInternalState(Move move) {
+        int fromRank = move.getFrom().getY();
+        int fromFile = move.getFrom().getX();
+        int toRank = move.getTo().getY();
+        int toFile = move.getTo().getX();
+        pieces[toRank][toFile] = pieces[fromRank][fromFile];
+        pieces[fromRank][fromFile] = new NonePiece();
+        pieces[toRank][toFile].changeToMoved();
     }
 }
