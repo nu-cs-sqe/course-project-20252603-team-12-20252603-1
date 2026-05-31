@@ -1,20 +1,44 @@
 package ui;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class WelcomeView extends JFrame {
 
+    private static final Color BACKGROUND   = new Color(30, 20, 12);
+    private static final Color ACCENT_COLOR = new Color(181, 136, 99);
+    private static final Color TEXT_COLOR   = new Color(240, 217, 181);
+    private static final Color FIELD_BG     = new Color(255, 248, 240);
+
+    private static final Font TITLE_FONT  = new Font("Serif",     Font.BOLD,  52);
+    private static final Font LABEL_FONT  = new Font("SansSerif", Font.PLAIN, 18);
+    private static final Font FIELD_FONT  = new Font("SansSerif", Font.PLAIN, 16);
+    private static final Font RADIO_FONT  = new Font("SansSerif", Font.PLAIN, 18);
+    private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD,  16);
+
     private JTextField player1NameField;
     private JTextField player2NameField;
     private JRadioButton standardRadioButton;
     private JRadioButton chess960RadioButton;
+    private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
     public WelcomeView() {
-        player1NameField   = new JTextField();
-        player2NameField   = new JTextField();
+        player1NameField    = new JTextField();
+        player2NameField    = new JTextField();
         standardRadioButton = new JRadioButton();
         chess960RadioButton = new JRadioButton();
         standardRadioButton.setSelected(true);
@@ -54,88 +78,115 @@ public class WelcomeView extends JFrame {
         startGameAction.run();
     }
 
+    public void showError(String message) {
+        errorLabel.setText(message);
+    }
+
+    String getErrorText() {
+        return errorLabel.getText();
+    }
+
     private void createWelcomeScreenUI() {
         // untestable: Swing UI assembly
-        java.awt.Color background  = new java.awt.Color(30, 20, 12);
-        java.awt.Color accentColor = new java.awt.Color(181, 136, 99);
-        java.awt.Color textColor   = new java.awt.Color(240, 217, 181);
-        java.awt.Color fieldBg     = new java.awt.Color(255, 248, 240);
+        JPanel panel = buildMainPanel();
+        addTitle(panel);
+        addPlayerNameFields(panel);
+        addModeSelector(panel);
+        addStartButton(panel);
+        addErrorLabel(panel);
+        configureWindow(panel);
+    }
 
-        java.awt.Font titleFont  = new java.awt.Font("Serif",     java.awt.Font.BOLD,  52);
-        java.awt.Font labelFont  = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 18);
-        java.awt.Font fieldFont  = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 16);
-        java.awt.Font radioFont  = new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 18);
-        java.awt.Font buttonFont = new java.awt.Font("SansSerif", java.awt.Font.BOLD,  16);
+    private JPanel buildMainPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(BACKGROUND);
+        panel.setBorder(BorderFactory.createEmptyBorder(55, 90, 55, 90));
+        return panel;
+    }
 
-        javax.swing.JPanel panel = new javax.swing.JPanel();
-        panel.setLayout(new javax.swing.BoxLayout(panel, javax.swing.BoxLayout.Y_AXIS));
-        panel.setBackground(background);
-        panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(55, 90, 55, 90));
-
-        javax.swing.JLabel title = new javax.swing.JLabel("♟  Chess  ♟");
-        title.setFont(titleFont);
-        title.setForeground(textColor);
-        title.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    private void addTitle(JPanel panel) {
+        JLabel title = new JLabel("♟  Chess  ♟");
+        title.setFont(TITLE_FONT);
+        title.setForeground(TEXT_COLOR);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(title);
-        panel.add(javax.swing.Box.createVerticalStrut(45));
+        panel.add(Box.createVerticalStrut(45));
+    }
 
-        for (int i = 0; i < 2; i++) {
-            javax.swing.JTextField field = (i == 0) ? player1NameField : player2NameField;
-            String labelText = (i == 0) ? "Player 1" : "Player 2";
+    private void addPlayerNameFields(JPanel panel) {
+        addPlayerNameField(panel, "Player 1", player1NameField);
+        addPlayerNameField(panel, "Player 2", player2NameField);
+    }
 
-            javax.swing.JLabel lbl = new javax.swing.JLabel(labelText);
-            lbl.setFont(labelFont);
-            lbl.setForeground(textColor);
-            lbl.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-            panel.add(lbl);
-            panel.add(javax.swing.Box.createVerticalStrut(5));
+    private void addPlayerNameField(JPanel panel, String labelText, JTextField field) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(LABEL_FONT);
+        label.setForeground(TEXT_COLOR);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(5));
 
-            field.setFont(fieldFont);
-            field.setBackground(fieldBg);
-            field.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 36));
-            field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createLineBorder(accentColor, 1),
-                javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)));
-            panel.add(field);
-            panel.add(javax.swing.Box.createVerticalStrut(18));
-        }
+        field.setFont(FIELD_FONT);
+        field.setBackground(FIELD_BG);
+        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACCENT_COLOR, 1),
+            BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+        panel.add(field);
+        panel.add(Box.createVerticalStrut(18));
+    }
 
-        javax.swing.ButtonGroup modeGroup = new javax.swing.ButtonGroup();
+    private void addModeSelector(JPanel panel) {
+        standardRadioButton.setText("Standard");
+        chess960RadioButton.setText("Chess960");
+        ButtonGroup modeGroup = new ButtonGroup();
         modeGroup.add(standardRadioButton);
         modeGroup.add(chess960RadioButton);
+        panel.add(buildRadioPanel());
+        panel.add(Box.createVerticalStrut(36));
+    }
 
-        javax.swing.JPanel radioPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 0));
-        radioPanel.setBackground(background);
-        radioPanel.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-
+    private JPanel buildRadioPanel() {
+        JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        radioPanel.setBackground(BACKGROUND);
+        radioPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         for (JRadioButton btn : new JRadioButton[]{standardRadioButton, chess960RadioButton}) {
-            btn.setFont(radioFont);
-            btn.setForeground(textColor);
-            btn.setBackground(background);
+            btn.setFont(RADIO_FONT);
+            btn.setForeground(TEXT_COLOR);
+            btn.setBackground(BACKGROUND);
             btn.setFocusPainted(false);
             radioPanel.add(btn);
         }
-        standardRadioButton.setText("Standard");
-        chess960RadioButton.setText("Chess960");
+        return radioPanel;
+    }
 
-        panel.add(radioPanel);
-        panel.add(javax.swing.Box.createVerticalStrut(36));
-
-        javax.swing.JButton startButton = new javax.swing.JButton("Start Game");
-        startButton.setFont(buttonFont);
-        startButton.setBackground(accentColor);
-        startButton.setForeground(textColor);
+    private void addStartButton(JPanel panel) {
+        JButton startButton = new JButton("Start Game");
+        startButton.setFont(BUTTON_FONT);
+        startButton.setBackground(ACCENT_COLOR);
+        startButton.setForeground(TEXT_COLOR);
         startButton.setFocusPainted(false);
         startButton.setOpaque(true);
         startButton.setBorderPainted(false);
-        startButton.setMaximumSize(new java.awt.Dimension(180, 42));
-        startButton.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+        startButton.setMaximumSize(new Dimension(180, 42));
+        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startButton.addActionListener(e -> clickStartGame());
         panel.add(startButton);
+    }
 
+    private void addErrorLabel(JPanel panel) {
+        errorLabel.setForeground(new Color(200, 50, 50));
+        errorLabel.setFont(LABEL_FONT);
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(errorLabel);
+    }
+
+    private void configureWindow(JPanel panel) {
         setTitle("Chess");
-        setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(background);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(BACKGROUND);
         getContentPane().add(panel);
         setSize(600, 600);
         setLocationRelativeTo(null);
