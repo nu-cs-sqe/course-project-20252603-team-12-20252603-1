@@ -381,17 +381,17 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ### Step 4: Test cases
 
-- **BC-TC52: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :x: )
+- **BC-TC52: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: newly constructed controller; no piece selected
   - **Expected output**: returned list size is `0`
 
-- **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :x: )
+- **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
   - **State of the system**: white turn; white pawn selected at `Location(0, 6)`; board stubs one legal move
   - **Expected output**: returned list equals board's `getLegalMoves` result for selected square
 
-- **BC-TC54: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :x: )
+- **BC-TC54: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
   - **State of the system**: white turn; own piece selected; board stubs empty legal-move list
   - **Expected output**: returned list size is `0`
