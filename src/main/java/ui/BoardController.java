@@ -41,13 +41,20 @@ public class BoardController {
     if (!isInBounds(loc)) {
       return;
     }
+    GameState state = board.getCurrentGameState();
+    if (state != GameState.WHITE_TURN && state != GameState.BLACK_TURN) {
+      return;
+    }
+    PieceColor currentColor =
+        (state == GameState.WHITE_TURN) ? PieceColor.WHITE : PieceColor.BLACK;
+    handleSourceClick(loc, currentColor);
+  }
+
+  private void handleSourceClick(Location loc, PieceColor currentColor) {
     int file = loc.getX();
     int rank = loc.getY();
     Piece at = board.getPieceAt(rank, file);
-    if (at.getType() == PieceType.NONE || board.getCurrentGameState() != GameState.WHITE_TURN) {
-      return;
-    }
-    if (at.getColor() != PieceColor.WHITE) {
+    if (at.getType() == PieceType.NONE || at.getColor() != currentColor) {
       return;
     }
     lastSelectedLoc = Optional.of(loc);

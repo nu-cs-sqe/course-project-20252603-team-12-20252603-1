@@ -558,6 +558,21 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForBlackPieceClick(standardGrid, 1, 0);
+        BoardController controller = new BoardController(boardMock);
+        Location clicked = new Location(0, 1);
+
+        controller.handleSquareClick(clicked);
+
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
@@ -614,6 +629,33 @@ class BoardControllerTest {
         GameState actual = controller.getCurrentGameState();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
+    }
+
+    private static Board boardForBlackPieceClick(Piece[][] snapshot, int rank, int file) {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.BLACK_TURN);
+        EasyMock.expect(boardMock.getPieceAt(rank, file)).andReturn(snapshot[rank][file]);
+        EasyMock.replay(boardMock);
+        return boardMock;
+    }
+
+    private static Board boardForSquareClickOnBlackTurn(Piece[][] snapshot, int rank, int file) {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.BLACK_TURN);
+        EasyMock.expect(boardMock.getPieceAt(rank, file)).andReturn(snapshot[rank][file]);
+        EasyMock.expect(boardMock.getSnapshot()).andStubReturn(snapshot);
+        EasyMock.replay(boardMock);
+        return boardMock;
+    }
+
+    private static Board boardForBlackPieceClickWithSnapshot(
+            Piece[][] snapshot, int rank, int file) {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andStubReturn(GameState.BLACK_TURN);
+        EasyMock.expect(boardMock.getPieceAt(rank, file)).andReturn(snapshot[rank][file]);
+        EasyMock.expect(boardMock.getSnapshot()).andReturn(snapshot);
+        EasyMock.replay(boardMock);
+        return boardMock;
     }
 
     private static Board replayNiceBoard() {
