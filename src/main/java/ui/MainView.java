@@ -1,6 +1,5 @@
 package ui;
 
-import domain.Board;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
@@ -10,17 +9,20 @@ public class MainView extends JFrame {
   private final BoardView boardView;
   private final GameStatsView gameStatsView;
 
-  public MainView(String player1Name, String player2Name, Board board) {
-    boardController = new BoardController(board);
+  public MainView(String player1Name, String player2Name, BoardController boardController) {
+    this.boardController = boardController;
     boardView = new BoardView(boardController);
     gameStatsView = new GameStatsView(player1Name, player2Name);
     configureMainView();
   }
 
   private void configureMainView() {
+    setTitle("Chess");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     addGameStatsView();
     addBoardViewToContentPane();
     registerBoardViewWithController();
+    pack();
   }
 
   private void addGameStatsView() {
