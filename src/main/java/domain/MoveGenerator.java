@@ -11,6 +11,8 @@ import domain.piece.PieceType;
 public class MoveGenerator {
 
     private static final int BOARD_SIZE = 8;
+    private static final int[][] ROOK_DIRS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    private static final int[][] BISHOP_DIRS = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
     private static final int[][] KNIGHT_OFFSETS = {
         {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}
     };
@@ -31,7 +33,34 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.KNIGHT) {
             return generateKnightMoves(from, piece);
         }
+        if (piece.getType() == PieceType.BISHOP) {
+            return generateSlidingMoves(from, piece, BISHOP_DIRS);
+        }
         return new ArrayList<>();
+    }
+
+    private List<Move> generateSlidingMoves(Location from, Piece piece, int[][] directions) {
+        List<Move> moves = new ArrayList<>();
+        int rank = from.getY();
+        int file = from.getX();
+        for (int[] direction : directions) {
+            int currentRank = rank + direction[0];
+            int currentFile = file + direction[1];
+            while (isOnBoard(currentRank, currentFile)) {
+                Piece target = board[currentRank][currentFile];
+                if (target.getType() == PieceType.NONE) {
+                    moves.add(new Move(from, new Location(currentFile, currentRank)));
+                    currentRank += direction[0];
+                    currentFile += direction[1];
+                    continue;
+                }
+                if (target.getColor() != piece.getColor()) {
+                    moves.add(new Move(from, new Location(currentFile, currentRank)));
+                }
+                break;
+            }
+        }
+        return moves;
     }
 
     private List<Move> generateKnightMoves(Location from, Piece knight) {

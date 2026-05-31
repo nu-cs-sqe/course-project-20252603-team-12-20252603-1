@@ -72,12 +72,12 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - State of the system: from (3,3) holds NonePiece
   - Expected output: returned move list size is 0
 
-- MG-TC3: GenerateLegalMoves_OnKnightAtCenter_ReturnsEightMoves ( :x: )
+- MG-TC3: GenerateLegalMoves_OnKnightAtCenter_ReturnsEightMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white knight at (4,4), all other squares NonePiece
   - Expected output: returned move list size is 8
 
-- MG-TC4: GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves ( :x: )
+- MG-TC4: GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white bishop at (4,4), all other squares NonePiece
   - Expected output: returned move list size is 13
