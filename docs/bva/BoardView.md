@@ -101,44 +101,44 @@ Rank (y) boundaries:
 
 **File boundary — x dimension**
 
-- **BV-TC4: MousePressed_AtLeftmostPixel_CallsHandleSquareClickWithFileZero** ( :x: )
+- **BV-TC4: MousePressed_AtLeftmostPixel_CallsHandleSquareClickWithFileZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(0, 0)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getX() == 0`
 
-- **BV-TC5: MousePressed_AtLastPixelOfFirstTile_CallsHandleSquareClickWithFileZero** ( :x: )
+- **BV-TC5: MousePressed_AtLastPixelOfFirstTile_CallsHandleSquareClickWithFileZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(TILE_SIZE − 1, 0)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getX() == 0`
 
-- **BV-TC6: MousePressed_AtFirstPixelOfSecondTile_CallsHandleSquareClickWithFileOne** ( :x: )
+- **BV-TC6: MousePressed_AtFirstPixelOfSecondTile_CallsHandleSquareClickWithFileOne** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(TILE_SIZE, 0)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getX() == 1`
 
-- **BV-TC7: MousePressed_AtLastPixelOfBoard_CallsHandleSquareClickWithFileSeven** ( :x: )
+- **BV-TC7: MousePressed_AtLastPixelOfBoard_CallsHandleSquareClickWithFileSeven** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(BOARD_SIZE*TILE_SIZE − 1, BOARD_SIZE*TILE_SIZE − 1)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getX() == 7`
 
 **Rank boundary — y dimension**
 
-- **BV-TC8: MousePressed_AtTopPixel_CallsHandleSquareClickWithRankZero** ( :x: )
+- **BV-TC8: MousePressed_AtTopPixel_CallsHandleSquareClickWithRankZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(0, 0)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 0`
 
-- **BV-TC9: MousePressed_AtLastPixelOfTopTileRow_CallsHandleSquareClickWithRankZero** ( :x: )
+- **BV-TC9: MousePressed_AtLastPixelOfTopTileRow_CallsHandleSquareClickWithRankZero** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(0, TILE_SIZE − 1)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 0`
 
-- **BV-TC10: MousePressed_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankOne** ( :x: )
+- **BV-TC10: MousePressed_AtFirstPixelOfSecondTileRow_CallsHandleSquareClickWithRankOne** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(0, TILE_SIZE)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 1`
 
-- **BV-TC11: MousePressed_AtBottomPixel_CallsHandleSquareClickWithRankSeven** ( :x: )
+- **BV-TC11: MousePressed_AtBottomPixel_CallsHandleSquareClickWithRankSeven** ( :white_check_mark: )
   - **Method(s) under test**: `BoardMouseListener.mousePressed`
   - **State of the system**: press at pixel `(0, BOARD_SIZE*TILE_SIZE − 1)`
   - **Expected output**: `handleSquareClick` receives `Location` with `getY() == 7`
