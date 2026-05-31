@@ -303,47 +303,47 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
 
 ### Step 4: Test cases — `BLACK_TURN` source selection
 
-- **BC-TC43: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :x: )
+- **BC-TC43: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; click black piece at `Location(0, 1)`
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC44: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :x: )
+- **BC-TC44: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: `GameState.BLACK_TURN`; click `Location(0, 1)`
   - **Expected output**: `getSelectedLocation()` present with same coordinates
 
-- **BC-TC45: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :x: )
+- **BC-TC45: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; click black piece
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC46: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :x: )
+- **BC-TC46: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece at `Location(0, 6)`
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC47: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :x: )
+- **BC-TC47: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece
   - **Expected output**: `GameState.BLACK_TURN`
 
-- **BC-TC48: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :x: )
+- **BC-TC48: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC49: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :x: )
+- **BC-TC49: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square `Location(3, 3)`
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC50: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :x: )
+- **BC-TC50: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: `GameState.BLACK_TURN`
 
-- **BC-TC51: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :x: )
+- **BC-TC51: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: snapshot unchanged cell-wise
