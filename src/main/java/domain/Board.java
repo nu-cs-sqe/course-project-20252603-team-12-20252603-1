@@ -1,6 +1,8 @@
 package domain;
 
 import domain.gamestate.GameState;
+import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -11,6 +13,8 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import java.util.List;
+import java.util.Optional;
 
 public class Board {
 
@@ -19,6 +23,11 @@ public class Board {
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
+    private Optional<Location> enPassantTarget = Optional.empty();
+
+    void setEnPassantTarget(Optional<Location> enPassantTarget) {
+        this.enPassantTarget = enPassantTarget;
+    }
 
     public Board(Piece[][] initialPieces) {
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -74,5 +83,9 @@ public class Board {
             }
         }
         return snapshot;
+    }
+
+    public List<Move> getLegalMoves(Location from) {
+        return new MoveGenerator(pieces, enPassantTarget).generateLegalMoves(from);
     }
 }
