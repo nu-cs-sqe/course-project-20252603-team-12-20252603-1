@@ -239,6 +239,24 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnNormalMove_SourceSquareIsEmpty() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(6, 4).getType();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void MakeMove_OnNormalMove_PieceAtDestination() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
