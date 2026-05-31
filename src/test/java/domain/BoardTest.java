@@ -239,6 +239,25 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_AfterBlackMove_GameStateIsWhiteTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[1][4] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        board.switchTurn();
+        Move move = new Move(new Location(4, 1), new Location(4, 2));
+
+        board.makeMove(move);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = board.getCurrentGameState();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void MakeMove_AfterWhiteMove_GameStateIsBlackTurn() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
