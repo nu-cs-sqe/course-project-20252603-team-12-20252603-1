@@ -158,7 +158,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC10: HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue ( :x: )
+- MG-TC10: HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue ( :white_check_mark: )
   - Method(s) under test: hasLegalMovesForColor(PieceColor)
   - State of the system: white knight at (4,4)
   - Expected output: hasLegalMovesForColor(PieceColor.WHITE) is true

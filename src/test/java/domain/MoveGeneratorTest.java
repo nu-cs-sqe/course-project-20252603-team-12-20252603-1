@@ -30,6 +30,30 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = moveGenerator.hasLegalMovesForColor(PieceColor.WHITE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void HasLegalMovesForColor_OnNoPiecesForColor_ReturnsFalse() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = moveGenerator.hasLegalMovesForColor(PieceColor.BLACK);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateAllLegalMovesForColor_OnSingleWhiteKnight_ReturnsEightMoves() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Knight(PieceColor.WHITE);

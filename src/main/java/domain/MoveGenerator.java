@@ -29,6 +29,20 @@ public class MoveGenerator {
         this.enPassantTarget = enPassantTarget;
     }
 
+    public boolean hasLegalMovesForColor(PieceColor color) {
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece piece = board[rank][file];
+                if (piece.getType() != PieceType.NONE && piece.getColor() == color) {
+                    if (!generateLegalMoves(new Location(file, rank)).isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public List<Move> generateAllLegalMovesForColor(PieceColor color) {
         List<Move> moves = new ArrayList<>();
         for (int rank = 0; rank < BOARD_SIZE; rank++) {
