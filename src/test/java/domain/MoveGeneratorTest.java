@@ -166,6 +166,18 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 6;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing() {
         Piece[][] board = emptyBoard();
         board[2][2] = new King(PieceColor.WHITE);
