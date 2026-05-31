@@ -19,7 +19,6 @@ import domain.piece.Rook;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -242,69 +241,52 @@ class BoardTest {
     }
 
     @Test
-    void GetLegalMoves_WhenCalled_DelegatesToLegalMoveGenerator() {
-        LegalMoveGenerator legalMoveGenerator = EasyMock.createMock(LegalMoveGenerator.class);
-        Location from = new Location(5, 3);
-        EasyMock.expect(legalMoveGenerator.generateLegalMoves(from)).andReturn(new ArrayList<>());
-        EasyMock.replay(legalMoveGenerator);
-
-        Piece[][] layout = new Piece[8][8];
-        for (Piece[] row : layout) {
-            Arrays.fill(row, new NonePiece());
-        }
+    void GetLegalMoves_WhenCalled_MatchesMoveGenerator() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[3][5] = new Pawn(PieceColor.WHITE);
         Board board = new Board(layout);
-        board.setEnPassantTarget(Optional.of(new Location(4, 2)));
-        board.setLegalMoveGenerator(legalMoveGenerator);
+        Optional<Location> enPassantTarget = Optional.of(new Location(2, 4));
+        board.setEnPassantTarget(enPassantTarget);
+        Location from = new Location(5, 3);
 
-        board.getLegalMoves(from);
+        List<Move> expected =
+            new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
+        List<Move> actual = board.getLegalMoves(from);
 
-        EasyMock.verify(legalMoveGenerator);
+        int expectedSize = expected.size();
+        int actualSize = actual.size();
+        assertEquals(expectedSize, actualSize);
     }
 
     @Test
     void GetLegalMoves_OnCenterKnight_ReturnsEightMoves() {
-        LegalMoveGenerator legalMoveGenerator = EasyMock.createMock(LegalMoveGenerator.class);
-        Location from = new Location(4, 4);
-        List<Move> stubbedMoves = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            stubbedMoves.add(new Move(from, new Location(i, i)));
-        }
-        EasyMock.expect(legalMoveGenerator.generateLegalMoves(from)).andReturn(stubbedMoves);
-        EasyMock.replay(legalMoveGenerator);
-
-        Piece[][] layout = new Piece[8][8];
-        for (Piece[] row : layout) {
-            Arrays.fill(row, new NonePiece());
-        }
+        Piece[][] layout = emptyPieceGrid();
+        layout[4][4] = new Knight(PieceColor.WHITE);
         Board board = new Board(layout);
-        board.setLegalMoveGenerator(legalMoveGenerator);
+        Location from = new Location(4, 4);
 
         int expected = 8;
         int actual = board.getLegalMoves(from).size();
-
         assertEquals(expected, actual);
-        EasyMock.verify(legalMoveGenerator);
     }
 
     @Test
     void GetLegalMoves_OnEmptySquare_ReturnsEmptyList() {
-        LegalMoveGenerator legalMoveGenerator = EasyMock.createMock(LegalMoveGenerator.class);
+        Piece[][] layout = emptyPieceGrid();
+        Board board = new Board(layout);
         Location from = new Location(3, 3);
-        EasyMock.expect(legalMoveGenerator.generateLegalMoves(from)).andReturn(new ArrayList<>());
-        EasyMock.replay(legalMoveGenerator);
 
+        int expected = 0;
+        int actual = board.getLegalMoves(from).size();
+        assertEquals(expected, actual);
+    }
+
+    private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
             Arrays.fill(row, new NonePiece());
         }
-        Board board = new Board(layout);
-        board.setLegalMoveGenerator(legalMoveGenerator);
-
-        int expected = 0;
-        int actual = board.getLegalMoves(from).size();
-
-        assertEquals(expected, actual);
-        EasyMock.verify(legalMoveGenerator);
+        return layout;
     }
 
     @Test

@@ -24,7 +24,10 @@ public class Board {
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
     private Optional<Location> enPassantTarget = Optional.empty();
-    private LegalMoveGenerator legalMoveGenerator;
+
+    void setEnPassantTarget(Optional<Location> enPassantTarget) {
+        this.enPassantTarget = enPassantTarget;
+    }
 
     public Board(Piece[][] initialPieces) {
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -82,15 +85,7 @@ public class Board {
         return snapshot;
     }
 
-    void setLegalMoveGenerator(LegalMoveGenerator legalMoveGenerator) {
-        this.legalMoveGenerator = legalMoveGenerator;
-    }
-
-    void setEnPassantTarget(Optional<Location> enPassantTarget) {
-        this.enPassantTarget = enPassantTarget;
-    }
-
     public List<Move> getLegalMoves(Location from) {
-        return legalMoveGenerator.generateLegalMoves(from);
+        return new MoveGenerator(pieces, enPassantTarget).generateLegalMoves(from);
     }
 }
