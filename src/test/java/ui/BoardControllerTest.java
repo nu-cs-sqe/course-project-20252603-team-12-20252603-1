@@ -617,6 +617,76 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(0, 6));
+
+        GameState expected = GameState.BLACK_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(0, 6));
+
+        boolean expected = true;
+        boolean actual = cellWiseSameTypeAndColor(standardGrid, controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(3, 3));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(3, 3));
+
+        GameState expected = GameState.BLACK_TURN;
+        GameState actual = controller.getCurrentGameState();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
+        BoardController controller = new BoardController(boardMock);
+
+        controller.handleSquareClick(new Location(3, 3));
+
+        boolean expected = true;
+        boolean actual = cellWiseSameTypeAndColor(standardGrid, controller.getBoardSnapshot());
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
