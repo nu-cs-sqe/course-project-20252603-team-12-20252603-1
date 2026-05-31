@@ -340,6 +340,56 @@
 
 ---
 
+## Method: `getLegalMoves(Location from)`
+
+### Step 1: Equivalence Classes
+
+- **Input: from location** — board location to generate legal moves from
+- **Input: piece at from** — empty square vs movable piece
+- **Input: enPassantTarget state** — empty vs present on the board (passed through to `MoveGenerator`)
+- **Output: legal move list size** — number of legal moves returned for the source piece
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: from location | Pairs of variables | file/rank in [0, 7] |
+| Input: piece at from | Cases | NONE, KNIGHT |
+| Input: enPassantTarget | Optional | empty, present |
+| Output: legal move list size | Counts | 0, 8 |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**from location — Pairs of variables:**
+- (3,3) empty square
+- (4,4) knight at center
+
+**enPassantTarget — Optional:**
+- `Optional.empty()` for basic delegation tests
+
+**legal move list size — Counts:**
+- 0
+- 8
+
+### Step 4: Test Cases
+
+- **TC50: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :x: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with `NonePiece` at `(3,3)`; `enPassantTarget` is empty
+  - **Expected output**: returned list size is `0`
+
+- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :x: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with white knight at `(4,4)` and all other squares `NonePiece`; `enPassantTarget` is empty
+  - **Expected output**: returned list size is `8`
+
+- **TC52: GetLegalMoves_WithEnPassantTargetSet_DelegatesEnPassantState** ( :x: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: white pawn at `(5,3)`, black pawn at `(4,3)`, `enPassantTarget` is `(4,2)` (set via package-private test hook until `makeMove` exists)
+  - **Expected output**: returned list size matches `MoveGenerator` with the same board and en passant target (delegates `enPassantTarget`, not `Optional.empty()`)
+
+---
+
 ## Method: `getCurrentGameState()`
 
 ### Step 1: Equivalence Classes
