@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import domain.gamestate.GameState;
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -20,6 +21,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -236,6 +238,31 @@ class BoardTest {
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
+    }
+
+    @Test
+    void GetLegalMoves_OnCenterKnight_ReturnsEightMoves() {
+        LegalMoveGenerator legalMoveGenerator = EasyMock.createMock(LegalMoveGenerator.class);
+        Location from = new Location(4, 4);
+        List<Move> stubbedMoves = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            stubbedMoves.add(new Move(from, new Location(i, i)));
+        }
+        EasyMock.expect(legalMoveGenerator.generateLegalMoves(from)).andReturn(stubbedMoves);
+        EasyMock.replay(legalMoveGenerator);
+
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        Board board = new Board(layout);
+        board.setLegalMoveGenerator(legalMoveGenerator);
+
+        int expected = 8;
+        int actual = board.getLegalMoves(from).size();
+
+        assertEquals(expected, actual);
+        EasyMock.verify(legalMoveGenerator);
     }
 
     @Test

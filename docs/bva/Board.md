@@ -379,7 +379,7 @@
   - **State of the system**: board with injected mock `LegalMoveGenerator` stubbed to return an empty list for `(3,3)`
   - **Expected output**: returned list size is `0`; mock `generateLegalMoves(Location)` is invoked once
 
-- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :x: )
+- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMoves(Location)`
   - **State of the system**: board with injected mock `LegalMoveGenerator` stubbed to return eight moves for `(4,4)`
   - **Expected output**: returned list size is `8`; mock `generateLegalMoves(Location)` is invoked once
