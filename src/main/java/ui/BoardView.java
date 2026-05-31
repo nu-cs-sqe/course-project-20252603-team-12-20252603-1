@@ -21,9 +21,6 @@ public class BoardView extends JPanel {
     private static final Color DARK_SQUARE_COLOR = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE_COLOR = new Color(186, 202, 68);
 
-    private int selectedRow;
-    private int selectedCol;
-
     private final Map<PieceType, Image> whitePieceImages = new EnumMap<>(PieceType.class);
     private final Map<PieceType, Image> blackPieceImages = new EnumMap<>(PieceType.class);
 
@@ -41,8 +38,8 @@ public class BoardView extends JPanel {
         // untestable: graphics rendering
         super.paintComponent(g);
         drawBoard(g);
-        drawPieces(g);
         drawSelectedSquare(g);
+        drawPieces(g);
     }
 
     private void drawBoard(Graphics g) {
@@ -54,6 +51,19 @@ public class BoardView extends JPanel {
                 g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
         }
+    }
+
+    private void drawSelectedSquare(Graphics g) {
+        // untestable: graphics rendering
+        java.util.Optional<Location> sel = boardController.getSelectedLocation();
+        if (!sel.isPresent()) {
+            return;
+        }
+        Location loc = sel.get();
+        int col = loc.getX();
+        int row = loc.getY();
+        g.setColor(SELECTED_SQUARE_COLOR);
+        g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     private void loadPieceImages() {
@@ -95,23 +105,10 @@ public class BoardView extends JPanel {
                 if (img == null) {
                     continue;
                 }
-                int screenRow = (BOARD_SIZE - 1) - rank;
+                int screenRow = rank;
                 g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
             }
         }
-    }
-
-    private void drawSelectedSquare(Graphics g) {
-        // untestable: graphics rendering
-        java.util.Optional<domain.location.Location> sel = boardController.getSelectedLocation();
-        if (!sel.isPresent()) {
-            return;
-        }
-        domain.location.Location loc = sel.get();
-        selectedCol = loc.getX();
-        selectedRow = (BOARD_SIZE - 1) - loc.getY();
-        g.setColor(SELECTED_SQUARE_COLOR);
-        g.fillRect(selectedCol * TILE_SIZE, selectedRow * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
     private class BoardMouseListener extends MouseAdapter {
