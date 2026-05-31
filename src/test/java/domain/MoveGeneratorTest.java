@@ -166,6 +166,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.WHITE);
+        board[0][4] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveTo(
+                moveGenerator.generateLegalMoves(new Location(4, 4)), 4, 3);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
