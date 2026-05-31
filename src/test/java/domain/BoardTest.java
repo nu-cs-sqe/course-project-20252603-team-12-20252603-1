@@ -281,6 +281,75 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MakeMove_AfterBlackMove_GameStateIsWhiteTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[1][4] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        board.switchTurn();
+        Move move = new Move(new Location(4, 1), new Location(4, 2));
+
+        board.makeMove(move);
+
+        GameState expected = GameState.WHITE_TURN;
+        GameState actual = board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_AfterWhiteMove_GameStateIsBlackTurn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        GameState expected = GameState.BLACK_TURN;
+        GameState actual = board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_SourceSquareIsEmpty() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(6, 4).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_PieceAtDestination() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.PAWN;
+        PieceType actual = board.getPieceAt(5, 4).getType();
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {

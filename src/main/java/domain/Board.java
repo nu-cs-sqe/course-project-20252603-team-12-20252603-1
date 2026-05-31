@@ -88,4 +88,19 @@ public class Board {
     public List<Move> getLegalMoves(Location from) {
         return new MoveGenerator(pieces, enPassantTarget).generateLegalMoves(from);
     }
+
+    public void makeMove(Move move) {
+        applyMoveToInternalState(move);
+        switchTurn();
+    }
+
+    private void applyMoveToInternalState(Move move) {
+        int fromRank = move.getFrom().getY();
+        int fromFile = move.getFrom().getX();
+        int toRank = move.getTo().getY();
+        int toFile = move.getTo().getX();
+        pieces[toRank][toFile] = pieces[fromRank][fromFile];
+        pieces[fromRank][fromFile] = new NonePiece();
+        pieces[toRank][toFile].changeToMoved();
+    }
 }
