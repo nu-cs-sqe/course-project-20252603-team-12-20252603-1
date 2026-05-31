@@ -8,6 +8,10 @@ public class Pawn extends Piece {
 
   @Override
   public Piece makeCopy() {
-    return new Pawn(getColor());
+    Pawn copy = new Pawn(getColor());
+    if (hasMoved()) {
+      copy.changeToMoved();
+    }
+    return copy;
   }
 }
