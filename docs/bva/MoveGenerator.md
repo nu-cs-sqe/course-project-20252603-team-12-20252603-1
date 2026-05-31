@@ -235,22 +235,22 @@ Scope: After generating **pseudo-legal** moves, filter out any move that leaves 
 
 ### Step 4: Test cases
 
-- **MG-TC14: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :x: )
+- **MG-TC14: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :white_check_mark: )
   - Method(s) under test: `generateLegalMoves(Location)`
   - State of the system: pinned white bishop at `(2,3)`; king `(2,2)`; black rook `(2,7)`
   - Expected output: no returned move has destination `(3,4)`
 
-- **MG-TC15: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :x: )
+- **MG-TC15: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :white_check_mark: )
   - Method(s) under test: `generateLegalMoves(Location)`
   - State of the system: white king at `(4,4)`; black rook at `(4,0)`
   - Expected output: returned move list size is `6`
 
-- **MG-TC16: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :x: )
+- **MG-TC16: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :white_check_mark: )
   - Method(s) under test: `generateLegalMoves(Location)`
   - State of the system: white king at `(4,4)`; black rook at `(4,0)`
   - Expected output: no returned move has destination `(4,3)`
 
-- **MG-TC17: HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue** ( :x: )
+- **MG-TC17: HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue** ( :white_check_mark: )
   - Method(s) under test: `hasLegalMovesForColor(PieceColor)`
   - State of the system: white king in check from rook but can escape off the file
   - Expected output: `hasLegalMovesForColor(PieceColor.WHITE)` is `true`
