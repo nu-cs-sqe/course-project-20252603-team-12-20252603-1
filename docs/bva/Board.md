@@ -340,6 +340,57 @@
 
 ---
 
+## Method: `getLegalMoves(Location from)`
+
+### Step 1: Equivalence Classes
+
+- **Input: from location** — board location to generate legal moves from
+- **Input: piece at from** — empty square vs movable piece
+- **Input: enPassantTarget state** — empty vs present on the board (passed to `MoveGenerator` in production)
+- **Output: legal move list** — list returned by `MoveGenerator.generateLegalMoves(from)`
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: from location | Pairs of variables | file/rank in [0, 7] |
+| Input: piece at from | Cases | NONE, KNIGHT |
+| Input: enPassantTarget | Optional | empty, present |
+| Output: legal move list | Collections | empty list, list with moves |
+| Collaborator | Pointers | `MoveGenerator` (same class used in production) |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**from location — Pairs of variables:**
+- (3,3) empty square
+- (4,4) knight at center
+
+**enPassantTarget — Optional:**
+- `Optional.empty()` for basic delegation tests
+
+**legal move list size — Counts:**
+- 0
+- 8
+
+### Step 4: Test Cases
+
+- **TC50: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with `NonePiece` at `(3,3)`; no other pieces
+  - **Expected output**: returned list size is `0`
+
+- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: lone white knight at `(4,4)` on otherwise empty board
+  - **Expected output**: returned list size is `8`
+
+- **TC52: GetLegalMoves_WhenCalled_MatchesMoveGenerator** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMoves(Location)`
+  - **State of the system**: board with white pawn at `(5,3)` and `enPassantTarget` set
+  - **Expected output**: returned list size matches `new MoveGenerator(snapshot, enPassantTarget).generateLegalMoves(from)`
+
+---
+
 ## Method: `getCurrentGameState()`
 
 ### Step 1: Equivalence Classes
@@ -509,5 +560,63 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; `getPieceAt(0, 0)` called twice
   - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
+
+---
+
+## Method: `makeMove(Move move)`
+
+Scope: apply a **normal** move to internal board state and toggle turn. Win, draw, en passant, castling, and promotion are deferred to later slices.
+
+### Step 1: Equivalence Classes
+
+- **Input: move** — `Move` with from/to locations and `MoveType.NORMAL`
+- **Input: board state before move** — piece at source square; destination empty or capturable
+- **Input: current game state** — `WHITE_TURN` or `BLACK_TURN`
+- **Output: piece at destination** — moved piece type and color match the piece that was at source
+- **Output: piece at source** — `NonePiece` after move
+- **Output: game state after move** — toggled to the opposite turn
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: move from/to | Pairs of variables | file/rank in [0, 7] |
+| Input: move type | Cases | NORMAL |
+| Input: game state before | Cases | WHITE_TURN, BLACK_TURN |
+| Output: destination piece type | Cases | PAWN, etc. |
+| Output: source piece type | Cases | NONE |
+| Output: game state after | Cases | BLACK_TURN, WHITE_TURN |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**move — Pairs of variables:**
+- White pawn `(4,6)` → `(4,5)` on empty board
+- Black pawn `(4,1)` → `(4,2)` on empty board
+
+**game state — Cases:**
+- `WHITE_TURN` before move → `BLACK_TURN` after
+- `BLACK_TURN` before move → `WHITE_TURN` after
+
+### Step 4: Test Cases
+
+- **TC50: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
+  - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
+
+- **TC51: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn moves from `(4,6)` to `(4,5)`
+  - **Expected output**: after move, `getPieceAt(6, 4)` returns type `NONE`
+
+- **TC52: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
+  - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
+
+- **TC53: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
+  - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
 
 ---

@@ -184,7 +184,7 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 
 | Effect            | Classes                                              |
 | ----------------- | ---------------------------------------------------- |
-| Selection / guard | White may select; black or empty must not change board |
+| Selection / guard | Active player may select own-color pieces only; opponent or empty must not change board |
 
 ### Step 4: Test cases
 
@@ -267,3 +267,83 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: Chess960 fixed start; white piece click
   - **Expected output**: `GameState.WHITE_TURN`
+
+---
+
+## Method / behavior: `handleSquareClick` — alternating turn enforcement
+
+Scope addition: derive **current player color** from `board.getCurrentGameState()` (`WHITE_TURN` → white pieces only; `BLACK_TURN` → black pieces only). Wrong-color and empty squares must not change selection or turn. Terminal states (`WHITE_WIN`, `BLACK_WIN`, `DRAW`) ignore clicks.
+
+### Step 1: Input and output equivalence classes
+
+| Input | Equivalence classes |
+| ----- | ------------------- |
+| `board.getCurrentGameState()` | `WHITE_TURN`; `BLACK_TURN`; terminal (win/draw) |
+| Square at `loc` | `NonePiece`; own-color piece; opponent-color piece |
+
+| Effect | Classes |
+| ------ | ------- |
+| Source selection | Own-color piece on active turn → selection set |
+| Rejection | Empty, opponent piece, or terminal state → no selection |
+
+### Step 2: BVA catalog data types
+
+| Variable | Catalog type | Notes |
+| -------- | ------------ | ----- |
+| `currentGameState` | Cases | WHITE_TURN vs BLACK_TURN vs terminal |
+| Piece at square | Cases | NONE vs own color vs opponent color |
+| `lastSelectedLoc` | Optional | empty vs present |
+
+### Step 3: Concrete boundary values
+
+- Turn: `WHITE_TURN` (existing BC-TC27–35) vs **`BLACK_TURN`** (new)
+- Black turn own piece: standard grid rank `1` file `0` (black pawn)
+- Black turn opponent: standard grid rank `6` file `0` (white pawn)
+- Black turn empty: rank `3` file `3`
+
+### Step 4: Test cases — `BLACK_TURN` source selection
+
+- **BC-TC43: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; click black piece at `Location(0, 1)`
+  - **Expected output**: `hasSelection()` is `true`
+
+- **BC-TC44: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: `GameState.BLACK_TURN`; click `Location(0, 1)`
+  - **Expected output**: `getSelectedLocation()` present with same coordinates
+
+- **BC-TC45: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; click black piece
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC46: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece at `Location(0, 6)`
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC47: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece
+  - **Expected output**: `GameState.BLACK_TURN`
+
+- **BC-TC48: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC49: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square `Location(3, 3)`
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC50: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square
+  - **Expected output**: `GameState.BLACK_TURN`
+
+- **BC-TC51: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square
+  - **Expected output**: snapshot unchanged cell-wise
