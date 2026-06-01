@@ -60,9 +60,51 @@
 
 
 **Planning Tracking**
-1. [not started] Matthew: Implement i18n in English and Spanish ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
-2. [50% done] Didier: Review feedback for MainView ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)) and review other PRs
-3. [80%] Alex: Continue working on BoardView ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
+1. [not started] Matthew: Implement i18n in English and Spanish
+   ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38)), implement Move class (BVA, TDD)
+   ([#56](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/56)), implement WelcomeController (BVA, TDD)
+   ([#54](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/54)), create AppController BVA
+   ([#50](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/50)), refactor piece makeCopy() to preserve
+   hasMoved state ([#57](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/57))
+2. [50% done] Didier: Review feedback for MainView
+   ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)) and review other PRs, implement Board
+   movePiece and isValidMoveShape for all piece types (BVA, TDD)
+   ([#47](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/47)), complete BoardController
+   ([#48](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/48)), update GameStatsView for move-piece
+   integration ([#51](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/51)), refactor MainView
+   ([#53](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/53))
+3. [80%] Alex: Continue working on BoardView
+   ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27)), complete WelcomeView implementation
+   (Chess960 radio buttons, isChess960Selected, setStartGameAction; BVA, TDD)
+   ([#42](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/42))
+
+# Week 9 (05/25/2026-05/31/2026)
+**Progress Tracking**:
+1. [done] Matthew: Implemented Move class  (BVA, MoveType enum, all constructors, withPromotionType)
+   ([#56](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/56))
+2. [done] Matthew: Refactored all piece makeCopy() methods to preserve hasMoved state
+   ([#57](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/57))
+3. [done] Matthew: Implemented WelcomeController (BVA, startGame, selectedInitializer) and updated design docs
+   ([#54](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/54))
+4. [done] Matthew: Created BVA for AppController. This was deprecated due to project redesign. 
+   ([#50](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/50))
+5. [in progress] Matthew: Set up i18n infrastructure (plan, messages.properties, GameStatsView i18n integration). Will wait until finished logical implementation to fully implement i18n.
+   ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
+6. [done] Didier: Implemented Board movePiece ([#47](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/47))
+7. [done] Didier: Implemented BoardController (setBoard, handleSquareClick). This was deprecated due to project redesign. 
+   ([#48](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/48))
+8. [done] Didier: Added updateCurrentPlayerLabel and GameStatsView updates. This was deprecated due to project redesign.
+   ([#51](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/51))
+9. [done] Didier: Refactored MainView to inject BoardController and aligned tests
+   ([#53](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/53))
+10. [done] Alex: Implemented WelcomeView (Chess960 radio buttons, isChess960Selected, setStartGameAction, createWelcomeScreenUI) ([#42](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/42))
+11. [done] Group: Redesigned project to have controllers create views; Main only instantiates WelcomeController, it no longer wires everything together
+
+**Planning Tracking**:
+1. [not started] Matthew: Complete and merge i18n
+   ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38)). Update BoardView to render legal move and capture highlights. Fix WelcomeController to work with new wiring.
+2. [not started] Didier: Add check filtering to MoveGenerator. Add BoardController.getLegalMovesForSelection(). 
+3. [not started] Alex: Add PromotionDialog.
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
