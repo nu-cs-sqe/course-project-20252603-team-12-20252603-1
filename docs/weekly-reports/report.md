@@ -60,9 +60,23 @@
 
 
 **Planning Tracking**
-1. [not started] Matthew: Implement i18n in English and Spanish ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
-2. [50% done] Didier: Review feedback for MainView ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)) and review other PRs
-3. [80%] Alex: Continue working on BoardView ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27))
+1. [not started] Matthew: Implement i18n in English and Spanish
+   ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38)), implement Move class (BVA, TDD)
+   ([#56](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/56)), implement WelcomeController (BVA, TDD)
+   ([#54](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/54)), create AppController BVA
+   ([#50](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/50)), refactor piece makeCopy() to preserve
+   hasMoved state ([#57](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/57))
+2. [50% done] Didier: Review feedback for MainView
+   ([#35](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/35)) and review other PRs, implement Board
+   movePiece and isValidMoveShape for all piece types (BVA, TDD)
+   ([#47](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/47)), complete BoardController
+   ([#48](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/48)), update GameStatsView for move-piece
+   integration ([#51](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/51)), refactor MainView
+   ([#53](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/53))
+3. [80%] Alex: Continue working on BoardView
+   ([#27](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/27)), complete WelcomeView implementation
+   (Chess960 radio buttons, isChess960Selected, setStartGameAction; BVA, TDD)
+   ([#42](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/42))
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
