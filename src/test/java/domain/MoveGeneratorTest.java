@@ -194,12 +194,35 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
             if (move.getTo().getX() == file
                     && move.getTo().getY() == rank
                     && move.getType() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasMoveType(java.util.List<Move> moves, MoveType type) {
+        for (Move move : moves) {
+            if (move.getType() == type) {
                 return true;
             }
         }
