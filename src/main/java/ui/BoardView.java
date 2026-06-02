@@ -20,6 +20,9 @@ public class BoardView extends JPanel {
     private static final Color LIGHT_SQUARE_COLOR = new Color(240, 217, 181);
     private static final Color DARK_SQUARE_COLOR = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE_COLOR = new Color(186, 202, 68);
+    private static final Color LEGAL_MOVE_DOT_COLOR = new Color(0, 0, 0, 100);
+    private static final Color LEGAL_CAPTURE_COLOR = new Color(186, 202, 68, 160);
+    private static final float LEGAL_MOVE_ALPHA = 0.85f;
 
     private final Map<PieceType, Image> whitePieceImages = new EnumMap<>(PieceType.class);
     private final Map<PieceType, Image> blackPieceImages = new EnumMap<>(PieceType.class);
