@@ -401,9 +401,13 @@ class BoardTest {
 
         board.makeMove(move);
 
-        PieceType expected = PieceType.ROOK;
-        PieceType actual = board.getPieceAt(7, 5).getType();
-        assertEquals(expected, actual);
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = board.getPieceAt(7, 6).getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = board.getPieceAt(7, 5).getType();
+        assertEquals(expectedRook, actualRook);
     }
 
     @Test
@@ -432,9 +436,13 @@ class BoardTest {
 
         board.makeMove(move);
 
-        PieceType expected = PieceType.ROOK;
-        PieceType actual = board.getPieceAt(7, 3).getType();
-        assertEquals(expected, actual);
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = board.getPieceAt(7, 2).getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = board.getPieceAt(7, 3).getType();
+        assertEquals(expectedRook, actualRook);
     }
 
     @Test
