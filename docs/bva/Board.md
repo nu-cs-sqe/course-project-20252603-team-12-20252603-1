@@ -164,9 +164,9 @@ Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move ty
   - **Expected output**: king at `(2,7)` and rook at `(3,7)`
 
 - **TC58: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
-  - **State of the system**: white pawn double-steps from `(4,6)` to `(4,4)` with black pawn at `(5,4)`
-  - **Expected output**: black pawn legal moves include en passant to `(4,5)`
+  - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
+  - **State of the system**: only white pawn at `(4,6)`; white pawn double-steps to `(4,4)`
+  - **Expected output**: `getEnPassantTarget()` is present at `(4,5)` (passed-over square for a later en-passant capture)
 
 - **TC59: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
