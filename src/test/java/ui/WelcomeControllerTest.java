@@ -103,8 +103,11 @@ class WelcomeControllerTest {
 
         controller.getWelcomeView().clickStartGame();
 
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
         boolean expected = true;
-        boolean actual = findVisibleMainView().isVisible();
+        boolean actual = mainView.isVisible();
         assertEquals(expected, actual);
     }
 
@@ -117,10 +120,11 @@ class WelcomeControllerTest {
 
         controller.getWelcomeView().clickStartGame();
 
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
         String expected = "Alice";
-        String actual = findVisibleMainView()
-                .getGameStatsView()
-                .getCurrentPlayerLabelText();
+        String actual = mainView.getGameStatsView().getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
 

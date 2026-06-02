@@ -33,9 +33,6 @@ public class BoardController {
   }
 
   private void updateCurrentPlayerLabel() {
-    if (mainView == null) {
-      return;
-    }
     String text = board.getCurrentGameState() == GameState.WHITE_TURN
         ? player1Name
         : player2Name;
