@@ -7,7 +7,7 @@ import domain.move.Move;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +62,13 @@ public class BoardController {
     return lastSelectedLoc;
   }
 
+  public List<Move> getLegalMovesForSelection() {
+    if (!lastSelectedLoc.isPresent()) {
+      return new ArrayList<>();
+    }
+    return board.getLegalMoves(lastSelectedLoc.get());
+  }
+
   public void handleSquareClick(Location loc) {
     if (!isInBounds(loc)) {
       return;
@@ -96,10 +103,6 @@ public class BoardController {
     int x = loc.getX();
     int y = loc.getY();
     return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-  }
-
-  public List<Move> getLegalMovesForSelection() {
-    return Collections.emptyList();
   }
 
   public Piece[][] getBoardSnapshot() {
