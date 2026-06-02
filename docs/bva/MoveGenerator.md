@@ -216,7 +216,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC18: ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece** ( :x: )
+- **MG-TC18: ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white knight at `(4, 4)`; NORMAL move to `(5, 6)`
   - **Expected output**: returned board at `(5, 6)` has type `KNIGHT`

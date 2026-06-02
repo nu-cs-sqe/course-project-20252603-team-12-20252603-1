@@ -14,6 +14,7 @@ import domain.piece.NonePiece;
 import domain.piece.Piece;
 import domain.piece.Pawn;
 import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -212,6 +213,19 @@ class MoveGeneratorTest {
 
         boolean expected = false;
         boolean actual = hasMoveTo(moveGenerator.generateLegalMoves(new Location(2, 3)), 3, 4);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        Move move = new Move(new Location(4, 4), new Location(5, 6));
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = result[6][5].getType();
         assertEquals(expected, actual);
     }
 
