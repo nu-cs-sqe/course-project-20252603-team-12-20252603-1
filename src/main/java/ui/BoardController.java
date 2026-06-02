@@ -33,6 +33,17 @@ public class BoardController {
   public void show() {
     mainView = new MainView(player1Name, player2Name, this);
     mainView.setVisible(true);
+    updateCurrentPlayerLabel();
+  }
+
+  private void updateCurrentPlayerLabel() {
+    if (mainView == null) {
+      return;
+    }
+    String text = board.getCurrentGameState() == GameState.WHITE_TURN
+        ? player1Name
+        : player2Name;
+    mainView.getGameStatsView().updateCurrentPlayerLabel(text);
   }
 
   MainView getMainView() {

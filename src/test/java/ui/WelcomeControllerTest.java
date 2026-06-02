@@ -106,4 +106,21 @@ class WelcomeControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.startGame();
+
+        String expected = "Alice";
+        String actual = controller.getStartedBoardController()
+                .getMainView()
+                .getGameStatsView()
+                .getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
+
 }
