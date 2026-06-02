@@ -3,6 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
@@ -76,6 +77,18 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer2Name("Bob");
         controller.getWelcomeView().clickStartGame();
         assertFalse(controller.getWelcomeView().isDisplayable());
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_StartedBoardControllerNotNull() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.startGame();
+
+        assertNotNull(controller.getStartedBoardController());
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 public class WelcomeController {
 
     private final WelcomeView welcomeView;
+    private BoardController startedBoardController;
 
     public WelcomeController() {
         welcomeView = new WelcomeView();
@@ -26,9 +27,10 @@ public class WelcomeController {
             welcomeView.showError("Player names cannot be empty.");
             return;
         }
-        BoardController boardController = new BoardController(new Board(selectedInitializer()));
+        startedBoardController =
+                new BoardController(player1Name, player2Name, new Board(selectedInitializer()));
         closeWelcomeView();
-        new MainView(player1Name, player2Name, boardController).setVisible(true);
+        new MainView(player1Name, player2Name, startedBoardController).setVisible(true);
     }
 
     private void closeWelcomeView() {
@@ -44,5 +46,9 @@ public class WelcomeController {
 
     WelcomeView getWelcomeView() {
         return welcomeView;
+    }
+
+    BoardController getStartedBoardController() {
+        return startedBoardController;
     }
 }

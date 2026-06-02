@@ -12,13 +12,21 @@ public class BoardController {
 
   private static final int BOARD_SIZE = 8;
 
+  private final String player1Name;
+  private final String player2Name;
   private final Board board;
   private BoardView boardView;
   private Optional<Location> lastSelectedLoc;
 
-  public BoardController(Board board) {
+  public BoardController(String player1Name, String player2Name, Board board) {
+    this.player1Name = player1Name;
+    this.player2Name = player2Name;
     this.board = board;
     lastSelectedLoc = Optional.empty();
+  }
+
+  public BoardController(Board board) {
+    this("", "", board);
   }
 
   public void setBoardView(BoardView boardView) {
