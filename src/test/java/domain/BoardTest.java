@@ -471,12 +471,19 @@ class BoardTest {
 
         board.makeMove(whiteDoubleStep);
 
-        boolean expected = true;
         Optional<Location> target = board.getEnPassantTarget();
-        boolean actual = target.isPresent()
-                && target.get().getX() == 4
-                && target.get().getY() == 5;
-        assertEquals(expected, actual);
+
+        boolean expectedPresent = true;
+        boolean actualPresent = target.isPresent();
+        assertEquals(expectedPresent, actualPresent);
+
+        int expectedFile = 4;
+        int actualFile = target.get().getX();
+        assertEquals(expectedFile, actualFile);
+
+        int expectedRank = 5;
+        int actualRank = target.get().getY();
+        assertEquals(expectedRank, actualRank);
     }
 
     @Test
