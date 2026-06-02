@@ -221,7 +221,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
   - **State of the system**: white knight at `(4, 4)`; NORMAL move to `(5, 6)`
   - **Expected output**: returned board at `(5, 6)` has type `KNIGHT`
 
-- **MG-TC19: ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty** ( :x: )
+- **MG-TC19: ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: same as MG-TC18
   - **Expected output**: returned board at `(4, 4)` has type `NONE`
