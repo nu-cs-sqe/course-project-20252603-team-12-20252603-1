@@ -68,6 +68,10 @@ public class Board {
         return currentGameState;
     }
 
+    public Optional<Location> getEnPassantTarget() {
+        return enPassantTarget;
+    }
+
     public void switchTurn() {
         if (currentGameState == GameState.WHITE_TURN) {
             currentGameState = GameState.BLACK_TURN;
@@ -95,7 +99,9 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+        Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
         applyMoveToInternalState(move);
+        updateEnPassantTarget(move, movingPiece);
         switchTurn();
     }
 
@@ -155,5 +161,19 @@ public class Board {
             }
         }
         return -1;
+    }
+
+    private void updateEnPassantTarget(Move move, Piece movedPiece) {
+        if (movedPiece.getType() != PieceType.PAWN || move.getType() != MoveType.NORMAL) {
+            enPassantTarget = Optional.empty();
+            return;
+        }
+        int rankDiff = move.getTo().getY() - move.getFrom().getY();
+        if (Math.abs(rankDiff) == 2) {
+            int epRank = move.getFrom().getY() + rankDiff / 2;
+            enPassantTarget = Optional.of(new Location(move.getFrom().getX(), epRank));
+        } else {
+            enPassantTarget = Optional.empty();
+        }
     }
 }

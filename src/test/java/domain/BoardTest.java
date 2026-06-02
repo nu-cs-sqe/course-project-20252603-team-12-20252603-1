@@ -423,12 +423,43 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move whiteDoubleStep = new Move(new Location(4, 6), new Location(4, 4));
+
+        board.makeMove(whiteDoubleStep);
+
+        boolean expected = true;
+        Optional<Location> target = board.getEnPassantTarget();
+        boolean actual = target.isPresent()
+                && target.get().getX() == 4
+                && target.get().getY() == 5;
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
             Arrays.fill(row, new NonePiece());
         }
         return layout;
+    }
+
+    private static boolean hasMoveToWithType(List<Move> moves, int file, int rank, MoveType type) {
+        for (Move move : moves) {
+            if (move.getTo().getX() == file
+                    && move.getTo().getY() == rank
+                    && move.getType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Test
