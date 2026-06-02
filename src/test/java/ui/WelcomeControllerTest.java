@@ -10,9 +10,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.awt.Window;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class WelcomeControllerTest {
+
+    @AfterEach
+    void disposeOpenMainViews() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView) {
+                ((MainView) window).dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_FreshInstance_WelcomeViewNotVisible() {
