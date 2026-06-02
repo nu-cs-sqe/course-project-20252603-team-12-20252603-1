@@ -239,27 +239,27 @@ Scope: add pseudo-legal generation for en passant and castling using current boa
 
 ### Step 4: Test cases
 
-- MG-TC14: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove ( :x: )
+- MG-TC14: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.of(new Location(5,2))`
   - Expected output: returned moves include destination `(5,2)` with `MoveType.EN_PASSANT`
 
-- MG-TC15: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove ( :x: )
+- MG-TC15: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.empty()`
   - Expected output: returned moves do not include any `MoveType.EN_PASSANT`
 
-- MG-TC16: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling ( :x: )
+- MG-TC16: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white king `(4,7)` and rook `(7,7)` unmoved; path clear and safe
   - Expected output: returned moves include destination `(6,7)` with `MoveType.CASTLING_KINGSIDE`
 
-- MG-TC17: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves ( :x: )
+- MG-TC17: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: same as MG-TC16 but king has `hasMoved() == true`
   - Expected output: returned moves include no castling move types
 
-- MG-TC18: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling ( :x: )
+- MG-TC18: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: same as MG-TC16 with black rook attacking square `(5,7)`
   - Expected output: returned moves do not include `MoveType.CASTLING_KINGSIDE`
