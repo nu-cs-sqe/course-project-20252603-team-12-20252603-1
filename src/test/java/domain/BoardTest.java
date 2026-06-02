@@ -387,6 +387,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.ROOK;
+        PieceType actual = board.getPieceAt(7, 5).getType();
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {

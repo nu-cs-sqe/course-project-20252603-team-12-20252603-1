@@ -21,6 +21,10 @@ public class Board {
 
     private static final int BOARD_SIZE = 8;
     private static final int BLACK_RANK_ROWS = 4;
+    private static final int KINGSIDE_KING_DEST_FILE = 6;
+    private static final int QUEENSIDE_KING_DEST_FILE = 2;
+    private static final int KINGSIDE_ROOK_DEST_FILE = 5;
+    private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
@@ -107,8 +111,49 @@ public class Board {
             pieces[toRank][toFile].changeToMoved();
             return;
         }
+        if (move.getType() == MoveType.CASTLING_KINGSIDE) {
+            executeCastling(fromRank, fromFile, KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE, true);
+            return;
+        }
+        if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
+            executeCastling(fromRank, fromFile, QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
+            return;
+        }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
         pieces[toRank][toFile].changeToMoved();
+    }
+
+    private void executeCastling(
+            int rank, int kingFile, int kingDestFile, int rookDestFile, boolean kingside) {
+        int rookFile = findCastlingRookFile(rank, kingFile, kingside);
+        Piece king = pieces[rank][kingFile];
+        Piece rook = pieces[rank][rookFile];
+        pieces[rank][kingFile] = new NonePiece();
+        pieces[rank][rookFile] = new NonePiece();
+        king.changeToMoved();
+        rook.changeToMoved();
+        pieces[rank][kingDestFile] = king;
+        pieces[rank][rookDestFile] = rook;
+    }
+
+    private int findCastlingRookFile(int rank, int kingFile, boolean kingside) {
+        PieceColor color = pieces[rank][kingFile].getColor();
+        if (kingside) {
+            for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
+                Piece p = pieces[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        } else {
+            for (int f = 0; f < kingFile; f++) {
+                Piece p = pieces[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        }
+        return -1;
     }
 }
