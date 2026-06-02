@@ -91,11 +91,15 @@ package ui {
 
     +class BoardController {
         -{static}{final} BOARD_SIZE: int
+        -player1Name: String
+        -player2Name: String
         -board: Board
+        -mainView: MainView
         -boardView: BoardView
         -lastSelectedLoc: Optional<Location>
 
-        +BoardController(board: Board)
+        +BoardController(player1Name: String, player2Name: String, board: Board)
+        +show(): void
         +setBoardView(boardView: BoardView): void
         ~getBoardView(): BoardView
         ~getMainView(): MainView

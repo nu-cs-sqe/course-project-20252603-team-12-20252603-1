@@ -8,6 +8,7 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +16,35 @@ public class BoardController {
 
   private static final int BOARD_SIZE = 8;
 
+  private final String player1Name;
+  private final String player2Name;
   private final Board board;
+  private MainView mainView;
   private BoardView boardView;
   private Optional<Location> lastSelectedLoc;
 
-  public BoardController(Board board) {
+  public BoardController(String player1Name, String player2Name, Board board) {
+    this.player1Name = player1Name;
+    this.player2Name = player2Name;
     this.board = board;
     lastSelectedLoc = Optional.empty();
+  }
+
+  public void show() {
+    mainView = new MainView(player1Name, player2Name, this);
+    mainView.setVisible(true);
+    updateCurrentPlayerLabel();
+  }
+
+  private void updateCurrentPlayerLabel() {
+    String text = board.getCurrentGameState() == GameState.WHITE_TURN
+        ? player1Name
+        : player2Name;
+    mainView.getGameStatsView().updateCurrentPlayerLabel(text);
+  }
+
+  MainView getMainView() {
+    return mainView;
   }
 
   public void setBoardView(BoardView boardView) {
@@ -81,6 +104,10 @@ public class BoardController {
     int x = loc.getX();
     int y = loc.getY();
     return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
+  }
+
+  public List<Move> getLegalMovesForSelection() {
+    return Collections.emptyList();
   }
 
   public Piece[][] getBoardSnapshot() {
