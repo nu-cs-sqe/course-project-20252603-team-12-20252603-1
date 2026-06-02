@@ -155,3 +155,48 @@
   - **Method(s) under test**: `selectedInitializer()`
   - **State of the system**: chess960 selected; `selectedInitializer()` called
   - **Expected output**: returned value is an instance of `FischerRandomBoardInitializer`
+
+---
+
+## Method / behavior: `startGame()` — BoardController launch wiring (chess-master alignment)
+
+Scope: After name validation, create `BoardController(player1Name, player2Name, board)` and call `boardController.show()` so the game UI (including turn labels) is owned by `BoardController`, not constructed directly in `WelcomeController`.
+
+### Step 1: Equivalence Classes
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| Player names | both non-empty (valid start) |
+| Board mode | standard or chess960 via `selectedInitializer()` |
+| Output | `BoardController` created and `show()` launches visible `MainView` with player-one label on white turn |
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Variable / output | Catalog data type |
+| ----------------- | ----------------- |
+| `player1Name`, `player2Name` | Strings |
+| Started controller reference | Pointers |
+| Main view visibility | Boolean |
+| Current player label text | Strings |
+
+### Step 3: Concrete boundary values
+
+- Valid start: `player1Name = "Alice"`, `player2Name = "Bob"`.
+- Fresh board from standard initializer; initial turn `WHITE_TURN`.
+
+### Step 4: Test cases
+
+- **TC9: StartGame_NonEmptyNames_StartedBoardControllerNotNull** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: valid player names; `startGame()` called after `show()`
+  - **Expected output**: `getStartedBoardController()` is not `null`
+
+- **TC10: StartGame_NonEmptyNames_MainViewIsVisible** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: valid player names; game started
+  - **Expected output**: `getStartedBoardController().getMainView().isVisible()` is `true`
+
+- **TC11: StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: valid player names; standard new game (`WHITE_TURN`)
+  - **Expected output**: game stats current-player label text is `player1Name`
