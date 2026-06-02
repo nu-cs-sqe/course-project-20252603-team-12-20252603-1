@@ -3,6 +3,7 @@ package domain;
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -20,6 +21,10 @@ public class Board {
 
     private static final int BOARD_SIZE = 8;
     private static final int BLACK_RANK_ROWS = 4;
+    private static final int KINGSIDE_KING_DEST_FILE = 6;
+    private static final int QUEENSIDE_KING_DEST_FILE = 2;
+    private static final int KINGSIDE_ROOK_DEST_FILE = 5;
+    private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
@@ -63,6 +68,10 @@ public class Board {
         return currentGameState;
     }
 
+    public Optional<Location> getEnPassantTarget() {
+        return enPassantTarget;
+    }
+
     public void switchTurn() {
         if (currentGameState == GameState.WHITE_TURN) {
             currentGameState = GameState.BLACK_TURN;
@@ -90,7 +99,9 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+        Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
         applyMoveToInternalState(move);
+        updateEnPassantTarget(move, movingPiece);
         switchTurn();
     }
 
@@ -99,8 +110,74 @@ public class Board {
         int fromFile = move.getFrom().getX();
         int toRank = move.getTo().getY();
         int toFile = move.getTo().getX();
+        if (move.getType() == MoveType.EN_PASSANT) {
+            pieces[toRank][toFile] = pieces[fromRank][fromFile];
+            pieces[fromRank][fromFile] = new NonePiece();
+            pieces[fromRank][toFile] = new NonePiece();
+            pieces[toRank][toFile].changeToMoved();
+            return;
+        }
+        if (move.getType() == MoveType.CASTLING_KINGSIDE) {
+            executeCastling(fromRank, fromFile, KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE, true);
+            return;
+        }
+        if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
+            executeCastling(fromRank, fromFile, QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
+            return;
+        }
+        if (move.getType() == MoveType.PROMOTION) {
+            throw new UnsupportedOperationException("Promotion moves are not yet implemented");
+        }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
         pieces[toRank][toFile].changeToMoved();
+    }
+
+    private void executeCastling(
+            int rank, int kingFile, int kingDestFile, int rookDestFile, boolean kingside) {
+        int rookFile = findCastlingRookFile(rank, kingFile, kingside);
+        Piece king = pieces[rank][kingFile];
+        Piece rook = pieces[rank][rookFile];
+        pieces[rank][kingFile] = new NonePiece();
+        pieces[rank][rookFile] = new NonePiece();
+        king.changeToMoved();
+        rook.changeToMoved();
+        pieces[rank][kingDestFile] = king;
+        pieces[rank][rookDestFile] = rook;
+    }
+
+    private int findCastlingRookFile(int rank, int kingFile, boolean kingside) {
+        PieceColor color = pieces[rank][kingFile].getColor();
+        if (kingside) {
+            for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
+                Piece p = pieces[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        } else {
+            for (int f = 0; f < kingFile; f++) {
+                Piece p = pieces[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        }
+        throw new IllegalStateException(
+                "No unmoved castling rook found on rank " + rank + " kingside=" + kingside);
+    }
+
+    private void updateEnPassantTarget(Move move, Piece movedPiece) {
+        if (movedPiece.getType() != PieceType.PAWN || move.getType() != MoveType.NORMAL) {
+            enPassantTarget = Optional.empty();
+            return;
+        }
+        int rankDiff = move.getTo().getY() - move.getFrom().getY();
+        if (Math.abs(rankDiff) == 2) {
+            int epRank = move.getFrom().getY() + rankDiff / 2;
+            enPassantTarget = Optional.of(new Location(move.getFrom().getX(), epRank));
+        } else {
+            enPassantTarget = Optional.empty();
+        }
     }
 }
