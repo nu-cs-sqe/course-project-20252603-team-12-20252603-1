@@ -61,7 +61,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(selected);
 
         int expected = 0;
@@ -82,7 +82,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(boardMoves);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(selected);
 
         List<Move> expected = boardMoves;
@@ -94,7 +94,7 @@ class BoardControllerTest {
     @Test
     void GetLegalMovesForSelection_NoSelection_ReturnsEmptyList() {
         Board boardMock = replayNiceBoard();
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         int expected = 0;
         int actual = controller.getLegalMovesForSelection().size();

@@ -8,7 +8,6 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,10 +103,6 @@ public class BoardController {
     int x = loc.getX();
     int y = loc.getY();
     return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-  }
-
-  public List<Move> getLegalMovesForSelection() {
-    return Collections.emptyList();
   }
 
   public Piece[][] getBoardSnapshot() {
