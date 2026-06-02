@@ -30,7 +30,7 @@ public class WelcomeController {
         startedBoardController =
                 new BoardController(player1Name, player2Name, new Board(selectedInitializer()));
         closeWelcomeView();
-        new MainView(player1Name, player2Name, startedBoardController).setVisible(true);
+        startedBoardController.show();
     }
 
     private void closeWelcomeView() {

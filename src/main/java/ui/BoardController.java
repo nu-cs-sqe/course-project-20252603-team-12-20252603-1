@@ -15,6 +15,7 @@ public class BoardController {
   private final String player1Name;
   private final String player2Name;
   private final Board board;
+  private MainView mainView;
   private BoardView boardView;
   private Optional<Location> lastSelectedLoc;
 
@@ -27,6 +28,15 @@ public class BoardController {
 
   public BoardController(Board board) {
     this("", "", board);
+  }
+
+  public void show() {
+    mainView = new MainView(player1Name, player2Name, this);
+    mainView.setVisible(true);
+  }
+
+  MainView getMainView() {
+    return mainView;
   }
 
   public void setBoardView(BoardView boardView) {

@@ -1,5 +1,6 @@
 package ui;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -89,6 +90,20 @@ class WelcomeControllerTest {
         controller.startGame();
 
         assertNotNull(controller.getStartedBoardController());
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_MainViewIsVisible() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.startGame();
+
+        boolean expected = true;
+        boolean actual = controller.getStartedBoardController().getMainView().isVisible();
+        assertEquals(expected, actual);
     }
 
 }
