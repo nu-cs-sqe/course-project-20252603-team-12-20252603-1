@@ -469,17 +469,6 @@ class BoardTest {
         return layout;
     }
 
-    private static boolean hasMoveToWithType(List<Move> moves, int file, int rank, MoveType type) {
-        for (Move move : moves) {
-            if (move.getTo().getX() == file
-                    && move.getTo().getY() == rank
-                    && move.getType() == type) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Test
     void GetPieceAt_ReturnedPieceIsDifferentObject() {
         Piece[][] layout = new Piece[8][8];
