@@ -226,7 +226,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
   - **State of the system**: same as MG-TC18
   - **Expected output**: returned board at `(4, 4)` has type `NONE`
 
-- **MG-TC20: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :x: )
+- **MG-TC20: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: same as MG-TC18
   - **Expected output**: `original` board at `(4, 4)` still has type `KNIGHT`

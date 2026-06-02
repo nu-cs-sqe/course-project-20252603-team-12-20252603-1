@@ -217,6 +217,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        Move move = new Move(new Location(4, 4), new Location(5, 6));
+
+        MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = board[4][4].getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Knight(PieceColor.WHITE);
