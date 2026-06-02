@@ -13,6 +13,10 @@ import domain.piece.PieceType;
 public class MoveGenerator {
 
     private static final int BOARD_SIZE = 8;
+    private static final int KINGSIDE_KING_DEST_FILE = 6;
+    private static final int QUEENSIDE_KING_DEST_FILE = 2;
+    private static final int KINGSIDE_ROOK_DEST_FILE = 5;
+    private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
     private static final int[][] EIGHT_DIRECTIONS = {
         {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}
     };
@@ -147,7 +151,84 @@ public class MoveGenerator {
                 moves.add(new Move(from, new Location(targetFile, targetRank)));
             }
         }
+        addCastlingMoves(moves, from, king);
         return moves;
+    }
+
+    private void addCastlingMoves(List<Move> moves, Location from, Piece king) {
+        if (king.hasMoved() || isInCheck(king.getColor())) {
+            return;
+        }
+        int rank = from.getY();
+        int file = from.getX();
+        PieceColor color = king.getColor();
+        int kingsideRook = findUnmovedRookFileIn(board, rank, file, true, color);
+        if (kingsideRook >= 0
+                && canCastle(rank, file, kingsideRook, KINGSIDE_KING_DEST_FILE,
+                KINGSIDE_ROOK_DEST_FILE, color)) {
+            moves.add(new Move(from, new Location(KINGSIDE_KING_DEST_FILE, rank),
+                    MoveType.CASTLING_KINGSIDE));
+        }
+        int queensideRook = findUnmovedRookFileIn(board, rank, file, false, color);
+        if (queensideRook >= 0
+                && canCastle(rank, file, queensideRook, QUEENSIDE_KING_DEST_FILE,
+                QUEENSIDE_ROOK_DEST_FILE, color)) {
+            moves.add(new Move(from, new Location(QUEENSIDE_KING_DEST_FILE, rank),
+                    MoveType.CASTLING_QUEENSIDE));
+        }
+    }
+
+    private boolean canCastle(
+            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile, PieceColor color) {
+        return isPathClearForCastling(rank, kingFile, rookFile, kingDestFile, rookDestFile)
+                && isKingPathSafe(rank, kingFile, kingDestFile, color);
+    }
+
+    private boolean isPathClearForCastling(
+            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile) {
+        int minFile = Math.min(Math.min(kingFile, rookFile), Math.min(kingDestFile, rookDestFile));
+        int maxFile = Math.max(Math.max(kingFile, rookFile), Math.max(kingDestFile, rookDestFile));
+        for (int f = minFile; f <= maxFile; f++) {
+            if (f == kingFile || f == rookFile) {
+                continue;
+            }
+            if (board[rank][f].getType() != PieceType.NONE) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isKingPathSafe(int rank, int kingFile, int kingDestFile, PieceColor color) {
+        int minFile = Math.min(kingFile, kingDestFile);
+        int maxFile = Math.max(kingFile, kingDestFile);
+        PieceColor attacker = opponent(color);
+        for (int f = minFile; f <= maxFile; f++) {
+            if (isSquareAttackedBy(new Location(f, rank), attacker, board)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int findUnmovedRookFileIn(
+            Piece[][] board, int rank, int kingFile, boolean kingside, PieceColor color) {
+        if (kingside) {
+            for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
+                Piece p = board[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        } else {
+            for (int f = 0; f < kingFile; f++) {
+                Piece p = board[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        }
+        return -1;
     }
 
     private List<Move> generateSlidingMoves(Location from, Piece piece, int[][] directions) {
