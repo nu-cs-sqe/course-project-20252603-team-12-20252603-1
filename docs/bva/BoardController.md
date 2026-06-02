@@ -347,3 +347,51 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: snapshot unchanged cell-wise
+
+---
+
+## Method: `getLegalMovesForSelection(): List<Move>`
+
+Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list (chess-master delegation; no board call).
+
+### Step 1: Input and output equivalence classes
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| `lastSelectedLoc` | `Optional.empty()` vs present |
+| `board.getLegalMoves(from)` | empty collection vs non-empty collection |
+
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| Returned list | empty; non-empty (same as board) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `lastSelectedLoc` | Optional | empty vs present |
+| Board move list | Collections | empty vs one-or-many |
+| Returned list | Collections | mirrors board when selected |
+
+### Step 3: Concrete boundary values
+
+- No selection: fresh controller; `getLegalMovesForSelection()` before any click.
+- With selection: white turn; click white pawn at `Location(0, 6)`; stub `board.getLegalMoves(Location(0, 6))`.
+- Board returns empty: same selection state; stub empty list from `getLegalMoves`.
+
+### Step 4: Test cases
+
+- **BC-TC52: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`
+  - **State of the system**: newly constructed controller; no piece selected
+  - **Expected output**: returned list size is `0`
+
+- **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
+  - **State of the system**: white turn; white pawn selected at `Location(0, 6)`; board stubs one legal move
+  - **Expected output**: returned list equals board's `getLegalMoves` result for selected square
+
+- **BC-TC54: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
+  - **State of the system**: white turn; own piece selected; board stubs empty legal-move list
+  - **Expected output**: returned list size is `0`
