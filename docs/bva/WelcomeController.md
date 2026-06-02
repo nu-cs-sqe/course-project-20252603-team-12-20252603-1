@@ -9,18 +9,20 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class                       | Catalog data type | Parameters                          |
-| --------------------------------------- | ----------------- | ----------------------------------- |
-| Output: WelcomeView initial visibility  | Boolean           | true (visible), false (not visible) |
-| Output: start-game action wired         | Boolean           | true (wired), false (not wired)     |
+| Equivalence class                      | Catalog data type | Parameters                          |
+| -------------------------------------- | ----------------- | ----------------------------------- |
+| Output: WelcomeView initial visibility | Boolean           | true (visible), false (not visible) |
+| Output: start-game action wired        | Boolean           | true (wired), false (not wired)     |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **WelcomeView initial visibility — Boolean:**
+
 - `false` (0)
 - `true` (1) — CAN'T SET: `show()` has not been called
 
 **start-game action wired — Boolean:**
+
 - `false` (0) — CAN'T SET: the constructor always wires the action
 - `true` (1)
 
@@ -53,6 +55,7 @@
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **WelcomeView visibility — Boolean:**
+
 - `false` (0) — CAN'T SET: `show()` always makes the view visible
 - `true` (1)
 
@@ -86,18 +89,22 @@
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **player1Name — String:**
+
 - `""` (empty string)
 - A non-empty string (e.g., `"Alice"`)
 
 **player2Name — String:**
+
 - `""` (empty string)
 - A non-empty string (e.g., `"Bob"`)
 
 **WelcomeView disposed — Boolean:**
+
 - `false` (0) — at least one name is empty; validation rejects the start
 - `true` (1) — both names are non-empty; game proceeds
 
 **error message — Boolean:**
+
 - `false` (0) — both names non-empty; no error shown
 - `true` (1) — at least one name is empty; error message displayed
 
@@ -129,18 +136,20 @@
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class             | Catalog data type | Parameters                                                                    |
-| ----------------------------- | ----------------- | ----------------------------------------------------------------------------- |
-| Input: chess960 mode selected | Boolean           | true (chess960 selected), false (standard selected)                           |
-| Output: BoardInitializer type | Cases             | StandardBoardInitializer, FischerRandomBoardInitializer                       |
+| Equivalence class             | Catalog data type | Parameters                                              |
+| ----------------------------- | ----------------- | ------------------------------------------------------- |
+| Input: chess960 mode selected | Boolean           | true (chess960 selected), false (standard selected)     |
+| Output: BoardInitializer type | Cases             | StandardBoardInitializer, FischerRandomBoardInitializer |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **chess960 mode selected — Boolean:**
+
 - `false` (0) — standard radio button selected (default)
 - `true` (1) — chess960 radio button selected
 
 **BoardInitializer type — Cases:**
+
 - `StandardBoardInitializer`
 - `FischerRandomBoardInitializer`
 
@@ -158,26 +167,26 @@
 
 ---
 
-## Method / behavior: `startGame()` — BoardController launch wiring (chess-master alignment)
+## Method / behavior: `startGame()` — BoardController launch wiring
 
 Scope: After name validation, create `BoardController(player1Name, player2Name, board)` and call `boardController.show()` so the game UI (including turn labels) is owned by `BoardController`, not constructed directly in `WelcomeController`.
 
 ### Step 1: Equivalence Classes
 
-| Input / state | Equivalence classes |
-| ------------- | ------------------- |
-| Player names | both non-empty (valid start) |
-| Board mode | standard or chess960 via `selectedInitializer()` |
-| Output | `BoardController` created and `show()` launches visible `MainView` with player-one label on white turn |
+| Input / state | Equivalence classes                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| Player names  | both non-empty (valid start)                                                                           |
+| Board mode    | standard or chess960 via `selectedInitializer()`                                                       |
+| Output        | `BoardController` created and `show()` launches visible `MainView` with player-one label on white turn |
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Variable / output | Catalog data type |
-| ----------------- | ----------------- |
-| `player1Name`, `player2Name` | Strings |
-| Started controller reference | Pointers |
-| Main view visibility | Boolean |
-| Current player label text | Strings |
+| Variable / output            | Catalog data type |
+| ---------------------------- | ----------------- |
+| `player1Name`, `player2Name` | Strings           |
+| Started controller reference | Pointers          |
+| Main view visibility         | Boolean           |
+| Current player label text    | Strings           |
 
 ### Step 3: Concrete boundary values
 
