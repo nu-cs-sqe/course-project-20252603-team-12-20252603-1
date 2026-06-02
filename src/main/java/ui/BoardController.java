@@ -15,13 +15,35 @@ public class BoardController {
 
   private static final int BOARD_SIZE = 8;
 
+  private final String player1Name;
+  private final String player2Name;
   private final Board board;
+  private MainView mainView;
   private BoardView boardView;
   private Optional<Location> lastSelectedLoc;
 
-  public BoardController(Board board) {
+  public BoardController(String player1Name, String player2Name, Board board) {
+    this.player1Name = player1Name;
+    this.player2Name = player2Name;
     this.board = board;
     lastSelectedLoc = Optional.empty();
+  }
+
+  public void show() {
+    mainView = new MainView(player1Name, player2Name, this);
+    mainView.setVisible(true);
+    updateCurrentPlayerLabel();
+  }
+
+  private void updateCurrentPlayerLabel() {
+    String text = board.getCurrentGameState() == GameState.WHITE_TURN
+        ? player1Name
+        : player2Name;
+    mainView.getGameStatsView().updateCurrentPlayerLabel(text);
+  }
+
+  MainView getMainView() {
+    return mainView;
   }
 
   public void setBoardView(BoardView boardView) {
