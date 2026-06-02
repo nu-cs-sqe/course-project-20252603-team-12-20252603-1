@@ -11,7 +11,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 | Input / state   | Equivalence classes                                           |
 | --------------- | ------------------------------------------------------------- |
 | board           | Collections - 8x8 board with Piece objects                    |
-| enPassantTarget | Optional - empty or present                                   |
+| enPassantTarget | Cases - no target vs target set at capture square             |
 | Output          | Cases - generator stores references for later move generation |
 
 ### Step 2: Catalog data types
@@ -19,19 +19,24 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 | Variable / output   | Catalog data type |
 | ------------------- | ----------------- |
 | board               | Collections       |
-| enPassantTarget     | Optional          |
+| enPassantTarget     | Cases             |
 | generator readiness | Cases             |
 
 ### Step 3: Concrete boundary values
 
 - board: 8x8 array filled with NonePiece except test-specific piece placements.
-- enPassantTarget: Optional.empty() for basic move tests.
+- enPassantTarget: no target for basic move tests.
+
+**enPassantTarget — Cases:**
+
+- No en-passant target
+- En-passant target present at a capture square
 
 ### Step 4: Test cases
 
 - MG-TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable ( :white_check_mark: )
   - Method(s) under test: MoveGenerator(Piece[][], Optional<Location>), generateLegalMoves(Location)
-  - State of the system: 8x8 board, white knight at (4,4), enPassantTarget is Optional.empty()
+  - State of the system: 8x8 board, white knight at (4,4), no en-passant target
   - Expected output: generateLegalMoves(new Location(4,4)) returns a non-null list
 
 ---
@@ -215,7 +220,7 @@ Scope: add pseudo-legal generation for en passant and castling using current boa
 
 | Input / state | Equivalence classes |
 | ------------- | ------------------- |
-| `enPassantTarget` | Optional empty vs present on adjacent capture square |
+| `enPassantTarget` | Cases - no target vs target on adjacent capture square |
 | King/rook movement state | Cases - unmoved king+rook vs moved king or moved rook |
 | Castling path | Cases - squares clear and safe vs blocked or attacked |
 | Output | Collections - includes special move vs excludes it |
@@ -224,15 +229,20 @@ Scope: add pseudo-legal generation for en passant and castling using current boa
 
 | Variable / output | Catalog data type |
 | ----------------- | ----------------- |
-| `enPassantTarget` | Optional |
+| `enPassantTarget` | Cases |
 | Piece movement flags | Cases |
 | Path occupancy and attack checks | Cases |
 | Returned move list | Collections |
 
 ### Step 3: Concrete boundary values
 
-- White en passant: white pawn at `(4,3)`, `enPassantTarget = (5,2)`.
-- No en passant target: same pawn placement, `enPassantTarget = Optional.empty()`.
+**enPassantTarget — Cases:**
+
+- No en-passant target
+- En-passant target present (e.g. `(5,2)` for white pawn en passant)
+
+- White en passant: white pawn at `(4,3)`, en-passant target at `(5,2)`.
+- No en passant: same pawn placement, no en-passant target.
 - Kingside castling allowed: white king `(4,7)` and rook `(7,7)` both unmoved, squares `(5,7)` and `(6,7)` empty, none of `(4,7)`, `(5,7)`, `(6,7)` attacked.
 - Castling blocked by moved king: same board but `king.changeToMoved()`.
 - Castling blocked by attacked transit square: same board plus black rook attacking `(5,7)`.
@@ -241,12 +251,12 @@ Scope: add pseudo-legal generation for en passant and castling using current boa
 
 - MG-TC14: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.of(new Location(5,2))`
+  - State of the system: white pawn at `(4,3)`, en-passant target at `(5,2)`
   - Expected output: returned moves include destination `(5,2)` with `MoveType.EN_PASSANT`
 
 - MG-TC15: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.empty()`
+  - State of the system: white pawn at `(4,3)`, no en-passant target
   - Expected output: returned moves do not include any `MoveType.EN_PASSANT`
 
 - MG-TC16: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling ( :white_check_mark: )
