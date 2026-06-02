@@ -15,25 +15,23 @@ public class WelcomeController {
         welcomeView.setStartGameAction(this::startGame);
     }
 
+    WelcomeView getWelcomeView() {
+        return welcomeView;
+    }
+
     public void show() {
         welcomeView.setVisible(true);
     }
 
-    void startGame() {
+    private void startGame() {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            welcomeView.showError("Player names cannot be empty.");
+            welcomeView.showError("Player name cannot be empty");
             return;
         }
-        BoardController boardController = new BoardController(new Board(selectedInitializer()));
         closeWelcomeView();
-        new MainView(player1Name, player2Name, boardController).setVisible(true);
-    }
-
-    private void closeWelcomeView() {
-        welcomeView.setVisible(false);
-        welcomeView.dispose();
+        new BoardController(player1Name, player2Name, new Board(selectedInitializer())).show();
     }
 
     BoardInitializer selectedInitializer() {
@@ -42,7 +40,8 @@ public class WelcomeController {
             : new StandardBoardInitializer();
     }
 
-    WelcomeView getWelcomeView() {
-        return welcomeView;
+    private void closeWelcomeView() {
+        welcomeView.setVisible(false);
+        welcomeView.dispose();
     }
 }
