@@ -4,9 +4,9 @@
 
 ### Step 1: Equivalence Classes
 
-- **Input: board snapshot** — 8×8 grid of `Piece` references passed to the generator
-- **Input: en-passant target state** — no target vs target set at a capture square
-- **Output: generator readiness** — generator holds board and target for later move generation
+- **Input: board snapshot** — the 8×8 `Piece[][]` passed to the constructor
+- **Input: en-passant target state** — whether a capture square is recorded for en passant
+- **Output: generator readiness** — generator can produce legal moves from the stored snapshot
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -14,7 +14,7 @@
 | --- | --- | --- |
 | Input: board snapshot | Collections | 8×8 `Piece[][]` |
 | Input: en-passant target state | Cases | no target, target present at `Location` |
-| Output: generator readiness | Cases | ready for `generateLegalMoves` |
+| Output: generator readiness | Cases | `generateLegalMoves` returns non-null list |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -25,28 +25,27 @@
 **En-passant target state — Cases:**
 
 - No en-passant target
-- En-passant target present at a capture square (used in later slices)
+- En-passant target present at a capture square (later slices)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
 - **MG-TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable** ( :white_check_mark: )
   - **Method(s) under test**: `MoveGenerator(Piece[][], Optional<Location>)`, `generateLegalMoves(Location)`
-  - **State of the system**: 8×8 board with white knight at `(4,4)`; no en-passant target
+  - **State of the system**: 8×8 board with white knight at `(4, 4)`; no en-passant target
   - **Expected output**: `generateLegalMoves(new Location(4, 4))` returns a non-null list
 
 ---
 
 ## Method: `generateLegalMoves(Location from)`
 
-Scope: pseudo-legal moves for the piece at `from` on the constructor board snapshot (piece-type rules only in this slice; check filtering documented below).
-
 ### Step 1: Equivalence Classes
 
 - **Input: source file** — column index of `from`
 - **Input: source rank** — row index of `from`
-- **Input: piece type at `from`** — `NONE`, `PAWN`, `KNIGHT`, `BISHOP`, `ROOK`, `QUEEN`, `KING`
+- **Input: piece type at `from`** — the `PieceType` on the source square
 - **Input: board occupancy** — empty paths, blockers, capturable enemy pieces
-- **Output: move list** — returned list size and destinations
+- **Output: move list size** — count of legal moves returned
+- **Output: move list contents** — destinations included or excluded
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -56,31 +55,29 @@ Scope: pseudo-legal moves for the piece at `from` on the constructor board snaps
 | Input: source rank | Interval | [0, 7] |
 | Input: piece type at `from` | Cases | NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING |
 | Input: board occupancy | Collections | empty board, blockers, capturable pieces |
-| Output: move list size | Counts | 0, 2, 8, 13, 14, 27 |
+| Output: move list size | Counts | 0, 2, 6, 8, 13, 14, 27 |
+| Output: move list contents | Collections | destination present, destination absent |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Source file / rank — Interval [0, 7]:**
 
 - Center `(4, 4)` for full directional coverage
-- Edge and corner squares where move counts differ (covered by piece-type TCs)
+- `(3, 3)` empty square → size `0`
 
 **Piece type at `from` — Cases:**
 
-- NONE → empty list
-- PAWN at start rank `(4, 6)` with empty `(4, 5)` and `(4, 4)` → 2 moves
-- KNIGHT at center → 8 moves
-- BISHOP at center on empty board → 13 moves
-- ROOK at center on empty board → 14 moves
-- QUEEN at center on empty board → 27 moves
-- KING at center on empty board → 8 moves
+- NONE
+- PAWN at `(4, 6)` with empty `(4, 5)` and `(4, 4)` → size `2`
+- KNIGHT at center → size `8`
+- BISHOP at center on empty board → size `13`
+- ROOK at center on empty board → size `14`
+- QUEEN at center on empty board → size `27`
+- KING at center on empty board → size `8`
 
 **Move list size — Counts:**
 
-- 0 (empty square)
-- 2 (white pawn at start)
-- 8 (knight or king at center)
-- 13, 14, 27 (bishop, rook, queen at center)
+- 0, 2, 6, 8, 13, 14, 27
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -123,13 +120,14 @@ Scope: pseudo-legal moves for the piece at `from` on the constructor board snaps
 
 ## Method / behavior: check filtering in `generateLegalMoves(Location from)`
 
-Scope: after pseudo-legal generation, remove moves that leave the moving side's king in check (`filterLegalMoves` / `applyMoveToBoard` / `leavesOwnKingInCheck`). Move simulation uses **NORMAL** moves only in this slice (no en passant, castling, or promotion).
+Scope: after pseudo-legal generation, remove moves that leave the moving side's king in check. Uses `filterLegalMoves`, `leavesOwnKingInCheck`, and `applyMoveToBoard` (NORMAL moves only in this slice).
 
 ### Step 1: Equivalence Classes
 
 - **Input: pin exposure** — pinned piece move that exposes king vs legal move along pin line
 - **Input: king in check** — king attacked with escape squares vs square still under attack
-- **Output: filtered move list** — excluded illegal destinations; reduced or empty list
+- **Output: filtered move list size** — reduced count when moves are removed
+- **Output: filtered move list contents** — illegal destinations absent from list
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -137,35 +135,101 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 | --- | --- | --- |
 | Input: pin exposure | Cases | move exposes king, move does not expose king |
 | Input: king in check | Cases | in check with escapes, square still in check |
-| Output: filtered move list | Collections | destination absent, list size reduced |
-| Output: move list size | Counts | 6 (king escapes off attacked file) |
+| Output: filtered move list size | Counts | 6 |
+| Output: filtered move list contents | Collections | destination absent |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Pin exposure — Cases:**
 
-- Pinned white bishop at `(2, 3)`; white king `(2, 2)`; black rook `(2, 7)` on c-file — pseudo move to `(3, 4)` exposes king
+- Pinned white bishop at `(2, 3)`; white king `(2, 2)`; black rook `(2, 7)` — pseudo move to `(3, 4)` exposes king
 
 **King in check — Cases:**
 
-- White king `(4, 4)`; black rook `(4, 0)` on same file — six escape squares off the file; `(4, 3)` still attacked
+- White king `(4, 4)`; black rook `(4, 0)` — six escapes off the file; `(4, 3)` still attacked
+
+**Filtered move list size — Counts:**
+
+- 6 (king escapes)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
+`filterLegalMoves` and `leavesOwnKingInCheck` are private; exercised indirectly through `generateLegalMoves`.
+
 - **MG-TC14: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :white_check_mark: )
-  - **Method(s) under test**: `generateLegalMoves(Location)`
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `filterLegalMoves`, `leavesOwnKingInCheck`, `applyMoveToBoard`)
   - **State of the system**: pinned white bishop at `(2, 3)`; king `(2, 2)`; black rook `(2, 7)`
   - **Expected output**: no returned move has destination `(3, 4)`
 
 - **MG-TC15: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :white_check_mark: )
-  - **Method(s) under test**: `generateLegalMoves(Location)`
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via check filtering)
   - **State of the system**: white king at `(4, 4)`; black rook at `(4, 0)`
   - **Expected output**: returned move list size is `6`
 
 - **MG-TC16: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :white_check_mark: )
-  - **Method(s) under test**: `generateLegalMoves(Location)`
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via check filtering)
   - **State of the system**: white king at `(4, 4)`; black rook at `(4, 0)`
   - **Expected output**: no returned move has destination `(4, 3)`
+
+---
+
+## Method: `applyMoveToBoard(Piece[][] original, Move move)` (package-private static)
+
+Scope: simulate a **NORMAL** move on a deep copy of the board for check filtering. En passant, castling, and promotion are deferred to later slices.
+
+### Step 1: Equivalence Classes
+
+- **Input: original board** — board snapshot before the move
+- **Input: move type** — `NORMAL` (sole case in this slice)
+- **Input: move endpoints** — `from` and `to` locations
+- **Output: returned board** — new array; source empty; destination holds mover
+- **Output: original board** — unchanged after call (deep copy)
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: original board | Collections | 8×8 `Piece[][]` with one mover |
+| Input: move type | Cases | NORMAL |
+| Input: move endpoints | Pairs of variables | `from` file/rank, `to` file/rank |
+| Output: piece type at destination | Cases | KNIGHT, etc. |
+| Output: piece type at source | Cases | NONE |
+| Output: original board at source | Cases | mover still present on `original` |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**Move type — Cases:**
+
+- NORMAL
+
+**Move endpoints — Pairs of variables:**
+
+- White knight `(4, 4)` → `(5, 6)` on otherwise empty board
+
+**Output at destination — Cases:**
+
+- KNIGHT (matches moving piece type)
+
+**Output at source — Cases:**
+
+- NONE on returned board; KNIGHT still on `original`
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **MG-TC18: ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece** ( :x: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white knight at `(4, 4)`; NORMAL move to `(5, 6)`
+  - **Expected output**: returned board at `(5, 6)` has type `KNIGHT`
+
+- **MG-TC19: ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty** ( :x: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: same as MG-TC18
+  - **Expected output**: returned board at `(4, 4)` has type `NONE`
+
+- **MG-TC20: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :x: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: same as MG-TC18
+  - **Expected output**: `original` board at `(4, 4)` still has type `KNIGHT`
 
 ---
 
@@ -173,9 +237,9 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 ### Step 1: Equivalence Classes
 
-- **Input: color** — `WHITE` or `BLACK`
-- **Input: board distribution** — pieces of both colors on the snapshot
-- **Output: move list** — concatenated legal moves for all pieces of the given color
+- **Input: color** — side whose moves are collected
+- **Input: board distribution** — placement of pieces for both colors
+- **Output: move list size** — total legal moves for that color
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -183,7 +247,7 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 | --- | --- | --- |
 | Input: color | Cases | WHITE, BLACK |
 | Input: board distribution | Collections | single movable piece, multiple pieces |
-| Output: move list size | Counts | 8 (single white knight) |
+| Output: move list size | Counts | 8 |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -194,11 +258,11 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 **Board distribution — Collections:**
 
-- Only movable white piece: knight at `(4, 4)`; black king at `(0, 0)` (blocks nothing for knight)
+- White knight at `(4, 4)`; black king at `(0, 0)`
 
 **Move list size — Counts:**
 
-- 8 (one white knight on empty board)
+- 8 (single white knight)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -213,10 +277,10 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 ### Step 1: Equivalence Classes
 
-- **Input: color** — `WHITE` or `BLACK`
-- **Input: board distribution** — side has at least one legal move vs no pieces of that color
-- **Input: king in check** — side in check but has a legal escape (check-filtering slice)
-- **Output: result** — `true` or `false`
+- **Input: color** — side queried for legal moves
+- **Input: board distribution** — movable pieces present vs no pieces of that color
+- **Input: king in check** — side in check but has a legal escape
+- **Output: result** — whether at least one legal move exists
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -236,12 +300,17 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 **Board distribution — Collections:**
 
-- White knight at `(4, 4)` on otherwise empty board → `true` for WHITE
-- No black pieces on board → `false` for BLACK
+- White knight at `(4, 4)` on otherwise empty board
+- No black pieces on board
 
 **King in check — Cases:**
 
-- White king in check from rook on file but can escape off the file → `true` for WHITE
+- White king in check from rook on file but can escape off the file
+
+**Result — Boolean:**
+
+- true (movable piece or legal escape)
+- false (no pieces for color)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -266,10 +335,9 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 ### Step 1: Equivalence Classes
 
-- **Input: color** — `WHITE` or `BLACK`
-- **Input: king attack state** — king attacked vs not attacked
-- **Input: king presence** — king on board vs absent (invalid layout; not primary TC focus)
-- **Output: result** — `true` or `false`
+- **Input: color** — side whose king is queried
+- **Input: king attack state** — king square attacked vs not attacked
+- **Output: result** — whether that side's king is in check
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -289,7 +357,12 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 **King attack state — Cases:**
 
 - Attacked: white king `(4, 4)`; black rook `(4, 0)`; clear file between
-- Not attacked: white king `(4, 4)`; no black piece attacks it
+- Not attacked: white king `(4, 4)`; black rook at `(0, 0)` (no attack line)
+
+**Result — Boolean:**
+
+- true
+- false
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
