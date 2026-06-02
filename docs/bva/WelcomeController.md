@@ -186,17 +186,17 @@ Scope: After name validation, create `BoardController(player1Name, player2Name, 
 
 ### Step 4: Test cases
 
-- **TC9: StartGame_NonEmptyNames_StartedBoardControllerNotNull** ( :x: )
+- **TC9: StartGame_NonEmptyNames_StartedBoardControllerNotNull** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: valid player names; `startGame()` called after `show()`
   - **Expected output**: `getStartedBoardController()` is not `null`
 
-- **TC10: StartGame_NonEmptyNames_MainViewIsVisible** ( :x: )
+- **TC10: StartGame_NonEmptyNames_MainViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: valid player names; game started
   - **Expected output**: `getStartedBoardController().getMainView().isVisible()` is `true`
 
-- **TC11: StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name** ( :x: )
+- **TC11: StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: valid player names; standard new game (`WHITE_TURN`)
   - **Expected output**: game stats current-player label text is `player1Name`
