@@ -204,3 +204,62 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - Method(s) under test: isInCheck(PieceColor)
   - State of the system: white king present and no black piece attacks it
   - Expected output: isInCheck(PieceColor.WHITE) is false
+
+---
+
+## Method / behavior: en passant and castling in `generateLegalMoves(Location from)`
+
+Scope: add pseudo-legal generation for en passant and castling using current board state, king/rook `hasMoved` flags, and `enPassantTarget`.
+
+### Step 1: Inputs and outputs
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| `enPassantTarget` | Optional empty vs present on adjacent capture square |
+| King/rook movement state | Cases - unmoved king+rook vs moved king or moved rook |
+| Castling path | Cases - squares clear and safe vs blocked or attacked |
+| Output | Collections - includes special move vs excludes it |
+
+### Step 2: Catalog data types
+
+| Variable / output | Catalog data type |
+| ----------------- | ----------------- |
+| `enPassantTarget` | Optional |
+| Piece movement flags | Cases |
+| Path occupancy and attack checks | Cases |
+| Returned move list | Collections |
+
+### Step 3: Concrete boundary values
+
+- White en passant: white pawn at `(4,3)`, `enPassantTarget = (5,2)`.
+- No en passant target: same pawn placement, `enPassantTarget = Optional.empty()`.
+- Kingside castling allowed: white king `(4,7)` and rook `(7,7)` both unmoved, squares `(5,7)` and `(6,7)` empty, none of `(4,7)`, `(5,7)`, `(6,7)` attacked.
+- Castling blocked by moved king: same board but `king.changeToMoved()`.
+- Castling blocked by attacked transit square: same board plus black rook attacking `(5,7)`.
+
+### Step 4: Test cases
+
+- MG-TC14: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.of(new Location(5,2))`
+  - Expected output: returned moves include destination `(5,2)` with `MoveType.EN_PASSANT`
+
+- MG-TC15: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at `(4,3)`, `enPassantTarget = Optional.empty()`
+  - Expected output: returned moves do not include any `MoveType.EN_PASSANT`
+
+- MG-TC16: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white king `(4,7)` and rook `(7,7)` unmoved; path clear and safe
+  - Expected output: returned moves include destination `(6,7)` with `MoveType.CASTLING_KINGSIDE`
+
+- MG-TC17: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: same as MG-TC16 but king has `hasMoved() == true`
+  - Expected output: returned moves include no castling move types
+
+- MG-TC18: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: same as MG-TC16 with black rook attacking square `(5,7)`
+  - Expected output: returned moves do not include `MoveType.CASTLING_KINGSIDE`
