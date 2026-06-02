@@ -2,10 +2,12 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -347,6 +349,158 @@ class BoardTest {
 
         PieceType expected = PieceType.PAWN;
         PieceType actual = board.getPieceAt(5, 4).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnEnPassantMove_DestinationHasMovingPawn() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[3][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.PAWN;
+        PieceType actual = board.getPieceAt(2, 5).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[3][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(3, 5).getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = board.getPieceAt(7, 6).getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = board.getPieceAt(7, 5).getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        assertThrows(IllegalStateException.class, () -> board.makeMove(move));
+    }
+
+    @Test
+    void MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[1][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(
+                new Location(4, 1), new Location(4, 0), MoveType.PROMOTION, PieceType.QUEEN);
+
+        assertThrows(UnsupportedOperationException.class, () -> board.makeMove(move));
+    }
+
+    @Test
+    void MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][0] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        board.makeMove(move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = board.getPieceAt(7, 2).getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = board.getPieceAt(7, 3).getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move whiteDoubleStep = new Move(new Location(4, 6), new Location(4, 4));
+
+        board.makeMove(whiteDoubleStep);
+
+        Optional<Location> target = board.getEnPassantTarget();
+
+        boolean expectedPresent = true;
+        boolean actualPresent = target.isPresent();
+        assertEquals(expectedPresent, actualPresent);
+
+        int expectedFile = 4;
+        int actualFile = target.get().getX();
+        assertEquals(expectedFile, actualFile);
+
+        int expectedRank = 5;
+        int actualRank = target.get().getY();
+        assertEquals(expectedRank, actualRank);
+    }
+
+    @Test
+    void MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][1] = new Knight(PieceColor.WHITE);
+        Board board = new Board(layout);
+        board.setEnPassantTarget(Optional.of(new Location(4, 5)));
+        Move knightMove = new Move(new Location(1, 7), new Location(2, 5));
+
+        board.makeMove(knightMove);
+
+        boolean expected = false;
+        boolean actual = board.getEnPassantTarget().isPresent();
         assertEquals(expected, actual);
     }
 

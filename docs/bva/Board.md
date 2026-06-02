@@ -109,6 +109,85 @@
 
 ---
 
+## Method / behavior: `makeMove(Move move)` with en passant and castling execution
+
+Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move types in board state, and maintain `enPassantTarget` so next-turn legal-move generation can include/exclude en passant correctly.
+
+### Step 1: Equivalence Classes
+
+- **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`, `NORMAL`
+- **Input: pawn advance distance (NORMAL pawn moves)** — one-step vs two-step
+- **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
+- **Output: castling effect** — king and rook relocate to castling destination files
+- **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
+- **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
+- **Output: unimplemented promotion** — `UnsupportedOperationException` until promotion execution is added
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: move type | Cases | NORMAL, EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
+| Input: pawn rank delta | Intervals | 1 step, 2 steps |
+| Output: piece positions | Cases | expected squares occupied/empty |
+| Output: enPassantTarget | Cases | target set, no target |
+| Output: invalid castling | Cases | exception thrown vs successful relocation |
+| Output: promotion | Cases | `UnsupportedOperationException` vs (future) promoted piece at destination |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+- Promotion move: `UnsupportedOperationException` (placeholder until implemented)
+- Kingside castling with no unmoved rook on king's rank: `IllegalStateException`
+- En passant execute: white pawn `(4,3)` to `(5,2)` with black pawn at `(5,3)`
+- Kingside castling execute: white king `(4,7)` and rook `(7,7)` to king `(6,7)`, rook `(5,7)`
+- Queenside castling execute: white king `(4,7)` and rook `(0,7)` to king `(2,7)`, rook `(3,7)`
+- Double-step pawn move sets en-passant target to midpoint square
+- Any non-double-step move clears en-passant target
+
+### Step 4: Test Cases
+
+- **TC54: MakeMove_OnEnPassantMove_DestinationHasMovingPawn** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
+  - **Expected output**: destination `(5,2)` has a white pawn
+
+- **TC55: MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: same as TC54
+  - **Expected output**: captured pawn square `(5,3)` is `NONE`
+
+- **TC56: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **Expected output**: king at `(6,7)` and rook at `(5,7)`
+
+- **TC57: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **Expected output**: king at `(2,7)` and rook at `(3,7)`
+
+- **TC58: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
+  - **State of the system**: only white pawn at `(4,6)`; white pawn double-steps to `(4,4)`
+  - **Expected output**: `getEnPassantTarget()` is present at `(4,5)` (passed-over square for a later en-passant capture)
+
+- **TC59: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
+  - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
+  - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
+
+- **TC60: MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`
+  - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
+  - **Expected output**: `IllegalStateException` (board state unchanged for castling)
+
+- **TC61: MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`
+  - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with promotion piece `QUEEN`
+  - **Expected output**: `UnsupportedOperationException` (promotion not yet applied on board)
+
+---
+
 ## Method: `Board(Piece[][])`
 
 ### Step 1: Equivalence Classes
