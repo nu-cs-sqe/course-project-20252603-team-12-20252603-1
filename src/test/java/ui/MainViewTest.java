@@ -19,7 +19,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBob_BoardControllerExposesSnapshot() {
     Board boardMock = stubSnapshot(eightByEightGrid());
-    MainView view = new MainView("Alice", "Bob", new BoardController(boardMock));
+    MainView view = new MainView("Alice", "Bob", new BoardController("Alice", "Bob", boardMock));
 
     int expected = BOARD_SIZE;
     int actual = view.getBoardController().getBoardSnapshot().length;
@@ -30,7 +30,7 @@ class MainViewTest {
   @Test
   void Constructor_OnAliceAndBob_WiresStatsBoardAndLayout() {
     Board boardMock = replayNiceBoard();
-    MainView view = new MainView("Alice", "Bob", new BoardController(boardMock));
+    MainView view = new MainView("Alice", "Bob", new BoardController("Alice", "Bob", boardMock));
 
     boolean wired =
         view.getGameStatsView() instanceof GameStatsView
@@ -51,7 +51,7 @@ class MainViewTest {
     Board boardMock = EasyMock.createNiceMock(Board.class);
     EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
     EasyMock.replay(boardMock);
-    MainView view = new MainView("Alice", "Bob", new BoardController(boardMock));
+    MainView view = new MainView("Alice", "Bob", new BoardController("Alice", "Bob", boardMock));
 
     GameState expectedState = GameState.WHITE_TURN;
     GameState actualState = view.getBoardController().getCurrentGameState();

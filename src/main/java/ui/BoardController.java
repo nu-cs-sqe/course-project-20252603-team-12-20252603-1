@@ -26,10 +26,6 @@ public class BoardController {
     lastSelectedLoc = Optional.empty();
   }
 
-  public BoardController(Board board) {
-    this("", "", board);
-  }
-
   public void show() {
     mainView = new MainView(player1Name, player2Name, this);
     mainView.setVisible(true);

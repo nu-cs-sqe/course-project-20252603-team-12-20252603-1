@@ -25,10 +25,13 @@ import org.junit.jupiter.api.Test;
 
 class BoardControllerTest {
 
+    private static final String TEST_PLAYER_ONE = "Alice";
+    private static final String TEST_PLAYER_TWO = "Bob";
+
     @Test
     void Constructor_FreshInstance_LastSelectedUnset() {
         Board boardMock = replayNiceBoard();
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
@@ -39,7 +42,7 @@ class BoardControllerTest {
     @Test
     void GetSelectedLocation_FreshInstance_ReturnsEmpty() {
         Board boardMock = replayNiceBoard();
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         Optional<Location> expected = Optional.empty();
         Optional<Location> actual = controller.getSelectedLocation();
@@ -54,7 +57,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -70,7 +73,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -86,7 +89,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(expectedGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -102,7 +105,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         int expected = 16;
@@ -118,7 +121,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         int expected = 16;
@@ -133,7 +136,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         GameState expectedState = GameState.WHITE_TURN;
         GameState actualState = controller.getCurrentGameState();
@@ -148,7 +151,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         boolean expected = true;
         boolean actual = everyOccupiedPieceHasNotMoved(controller.getBoardSnapshot());
@@ -165,7 +168,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(snapshot2);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] actual1 = controller.getBoardSnapshot();
         Piece[][] actual2 = controller.getBoardSnapshot();
 
@@ -179,7 +182,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -192,7 +195,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -205,7 +208,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_WhiteBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -218,7 +221,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_BlackBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -231,7 +234,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_BackRankTypesMirror() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -244,7 +247,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_StandardPawnRows() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -257,7 +260,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_WhiteBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -270,7 +273,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_BlackBackRank() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -283,7 +286,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_WhiteBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -296,7 +299,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_BlackBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -309,7 +312,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_WhiteBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -322,7 +325,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_BlackBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -335,7 +338,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_BackRanksMirrorPieceTypes() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -348,7 +351,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -361,7 +364,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -374,7 +377,7 @@ class BoardControllerTest {
     void GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank() {
         Piece[][] seedGrid = newChess960SeedOneGrid();
         Board boardMock = stubSnapshot(seedGrid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Piece[][] snapshot = controller.getBoardSnapshot();
 
         boolean expected = true;
@@ -387,7 +390,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -402,7 +405,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -417,7 +420,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForWhitePieceClickWithSnapshot(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -432,7 +435,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 1));
 
@@ -446,7 +449,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 1));
 
@@ -460,7 +463,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 1));
 
@@ -474,7 +477,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -488,7 +491,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnEmptySquare_TurnRemainsWhite() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -502,7 +505,7 @@ class BoardControllerTest {
     void HandleSquareClick_BeforeFirstMove_OnEmptySquare_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -515,7 +518,7 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_InvalidLocation_NoSelectionAfterClick() {
         Board boardMock = replayNiceBoard();
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(-1, 0));
 
@@ -532,7 +535,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(new Location(-1, 0));
 
         GameState expected = GameState.WHITE_TURN;
@@ -548,7 +551,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(standardGrid);
         EasyMock.replay(boardMock);
 
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(new Location(-1, 0));
 
         boolean expected = true;
@@ -561,7 +564,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForBlackPieceClick(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 1);
 
         controller.handleSquareClick(clicked);
@@ -576,7 +579,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForBlackPieceClick(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 1);
 
         controller.handleSquareClick(clicked);
@@ -591,7 +594,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForBlackPieceClickWithSnapshot(standardGrid, 1, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 1);
 
         controller.handleSquareClick(clicked);
@@ -606,7 +609,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 6));
 
@@ -620,7 +623,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 6));
 
@@ -634,7 +637,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(0, 6));
 
@@ -648,7 +651,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -662,7 +665,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -676,7 +679,7 @@ class BoardControllerTest {
     void HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClickOnBlackTurn(standardGrid, 3, 3);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(3, 3));
 
@@ -690,7 +693,7 @@ class BoardControllerTest {
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
 
         Piece[][] snapshot = controller.getBoardSnapshot();
 
@@ -704,7 +707,7 @@ class BoardControllerTest {
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -719,7 +722,7 @@ class BoardControllerTest {
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -734,7 +737,7 @@ class BoardControllerTest {
     void HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = boardForWhitePieceClick(chess960Grid, 6, 0);
-        BoardController controller = new BoardController(boardMock);
+        BoardController controller = controllerFor(boardMock);
         Location clicked = new Location(0, 6);
 
         controller.handleSquareClick(clicked);
@@ -770,6 +773,10 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getSnapshot()).andReturn(snapshot);
         EasyMock.replay(boardMock);
         return boardMock;
+    }
+
+    private static BoardController controllerFor(Board board) {
+        return new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board);
     }
 
     private static Board replayNiceBoard() {
