@@ -443,6 +443,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][1] = new Knight(PieceColor.WHITE);
+        Board board = new Board(layout);
+        board.setEnPassantTarget(Optional.of(new Location(4, 5)));
+        Move knightMove = new Move(new Location(1, 7), new Location(2, 5));
+
+        board.makeMove(knightMove);
+
+        boolean expected = false;
+        boolean actual = board.getEnPassantTarget().isPresent();
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
