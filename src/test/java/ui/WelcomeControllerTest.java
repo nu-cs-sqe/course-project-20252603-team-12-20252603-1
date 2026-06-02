@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import java.awt.Window;
 import org.junit.jupiter.api.Test;
 
 class WelcomeControllerTest {
@@ -31,7 +33,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertFalse(controller.getWelcomeView().isDisplayable());
     }
 
@@ -41,7 +43,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("");
         controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
@@ -52,7 +54,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
@@ -87,9 +89,9 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("Bob");
 
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
 
-        assertNotNull(controller.getStartedBoardController());
+        assertNotNull(findVisibleMainView());
     }
 
     @Test
@@ -99,10 +101,10 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("Bob");
 
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
 
         boolean expected = true;
-        boolean actual = controller.getStartedBoardController().getMainView().isVisible();
+        boolean actual = findVisibleMainView().isVisible();
         assertEquals(expected, actual);
     }
 
@@ -113,14 +115,24 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("Bob");
 
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
 
         String expected = "Alice";
-        String actual = controller.getStartedBoardController()
-                .getMainView()
+        String actual = findVisibleMainView()
                 .getGameStatsView()
                 .getCurrentPlayerLabelText();
         assertEquals(expected, actual);
     }
 
+    private static MainView findVisibleMainView() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView) {
+                MainView mainView = (MainView) window;
+                if (mainView.isVisible()) {
+                    return mainView;
+                }
+            }
+        }
+        return null;
+    }
 }

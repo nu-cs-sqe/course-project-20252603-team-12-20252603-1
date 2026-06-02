@@ -9,33 +9,29 @@ import java.util.Random;
 public class WelcomeController {
 
     private final WelcomeView welcomeView;
-    private BoardController startedBoardController;
 
     public WelcomeController() {
         welcomeView = new WelcomeView();
         welcomeView.setStartGameAction(this::startGame);
     }
 
+    WelcomeView getWelcomeView() {
+        return welcomeView;
+    }
+
     public void show() {
         welcomeView.setVisible(true);
     }
 
-    void startGame() {
+    private void startGame() {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            welcomeView.showError("Player names cannot be empty.");
+            welcomeView.showError("Player name cannot be empty");
             return;
         }
-        startedBoardController =
-                new BoardController(player1Name, player2Name, new Board(selectedInitializer()));
         closeWelcomeView();
-        startedBoardController.show();
-    }
-
-    private void closeWelcomeView() {
-        welcomeView.setVisible(false);
-        welcomeView.dispose();
+        new BoardController(player1Name, player2Name, new Board(selectedInitializer())).show();
     }
 
     BoardInitializer selectedInitializer() {
@@ -44,11 +40,8 @@ public class WelcomeController {
             : new StandardBoardInitializer();
     }
 
-    WelcomeView getWelcomeView() {
-        return welcomeView;
-    }
-
-    BoardController getStartedBoardController() {
-        return startedBoardController;
+    private void closeWelcomeView() {
+        welcomeView.setVisible(false);
+        welcomeView.dispose();
     }
 }
