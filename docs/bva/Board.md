@@ -115,25 +115,28 @@ Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move ty
 
 ### Step 1: Equivalence Classes
 
-- **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `NORMAL`
+- **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`, `NORMAL`
 - **Input: pawn advance distance (NORMAL pawn moves)** — one-step vs two-step
 - **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
 - **Output: castling effect** — king and rook relocate to castling destination files
 - **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
 - **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
+- **Output: unimplemented promotion** — `UnsupportedOperationException` until promotion execution is added
 
 ### Step 2: Data Types (from BVA Catalog)
 
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
-| Input: move type | Cases | NORMAL, EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE |
+| Input: move type | Cases | NORMAL, EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
 | Input: pawn rank delta | Intervals | 1 step, 2 steps |
 | Output: piece positions | Cases | expected squares occupied/empty |
 | Output: enPassantTarget | Cases | target set, no target |
 | Output: invalid castling | Cases | exception thrown vs successful relocation |
+| Output: promotion | Cases | `UnsupportedOperationException` vs (future) promoted piece at destination |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
+- Promotion move: `UnsupportedOperationException` (placeholder until implemented)
 - Kingside castling with no unmoved rook on king's rank: `IllegalStateException`
 - En passant execute: white pawn `(4,3)` to `(5,2)` with black pawn at `(5,3)`
 - Kingside castling execute: white king `(4,7)` and rook `(7,7)` to king `(6,7)`, rook `(5,7)`
@@ -177,6 +180,11 @@ Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move ty
   - **Method(s) under test**: `makeMove(Move)`
   - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
   - **Expected output**: `IllegalStateException` (board state unchanged for castling)
+
+- **TC61: MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`
+  - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with promotion piece `QUEEN`
+  - **Expected output**: `UnsupportedOperationException` (promotion not yet applied on board)
 
 ---
 

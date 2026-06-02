@@ -125,6 +125,9 @@ public class Board {
             executeCastling(fromRank, fromFile, QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
             return;
         }
+        if (move.getType() == MoveType.PROMOTION) {
+            throw new UnsupportedOperationException("Promotion moves are not yet implemented");
+        }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
         pieces[toRank][toFile].changeToMoved();

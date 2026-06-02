@@ -424,6 +424,20 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[1][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(
+                new Location(4, 1), new Location(4, 0), MoveType.PROMOTION, PieceType.QUEEN);
+
+        assertThrows(UnsupportedOperationException.class, () -> board.makeMove(move));
+    }
+
+    @Test
     void MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
