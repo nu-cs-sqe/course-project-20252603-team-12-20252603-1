@@ -2,9 +2,14 @@ import org.gradle.api.plugins.quality.Checkstyle
 
 plugins {
     id("java")
+    id("application")
     checkstyle
     jacoco
     id("info.solidsoft.pitest") version "1.15.0"
+}
+
+application {
+    mainClass = "ui.Main"
 }
 
 group = "nu.csse.sqe"
