@@ -160,7 +160,8 @@ public class Board {
                 }
             }
         }
-        return -1;
+        throw new IllegalStateException(
+                "No unmoved castling rook found on rank " + rank + " kingside=" + kingside);
     }
 
     private void updateEnPassantTarget(Move move, Piece movedPiece) {
