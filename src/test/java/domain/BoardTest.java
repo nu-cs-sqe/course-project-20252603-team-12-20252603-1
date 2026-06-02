@@ -369,6 +369,24 @@ class BoardTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[3][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        board.makeMove(move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = board.getPieceAt(3, 5).getType();
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyPieceGrid() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {

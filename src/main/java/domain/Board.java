@@ -3,6 +3,7 @@ package domain;
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -99,6 +100,13 @@ public class Board {
         int fromFile = move.getFrom().getX();
         int toRank = move.getTo().getY();
         int toFile = move.getTo().getX();
+        if (move.getType() == MoveType.EN_PASSANT) {
+            pieces[toRank][toFile] = pieces[fromRank][fromFile];
+            pieces[fromRank][fromFile] = new NonePiece();
+            pieces[fromRank][toFile] = new NonePiece();
+            pieces[toRank][toFile].changeToMoved();
+            return;
+        }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
         pieces[toRank][toFile].changeToMoved();
