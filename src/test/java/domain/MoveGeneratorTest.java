@@ -241,6 +241,22 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        board[0][5] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
