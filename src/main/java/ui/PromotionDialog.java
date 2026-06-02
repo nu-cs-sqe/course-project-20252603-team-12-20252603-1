@@ -1,0 +1,49 @@
+package ui;
+
+import domain.piece.PieceColor;
+import domain.piece.PieceType;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+class PromotionDialog {
+
+    private static final Color BACKGROUND = new Color(30, 20, 12);
+    private static final Color BUTTON_BG = new Color(181, 136, 99);
+    private static final Color TEXT_COLOR = new Color(240, 217, 181);
+    private static final Font LABEL_FONT = new Font("SansSerif", Font.BOLD, 16);
+    private static final int BUTTON_SIZE = 72;
+
+    private final JDialog dialog;
+    private final PieceColor color;
+    private PieceType chosenType = PieceType.QUEEN;
+
+    PromotionDialog(JFrame parent, PieceColor color) {
+        this.color = color;
+        this.dialog = new JDialog(parent, "Promote Pawn", true);
+    }
+
+    PieceType showAndGetChoice() {
+        return chosenType;
+    }
+
+    private void buildUi() {
+    }
+
+    private JButton buildPromotionButton(PieceType type) {
+        throw new UnsupportedOperationException();
+    }
+
+    private Image loadImage(PieceType type) {
+        throw new UnsupportedOperationException();
+    }
+}
