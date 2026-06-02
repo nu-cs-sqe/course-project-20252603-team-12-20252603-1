@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import domain.location.Location;
+import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -173,6 +175,35 @@ class MoveGeneratorTest {
         int actual = moveGenerator.generateLegalMoves(new Location(3, 3)).size();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator =
+                new MoveGenerator(board, Optional.of(new Location(5, 2)));
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                5,
+                2,
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
+    private static boolean hasMoveToWithType(
+            java.util.List<Move> moves, int file, int rank, MoveType type) {
+        for (Move move : moves) {
+            if (move.getTo().getX() == file
+                    && move.getTo().getY() == rank
+                    && move.getType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Piece[][] emptyBoard() {

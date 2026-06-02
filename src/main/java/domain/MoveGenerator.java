@@ -2,6 +2,7 @@ package domain;
 
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -113,7 +114,22 @@ public class MoveGenerator {
                 && board[twoAhead][file].getType() == PieceType.NONE) {
             moves.add(new Move(from, new Location(file, twoAhead)));
         }
+        addEnPassantMoves(moves, from, rank, file, direction);
         return moves;
+    }
+
+    private void addEnPassantMoves(
+            List<Move> moves, Location from, int rank, int file, int direction) {
+        if (!enPassantTarget.isPresent()) {
+            return;
+        }
+        Location target = enPassantTarget.get();
+        if (target.getY() != rank + direction) {
+            return;
+        }
+        if (target.getX() == file - 1 || target.getX() == file + 1) {
+            moves.add(new Move(from, target, MoveType.EN_PASSANT));
+        }
     }
 
     private List<Move> generateKingMoves(Location from, Piece king) {
