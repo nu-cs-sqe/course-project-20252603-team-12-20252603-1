@@ -1,15 +1,21 @@
 package ui;
 
 import domain.location.Location;
+import domain.move.Move;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
 
@@ -20,6 +26,9 @@ public class BoardView extends JPanel {
     private static final Color LIGHT_SQUARE_COLOR = new Color(240, 217, 181);
     private static final Color DARK_SQUARE_COLOR = new Color(181, 136, 99);
     private static final Color SELECTED_SQUARE_COLOR = new Color(186, 202, 68);
+    private static final Color LEGAL_MOVE_DOT_COLOR = new Color(0, 0, 0, 100);
+    private static final Color LEGAL_CAPTURE_COLOR = new Color(186, 202, 68, 160);
+    private static final float LEGAL_MOVE_ALPHA = 0.85f;
 
     private final Map<PieceType, Image> whitePieceImages = new EnumMap<>(PieceType.class);
     private final Map<PieceType, Image> blackPieceImages = new EnumMap<>(PieceType.class);
@@ -39,6 +48,7 @@ public class BoardView extends JPanel {
         super.paintComponent(g);
         drawBoard(g);
         drawSelectedSquare(g);
+        drawLegalMoveHighlights(g);
         drawPieces(g);
     }
 
@@ -64,6 +74,39 @@ public class BoardView extends JPanel {
         int row = loc.getY();
         g.setColor(SELECTED_SQUARE_COLOR);
         g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    }
+
+    private void drawLegalMoveHighlights(Graphics g) {
+        // untestable: graphics rendering
+        List<Move> moves = boardController.getLegalMovesForSelection();
+        if (moves.isEmpty()) {
+            return;
+        }
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Composite originalComposite = g2d.getComposite();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, LEGAL_MOVE_ALPHA));
+
+        domain.piece.Piece[][] snapshot = boardController.getBoardSnapshot();
+        for (Move move : moves) {
+            int file = move.getTo().getX();
+            int screenRow = move.getTo().getY();
+            boolean isCapture =
+                snapshot[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
+            if (isCapture) {
+                g2d.setColor(LEGAL_CAPTURE_COLOR);
+                g2d.fillRect(file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else {
+                int dotSize = TILE_SIZE / 3;
+                int offset = (TILE_SIZE - dotSize) / 2;
+                g2d.setColor(LEGAL_MOVE_DOT_COLOR);
+                g2d.fillOval(
+                    file * TILE_SIZE + offset,
+                    screenRow * TILE_SIZE + offset,
+                    dotSize, dotSize);
+            }
+        }
+        g2d.setComposite(originalComposite);
     }
 
     private void loadPieceImages() {

@@ -1,14 +1,28 @@
 package ui;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import java.awt.Window;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class WelcomeControllerTest {
+
+    @AfterEach
+    void disposeOpenMainViews() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView) {
+                ((MainView) window).dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_FreshInstance_WelcomeViewNotVisible() {
@@ -29,7 +43,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertFalse(controller.getWelcomeView().isDisplayable());
     }
 
@@ -39,7 +53,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("");
         controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
@@ -50,7 +64,7 @@ class WelcomeControllerTest {
         controller.show();
         controller.getWelcomeView().setPlayer1Name("Alice");
         controller.getWelcomeView().setPlayer2Name("");
-        controller.startGame();
+        controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
     }
@@ -78,4 +92,61 @@ class WelcomeControllerTest {
         assertFalse(controller.getWelcomeView().isDisplayable());
     }
 
+    @Test
+    void StartGame_NonEmptyNames_StartedBoardControllerNotNull() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.getWelcomeView().clickStartGame();
+
+        assertNotNull(findVisibleMainView());
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_MainViewIsVisible() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.getWelcomeView().clickStartGame();
+
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
+        boolean expected = true;
+        boolean actual = mainView.isVisible();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.getWelcomeView().clickStartGame();
+
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
+        String expected = "Alice";
+        String actual = mainView.getGameStatsView().getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
+
+    private static MainView findVisibleMainView() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView) {
+                MainView mainView = (MainView) window;
+                if (mainView.isVisible()) {
+                    return mainView;
+                }
+            }
+        }
+        return null;
+    }
 }
