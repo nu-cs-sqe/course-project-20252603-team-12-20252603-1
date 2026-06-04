@@ -855,7 +855,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **Expected output**: `currentGameState` = `BLACK_WIN`
   - **Covered by**: TC76 (parameterized test)
 
-- **TC78: UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw** ( :x: )
+- **TC78: UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where black has no legal moves and is not in check; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
