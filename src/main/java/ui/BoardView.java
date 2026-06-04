@@ -94,7 +94,7 @@ public class BoardView extends JPanel {
             int file = move.getTo().getX();
             int screenRow = move.getTo().getY();
             boolean isCapture =
-                snapshot[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
+                    snapshot[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
             if (isCapture) {
                 g2d.setColor(LEGAL_CAPTURE_COLOR);
                 g2d.fillRect(file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -103,9 +103,9 @@ public class BoardView extends JPanel {
                 int offset = (TILE_SIZE - dotSize) / 2;
                 g2d.setColor(LEGAL_MOVE_DOT_COLOR);
                 g2d.fillOval(
-                    file * TILE_SIZE + offset,
-                    screenRow * TILE_SIZE + offset,
-                    dotSize, dotSize);
+                        file * TILE_SIZE + offset,
+                        screenRow * TILE_SIZE + offset,
+                        dotSize, dotSize);
             }
         }
         g2d.setComposite(originalComposite);
@@ -145,7 +145,7 @@ public class BoardView extends JPanel {
                     continue;
                 }
                 Map<PieceType, Image> images =
-                    piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
+                        piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
                 Image img = images.get(piece.getType());
                 if (img == null) {
                     continue;

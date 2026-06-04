@@ -131,8 +131,8 @@ public class WelcomeView extends JFrame {
         field.setBackground(FIELD_BG);
         field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ACCENT_COLOR, 1),
-            BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+                BorderFactory.createLineBorder(ACCENT_COLOR, 1),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)));
         panel.add(field);
         panel.add(Box.createVerticalStrut(18));
     }
