@@ -54,7 +54,9 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
 
         List<Integer> remaining = new ArrayList<>();
         for (int col = 0; col < 8; col++) {
-            if (rank[col] == PieceType.NONE) remaining.add(col);
+            if (rank[col] == PieceType.NONE) {
+                remaining.add(col);
+            }
         }
 
         rank[remaining.remove(random.nextInt(remaining.size()))] = PieceType.QUEEN;
