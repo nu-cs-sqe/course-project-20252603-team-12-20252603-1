@@ -865,7 +865,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: board has only two kings and black has legal moves; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
 
-- **TC80: UpdateGameState_WhenHalfMoveClockAtLimit_GameStateIsDraw** ( :x: )
+- **TC80: UpdateGameState_WhenHalfMoveClockAtLimit_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for next player; `halfMoveClock` = 100; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
