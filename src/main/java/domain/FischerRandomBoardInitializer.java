@@ -10,7 +10,9 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
 
     private final Random random;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Random has no copy constructor")
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Random has no copy constructor")
     public FischerRandomBoardInitializer(Random random) {
         this.random = random;
     }

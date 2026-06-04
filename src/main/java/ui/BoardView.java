@@ -36,7 +36,9 @@ public class BoardView extends JPanel {
 
     private BoardController boardController;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Intentional shared reference for collaboration")
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
     public BoardView(BoardController boardController) {
         this.boardController = boardController;
         addMouseListener(new BoardMouseListener());
@@ -116,8 +118,10 @@ public class BoardView extends JPanel {
         PieceType[] types = {PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT,
                              PieceType.BISHOP, PieceType.QUEEN, PieceType.KING};
         for (PieceType type : types) {
-            loadOnePieceImage(type, PieceColor.WHITE, "pieces/white_" + type.name().toLowerCase() + ".png");
-            loadOnePieceImage(type, PieceColor.BLACK, "pieces/black_" + type.name().toLowerCase() + ".png");
+            loadOnePieceImage(type, PieceColor.WHITE,
+                    "pieces/white_" + type.name().toLowerCase() + ".png");
+            loadOnePieceImage(type, PieceColor.BLACK,
+                    "pieces/black_" + type.name().toLowerCase() + ".png");
         }
     }
 
@@ -151,7 +155,8 @@ public class BoardView extends JPanel {
                     continue;
                 }
                 int screenRow = rank;
-                g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+                g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE,
+                        TILE_SIZE, TILE_SIZE, this);
             }
         }
     }

@@ -23,7 +23,9 @@ public class BoardController {
     private BoardView boardView;
     private Optional<Location> lastSelectedLoc;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Intentional shared reference for collaboration")
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
     public BoardController(String player1Name, String player2Name, Board board) {
         this.player1Name = player1Name;
         this.player2Name = player2Name;
@@ -48,7 +50,9 @@ public class BoardController {
         return mainView;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Intentional shared reference for collaboration")
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
     public void setBoardView(BoardView boardView) {
         this.boardView = boardView;
     }
