@@ -650,4 +650,41 @@ class BoardTest {
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
 
+    static Stream<Arguments> halfMoveClockProvider() {
+        Piece[][] layout1 = emptyPieceGrid();
+        layout1[7][7] = new King(PieceColor.WHITE);
+        layout1[5][5] = new Knight(PieceColor.WHITE);
+        layout1[0][0] = new King(PieceColor.BLACK);
+        Board board1 = new Board(layout1);
+
+        Piece[][] layout2 = emptyPieceGrid();
+        layout2[7][7] = new King(PieceColor.WHITE);
+        layout2[6][4] = new Pawn(PieceColor.WHITE);
+        layout2[0][0] = new King(PieceColor.BLACK);
+        Board board2 = new Board(layout2);
+        board2.halfMoveClock = 5;
+
+        Piece[][] layout3 = emptyPieceGrid();
+        layout3[7][7] = new King(PieceColor.WHITE);
+        layout3[5][5] = new Knight(PieceColor.WHITE);
+        layout3[3][4] = new Pawn(PieceColor.BLACK);
+        layout3[0][0] = new King(PieceColor.BLACK);
+        Board board3 = new Board(layout3);
+        board3.halfMoveClock = 5;
+
+        return Stream.of(
+                Arguments.of(board1, new Move(new Location(5, 5), new Location(4, 3)), 1),
+                Arguments.of(board2, new Move(new Location(4, 6), new Location(4, 5)), 0),
+                Arguments.of(board3, new Move(new Location(5, 5), new Location(4, 3)), 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("halfMoveClockProvider")
+    void MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements(
+            Board board, Move move, int expectedClock) {
+        board.makeMove(move);
+        assertEquals(expectedClock, board.getHalfMoveClock());
+    }
+
 }

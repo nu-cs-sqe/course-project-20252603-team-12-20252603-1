@@ -676,19 +676,19 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: `halfMoveClock` set to 99; one non-pawn non-capture NORMAL move made
   - **Expected output**: `getHalfMoveClock()` returns 100 AND `getCurrentGameState()` returns `DRAW`
 
-- **TC73: MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements** ( :x: )
+- **TC73: MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 0; white knight makes a NORMAL move to an empty square
   - **Expected output**: `getHalfMoveClock()` returns 1
   - **Note**: TC74–TC75 are covered by this test case as a parameterized test
 
-- **TC74: MakeMove_OnPawnMove_HalfMoveClockResets** ( :x: )
+- **TC74: MakeMove_OnPawnMove_HalfMoveClockResets** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 5; white pawn makes a one-step NORMAL move
   - **Expected output**: `getHalfMoveClock()` returns 0
   - **Covered by**: TC73 (parameterized test)
 
-- **TC75: MakeMove_OnCapture_HalfMoveClockResets** ( :x: )
+- **TC75: MakeMove_OnCapture_HalfMoveClockResets** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 5; white knight captures a black pawn
   - **Expected output**: `getHalfMoveClock()` returns 0
