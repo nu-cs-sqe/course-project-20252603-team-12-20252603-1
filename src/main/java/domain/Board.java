@@ -109,6 +109,10 @@ public class Board {
                     ? winStateFor(movingPiece.getColor()) : GameState.DRAW;
             return;
         }
+        if (isInsufficientMaterial()) {
+            currentGameState = GameState.DRAW;
+            return;
+        }
         switchTurn();
     }
 
@@ -200,6 +204,25 @@ public class Board {
         }
         throw new IllegalStateException(
                 "No unmoved castling rook found on rank " + rank + " kingside=" + kingside);
+    }
+
+    boolean isInsufficientMaterial() {
+        int nonKingCount = 0;
+        boolean hasMajorOrPawn = false;
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece p = pieces[rank][file];
+                if (p.getType() == PieceType.NONE || p.getType() == PieceType.KING) {
+                    continue;
+                }
+                nonKingCount++;
+                PieceType t = p.getType();
+                if (t != PieceType.BISHOP && t != PieceType.KNIGHT) {
+                    hasMajorOrPawn = true;
+                }
+            }
+        }
+        return !hasMajorOrPawn && nonKingCount <= 1;
     }
 
     private void updateEnPassantTarget(Move move, Piece movedPiece) {

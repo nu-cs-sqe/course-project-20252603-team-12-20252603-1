@@ -666,7 +666,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: white's NORMAL move leaves black with no legal moves and not in check
   - **Expected output**: `getCurrentGameState()` returns `DRAW`
 
-- **TC71: MakeMove_WhenOnlyKingsRemain_GameStateIsDraw** ( :x: )
+- **TC71: MakeMove_WhenOnlyKingsRemain_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white king and black king only; white knight captures the last non-king piece
   - **Expected output**: `getCurrentGameState()` returns `DRAW`
