@@ -37,6 +37,22 @@ class PromotionDialog {
     }
 
     private void buildUi() {
+        // untestable: Swing layout construction
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panel.setBackground(BACKGROUND);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JLabel label = new JLabel("Choose promotion piece:");
+        label.setForeground(TEXT_COLOR);
+        label.setFont(LABEL_FONT);
+        panel.add(label);
+        for (PieceType type : new PieceType[]{
+                PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT}) {
+            panel.add(buildPromotionButton(type));
+        }
+        dialog.setContentPane(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(dialog.getParent());
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     }
 
     private JButton buildPromotionButton(PieceType type) {
