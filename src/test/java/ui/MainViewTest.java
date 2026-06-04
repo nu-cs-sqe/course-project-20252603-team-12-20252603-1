@@ -33,8 +33,8 @@ class MainViewTest {
     MainView view = new MainView("Alice", "Bob", new BoardController("Alice", "Bob", boardMock));
 
     boolean wired =
-        view.getGameStatsView() instanceof GameStatsView
-            && view.getBoardView() instanceof BoardView
+        view.getGameStatsView() != null
+            && view.getBoardView() != null
             && "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
             && "Alice vs Bob".equals(view.getGameStatsView().getGameStateLabelText());
     Container contentPane = view.getContentPane();

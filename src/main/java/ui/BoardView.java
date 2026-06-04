@@ -4,14 +4,15 @@ import domain.location.Location;
 import domain.move.Move;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
@@ -35,6 +36,9 @@ public class BoardView extends JPanel {
 
     private BoardController boardController;
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
     public BoardView(BoardController boardController) {
         this.boardController = boardController;
         addMouseListener(new BoardMouseListener());
@@ -92,7 +96,7 @@ public class BoardView extends JPanel {
             int file = move.getTo().getX();
             int screenRow = move.getTo().getY();
             boolean isCapture =
-                snapshot[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
+                    snapshot[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
             if (isCapture) {
                 g2d.setColor(LEGAL_CAPTURE_COLOR);
                 g2d.fillRect(file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -101,9 +105,9 @@ public class BoardView extends JPanel {
                 int offset = (TILE_SIZE - dotSize) / 2;
                 g2d.setColor(LEGAL_MOVE_DOT_COLOR);
                 g2d.fillOval(
-                    file * TILE_SIZE + offset,
-                    screenRow * TILE_SIZE + offset,
-                    dotSize, dotSize);
+                        file * TILE_SIZE + offset,
+                        screenRow * TILE_SIZE + offset,
+                        dotSize, dotSize);
             }
         }
         g2d.setComposite(originalComposite);
@@ -114,8 +118,10 @@ public class BoardView extends JPanel {
         PieceType[] types = {PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT,
                              PieceType.BISHOP, PieceType.QUEEN, PieceType.KING};
         for (PieceType type : types) {
-            loadOnePieceImage(type, PieceColor.WHITE, "pieces/white_" + type.name().toLowerCase() + ".png");
-            loadOnePieceImage(type, PieceColor.BLACK, "pieces/black_" + type.name().toLowerCase() + ".png");
+            loadOnePieceImage(type, PieceColor.WHITE,
+                    "pieces/white_" + type.name().toLowerCase() + ".png");
+            loadOnePieceImage(type, PieceColor.BLACK,
+                    "pieces/black_" + type.name().toLowerCase() + ".png");
         }
     }
 
@@ -143,13 +149,14 @@ public class BoardView extends JPanel {
                     continue;
                 }
                 Map<PieceType, Image> images =
-                    piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
+                        piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
                 Image img = images.get(piece.getType());
                 if (img == null) {
                     continue;
                 }
                 int screenRow = rank;
-                g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+                g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE,
+                        TILE_SIZE, TILE_SIZE, this);
             }
         }
     }
