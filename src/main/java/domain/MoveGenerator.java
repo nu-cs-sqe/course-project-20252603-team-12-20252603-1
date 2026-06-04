@@ -100,6 +100,7 @@ public class MoveGenerator {
         int startRank = (color == PieceColor.WHITE) ? 6 : 1;
         int promotionRank = (color == PieceColor.WHITE) ? 0 : 7;
         addPawnForwardMoves(moves, from, rank, file, direction, startRank, promotionRank);
+        addPawnCaptureMoves(moves, from, rank, file, direction, promotionRank, color);
         return moves;
     }
 
@@ -124,6 +125,23 @@ public class MoveGenerator {
                 && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
             moves.add(new Move(from, new Location(file, twoAhead)));
+        }
+    }
+
+    private void addPawnCaptureMoves(
+            List<Move> moves, Location from, int rank, int file,
+            int direction, int promotionRank, PieceColor color) {
+        int targetRank = rank + direction;
+        for (int df : new int[]{-1, 1}) {
+            int targetFile = file + df;
+            if (!isOnBoard(targetRank, targetFile)) {
+                continue;
+            }
+            Piece target = board[targetRank][targetFile];
+            if (target.getType() == PieceType.NONE || target.getColor() == color) {
+                continue;
+            }
+            moves.add(new Move(from, new Location(targetFile, targetRank)));
         }
     }
 

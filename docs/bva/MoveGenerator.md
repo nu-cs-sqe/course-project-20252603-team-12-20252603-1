@@ -240,7 +240,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - State of the system: white pawn at (4,1), square (4,0) empty, no diagonals, no en passant
   - Expected output: returned move list size is 4 (four PROMOTION moves, no normal forward move)
 
-- MG-TC15: generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves ( :x: )
+- MG-TC15: generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white pawn at (4,4), black rook at (5,3), square (4,3) empty, no en passant
   - Expected output: returned move list size is 2 (forward to (4,3) + capture to (5,3))

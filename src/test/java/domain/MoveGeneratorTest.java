@@ -176,6 +176,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Pawn(PieceColor.WHITE);
+        board[3][5] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 2;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves() {
         Piece[][] board = emptyBoard();
         board[1][4] = new Pawn(PieceColor.WHITE);
