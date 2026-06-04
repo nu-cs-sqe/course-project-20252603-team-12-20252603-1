@@ -204,3 +204,53 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - Method(s) under test: isInCheck(PieceColor)
   - State of the system: white king present and no black piece attacks it
   - Expected output: isInCheck(PieceColor.WHITE) is false
+
+---
+
+## Method: generateLegalMoves(Location from) — pawn promotion candidates and captures
+
+### Step 1: Inputs and outputs
+
+| Input / state      | Equivalence classes                                                      |
+| ------------------ | ------------------------------------------------------------------------ |
+| from               | Pairs of variables - file/rank on board                                  |
+| pawn rank          | Cases - at promotion rank boundary vs elsewhere                          |
+| board occupancy    | Cases - forward clear, diagonal enemy, diagonal friendly, en passant set |
+| Output             | Collection - list of legal moves (MoveType may be PROMOTION, EN_PASSANT) |
+
+### Step 2: Catalog data types
+
+| Variable / output | Catalog data type |
+| ----------------- | ----------------- |
+| from.x, from.y    | Intervals [0,7]   |
+| promotionRank     | Cases             |
+| move list         | Collections       |
+
+### Step 3: Concrete boundary values
+
+- White promotion rank: 0. White pawn at rank 1 is one step from back rank.
+- Diagonal capture: enemy piece at (file±1, rank+direction).
+- Capture-promotion: enemy piece at (file±1, promotionRank).
+- En passant: enPassantTarget set to (file±1, rank+direction).
+
+### Step 4: Test cases
+
+- MG-TC14: generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at (4,1), square (4,0) empty, no diagonals, no en passant
+  - Expected output: returned move list size is 4 (four PROMOTION moves, no normal forward move)
+
+- MG-TC15: generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at (4,4), black rook at (5,3), square (4,3) empty, no en passant
+  - Expected output: returned move list size is 2 (forward to (4,3) + capture to (5,3))
+
+- MG-TC16: generateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at (4,1), black rook at (5,0), square (4,0) empty, no en passant
+  - Expected output: returned move list size is 8 (4 forward PROMOTION + 4 capture PROMOTION)
+
+- MG-TC17: generateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves ( :x: )
+  - Method(s) under test: generateLegalMoves(Location)
+  - State of the system: white pawn at (4,3), enPassantTarget at (5,2), square (4,2) empty
+  - Expected output: returned move list size is 2 (forward to (4,2) + EN_PASSANT to (5,2))
