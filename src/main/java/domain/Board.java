@@ -141,8 +141,8 @@ public class Board {
             int rank, int kingFile, int kingDestFile, int rookDestFile, boolean kingside) {
         int rookFile = findCastlingRookFile(rank, kingFile, kingside);
         Piece king = pieces[rank][kingFile];
-        Piece rook = pieces[rank][rookFile];
         pieces[rank][kingFile] = new NonePiece();
+        Piece rook = pieces[rank][rookFile];
         pieces[rank][rookFile] = new NonePiece();
         king.changeToMoved();
         rook.changeToMoved();

@@ -97,7 +97,6 @@ public class MoveGenerator {
         int file = from.getX();
         PieceColor color = pawn.getColor();
         int direction = (color == PieceColor.WHITE) ? -1 : 1;
-        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
 
         int oneAhead = rank + direction;
         if (!isOnBoard(oneAhead, file)) {
@@ -109,6 +108,7 @@ public class MoveGenerator {
         moves.add(new Move(from, new Location(file, oneAhead)));
 
         int twoAhead = rank + 2 * direction;
+        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
         if (rank == startRank
                 && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
