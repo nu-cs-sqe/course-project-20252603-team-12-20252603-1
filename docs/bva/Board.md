@@ -651,7 +651,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
   - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
 
-- **TC68: MakeMove_WhenWhiteCausesCheckmate_GameStateIsWhiteWin** ( :x: )
+- **TC68: MakeMove_WhenWhiteCausesCheckmate_GameStateIsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white's NORMAL move leaves black in check with no legal moves
   - **Expected output**: `getCurrentGameState()` returns `WHITE_WIN`
