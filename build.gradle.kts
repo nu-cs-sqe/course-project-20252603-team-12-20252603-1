@@ -1,9 +1,12 @@
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
 import org.gradle.api.plugins.quality.Checkstyle
 
 plugins {
     id("java")
     id("application")
     checkstyle
+    id("com.github.spotbugs") version "6.0.25"
     jacoco
     id("info.solidsoft.pitest") version "1.15.0"
 }
@@ -52,6 +55,24 @@ java {
 
 tasks.compileJava {
     options.release = 11
+}
+
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = Effort.DEFAULT
+    reportLevel = Confidence.DEFAULT
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+}
+
+tasks.spotbugsMain {
+    reports.create("html") {
+        required = true
+        outputLocation = layout.buildDirectory.file("reports/spotbugs/spotbugs.html")
+        setStylesheet("fancy-hist.xsl")
+    }
 }
 
 tasks.jacocoTestReport {
