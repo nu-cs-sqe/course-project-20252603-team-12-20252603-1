@@ -840,4 +840,36 @@ class BoardTest {
         assertEquals(expected, board.isInsufficientMaterial());
     }
 
+    static Stream<Arguments> isCaptureProvider() {
+        Piece[][] layout1 = emptyPieceGrid();
+        layout1[3][4] = new Pawn(PieceColor.WHITE);
+        layout1[3][5] = new Pawn(PieceColor.BLACK);
+        Board board1 = new Board(layout1);
+        Move enPassant = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        Piece[][] layout2 = emptyPieceGrid();
+        layout2[6][4] = new Pawn(PieceColor.WHITE);
+        Board board2 = new Board(layout2);
+        Move normalToEmpty = new Move(new Location(4, 6), new Location(4, 5));
+
+        Piece[][] layout3 = emptyPieceGrid();
+        layout3[5][3] = new Knight(PieceColor.WHITE);
+        layout3[3][4] = new Pawn(PieceColor.BLACK);
+        Board board3 = new Board(layout3);
+        Move normalToOccupied = new Move(new Location(3, 5), new Location(4, 3));
+
+        return Stream.of(
+                Arguments.of(board1, enPassant, true),
+                Arguments.of(board2, normalToEmpty, false),
+                Arguments.of(board3, normalToOccupied, true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("isCaptureProvider")
+    void IsCapture_WithVariousMoveTypes_ReturnsCorrectResult(
+            Board board, Move move, boolean expected) {
+        assertEquals(expected, board.isCapture(move));
+    }
+
 }

@@ -988,19 +988,19 @@ Logic: returns `true` iff `!hasMajorOrPawn && nonKingCount <= 1`.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC89: IsCapture_OnEnPassantMove_ReturnsTrue** ( :x: )
+- **TC89: IsCapture_OnEnPassantMove_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`; EN_PASSANT move from `(4,3)` to `(5,2)`
   - **Expected output**: `isCapture(move)` returns `true`
   - **Note**: TC90–TC91 are covered by this test case as a parameterized test
 
-- **TC90: IsCapture_OnNormalMoveToEmptySquare_ReturnsFalse** ( :x: )
+- **TC90: IsCapture_OnNormalMoveToEmptySquare_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white pawn at `(4,6)`, empty destination `(4,5)`; NORMAL move
   - **Expected output**: `isCapture(move)` returns `false`
   - **Covered by**: TC89 (parameterized test)
 
-- **TC91: IsCapture_OnNormalMoveToOccupiedSquare_ReturnsTrue** ( :x: )
+- **TC91: IsCapture_OnNormalMoveToOccupiedSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white knight at `(3,5)`, black pawn at `(4,3)`; NORMAL move from `(3,5)` to `(4,3)`
   - **Expected output**: `isCapture(move)` returns `true`
