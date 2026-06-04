@@ -870,7 +870,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: board with legal moves for next player; `halfMoveClock` = 100; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
 
-- **TC81: UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn** ( :x: )
+- **TC81: UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves; `halfMoveClock` = 99; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `BLACK_TURN`

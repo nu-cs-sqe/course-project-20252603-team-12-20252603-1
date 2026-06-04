@@ -757,4 +757,18 @@ class BoardTest {
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
 
+    @Test
+    void UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[7][0] = new King(PieceColor.WHITE);
+        layout[0][7] = new King(PieceColor.BLACK);
+        layout[5][5] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        board.halfMoveClock = 99;
+
+        board.updateGameState(PieceColor.WHITE);
+
+        assertEquals(GameState.BLACK_TURN, board.getCurrentGameState());
+    }
+
 }
