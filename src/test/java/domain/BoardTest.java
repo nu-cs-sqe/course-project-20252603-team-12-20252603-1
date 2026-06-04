@@ -252,7 +252,7 @@ class BoardTest {
         Location from = new Location(5, 3);
 
         List<Move> expected =
-            new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
+                new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
         List<Move> actual = board.getLegalMoves(from);
 
         int expectedSize = expected.size();
