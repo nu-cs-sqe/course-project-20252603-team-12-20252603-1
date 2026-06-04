@@ -33,6 +33,8 @@ class PromotionDialog {
     }
 
     PieceType showAndGetChoice() {
+        // untestable: UI/IO modal blocks on user input
+        dialog.setVisible(true);
         return chosenType;
     }
 
