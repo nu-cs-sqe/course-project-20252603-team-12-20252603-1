@@ -40,7 +40,27 @@ class PromotionDialog {
     }
 
     private JButton buildPromotionButton(PieceType type) {
-        throw new UnsupportedOperationException();
+        // untestable: Swing component construction
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+        button.setBackground(BUTTON_BG);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setOpaque(true);
+        Image img = loadImage(type);
+        if (img != null) {
+            button.setIcon(new ImageIcon(
+                img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
+        } else {
+            button.setText(type.name().substring(0, 1));
+            button.setForeground(TEXT_COLOR);
+            button.setFont(LABEL_FONT);
+        }
+        button.addActionListener(e -> {
+            chosenType = type;
+            dialog.dispose();
+        });
+        return button;
     }
 
     private Image loadImage(PieceType type) {
