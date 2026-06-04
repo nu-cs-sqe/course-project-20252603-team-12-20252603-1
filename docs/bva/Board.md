@@ -646,7 +646,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
   - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC56: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :x: )
+- **TC56: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
   - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
