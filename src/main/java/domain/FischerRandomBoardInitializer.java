@@ -1,6 +1,7 @@
 package domain;
 
 import domain.piece.PieceType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,6 +10,7 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
 
     private final Random random;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Random has no copy constructor")
     public FischerRandomBoardInitializer(Random random) {
         this.random = random;
     }

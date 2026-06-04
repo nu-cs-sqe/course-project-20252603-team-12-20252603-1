@@ -3,6 +3,7 @@ package domain;
 import domain.location.Location;
 import domain.move.Move;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import domain.piece.Piece;
@@ -25,7 +26,7 @@ public class MoveGenerator {
     private final Optional<Location> enPassantTarget;
 
     public MoveGenerator(Piece[][] board, Optional<Location> enPassantTarget) {
-        this.board = board;
+        this.board = Arrays.stream(board).map(Piece[]::clone).toArray(Piece[][]::new);
         this.enPassantTarget = enPassantTarget;
     }
 

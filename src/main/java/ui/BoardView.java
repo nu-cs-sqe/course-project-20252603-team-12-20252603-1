@@ -2,6 +2,7 @@ package ui;
 
 import domain.location.Location;
 import domain.move.Move;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.awt.AlphaComposite;
@@ -35,6 +36,7 @@ public class BoardView extends JPanel {
 
     private BoardController boardController;
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Intentional shared reference for collaboration")
     public BoardView(BoardController boardController) {
         this.boardController = boardController;
         addMouseListener(new BoardMouseListener());

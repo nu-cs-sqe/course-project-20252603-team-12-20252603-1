@@ -1,5 +1,6 @@
 package ui;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
@@ -9,6 +10,7 @@ public class MainView extends JFrame {
   private final BoardView boardView;
   private final GameStatsView gameStatsView;
 
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Intentional shared reference for collaboration")
   public MainView(String player1Name, String player2Name, BoardController boardController) {
     this.boardController = boardController;
     boardView = new BoardView(boardController);
