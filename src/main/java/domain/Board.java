@@ -102,21 +102,34 @@ public class Board {
         Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
         applyMoveToInternalState(move);
         updateEnPassantTarget(move, movingPiece);
-        if (moveCreatesCheckmate(movingPiece.getColor())) {
-            currentGameState =
-                    movingPiece.getColor() == PieceColor.WHITE
-                            ? GameState.WHITE_WIN : GameState.BLACK_WIN;
+        PieceColor opponentColor = opponentOf(movingPiece.getColor());
+        MoveGenerator moveGenerator = new MoveGenerator(pieces, enPassantTarget);
+        if (hasKing(opponentColor) && !moveGenerator.hasLegalMovesForColor(opponentColor)) {
+            currentGameState = moveGenerator.isInCheck(opponentColor)
+                    ? winStateFor(movingPiece.getColor()) : GameState.DRAW;
             return;
         }
         switchTurn();
     }
 
-    private boolean moveCreatesCheckmate(PieceColor movingColor) {
-        PieceColor opponentColor =
-                movingColor == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
-        MoveGenerator moveGenerator = new MoveGenerator(pieces, enPassantTarget);
-        return moveGenerator.isInCheck(opponentColor)
-                && !moveGenerator.hasLegalMovesForColor(opponentColor);
+    private PieceColor opponentOf(PieceColor color) {
+        return color == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+    }
+
+    private GameState winStateFor(PieceColor color) {
+        return color == PieceColor.WHITE ? GameState.WHITE_WIN : GameState.BLACK_WIN;
+    }
+
+    private boolean hasKing(PieceColor color) {
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece piece = pieces[rank][file];
+                if (piece.getType() == PieceType.KING && piece.getColor() == color) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void applyMoveToInternalState(Move move) {

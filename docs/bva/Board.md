@@ -435,7 +435,7 @@
   - **State of the system**: one-move checkmate position; black's move leaves white with no legal moves and in check
   - **Expected output**: returns `BLACK_WIN`
 
-- **TC67: GetCurrentGameState_AfterStalemate_ReturnsDraw** ( :x: )
+- **TC67: GetCurrentGameState_AfterStalemate_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
   - **State of the system**: white's move leaves black with no legal moves and not in check
   - **Expected output**: returns `DRAW`

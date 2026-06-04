@@ -560,4 +560,21 @@ class BoardTest {
         assertEquals(GameState.BLACK_WIN, board.getCurrentGameState());
     }
 
+    @Test
+    void GetCurrentGameState_AfterStalemate_ReturnsDraw() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[0][0] = new King(PieceColor.BLACK);
+        layout[0][1] = new Pawn(PieceColor.BLACK);
+        layout[1][0] = new Pawn(PieceColor.BLACK);
+        layout[1][1] = new Pawn(PieceColor.BLACK);
+        layout[2][0] = new Pawn(PieceColor.WHITE);
+        layout[2][1] = new Pawn(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+
+        board.makeMove(new Move(new Location(7, 7), new Location(6, 7)));
+
+        assertEquals(GameState.DRAW, board.getCurrentGameState());
+    }
+
 }
