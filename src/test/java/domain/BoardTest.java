@@ -731,4 +731,16 @@ class BoardTest {
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
 
+    @Test
+    void UpdateGameState_WhenInsufficientMaterial_GameStateIsDraw() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[7][0] = new King(PieceColor.WHITE);
+        layout[0][7] = new King(PieceColor.BLACK);
+        Board board = new Board(layout);
+
+        board.updateGameState(PieceColor.WHITE);
+
+        assertEquals(GameState.DRAW, board.getCurrentGameState());
+    }
+
 }
