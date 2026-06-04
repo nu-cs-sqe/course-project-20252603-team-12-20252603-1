@@ -141,7 +141,12 @@ public class MoveGenerator {
             if (target.getType() == PieceType.NONE || target.getColor() == color) {
                 continue;
             }
-            moves.add(new Move(from, new Location(targetFile, targetRank)));
+            Location dest = new Location(targetFile, targetRank);
+            if (targetRank == promotionRank) {
+                addPromotionMoves(moves, from, dest);
+            } else {
+                moves.add(new Move(from, dest));
+            }
         }
     }
 

@@ -245,7 +245,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
   - State of the system: white pawn at (4,4), black rook at (5,3), square (4,3) empty, no en passant
   - Expected output: returned move list size is 2 (forward to (4,3) + capture to (5,3))
 
-- MG-TC16: generateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves ( :x: )
+- MG-TC16: generateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white pawn at (4,1), black rook at (5,0), square (4,0) empty, no en passant
   - Expected output: returned move list size is 8 (4 forward PROMOTION + 4 capture PROMOTION)
