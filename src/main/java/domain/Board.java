@@ -25,10 +25,12 @@ public class Board {
     private static final int QUEENSIDE_KING_DEST_FILE = 2;
     private static final int KINGSIDE_ROOK_DEST_FILE = 5;
     private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
+    private static final int FIFTY_MOVE_HALF_MOVE_LIMIT = 100;
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
     private Optional<Location> enPassantTarget = Optional.empty();
+    int halfMoveClock = 0;
 
     void setEnPassantTarget(Optional<Location> enPassantTarget) {
         this.enPassantTarget = enPassantTarget;
@@ -100,8 +102,11 @@ public class Board {
 
     public void makeMove(Move move) {
         Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
+        boolean isPawnMove = movingPiece.getType() == PieceType.PAWN;
+        boolean capture = isCapture(move);
         applyMoveToInternalState(move);
         updateEnPassantTarget(move, movingPiece);
+        halfMoveClock = (isPawnMove || capture) ? 0 : halfMoveClock + 1;
         PieceColor opponentColor = opponentOf(movingPiece.getColor());
         MoveGenerator moveGenerator = new MoveGenerator(pieces, enPassantTarget);
         if (hasKing(opponentColor) && !moveGenerator.hasLegalMovesForColor(opponentColor)) {
@@ -109,11 +114,22 @@ public class Board {
                     ? winStateFor(movingPiece.getColor()) : GameState.DRAW;
             return;
         }
-        if (isInsufficientMaterial()) {
+        if (isInsufficientMaterial() || halfMoveClock >= FIFTY_MOVE_HALF_MOVE_LIMIT) {
             currentGameState = GameState.DRAW;
             return;
         }
         switchTurn();
+    }
+
+    int getHalfMoveClock() {
+        return halfMoveClock;
+    }
+
+    boolean isCapture(Move move) {
+        if (move.getType() == MoveType.EN_PASSANT) {
+            return true;
+        }
+        return pieces[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
     }
 
     private PieceColor opponentOf(PieceColor color) {

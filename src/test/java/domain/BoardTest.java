@@ -604,20 +604,6 @@ class BoardTest {
     }
 
     @Test
-    void MakeMove_WhenOnlyKingsRemain_GameStateIsDraw() {
-        Piece[][] layout = emptyPieceGrid();
-        layout[7][0] = new King(PieceColor.WHITE);
-        layout[4][2] = new Knight(PieceColor.WHITE);
-        layout[0][7] = new King(PieceColor.BLACK);
-        layout[2][3] = new Pawn(PieceColor.BLACK);
-        Board board = new Board(layout);
-
-        board.makeMove(new Move(new Location(2, 4), new Location(3, 2)));
-
-        assertEquals(GameState.DRAW, board.getCurrentGameState());
-    }
-
-    @Test
     void MakeMove_WhenMoveCausesStalemate_GameStateIsDraw() {
         Piece[][] layout = emptyPieceGrid();
         layout[0][0] = new King(PieceColor.BLACK);
@@ -631,6 +617,36 @@ class BoardTest {
 
         board.makeMove(new Move(new Location(7, 7), new Location(6, 7)));
 
+        assertEquals(GameState.DRAW, board.getCurrentGameState());
+    }
+
+    @Test
+    void MakeMove_WhenOnlyKingsRemain_GameStateIsDraw() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[7][0] = new King(PieceColor.WHITE);
+        layout[4][4] = new Queen(PieceColor.WHITE);
+        layout[1][1] = new King(PieceColor.BLACK);
+        layout[2][2] = new Queen(PieceColor.BLACK);
+        Board board = new Board(layout);
+
+        board.makeMove(new Move(new Location(4, 4), new Location(2, 2)));
+        board.makeMove(new Move(new Location(1, 1), new Location(2, 2)));
+
+        assertEquals(GameState.DRAW, board.getCurrentGameState());
+    }
+
+    @Test
+    void MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[7][7] = new King(PieceColor.WHITE);
+        layout[5][5] = new Knight(PieceColor.WHITE);
+        layout[0][0] = new King(PieceColor.BLACK);
+        Board board = new Board(layout);
+        board.halfMoveClock = 99;
+
+        board.makeMove(new Move(new Location(5, 5), new Location(4, 3)));
+
+        assertEquals(100, board.getHalfMoveClock());
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
 

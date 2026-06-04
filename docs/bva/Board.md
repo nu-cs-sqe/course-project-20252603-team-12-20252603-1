@@ -671,7 +671,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: white king and black king only; white knight captures the last non-king piece
   - **Expected output**: `getCurrentGameState()` returns `DRAW`
 
-- **TC72: MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw** ( :x: )
+- **TC72: MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 99; one non-pawn non-capture NORMAL move made
   - **Expected output**: `getHalfMoveClock()` returns 100 AND `getCurrentGameState()` returns `DRAW`
