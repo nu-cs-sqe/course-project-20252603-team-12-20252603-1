@@ -582,7 +582,6 @@ class BoardControllerTest {
 
     @Test
     void HandleSquareClick_InvalidLocation_TurnRemainsWhite() {
-        Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.replay(boardMock);

@@ -68,6 +68,14 @@ spotbugs {
     extraArgs = listOf("-nested:false")
 }
 
+tasks.spotbugsTest {
+    reports.create("html") {
+        required = true
+        outputLocation = layout.buildDirectory.file("reports/spotbugs/spotbugsTest.html")
+        setStylesheet("fancy-hist.xsl")
+    }
+}
+
 tasks.spotbugsMain {
     reports.create("html") {
         required = true
