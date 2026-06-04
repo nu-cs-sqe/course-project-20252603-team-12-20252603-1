@@ -113,7 +113,7 @@ public class Board {
     void updateGameState(PieceColor justMovedColor) {
         PieceColor nextColor = opponentOf(justMovedColor);
         MoveGenerator gen = new MoveGenerator(pieces, enPassantTarget);
-        if (hasKing(nextColor) && !gen.hasLegalMovesForColor(nextColor)) {
+        if (!gen.hasLegalMovesForColor(nextColor)) {
             currentGameState = gen.isInCheck(nextColor)
                     ? winStateFor(justMovedColor) : GameState.DRAW;
             return;

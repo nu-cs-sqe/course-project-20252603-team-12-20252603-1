@@ -290,6 +290,8 @@ class BoardTest {
             Arrays.fill(row, new NonePiece());
         }
         layout[1][4] = new Pawn(PieceColor.BLACK);
+        layout[0][0] = new King(PieceColor.BLACK);
+        layout[7][7] = new King(PieceColor.WHITE);
         Board board = new Board(layout);
         board.switchTurn();
         Move move = new Move(new Location(4, 1), new Location(4, 2));
@@ -308,6 +310,8 @@ class BoardTest {
             Arrays.fill(row, new NonePiece());
         }
         layout[6][4] = new Pawn(PieceColor.WHITE);
+        layout[7][7] = new King(PieceColor.WHITE);
+        layout[0][0] = new King(PieceColor.BLACK);
         Board board = new Board(layout);
         Move move = new Move(new Location(4, 6), new Location(4, 5));
 
