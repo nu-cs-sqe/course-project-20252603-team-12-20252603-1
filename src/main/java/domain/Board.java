@@ -101,7 +101,7 @@ public class Board {
     }
 
     public void makeMove(Move move) {
-        PieceColor movingColor = currentPlayerColor();
+        final PieceColor movingColor = currentPlayerColor();
         Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
         boolean isPawnMove = movingPiece.getType() == PieceType.PAWN;
         boolean capture = isCapture(move);
