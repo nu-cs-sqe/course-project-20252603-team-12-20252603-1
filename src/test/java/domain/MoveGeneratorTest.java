@@ -301,6 +301,20 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        board[3][5] = new Pawn(PieceColor.BLACK);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = result[3][5].getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Knight(PieceColor.WHITE);

@@ -187,7 +187,7 @@ Scope: simulate a move on a deep copy for **check filtering** (chess-master pari
 **Move type — Cases:**
 
 - NORMAL — knight `(4, 4)` → `(5, 6)`
-- EN_PASSANT — white pawn `(4, 3)` → `(5, 2)`; black pawn at `(4, 2)` removed
+- EN_PASSANT — white pawn `(4, 3)` → `(5, 2)`; black pawn at `(5, 3)` (rank `3`, file `5`) removed
 - CASTLING_KINGSIDE — white king `(4, 7)` → `(6, 7)`; rook `(7, 7)` → `(5, 7)`
 - CASTLING_QUEENSIDE — white king `(4, 7)` → `(2, 7)`; rook `(0, 7)` → `(3, 7)`
 - PROMOTION — white pawn `(4, 1)` → `(4, 0)` with `PieceType.QUEEN`
@@ -206,10 +206,10 @@ Scope: simulate a move on a deep copy for **check filtering** (chess-master pari
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: same as MG-TC18
   - **Expected output**: after the call, `original[4][4].getType()` is still `KNIGHT`
-- **MG-TC33: ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn** ( :x: )
+- **MG-TC33: ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
-  - **State of the system**: white pawn `(4, 3)`; black pawn `(4, 2)`; `EN_PASSANT` to `(5, 2)`
-  - **Expected output**: returned board at `(4, 2)` has type `NONE`
+  - **State of the system**: white pawn `(4, 3)`; black pawn `(5, 3)`; `EN_PASSANT` to `(5, 2)`
+  - **Expected output**: returned board at `(5, 3)` has type `NONE`
 - **MG-TC34: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :x: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; `CASTLING_KINGSIDE` to `(6, 7)`

@@ -123,6 +123,12 @@ public class MoveGenerator {
         int fromFile = move.getFrom().getX();
         int toRank = move.getTo().getY();
         int toFile = move.getTo().getX();
+        if (move.getType() == MoveType.EN_PASSANT) {
+            copy[toRank][toFile] = copy[fromRank][fromFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][toFile] = new NonePiece();
+            return copy;
+        }
         copy[toRank][toFile] = copy[fromRank][fromFile];
         copy[fromRank][fromFile] = new NonePiece();
         return copy;
