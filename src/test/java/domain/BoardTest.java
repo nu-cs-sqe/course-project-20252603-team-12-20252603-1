@@ -74,7 +74,9 @@ class BoardTest {
     void Constructor_WhenPieceArrayHasPieceAtPosition_PieceTypeIsPiece(
             Piece piece, int row, int col, PieceType expectedType) {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[row][col] = piece;
         Board board = new Board(layout);
         assertEquals(expectedType, board.getSnapshot()[row][col].getType());
@@ -83,7 +85,9 @@ class BoardTest {
     @Test
     void Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[7][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         assertEquals(PieceColor.BLACK, board.getSnapshot()[7][0].getColor());
@@ -92,7 +96,9 @@ class BoardTest {
     @Test
     void Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getSnapshot()[0][0].getColor());
@@ -101,7 +107,9 @@ class BoardTest {
     @Test
     void Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         Board board = new Board(layout);
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
@@ -218,7 +226,9 @@ class BoardTest {
     void GetPieceAt_WhenBoardHasPieceAtPosition_PieceTypeMatches(
             Piece piece, int rank, int file, PieceType expectedType) {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[rank][file] = piece;
         Board board = new Board(layout);
         assertEquals(expectedType, board.getPieceAt(rank, file).getType());
@@ -227,7 +237,9 @@ class BoardTest {
     @Test
     void GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         assertEquals(PieceColor.BLACK, board.getPieceAt(0, 0).getColor());
@@ -236,7 +248,9 @@ class BoardTest {
     @Test
     void GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
@@ -520,7 +534,9 @@ class BoardTest {
     @Test
     void GetPieceAt_ReturnedPieceIsDifferentObject() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         Piece piece1 = board.getPieceAt(0, 0);
