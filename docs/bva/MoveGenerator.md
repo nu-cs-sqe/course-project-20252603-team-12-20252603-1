@@ -243,7 +243,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 | ------------------------- | ----------------- | -------------------------------------------------------------------------- |
 | Input: color              | Cases             | WHITE                                                                      |
 | Input: board distribution | Collections       | single piece (knight, pawn, king); corner checkmate with two black rooks   |
-| Output: move list size    | Counts            | `0`, `1`, `6`, `8`                                                         |
+| Output: move list size    | Counts            | `0`, `1`, `6`, `8`, `17`                                                   |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -258,6 +258,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 - White pawn at `(4, 5)` (rank `5`, file `4`) — only one one-step advance
 - White king at `(0, 0)`; black rooks at `(0, 7)` and `(1, 7)`; black king at `(7, 0)` — checkmate, filtered subset empty
 - White king at `(4, 4)`; black rook at `(4, 0)` — in check; two king moves removed from pseudo-legal `8`
+- White king at `(2, 2)`; white bishop at `(2, 3)`; black rook at `(7, 7)` (does not pin) — two movable white pieces
 
 **Move list size — Counts (subset boundaries):**
 
@@ -265,6 +266,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 - `1` — filtered subset has exactly one move
 - `6` — filtered subset smaller than pseudo-legal king moves alone (`8`)
 - `8` — filtered subset equals pseudo-legal aggregate for lone knight
+- `17` — aggregate of two pieces (`8` king + `9` bishop); no check filter applied
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -284,6 +286,10 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only white piece is king at `(4, 4)` in check from black rook at `(4, 0)`
   - **Expected output**: returned move list size is `6` for `PieceColor.WHITE`
+- **MG-TC24: GenerateAllLegalMovesForColor_OnKingAndBishop_ReturnsSeventeenMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
+  - **State of the system**: white king at `(2, 2)` and bishop at `(2, 3)`; black rook at `(7, 7)` does not pin; black king at `(0, 0)`
+  - **Expected output**: returned move list size is `17` for `PieceColor.WHITE` (`8` + `9` per-piece legal counts summed)
 
 ---
 

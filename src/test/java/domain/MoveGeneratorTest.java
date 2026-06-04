@@ -123,6 +123,21 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateAllLegalMovesForColor_OnKingAndBishop_ReturnsSeventeenMoves() {
+        Piece[][] board = emptyBoard();
+        board[2][2] = new King(PieceColor.WHITE);
+        board[3][2] = new Bishop(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.BLACK);
+        board[0][0] = new King(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 17;
+        int actual = moveGenerator.generateAllLegalMovesForColor(PieceColor.WHITE).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateAllLegalMovesForColor_WhenOnlyKingInCheck_ReturnsSixMoves() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
