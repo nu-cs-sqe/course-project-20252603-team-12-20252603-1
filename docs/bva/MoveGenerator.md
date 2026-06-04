@@ -162,7 +162,7 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 ## Method: `applyMoveToBoard(Piece[][] original, Move move)` (package-private static)
 
-Scope: simulate a move on a deep copy for **check filtering** (chess-master parity). Supports `NORMAL`, `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, and `PROMOTION`.
+Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`, `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, and `PROMOTION`.
 
 ### Step 1: Equivalence Classes
 

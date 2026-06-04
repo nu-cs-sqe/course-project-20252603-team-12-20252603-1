@@ -352,7 +352,7 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
 
 ## Method: `getLegalMovesForSelection(): List<Move>`
 
-Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list (chess-master delegation; no board call).
+Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list without calling the board.
 
 ### Step 1: Input and output equivalence classes
 
@@ -398,9 +398,9 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ---
 
-## Method / behavior: move execution via `handleSquareClick(Location loc)` (chess-master parity)
+## Method / behavior: move execution via `handleSquareClick(Location loc)`
 
-Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion uses `PromotionDialog` before `makeMove`. Game-over states delegate to `EndGameController` (later slice).
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion dialog and end-game UI are out of scope for this slice (separate features).
 
 ### Step 1: Equivalence Classes
 
@@ -428,7 +428,7 @@ Scope: when a piece is already selected, a second click either executes a legal 
 
 Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`.
 
-- **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :x: )
+- **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
   - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
