@@ -140,6 +140,17 @@ public class MoveGenerator {
             copy[fromRank][KINGSIDE_ROOK_DEST_FILE] = rook;
             return copy;
         }
+        if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color);
+            Piece king = copy[fromRank][fromFile];
+            Piece rook = copy[fromRank][rookFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][rookFile] = new NonePiece();
+            copy[fromRank][QUEENSIDE_KING_DEST_FILE] = king;
+            copy[fromRank][QUEENSIDE_ROOK_DEST_FILE] = rook;
+            return copy;
+        }
         copy[toRank][toFile] = copy[fromRank][fromFile];
         copy[fromRank][fromFile] = new NonePiece();
         return copy;
