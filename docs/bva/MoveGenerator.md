@@ -235,7 +235,7 @@ Scope: Add basic legal move generation for all piece types (pawn, knight, bishop
 
 ### Step 4: Test cases
 
-- MG-TC14: generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves ( :x: )
+- MG-TC14: generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves ( :white_check_mark: )
   - Method(s) under test: generateLegalMoves(Location)
   - State of the system: white pawn at (4,1), square (4,0) empty, no diagonals, no en passant
   - Expected output: returned move list size is 4 (four PROMOTION moves, no normal forward move)

@@ -2,6 +2,7 @@ package domain;
 
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -97,23 +98,40 @@ public class MoveGenerator {
         PieceColor color = pawn.getColor();
         int direction = (color == PieceColor.WHITE) ? -1 : 1;
         int startRank = (color == PieceColor.WHITE) ? 6 : 1;
+        int promotionRank = (color == PieceColor.WHITE) ? 0 : 7;
+        addPawnForwardMoves(moves, from, rank, file, direction, startRank, promotionRank);
+        return moves;
+    }
 
+    private void addPawnForwardMoves(
+            List<Move> moves, Location from, int rank, int file,
+            int direction, int startRank, int promotionRank) {
         int oneAhead = rank + direction;
         if (!isOnBoard(oneAhead, file)) {
-            return moves;
+            return;
         }
         if (board[oneAhead][file].getType() != PieceType.NONE) {
-            return moves;
+            return;
         }
-        moves.add(new Move(from, new Location(file, oneAhead)));
-
+        Location oneStep = new Location(file, oneAhead);
+        if (oneAhead == promotionRank) {
+            addPromotionMoves(moves, from, oneStep);
+        } else {
+            moves.add(new Move(from, oneStep));
+        }
         int twoAhead = rank + 2 * direction;
         if (rank == startRank
                 && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
             moves.add(new Move(from, new Location(file, twoAhead)));
         }
-        return moves;
+    }
+
+    private void addPromotionMoves(List<Move> moves, Location from, Location to) {
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.QUEEN));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.ROOK));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.BISHOP));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.KNIGHT));
     }
 
     private List<Move> generateKingMoves(Location from, Piece king) {

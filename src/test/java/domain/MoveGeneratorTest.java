@@ -175,6 +175,18 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves() {
+        Piece[][] board = emptyBoard();
+        board[1][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 4;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 1)).size();
+
+        assertEquals(expected, actual);
+    }
+
     private static Piece[][] emptyBoard() {
         Piece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
         for (int rank = 0; rank < BOARD_SIZE; rank++) {
