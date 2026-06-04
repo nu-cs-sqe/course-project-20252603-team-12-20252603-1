@@ -109,85 +109,6 @@
 
 ---
 
-## Method / behavior: `makeMove(Move move)` with en passant and castling execution
-
-Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move types in board state, and maintain `enPassantTarget` so next-turn legal-move generation can include/exclude en passant correctly.
-
-### Step 1: Equivalence Classes
-
-- **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`, `NORMAL`
-- **Input: pawn advance distance (NORMAL pawn moves)** — one-step vs two-step
-- **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
-- **Output: castling effect** — king and rook relocate to castling destination files
-- **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
-- **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
-- **Output: unimplemented promotion** — `UnsupportedOperationException` until promotion execution is added
-
-### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class | Catalog data type | Parameters |
-| --- | --- | --- |
-| Input: move type | Cases | NORMAL, EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
-| Input: pawn rank delta | Intervals | 1 step, 2 steps |
-| Output: piece positions | Cases | expected squares occupied/empty |
-| Output: enPassantTarget | Cases | target set, no target |
-| Output: invalid castling | Cases | exception thrown vs successful relocation |
-| Output: promotion | Cases | `UnsupportedOperationException` vs (future) promoted piece at destination |
-
-### Step 3: Boundary Values (from BVA Catalog)
-
-- Promotion move: `UnsupportedOperationException` (placeholder until implemented)
-- Kingside castling with no unmoved rook on king's rank: `IllegalStateException`
-- En passant execute: white pawn `(4,3)` to `(5,2)` with black pawn at `(5,3)`
-- Kingside castling execute: white king `(4,7)` and rook `(7,7)` to king `(6,7)`, rook `(5,7)`
-- Queenside castling execute: white king `(4,7)` and rook `(0,7)` to king `(2,7)`, rook `(3,7)`
-- Double-step pawn move sets en-passant target to midpoint square
-- Any non-double-step move clears en-passant target
-
-### Step 4: Test Cases
-
-- **TC54: MakeMove_OnEnPassantMove_DestinationHasMovingPawn** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
-  - **Expected output**: destination `(5,2)` has a white pawn
-
-- **TC55: MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: same as TC54
-  - **Expected output**: captured pawn square `(5,3)` is `NONE`
-
-- **TC56: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
-  - **Expected output**: king at `(6,7)` and rook at `(5,7)`
-
-- **TC57: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
-  - **Expected output**: king at `(2,7)` and rook at `(3,7)`
-
-- **TC58: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
-  - **State of the system**: only white pawn at `(4,6)`; white pawn double-steps to `(4,4)`
-  - **Expected output**: `getEnPassantTarget()` is present at `(4,5)` (passed-over square for a later en-passant capture)
-
-- **TC59: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
-  - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
-  - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
-
-- **TC60: MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`
-  - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
-  - **Expected output**: `IllegalStateException` (board state unchanged for castling)
-
-- **TC61: MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`
-  - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with promotion piece `QUEEN`
-  - **Expected output**: `UnsupportedOperationException` (promotion not yet applied on board)
-
----
-
 ## Method: `Board(Piece[][])`
 
 ### Step 1: Equivalence Classes
@@ -478,17 +399,18 @@ Scope: execute `EN_PASSANT` and `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE` move ty
 
 ### Step 2: Data Types (from BVA Catalog)
 
-| Equivalence class           | Catalog data type | Parameters             |
-| --------------------------- | ----------------- | ---------------------- |
-| Output: returned game state | Cases             | WHITE_TURN, BLACK_TURN |
-
-Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic methods (`movePiece`), which are excluded from this BVA's scope.
+| Equivalence class           | Catalog data type | Parameters                                         |
+| --------------------------- | ----------------- | -------------------------------------------------- |
+| Output: returned game state | Cases             | WHITE_TURN, BLACK_TURN, WHITE_WIN, BLACK_WIN, DRAW |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Game state — Cases:**
-- WHITE_TURN (first possibility)
-- BLACK_TURN (second possibility)
+- WHITE_TURN
+- BLACK_TURN
+- WHITE_WIN
+- BLACK_WIN
+- DRAW
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -502,6 +424,21 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
   - **Method(s) under test**: `getCurrentGameState()`, `switchTurn()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` called once
   - **Expected output**: returns `BLACK_TURN`
+
+- **TC65: GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin** ( :x: )
+  - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
+  - **State of the system**: one-move checkmate position; white's move leaves black with no legal moves and in check
+  - **Expected output**: returns `WHITE_WIN`
+
+- **TC66: GetCurrentGameState_AfterBlackCheckmate_ReturnsBlackWin** ( :x: )
+  - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
+  - **State of the system**: one-move checkmate position; black's move leaves white with no legal moves and in check
+  - **Expected output**: returns `BLACK_WIN`
+
+- **TC67: GetCurrentGameState_AfterStalemate_ReturnsDraw** ( :x: )
+  - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
+  - **State of the system**: white's move leaves black with no legal moves and not in check
+  - **Expected output**: returns `DRAW`
 
 ---
 
@@ -644,16 +581,20 @@ Note: `WHITE_WIN`, `BLACK_WIN`, and `DRAW` are reachable only through game-logic
 
 ## Method: `makeMove(Move move)`
 
-Scope: apply a **normal** move to internal board state and toggle turn. Win, draw, en passant, castling, and promotion are deferred to later slices.
+Scope: apply a **normal** move to internal board state, update `halfMoveClock`, and call `updateGameState()` to detect checkmate, stalemate, insufficient material, and the 50-move draw rule.
 
 ### Step 1: Equivalence Classes
 
 - **Input: move** — `Move` with from/to locations and `MoveType.NORMAL`
 - **Input: board state before move** — piece at source square; destination empty or capturable
 - **Input: current game state** — `WHITE_TURN` or `BLACK_TURN`
+- **Input: whether the moving piece is a pawn** — affects `halfMoveClock` reset
+- **Input: whether the move is a capture** — affects `halfMoveClock` reset
+- **Input: current `halfMoveClock` value** — Count with threshold at HIGH = 100
 - **Output: piece at destination** — moved piece type and color match the piece that was at source
 - **Output: piece at source** — `NonePiece` after move
-- **Output: game state after move** — toggled to the opposite turn
+- **Output: `halfMoveClock` after move** — 0 if reset, prior value + 1 if incremented
+- **Output: game state after move** — `WHITE_TURN`, `BLACK_TURN`, `WHITE_WIN`, `BLACK_WIN`, or `DRAW`
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -662,9 +603,13 @@ Scope: apply a **normal** move to internal board state and toggle turn. Win, dra
 | Input: move from/to | Pairs of variables | file/rank in [0, 7] |
 | Input: move type | Cases | NORMAL |
 | Input: game state before | Cases | WHITE_TURN, BLACK_TURN |
+| Input: pawn move | Boolean | true, false |
+| Input: capture | Boolean | true, false |
+| Input: halfMoveClock | Count | 0, 99, 100 |
 | Output: destination piece type | Cases | PAWN, etc. |
 | Output: source piece type | Cases | NONE |
-| Output: game state after | Cases | BLACK_TURN, WHITE_TURN |
+| Output: halfMoveClock | Count | 0, prior value + 1 |
+| Output: game state after | Cases | WHITE_TURN, BLACK_TURN, WHITE_WIN, BLACK_WIN, DRAW |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -673,29 +618,432 @@ Scope: apply a **normal** move to internal board state and toggle turn. Win, dra
 - Black pawn `(4,1)` → `(4,2)` on empty board
 
 **game state — Cases:**
-- `WHITE_TURN` before move → `BLACK_TURN` after
-- `BLACK_TURN` before move → `WHITE_TURN` after
+- WHITE_TURN, BLACK_TURN, WHITE_WIN, BLACK_WIN, DRAW
+
+**isPawnMove — Boolean:**
+- true, false
+
+**isCapture — Boolean:**
+- true, false
+
+**halfMoveClock — Count:**
+- 0, 99, 100 (threshold at HIGH = 100)
 
 ### Step 4: Test Cases
 
-- **TC50: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
+- **TC53: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
 
-- **TC51: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
+- **TC54: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn moves from `(4,6)` to `(4,5)`
   - **Expected output**: after move, `getPieceAt(6, 4)` returns type `NONE`
 
-- **TC52: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC55: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
   - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC53: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC56: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
   - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
 
+- **TC68: MakeMove_WhenWhiteCausesCheckmate_GameStateIsWhiteWin** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: white's NORMAL move leaves black in check with no legal moves
+  - **Expected output**: `getCurrentGameState()` returns `WHITE_WIN`
+
+- **TC69: MakeMove_WhenBlackCausesCheckmate_GameStateIsBlackWin** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: game state is `BLACK_TURN`; black's NORMAL move leaves white in check with no legal moves
+  - **Expected output**: `getCurrentGameState()` returns `BLACK_WIN`
+
+- **TC70: MakeMove_WhenMoveCausesStalemate_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: white's NORMAL move leaves black with no legal moves and not in check
+  - **Expected output**: `getCurrentGameState()` returns `DRAW`
+
+- **TC71: MakeMove_WhenOnlyKingsRemain_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
+  - **State of the system**: white king and black king only; white knight captures the last non-king piece
+  - **Expected output**: `getCurrentGameState()` returns `DRAW`
+
+- **TC72: MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`, `getHalfMoveClock()`
+  - **State of the system**: `halfMoveClock` set to 99; one non-pawn non-capture NORMAL move made
+  - **Expected output**: `getHalfMoveClock()` returns 100 AND `getCurrentGameState()` returns `DRAW`
+
+- **TC73: MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
+  - **State of the system**: `halfMoveClock` set to 0; white knight makes a NORMAL move to an empty square
+  - **Expected output**: `getHalfMoveClock()` returns 1
+  - **Note**: TC74–TC75 are covered by this test case as a parameterized test
+
+- **TC74: MakeMove_OnPawnMove_HalfMoveClockResets** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
+  - **State of the system**: `halfMoveClock` set to 5; white pawn makes a one-step NORMAL move
+  - **Expected output**: `getHalfMoveClock()` returns 0
+  - **Covered by**: TC73 (parameterized test)
+
+- **TC75: MakeMove_OnCapture_HalfMoveClockResets** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
+  - **State of the system**: `halfMoveClock` set to 5; white knight captures a black pawn
+  - **Expected output**: `getHalfMoveClock()` returns 0
+  - **Covered by**: TC73 (parameterized test)
+
 ---
+
+---
+
+## Method / behavior: `makeMove(Move move)` with en passant, castling, and promotion execution
+
+Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROMOTION` move types in board state, and maintain `enPassantTarget` so next-turn legal-move generation can include/exclude en passant correctly.
+
+### Step 1: Equivalence Classes
+
+- **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`
+- **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
+- **Output: castling effect** — king and rook relocate to castling destination files
+- **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
+- **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
+- **Output: promotion execution** — pawn replaced by promoted piece type at the destination
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: move type | Cases | EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
+| Output: piece positions | Cases | expected squares occupied/empty |
+| Output: enPassantTarget | Cases | target set, no target |
+| Output: invalid castling | Cases | exception thrown vs successful relocation |
+| Output: promotion | Cases | promoted piece at destination |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**move type — Cases:**
+- EN_PASSANT
+- CASTLING_KINGSIDE
+- CASTLING_QUEENSIDE
+- PROMOTION
+
+**piece positions — Cases:**
+- expected squares occupied
+- expected squares empty
+
+**enPassantTarget — Cases:**
+- target set
+- no target
+
+**invalid castling — Cases:**
+- exception thrown
+- successful relocation
+
+**promotion — Cases:**
+- promoted piece at destination
+
+### Step 4: Test Cases
+
+- **TC57: MakeMove_OnEnPassantMove_DestinationHasMovingPawn** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
+  - **Expected output**: destination `(5,2)` has a white pawn
+
+- **TC58: MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: same as TC57
+  - **Expected output**: captured pawn square `(5,3)` is `NONE`
+
+- **TC59: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **Expected output**: king at `(6,7)` and rook at `(5,7)`
+
+- **TC60: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **Expected output**: king at `(2,7)` and rook at `(3,7)`
+
+- **TC61: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
+  - **State of the system**: only white pawn at `(4,6)`; white pawn double-steps to `(4,4)`
+  - **Expected output**: `getEnPassantTarget()` is present at `(4,5)` (passed-over square for a later en-passant capture)
+
+- **TC62: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
+  - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
+  - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
+
+- **TC63: MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`
+  - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
+  - **Expected output**: `IllegalStateException`
+
+- **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with no promotion type specified
+  - **Expected output**: `getPieceAt(0, 4).getType()` equals `QUEEN`
+
+---
+
+## Method: `updateGameState(PieceColor justMovedColor)` (package-private)
+
+### Step 1: Equivalence Classes
+
+- **Input: color of the player who just moved**
+- **Input: whether the next player is in check after the move**
+- **Input: whether the next player has any legal moves after the move**
+- **Input: whether remaining pieces are insufficient to force checkmate**
+- **Input: current value of `halfMoveClock` after clock update**
+- **Output: `currentGameState` after the call**
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: justMovedColor | Cases | WHITE, BLACK |
+| Input: next player in check | Boolean | true, false |
+| Input: next player has legal moves | Boolean | true, false |
+| Input: isInsufficientMaterial | Boolean | true, false |
+| Input: halfMoveClock | Count | 99, 100 |
+| Output: currentGameState | Cases | WHITE_WIN, BLACK_WIN, DRAW, WHITE_TURN, BLACK_TURN |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**justMovedColor — Cases:**
+- WHITE
+- BLACK
+
+**next player in check — Boolean:**
+- true
+- false
+
+**next player has legal moves — Boolean:**
+- true
+- false
+
+**isInsufficientMaterial — Boolean:**
+- true
+- false
+
+**halfMoveClock — Count:**
+- 0
+- 1
+- 99
+- 100
+
+**currentGameState — Cases:**
+- WHITE_WIN
+- BLACK_WIN
+- DRAW
+- WHITE_TURN
+- BLACK_TURN
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC76: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsWhite_GameStateIsWhiteWin** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board where black has no legal moves and is in check; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `WHITE_WIN`
+  - **Note**: TC77 is covered by this test case as a parameterized test
+
+- **TC77: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsBlack_GameStateIsBlackWin** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board where white has no legal moves and is in check; call `updateGameState(BLACK)`
+  - **Expected output**: `currentGameState` = `BLACK_WIN`
+  - **Covered by**: TC76 (parameterized test)
+
+- **TC78: UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board where black has no legal moves and is not in check; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `DRAW`
+
+- **TC79: UpdateGameState_WhenInsufficientMaterial_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board has only two kings and black has legal moves; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `DRAW`
+
+- **TC80: UpdateGameState_WhenHalfMoveClockAtLimit_GameStateIsDraw** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board with legal moves for next player; `halfMoveClock` = 100; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `DRAW`
+
+- **TC81: UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board with legal moves; `halfMoveClock` = 99; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `BLACK_TURN`
+
+- **TC82: UpdateGameState_WhenJustMovedWhiteAndGameContinues_GameStateIsBlackTurn** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board with legal moves for black; `halfMoveClock` = 0; not insufficient material; call `updateGameState(WHITE)`
+  - **Expected output**: `currentGameState` = `BLACK_TURN`
+  - **Note**: TC83 is covered by this test case as a parameterized test
+
+- **TC83: UpdateGameState_WhenJustMovedBlackAndGameContinues_GameStateIsWhiteTurn** ( :x: )
+  - **Method(s) under test**: `updateGameState(PieceColor)`
+  - **State of the system**: board with legal moves for white; `halfMoveClock` = 1; not insufficient material; call `updateGameState(BLACK)`
+  - **Expected output**: `currentGameState` = `WHITE_TURN`
+  - **Covered by**: TC82 (parameterized test)
+
+---
+
+## Method: `isInsufficientMaterial()` (package-private)
+
+### Step 1: Equivalence Classes
+
+- **Input: count of non-king pieces on the board**
+- **Input: whether any non-king piece is a pawn, rook, or queen**
+- **Output: whether material is insufficient to force checkmate**
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: non-king piece count | Count | 0, 1, 2 |
+| Input: hasMajorOrPawn | Boolean | true, false |
+| Output: return value | Boolean | true, false |
+
+Logic: returns `true` iff `!hasMajorOrPawn && nonKingCount <= 1`.
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**non-king piece count — Count:**
+- 0
+- 1
+- 2
+
+**hasMajorOrPawn — Boolean:**
+- true
+- false
+
+**return value — Boolean:**
+- true
+- false
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC84: IsInsufficientMaterial_WithOnlyKings_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isInsufficientMaterial()`
+  - **State of the system**: board with one white king and one black king
+  - **Expected output**: `isInsufficientMaterial()` returns `true`
+  - **Note**: TC85–TC88 are covered by this test case as a parameterized test
+
+- **TC85: IsInsufficientMaterial_WithKingAndBishopVsKing_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isInsufficientMaterial()`
+  - **State of the system**: white king, white bishop, black king
+  - **Expected output**: `isInsufficientMaterial()` returns `true`
+  - **Covered by**: TC84 (parameterized test)
+
+- **TC86: IsInsufficientMaterial_WithKingAndKnightVsKing_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isInsufficientMaterial()`
+  - **State of the system**: white king, white knight, black king
+  - **Expected output**: `isInsufficientMaterial()` returns `true`
+  - **Covered by**: TC84 (parameterized test)
+
+- **TC87: IsInsufficientMaterial_WithKingAndPawnVsKing_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `isInsufficientMaterial()`
+  - **State of the system**: white king, white pawn, black king
+  - **Expected output**: `isInsufficientMaterial()` returns `false`
+  - **Covered by**: TC84 (parameterized test)
+
+- **TC88: IsInsufficientMaterial_WithKingAndTwoBishopsVsKing_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `isInsufficientMaterial()`
+  - **State of the system**: white king, white bishop, black bishop, black king
+  - **Expected output**: `isInsufficientMaterial()` returns `false`
+  - **Covered by**: TC84 (parameterized test)
+
+---
+
+## Method: `isCapture(Move move)` (package-private)
+
+### Step 1: Equivalence Classes
+
+- **Input: move type** — `EN_PASSANT` or other
+- **Input: piece type at the destination square** — `NONE` or non-`NONE`
+- **Output: whether the move is a capture**
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: move type | Cases | EN_PASSANT, NORMAL |
+| Input: destination piece type | Cases | NONE, non-NONE |
+| Output: return value | Boolean | true, false |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**move type — Cases:**
+- EN_PASSANT
+- NORMAL
+
+**destination piece type — Cases:**
+- NONE
+- non-NONE
+
+**return value — Boolean:**
+- true
+- false
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC89: IsCapture_OnEnPassantMove_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isCapture(Move)`
+  - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`; EN_PASSANT move from `(4,3)` to `(5,2)`
+  - **Expected output**: `isCapture(move)` returns `true`
+  - **Note**: TC90–TC91 are covered by this test case as a parameterized test
+
+- **TC90: IsCapture_OnNormalMoveToEmptySquare_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `isCapture(Move)`
+  - **State of the system**: white pawn at `(4,6)`, empty destination `(4,5)`; NORMAL move
+  - **Expected output**: `isCapture(move)` returns `false`
+  - **Covered by**: TC89 (parameterized test)
+
+- **TC91: IsCapture_OnNormalMoveToOccupiedSquare_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isCapture(Move)`
+  - **State of the system**: white knight at `(3,5)`, black pawn at `(4,3)`; NORMAL move from `(3,5)` to `(4,3)`
+  - **Expected output**: `isCapture(move)` returns `true`
+  - **Covered by**: TC89 (parameterized test)
+
+---
+
+## Method: `currentPlayerColor()` (package-private)
+
+### Step 1: Equivalence Classes
+
+- **Input: `currentGameState`** — which turn it is
+- **Output: `PieceColor`** — the player whose turn it is
+
+Terminal states are impossible inputs: `currentPlayerColor()` is only called at the start of `makeMove()`.
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: currentGameState | Cases | WHITE_TURN, BLACK_TURN |
+| Output: PieceColor | Cases | WHITE, BLACK |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**currentGameState — Cases:**
+- WHITE_TURN
+- BLACK_TURN
+
+**PieceColor — Cases:**
+- WHITE
+- BLACK
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+- **TC92: CurrentPlayerColor_WhenWhiteTurn_ReturnsWhite** ( :x: )
+  - **Method(s) under test**: `currentPlayerColor()`
+  - **State of the system**: board freshly constructed; state is `WHITE_TURN`
+  - **Expected output**: `currentPlayerColor()` returns `WHITE`
+  - **Note**: TC93 is covered by this test case as a parameterized test
+
+- **TC93: CurrentPlayerColor_WhenBlackTurn_ReturnsBlack** ( :x: )
+  - **Method(s) under test**: `currentPlayerColor()`
+  - **State of the system**: board with state set to `BLACK_TURN` via `switchTurn()`
+  - **Expected output**: `currentPlayerColor()` returns `BLACK`
+  - **Covered by**: TC92 (parameterized test)
