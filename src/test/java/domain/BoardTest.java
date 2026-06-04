@@ -675,7 +675,6 @@ class BoardTest {
         layout1[7][7] = new King(PieceColor.WHITE);
         layout1[5][5] = new Knight(PieceColor.WHITE);
         layout1[0][0] = new King(PieceColor.BLACK);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][7] = new King(PieceColor.WHITE);
@@ -692,6 +691,7 @@ class BoardTest {
         Board board3 = new Board(layout3);
         board3.halfMoveClock = 5;
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, new Move(new Location(5, 5), new Location(4, 3)), 1),
                 Arguments.of(board2, new Move(new Location(4, 6), new Location(4, 5)), 0),
@@ -712,7 +712,6 @@ class BoardTest {
         layout1[7][4] = new King(PieceColor.BLACK);
         layout1[6][0] = new Rook(PieceColor.WHITE);
         layout1[7][7] = new Rook(PieceColor.WHITE);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][4] = new King(PieceColor.WHITE);
@@ -720,6 +719,7 @@ class BoardTest {
         layout2[7][7] = new Rook(PieceColor.BLACK);
         Board board2 = new Board(layout2);
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, PieceColor.WHITE, GameState.WHITE_WIN),
                 Arguments.of(board2, PieceColor.BLACK, GameState.BLACK_WIN)
@@ -796,7 +796,6 @@ class BoardTest {
         layout1[7][0] = new King(PieceColor.WHITE);
         layout1[0][7] = new King(PieceColor.BLACK);
         layout1[5][5] = new Rook(PieceColor.WHITE);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][0] = new King(PieceColor.WHITE);
@@ -805,6 +804,7 @@ class BoardTest {
         Board board2 = new Board(layout2);
         board2.halfMoveClock = 1;
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, PieceColor.WHITE, GameState.BLACK_TURN),
                 Arguments.of(board2, PieceColor.BLACK, GameState.WHITE_TURN)
@@ -864,8 +864,6 @@ class BoardTest {
         Piece[][] layout1 = emptyPieceGrid();
         layout1[3][4] = new Pawn(PieceColor.WHITE);
         layout1[3][5] = new Pawn(PieceColor.BLACK);
-        Board board1 = new Board(layout1);
-        Move enPassant = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[6][4] = new Pawn(PieceColor.WHITE);
@@ -878,6 +876,8 @@ class BoardTest {
         Board board3 = new Board(layout3);
         Move normalToOccupied = new Move(new Location(3, 5), new Location(4, 3));
 
+        Board board1 = new Board(layout1);
+        Move enPassant = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
         return Stream.of(
                 Arguments.of(board1, enPassant, true),
                 Arguments.of(board2, normalToEmpty, false),

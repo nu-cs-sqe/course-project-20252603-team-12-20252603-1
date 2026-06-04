@@ -1133,7 +1133,6 @@ class BoardControllerTest {
     void HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Location selected = new Location(0, 6);
-        Location illegal = new Location(3, 3);
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
@@ -1143,6 +1142,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(selected);
+        Location illegal = new Location(3, 3);
         controller.handleSquareClick(illegal);
 
         boolean expected = false;
@@ -1154,16 +1154,16 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Location selected = new Location(0, 6);
-        Location otherPiece = new Location(1, 7);
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
         EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
         EasyMock.replay(boardMock);
 
+        Location selected = new Location(0, 6);
         BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(selected);
+        Location otherPiece = new Location(1, 7);
         controller.handleSquareClick(otherPiece);
 
         Optional<Location> expected = Optional.of(otherPiece);
