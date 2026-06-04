@@ -781,7 +781,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
   - **Expected output**: `IllegalStateException`
 
-- **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :x: )
+- **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with no promotion type specified
   - **Expected output**: `getPieceAt(0, 4).getType()` equals `QUEEN`

@@ -424,17 +424,18 @@ class BoardTest {
     }
 
     @Test
-    void MakeMove_OnPromotionMove_ThrowsUnsupportedOperationException() {
+    void MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
             Arrays.fill(row, new NonePiece());
         }
         layout[1][4] = new Pawn(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(
-                new Location(4, 1), new Location(4, 0), MoveType.PROMOTION, PieceType.QUEEN);
+        Move move = new Move(new Location(4, 1), new Location(4, 0), MoveType.PROMOTION);
 
-        assertThrows(UnsupportedOperationException.class, () -> board.makeMove(move));
+        board.makeMove(move);
+
+        assertEquals(PieceType.QUEEN, board.getPieceAt(0, 4).getType());
     }
 
     @Test

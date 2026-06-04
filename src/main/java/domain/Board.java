@@ -130,7 +130,11 @@ public class Board {
             return;
         }
         if (move.getType() == MoveType.PROMOTION) {
-            throw new UnsupportedOperationException("Promotion moves are not yet implemented");
+            PieceType promotionType = move.getPromotionType().orElse(PieceType.QUEEN);
+            PieceColor color = pieces[fromRank][fromFile].getColor();
+            pieces[toRank][toFile] = createPiece(promotionType, color);
+            pieces[fromRank][fromFile] = new NonePiece();
+            return;
         }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
