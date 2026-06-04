@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -321,6 +322,155 @@ class MoveGeneratorTest {
         int actual = moveGenerator.generateLegalMoves(new Location(3, 3)).size();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator =
+                new MoveGenerator(board, Optional.of(new Location(5, 2)));
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                5,
+                2,
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator =
+                new MoveGenerator(board, Optional.of(new Location(5, 4)));
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                6,
+                7,
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][4].changeToMoved();
+        board[7][7] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                2,
+                7,
+                MoveType.CASTLING_QUEENSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        board[7][7].changeToMoved();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        board[0][5] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    private static boolean hasMoveToWithType(
+            java.util.List<Move> moves, int file, int rank, MoveType type) {
+        for (Move move : moves) {
+            if (move.getTo().getX() == file
+                    && move.getTo().getY() == rank
+                    && move.getType() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasMoveType(java.util.List<Move> moves, MoveType type) {
+        for (Move move : moves) {
+            if (move.getType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean hasMoveTo(java.util.List<Move> moves, int file, int rank) {

@@ -26,8 +26,8 @@
 
 **En-passant target state — Cases:**
 
-- No en-passant target
-- En-passant target present at a capture square (later slices)
+- No en-passant target (`Optional.empty()`)
+- En-passant target present at capture square (see MG-TC25–26, MG-TC32)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -396,4 +396,89 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
   - **Method(s) under test**: `isInCheck(PieceColor)`
   - **State of the system**: white king present; no black piece attacks it
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
+
+---
+
+## Method / behavior: en passant and castling in `generateLegalMoves(Location from)`
+
+Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling** (king/rook `hasMoved`, clear path, king path not attacked). Exercised through `generateLegalMoves`; check filtering above still applies to returned moves.
+
+### Step 1: Equivalence Classes
+
+- **Input: en-passant target** — absent vs present on valid capture square vs present on wrong rank
+- **Input: castling side** — kingside vs queenside unmoved rook
+- **Input: king/rook movement state** — both unmoved vs king moved vs rook moved
+- **Input: castling path safety** — transit squares clear and unattacked vs square under attack
+- **Output: move list contents** — special `MoveType` present vs absent for a given destination
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: en-passant target | Cases | no target, valid target at `(5, 2)`, invalid target at `(5, 4)` |
+| Input: castling side | Cases | kingside, queenside |
+| Input: king/rook movement state | Cases | both unmoved, king moved, rook moved |
+| Input: castling path safety | Cases | safe path, attacked transit square `(5, 7)` |
+| Output: move list contents | Collections | includes / excludes `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE` |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+**En-passant target — Cases:**
+
+- No target — `Optional.empty()` for pawn at `(4, 3)`
+- Valid target — `(5, 2)` adjacent to white pawn at `(4, 3)` on rank `2`
+- Invalid target — `(5, 4)` (wrong rank; not `rank + direction`)
+
+**Castling side — Cases:**
+
+- Kingside — white king `(4, 7)`, rook `(7, 7)` unmoved; destination `(6, 7)`
+- Queenside — white king `(4, 7)`, rook `(0, 7)` unmoved; destination `(2, 7)`
+
+**King/rook movement — Cases:**
+
+- Both unmoved — castling allowed when path safe
+- King moved — `king.changeToMoved()`; no castling types
+- Kingside rook moved — `rook.changeToMoved()` at `(7, 7)`; kingside excluded
+
+**Castling path safety — Cases:**
+
+- Clear path — squares between king and rook empty; no attack on king path
+- Attacked transit — black rook at `(5, 0)` attacks `(5, 7)` on kingside layout
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+`addEnPassantMoves` and `addCastlingMoves` are private; exercised indirectly through `generateLegalMoves`.
+
+- **MG-TC25: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
+  - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 2)`
+  - **Expected output**: returned moves include destination `(5, 2)` with `MoveType.EN_PASSANT`
+- **MG-TC26: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
+  - **State of the system**: white pawn at `(4, 3)`; `Optional.empty()` en-passant target
+  - **Expected output**: no returned move has `MoveType.EN_PASSANT`
+- **MG-TC27: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
+  - **State of the system**: white king `(4, 7)` and rook `(7, 7)` unmoved; path clear and safe
+  - **Expected output**: returned moves include destination `(6, 7)` with `MoveType.CASTLING_KINGSIDE`
+- **MG-TC28: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
+  - **State of the system**: same as MG-TC27 but king has `hasMoved() == true`
+  - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE` or `MoveType.CASTLING_QUEENSIDE`
+- **MG-TC29: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
+  - **State of the system**: same as MG-TC27 with black rook at `(5, 0)` attacking transit square `(5, 7)`
+  - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
+- **MG-TC30: GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
+  - **State of the system**: white king `(4, 7)` and rook `(0, 7)` unmoved; squares `(1, 7)`, `(2, 7)`, `(3, 7)` empty; path safe
+  - **Expected output**: returned moves include destination `(2, 7)` with `MoveType.CASTLING_QUEENSIDE`
+- **MG-TC31: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
+  - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
+  - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
+- **MG-TC32: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
+  - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
+  - **Expected output**: no returned move has `MoveType.EN_PASSANT`
 
