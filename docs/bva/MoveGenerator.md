@@ -218,7 +218,7 @@ Scope: simulate a move on a deep copy for **check filtering** (chess-master pari
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to `(2, 7)`
   - **Expected output**: returned board at `(2, 7)` is `KING` and at `(3, 7)` is `ROOK`
-- **MG-TC36: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :x: )
+- **MG-TC36: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.QUEEN`
   - **Expected output**: returned board at `(4, 0)` has type `QUEEN`
