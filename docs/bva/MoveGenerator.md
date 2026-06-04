@@ -477,7 +477,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC32: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :x: )
+- **MG-TC32: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`

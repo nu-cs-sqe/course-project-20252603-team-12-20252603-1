@@ -356,6 +356,21 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator =
+                new MoveGenerator(board, Optional.of(new Location(5, 4)));
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 3)),
+                MoveType.EN_PASSANT);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling() {
         Piece[][] board = emptyBoard();
         board[7][4] = new King(PieceColor.WHITE);
