@@ -1103,4 +1103,72 @@ class BoardControllerTest {
                 && rooks == 2
                 && kings == 1;
     }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location illegal = new Location(3, 3);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(3, 3)).andReturn(standardGrid[3][3]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(illegal);
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location otherPiece = new Location(1, 7);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(otherPiece);
+
+        Optional<Location> expected = Optional.of(otherPiece);
+        Optional<Location> actual = controller.getSelectedLocation();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
 }
