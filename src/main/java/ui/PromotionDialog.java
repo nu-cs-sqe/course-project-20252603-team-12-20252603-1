@@ -44,6 +44,13 @@ class PromotionDialog {
     }
 
     private Image loadImage(PieceType type) {
-        throw new UnsupportedOperationException();
+        // untestable: classpath resource loading, no headless equivalent
+        String prefix = (color == PieceColor.WHITE) ? "white" : "black";
+        String path = "pieces/" + prefix + "_" + type.name().toLowerCase() + ".png";
+        java.net.URL resource = getClass().getClassLoader().getResource(path);
+        if (resource == null) {
+            return null;
+        }
+        return new ImageIcon(resource).getImage();
     }
 }
