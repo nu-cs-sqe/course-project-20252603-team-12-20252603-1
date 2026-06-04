@@ -28,8 +28,10 @@ class PromotionDialog {
     private PieceType chosenType = PieceType.QUEEN;
 
     PromotionDialog(JFrame parent, PieceColor color) {
+        // untestable: creates JDialog (Swing/AWT component)
         this.color = color;
         this.dialog = new JDialog(parent, "Promote Pawn", true);
+        buildUi();
     }
 
     PieceType showAndGetChoice() {
