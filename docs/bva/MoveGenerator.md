@@ -473,7 +473,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and rook `(0, 7)` unmoved; squares `(1, 7)`, `(2, 7)`, `(3, 7)` empty; path safe
   - **Expected output**: returned moves include destination `(2, 7)` with `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC31: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :x: )
+- **MG-TC31: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
