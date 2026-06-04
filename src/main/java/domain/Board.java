@@ -118,11 +118,15 @@ public class Board {
             return;
         }
         if (move.getType() == MoveType.CASTLING_KINGSIDE) {
-            executeCastling(fromRank, fromFile, KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE, true);
+            executeCastling(
+                    fromRank, fromFile,
+                    KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE, true);
             return;
         }
         if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
-            executeCastling(fromRank, fromFile, QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
+            executeCastling(
+                    fromRank, fromFile,
+                    QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
             return;
         }
         if (move.getType() == MoveType.PROMOTION) {
@@ -137,8 +141,8 @@ public class Board {
             int rank, int kingFile, int kingDestFile, int rookDestFile, boolean kingside) {
         int rookFile = findCastlingRookFile(rank, kingFile, kingside);
         Piece king = pieces[rank][kingFile];
-        Piece rook = pieces[rank][rookFile];
         pieces[rank][kingFile] = new NonePiece();
+        Piece rook = pieces[rank][rookFile];
         pieces[rank][rookFile] = new NonePiece();
         king.changeToMoved();
         rook.changeToMoved();
