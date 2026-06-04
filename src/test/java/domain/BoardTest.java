@@ -872,4 +872,18 @@ class BoardTest {
         assertEquals(expected, board.isCapture(move));
     }
 
+    @ParameterizedTest
+    @CsvSource({"WHITE_TURN, WHITE", "BLACK_TURN, BLACK"})
+    void CurrentPlayerColor_WithGivenGameState_ReturnsCorrectColor(
+            GameState state, PieceColor expected) {
+        Piece[][] layout = emptyPieceGrid();
+        layout[7][0] = new King(PieceColor.WHITE);
+        layout[0][7] = new King(PieceColor.BLACK);
+        Board board = new Board(layout);
+        if (state == GameState.BLACK_TURN) {
+            board.switchTurn();
+        }
+        assertEquals(expected, board.currentPlayerColor());
+    }
+
 }

@@ -126,6 +126,10 @@ public class Board {
                 ? GameState.WHITE_TURN : GameState.BLACK_TURN;
     }
 
+    PieceColor currentPlayerColor() {
+        return currentGameState == GameState.WHITE_TURN ? PieceColor.WHITE : PieceColor.BLACK;
+    }
+
     int getHalfMoveClock() {
         return halfMoveClock;
     }

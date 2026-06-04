@@ -1036,13 +1036,13 @@ Terminal states are impossible inputs: `currentPlayerColor()` is only called at 
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC92: CurrentPlayerColor_WhenWhiteTurn_ReturnsWhite** ( :x: )
+- **TC92: CurrentPlayerColor_WhenWhiteTurn_ReturnsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `currentPlayerColor()`
   - **State of the system**: board freshly constructed; state is `WHITE_TURN`
   - **Expected output**: `currentPlayerColor()` returns `WHITE`
   - **Note**: TC93 is covered by this test case as a parameterized test
 
-- **TC93: CurrentPlayerColor_WhenBlackTurn_ReturnsBlack** ( :x: )
+- **TC93: CurrentPlayerColor_WhenBlackTurn_ReturnsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `currentPlayerColor()`
   - **State of the system**: board with state set to `BLACK_TURN` via `switchTurn()`
   - **Expected output**: `currentPlayerColor()` returns `BLACK`
