@@ -40,9 +40,30 @@ public class BoardController {
     }
 
     private void updateCurrentPlayerLabel() {
-        String text = board.getCurrentGameState() == GameState.WHITE_TURN
-                ? player1Name
-                : player2Name;
+        if (mainView == null) {
+            return;
+        }
+        String text;
+        switch (board.getCurrentGameState()) {
+            case WHITE_TURN:
+                text = player1Name;
+                break;
+            case BLACK_TURN:
+                text = player2Name;
+                break;
+            case WHITE_WIN:
+                text = player1Name + " wins!";
+                break;
+            case BLACK_WIN:
+                text = player2Name + " wins!";
+                break;
+            case DRAW:
+                text = "Draw!";
+                break;
+            default:
+                text = "";
+                break;
+        }
         mainView.getGameStatsView().updateCurrentPlayerLabel(text);
     }
 
@@ -86,7 +107,11 @@ public class BoardController {
         }
         PieceColor currentColor =
                 (state == GameState.WHITE_TURN) ? PieceColor.WHITE : PieceColor.BLACK;
-        handleSourceClick(loc, currentColor);
+        if (lastSelectedLoc.isPresent()) {
+            handleDestinationClick(loc, currentColor);
+        } else {
+            handleSourceClick(loc, currentColor);
+        }
     }
 
     private void handleSourceClick(Location loc, PieceColor currentColor) {
@@ -98,6 +123,40 @@ public class BoardController {
         }
         lastSelectedLoc = Optional.of(loc);
         repaintBoardView();
+    }
+
+    private void handleDestinationClick(Location dest, PieceColor currentColor) {
+        Location src = lastSelectedLoc.get();
+        Piece destPiece = board.getPieceAt(dest.getY(), dest.getX());
+
+        if (destPiece.getType() != PieceType.NONE && destPiece.getColor() == currentColor) {
+            lastSelectedLoc = Optional.of(dest);
+            repaintBoardView();
+            return;
+        }
+
+        List<Move> legalMoves = board.getLegalMoves(src);
+        Optional<Move> matchingMove = findMoveToDestination(legalMoves, dest);
+
+        if (!matchingMove.isPresent()) {
+            lastSelectedLoc = Optional.empty();
+            repaintBoardView();
+            return;
+        }
+
+        board.makeMove(matchingMove.get());
+        lastSelectedLoc = Optional.empty();
+        updateCurrentPlayerLabel();
+        repaintBoardView();
+    }
+
+    private Optional<Move> findMoveToDestination(List<Move> moves, Location dest) {
+        for (Move move : moves) {
+            if (move.getTo().getX() == dest.getX() && move.getTo().getY() == dest.getY()) {
+                return Optional.of(move);
+            }
+        }
+        return Optional.empty();
     }
 
     private void repaintBoardView() {

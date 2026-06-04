@@ -352,7 +352,7 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
 
 ## Method: `getLegalMovesForSelection(): List<Move>`
 
-Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list (chess-master delegation; no board call).
+Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list without calling the board.
 
 ### Step 1: Input and output equivalence classes
 
@@ -395,3 +395,48 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
   - **State of the system**: white turn; own piece selected; board stubs empty legal-move list
   - **Expected output**: returned list size is `0`
+
+---
+
+## Method / behavior: move execution via `handleSquareClick(Location loc)`
+
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion dialog and end-game UI are out of scope for this slice (separate features).
+
+### Step 1: Equivalence Classes
+
+- **Input: selection state** — `lastSelectedLoc` present vs absent (second click path)
+- **Input: destination square** — legal move target vs illegal vs another own piece
+- **Output: board interaction** — `makeMove` invoked vs not
+- **Output: selection after click** — cleared vs updated
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: selection state | Cases | selected, not selected |
+| Input: destination square | Cases | legal destination, illegal empty, own piece |
+| Output: `makeMove` called | Boolean | `true`, `false` |
+| Output: selection cleared | Boolean | `true`, `false` |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+- Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once
+- Illegal destination: stub returns move list with no matching `to` → selection cleared
+- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`.
+
+- **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
+  - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
+- **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: white turn; piece selected; click `(3, 3)` not in legal moves
+  - **Expected output**: `board.makeMove` not called; `hasSelection()` is `false`
+- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
+  - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`

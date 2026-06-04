@@ -25,10 +25,12 @@ public class Board {
     private static final int QUEENSIDE_KING_DEST_FILE = 2;
     private static final int KINGSIDE_ROOK_DEST_FILE = 5;
     private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
+    private static final int FIFTY_MOVE_HALF_MOVE_LIMIT = 100;
 
     private final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
     private GameState currentGameState = GameState.WHITE_TURN;
     private Optional<Location> enPassantTarget = Optional.empty();
+    int halfMoveClock = 0;
 
     void setEnPassantTarget(Optional<Location> enPassantTarget) {
         this.enPassantTarget = enPassantTarget;
@@ -99,10 +101,53 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+        final PieceColor movingColor = currentPlayerColor();
         Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
+        boolean isPawnMove = movingPiece.getType() == PieceType.PAWN;
+        boolean capture = isCapture(move);
         applyMoveToInternalState(move);
         updateEnPassantTarget(move, movingPiece);
-        switchTurn();
+        halfMoveClock = (isPawnMove || capture) ? 0 : halfMoveClock + 1;
+        updateGameState(movingColor);
+    }
+
+    void updateGameState(PieceColor justMovedColor) {
+        PieceColor nextColor = opponentOf(justMovedColor);
+        MoveGenerator gen = new MoveGenerator(pieces, enPassantTarget);
+        if (!gen.hasLegalMovesForColor(nextColor)) {
+            currentGameState = gen.isInCheck(nextColor)
+                    ? winStateFor(justMovedColor) : GameState.DRAW;
+            return;
+        }
+        if (isInsufficientMaterial() || halfMoveClock >= FIFTY_MOVE_HALF_MOVE_LIMIT) {
+            currentGameState = GameState.DRAW;
+            return;
+        }
+        currentGameState = nextColor == PieceColor.WHITE
+                ? GameState.WHITE_TURN : GameState.BLACK_TURN;
+    }
+
+    PieceColor currentPlayerColor() {
+        return currentGameState == GameState.WHITE_TURN ? PieceColor.WHITE : PieceColor.BLACK;
+    }
+
+    int getHalfMoveClock() {
+        return halfMoveClock;
+    }
+
+    boolean isCapture(Move move) {
+        if (move.getType() == MoveType.EN_PASSANT) {
+            return true;
+        }
+        return pieces[move.getTo().getY()][move.getTo().getX()].getType() != PieceType.NONE;
+    }
+
+    private PieceColor opponentOf(PieceColor color) {
+        return color == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+    }
+
+    private GameState winStateFor(PieceColor color) {
+        return color == PieceColor.WHITE ? GameState.WHITE_WIN : GameState.BLACK_WIN;
     }
 
     private void applyMoveToInternalState(Move move) {
@@ -130,7 +175,11 @@ public class Board {
             return;
         }
         if (move.getType() == MoveType.PROMOTION) {
-            throw new UnsupportedOperationException("Promotion moves are not yet implemented");
+            PieceType promotionType = move.getPromotionType().orElse(PieceType.QUEEN);
+            PieceColor color = pieces[fromRank][fromFile].getColor();
+            pieces[toRank][toFile] = createPiece(promotionType, color);
+            pieces[fromRank][fromFile] = new NonePiece();
+            return;
         }
         pieces[toRank][toFile] = pieces[fromRank][fromFile];
         pieces[fromRank][fromFile] = new NonePiece();
@@ -169,6 +218,25 @@ public class Board {
         }
         throw new IllegalStateException(
                 "No unmoved castling rook found on rank " + rank + " kingside=" + kingside);
+    }
+
+    boolean isInsufficientMaterial() {
+        int nonKingCount = 0;
+        boolean hasMajorOrPawn = false;
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece p = pieces[rank][file];
+                if (p.getType() == PieceType.NONE || p.getType() == PieceType.KING) {
+                    continue;
+                }
+                nonKingCount++;
+                PieceType t = p.getType();
+                if (t != PieceType.BISHOP && t != PieceType.KNIGHT) {
+                    hasMajorOrPawn = true;
+                }
+            }
+        }
+        return !hasMajorOrPawn && nonKingCount <= 1;
     }
 
     private void updateEnPassantTarget(Move move, Piece movedPiece) {

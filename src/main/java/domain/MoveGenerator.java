@@ -3,7 +3,14 @@ package domain;
 import domain.location.Location;
 import domain.move.Move;
 import domain.move.MoveType;
+import domain.piece.Bishop;
+import domain.piece.King;
+import domain.piece.Knight;
+import domain.piece.NonePiece;
+import domain.piece.Pawn;
 import domain.piece.Piece;
+import domain.piece.Queen;
+import domain.piece.Rook;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.util.ArrayList;
@@ -14,6 +21,10 @@ import java.util.Optional;
 public class MoveGenerator {
 
     private static final int BOARD_SIZE = 8;
+    private static final int KINGSIDE_KING_DEST_FILE = 6;
+    private static final int QUEENSIDE_KING_DEST_FILE = 2;
+    private static final int KINGSIDE_ROOK_DEST_FILE = 5;
+    private static final int QUEENSIDE_ROOK_DEST_FILE = 3;
     private static final int[][] EIGHT_DIRECTIONS = {
         {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}
     };
@@ -71,6 +82,11 @@ public class MoveGenerator {
         if (piece.getType() == PieceType.NONE) {
             return new ArrayList<>();
         }
+        List<Move> pseudoLegal = generatePseudoLegalMoves(from, piece);
+        return filterLegalMoves(pseudoLegal, piece.getColor());
+    }
+
+    private List<Move> generatePseudoLegalMoves(Location from, Piece piece) {
         if (piece.getType() == PieceType.KNIGHT) {
             return generateKnightMoves(from, piece);
         }
@@ -90,6 +106,77 @@ public class MoveGenerator {
             return generatePawnMoves(from, piece);
         }
         return new ArrayList<>();
+    }
+
+    private List<Move> filterLegalMoves(List<Move> pseudoLegal, PieceColor movingColor) {
+        List<Move> legal = new ArrayList<>();
+        for (Move move : pseudoLegal) {
+            if (!leavesOwnKingInCheck(move, movingColor)) {
+                legal.add(move);
+            }
+        }
+        return legal;
+    }
+
+    private boolean leavesOwnKingInCheck(Move move, PieceColor movingColor) {
+        Piece[][] boardAfter = applyMoveToBoard(board, move);
+        return new MoveGenerator(boardAfter, Optional.empty()).isInCheck(movingColor);
+    }
+
+    static Piece[][] applyMoveToBoard(Piece[][] original, Move move) {
+        Piece[][] copy = deepCopy(original);
+        int fromRank = move.getFrom().getY();
+        int fromFile = move.getFrom().getX();
+        int toRank = move.getTo().getY();
+        int toFile = move.getTo().getX();
+        if (move.getType() == MoveType.EN_PASSANT) {
+            copy[toRank][toFile] = copy[fromRank][fromFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][toFile] = new NonePiece();
+            return copy;
+        }
+        if (move.getType() == MoveType.CASTLING_KINGSIDE) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, true, color);
+            Piece king = copy[fromRank][fromFile];
+            Piece rook = copy[fromRank][rookFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][rookFile] = new NonePiece();
+            copy[fromRank][KINGSIDE_KING_DEST_FILE] = king;
+            copy[fromRank][KINGSIDE_ROOK_DEST_FILE] = rook;
+            return copy;
+        }
+        if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color);
+            Piece king = copy[fromRank][fromFile];
+            Piece rook = copy[fromRank][rookFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][rookFile] = new NonePiece();
+            copy[fromRank][QUEENSIDE_KING_DEST_FILE] = king;
+            copy[fromRank][QUEENSIDE_ROOK_DEST_FILE] = rook;
+            return copy;
+        }
+        if (move.getType() == MoveType.PROMOTION) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            PieceType promoType = move.getPromotionType().orElse(PieceType.QUEEN);
+            copy[toRank][toFile] = createPiece(promoType, color);
+            copy[fromRank][fromFile] = new NonePiece();
+            return copy;
+        }
+        copy[toRank][toFile] = copy[fromRank][fromFile];
+        copy[fromRank][fromFile] = new NonePiece();
+        return copy;
+    }
+
+    private static Piece[][] deepCopy(Piece[][] original) {
+        Piece[][] copy = new Piece[BOARD_SIZE][BOARD_SIZE];
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                copy[rank][file] = original[rank][file].makeCopy();
+            }
+        }
+        return copy;
     }
 
     private List<Move> generatePawnMoves(Location from, Piece pawn) {
@@ -130,21 +217,6 @@ public class MoveGenerator {
         }
     }
 
-    private void addEnPassantMoves(
-            List<Move> moves, Location from, int rank, int file, int direction) {
-        if (!enPassantTarget.isPresent()) {
-            return;
-        }
-        Location ep = enPassantTarget.get();
-        int targetRank = rank + direction;
-        for (int df : new int[]{-1, 1}) {
-            int targetFile = file + df;
-            if (ep.getX() == targetFile && ep.getY() == targetRank) {
-                moves.add(new Move(from, ep, MoveType.EN_PASSANT));
-            }
-        }
-    }
-
     private void addPawnCaptureMoves(
             List<Move> moves, Location from, int rank, int file,
             int direction, int promotionRank, PieceColor color) {
@@ -174,6 +246,20 @@ public class MoveGenerator {
         moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.KNIGHT));
     }
 
+    private void addEnPassantMoves(
+            List<Move> moves, Location from, int rank, int file, int direction) {
+        if (!enPassantTarget.isPresent()) {
+            return;
+        }
+        Location target = enPassantTarget.get();
+        if (target.getY() != rank + direction) {
+            return;
+        }
+        if (target.getX() == file - 1 || target.getX() == file + 1) {
+            moves.add(new Move(from, target, MoveType.EN_PASSANT));
+        }
+    }
+
     private List<Move> generateKingMoves(Location from, Piece king) {
         List<Move> moves = new ArrayList<>();
         int rank = from.getY();
@@ -189,7 +275,84 @@ public class MoveGenerator {
                 moves.add(new Move(from, new Location(targetFile, targetRank)));
             }
         }
+        addCastlingMoves(moves, from, king);
         return moves;
+    }
+
+    private void addCastlingMoves(List<Move> moves, Location from, Piece king) {
+        if (king.hasMoved() || isInCheck(king.getColor())) {
+            return;
+        }
+        int rank = from.getY();
+        int file = from.getX();
+        PieceColor color = king.getColor();
+        int kingsideRook = findUnmovedRookFileIn(board, rank, file, true, color);
+        if (kingsideRook >= 0
+                && canCastle(rank, file, kingsideRook, KINGSIDE_KING_DEST_FILE,
+                KINGSIDE_ROOK_DEST_FILE, color)) {
+            moves.add(new Move(from, new Location(KINGSIDE_KING_DEST_FILE, rank),
+                    MoveType.CASTLING_KINGSIDE));
+        }
+        int queensideRook = findUnmovedRookFileIn(board, rank, file, false, color);
+        if (queensideRook >= 0
+                && canCastle(rank, file, queensideRook, QUEENSIDE_KING_DEST_FILE,
+                QUEENSIDE_ROOK_DEST_FILE, color)) {
+            moves.add(new Move(from, new Location(QUEENSIDE_KING_DEST_FILE, rank),
+                    MoveType.CASTLING_QUEENSIDE));
+        }
+    }
+
+    private boolean canCastle(
+            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile, PieceColor color) {
+        return isPathClearForCastling(rank, kingFile, rookFile, kingDestFile, rookDestFile)
+                && isKingPathSafe(rank, kingFile, kingDestFile, color);
+    }
+
+    private boolean isPathClearForCastling(
+            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile) {
+        int minFile = Math.min(Math.min(kingFile, rookFile), Math.min(kingDestFile, rookDestFile));
+        int maxFile = Math.max(Math.max(kingFile, rookFile), Math.max(kingDestFile, rookDestFile));
+        for (int f = minFile; f <= maxFile; f++) {
+            if (f == kingFile || f == rookFile) {
+                continue;
+            }
+            if (board[rank][f].getType() != PieceType.NONE) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isKingPathSafe(int rank, int kingFile, int kingDestFile, PieceColor color) {
+        int minFile = Math.min(kingFile, kingDestFile);
+        int maxFile = Math.max(kingFile, kingDestFile);
+        PieceColor attacker = opponent(color);
+        for (int f = minFile; f <= maxFile; f++) {
+            if (isSquareAttackedBy(new Location(f, rank), attacker, board)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int findUnmovedRookFileIn(
+            Piece[][] board, int rank, int kingFile, boolean kingside, PieceColor color) {
+        if (kingside) {
+            for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
+                Piece p = board[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        } else {
+            for (int f = 0; f < kingFile; f++) {
+                Piece p = board[rank][f];
+                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
+                    return f;
+                }
+            }
+        }
+        return -1;
     }
 
     private List<Move> generateSlidingMoves(Location from, Piece piece, int[][] directions) {
@@ -347,5 +510,27 @@ public class MoveGenerator {
 
     private static PieceColor opponent(PieceColor color) {
         return color == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+    }
+
+    static Piece createPiece(PieceType type, PieceColor color) {
+        if (type == PieceType.QUEEN) {
+            return new Queen(color);
+        }
+        if (type == PieceType.ROOK) {
+            return new Rook(color);
+        }
+        if (type == PieceType.BISHOP) {
+            return new Bishop(color);
+        }
+        if (type == PieceType.KNIGHT) {
+            return new Knight(color);
+        }
+        if (type == PieceType.PAWN) {
+            return new Pawn(color);
+        }
+        if (type == PieceType.KING) {
+            return new King(color);
+        }
+        return new NonePiece();
     }
 }
