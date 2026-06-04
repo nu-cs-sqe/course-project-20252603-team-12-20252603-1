@@ -228,20 +228,22 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 
 ## Method: `generateAllLegalMovesForColor(PieceColor color)`
 
+Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filtering can shrink the combined list (BVA catalog: **subset of a collection** — empty, one element, smaller than pseudo-legal aggregate, unchanged when nothing is filtered).
+
 ### Step 1: Equivalence Classes
 
 - **Input: color** — side whose moves are collected
-- **Input: board distribution** — placement of pieces for both colors
-- **Output: move list size** — total legal moves for that color
+- **Input: board distribution** — one movable piece vs several; checkmate vs in-check vs unrestricted
+- **Output: move list size** — total legal moves for that color after filtering
 
 ### Step 2: Data Types (from BVA Catalog)
 
 
-| Equivalence class         | Catalog data type | Parameters                            |
-| ------------------------- | ----------------- | ------------------------------------- |
-| Input: color              | Cases             | WHITE, BLACK                          |
-| Input: board distribution | Collections       | single movable piece, multiple pieces |
-| Output: move list size | Counts | `8` |
+| Equivalence class         | Catalog data type | Parameters                                                                 |
+| ------------------------- | ----------------- | -------------------------------------------------------------------------- |
+| Input: color              | Cases             | WHITE                                                                      |
+| Input: board distribution | Collections       | single piece (knight, pawn, king); corner checkmate with two black rooks   |
+| Output: move list size    | Counts            | `0`, `1`, `6`, `8`                                                         |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -249,15 +251,20 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 **Color — Cases:**
 
 - WHITE
-- BLACK
 
 **Board distribution — Collections:**
 
-- White knight at `(4, 4)`; black king at `(0, 0)`
+- White knight at `(4, 4)`; black king at `(0, 0)` — no moves removed by check filter
+- White pawn at `(4, 5)` (rank `5`, file `4`) — only one one-step advance
+- White king at `(0, 0)`; black rooks at `(0, 7)` and `(1, 7)`; black king at `(7, 0)` — checkmate, filtered subset empty
+- White king at `(4, 4)`; black rook at `(4, 0)` — in check; two king moves removed from pseudo-legal `8`
 
-**Move list size — Counts:**
+**Move list size — Counts (subset boundaries):**
 
-- `8` — white knight at `(4, 4)`; black king at `(0, 0)`
+- `0` — filtered subset empty (checkmate)
+- `1` — filtered subset has exactly one move
+- `6` — filtered subset smaller than pseudo-legal king moves alone (`8`)
+- `8` — filtered subset equals pseudo-legal aggregate for lone knight
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -265,6 +272,18 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only movable white piece is knight at `(4, 4)`
   - **Expected output**: returned move list size is `8` for `PieceColor.WHITE`
+- **MG-TC21: GenerateAllLegalMovesForColor_WhenWhiteCheckmated_ReturnsZeroMoves** ( :x: )
+  - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
+  - **State of the system**: white king at `(0, 0)`; black rooks at `(0, 7)` and `(1, 7)`; black king at `(7, 0)`
+  - **Expected output**: returned move list size is `0` for `PieceColor.WHITE`
+- **MG-TC22: GenerateAllLegalMovesForColor_OnPawnWithOnlyOneStep_ReturnsOneMove** ( :x: )
+  - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
+  - **State of the system**: only white piece is pawn at `(4, 5)` (not on starting rank; one empty square ahead)
+  - **Expected output**: returned move list size is `1` for `PieceColor.WHITE`
+- **MG-TC23: GenerateAllLegalMovesForColor_WhenOnlyKingInCheck_ReturnsSixMoves** ( :x: )
+  - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
+  - **State of the system**: only white piece is king at `(4, 4)` in check from black rook at `(4, 0)`
+  - **Expected output**: returned move list size is `6` for `PieceColor.WHITE`
 
 ---
 
