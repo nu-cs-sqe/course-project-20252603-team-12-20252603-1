@@ -95,6 +95,21 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateAllLegalMovesForColor_WhenWhiteCheckmated_ReturnsZeroMoves() {
+        Piece[][] board = emptyBoard();
+        board[0][0] = new King(PieceColor.WHITE);
+        board[0][7] = new Rook(PieceColor.BLACK);
+        board[1][7] = new Rook(PieceColor.BLACK);
+        board[7][0] = new King(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 0;
+        int actual = moveGenerator.generateAllLegalMovesForColor(PieceColor.WHITE).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnWhitePawnAtStart_ReturnsOneAndTwoStepMoves() {
         Piece[][] board = emptyBoard();
         board[6][4] = new Pawn(PieceColor.WHITE);
