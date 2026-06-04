@@ -2,6 +2,7 @@ package domain.move;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import domain.location.Location;
 import domain.piece.PieceType;
@@ -100,7 +101,8 @@ class MoveTest {
     void WithPromotionType_OriginalMoveTypeIsUnchanged() {
         Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
 
-        original.withPromotionType(PieceType.QUEEN);
+        Move unused = original.withPromotionType(PieceType.QUEEN);
+        assertNotNull(unused);
 
         assertEquals(MoveType.NORMAL, original.getType());
     }
@@ -109,7 +111,8 @@ class MoveTest {
     void WithPromotionType_OriginalMovePromotionTypeIsUnchanged() {
         Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
 
-        original.withPromotionType(PieceType.QUEEN);
+        Move unused = original.withPromotionType(PieceType.QUEEN);
+        assertNotNull(unused);
 
         assertFalse(original.getPromotionType().isPresent());
     }
