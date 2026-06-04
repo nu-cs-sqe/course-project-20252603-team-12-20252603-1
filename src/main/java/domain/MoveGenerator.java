@@ -2,13 +2,14 @@ package domain;
 
 import domain.location.Location;
 import domain.move.Move;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import domain.piece.NonePiece;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class MoveGenerator {
 
@@ -26,7 +27,7 @@ public class MoveGenerator {
     private final Optional<Location> enPassantTarget;
 
     public MoveGenerator(Piece[][] board, Optional<Location> enPassantTarget) {
-        this.board = board;
+        this.board = Arrays.stream(board).map(Piece[]::clone).toArray(Piece[][]::new);
         this.enPassantTarget = enPassantTarget;
     }
 
@@ -138,7 +139,6 @@ public class MoveGenerator {
         int file = from.getX();
         PieceColor color = pawn.getColor();
         int direction = (color == PieceColor.WHITE) ? -1 : 1;
-        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
 
         int oneAhead = rank + direction;
         if (!isOnBoard(oneAhead, file)) {
@@ -150,6 +150,7 @@ public class MoveGenerator {
         moves.add(new Move(from, new Location(file, oneAhead)));
 
         int twoAhead = rank + 2 * direction;
+        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
         if (rank == startRank
                 && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
