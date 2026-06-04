@@ -875,13 +875,13 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: board with legal moves; `halfMoveClock` = 99; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `BLACK_TURN`
 
-- **TC82: UpdateGameState_WhenJustMovedWhiteAndGameContinues_GameStateIsBlackTurn** ( :x: )
+- **TC82: UpdateGameState_WhenJustMovedWhiteAndGameContinues_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for black; `halfMoveClock` = 0; not insufficient material; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `BLACK_TURN`
   - **Note**: TC83 is covered by this test case as a parameterized test
 
-- **TC83: UpdateGameState_WhenJustMovedBlackAndGameContinues_GameStateIsWhiteTurn** ( :x: )
+- **TC83: UpdateGameState_WhenJustMovedBlackAndGameContinues_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for white; `halfMoveClock` = 1; not insufficient material; call `updateGameState(BLACK)`
   - **Expected output**: `currentGameState` = `WHITE_TURN`

@@ -771,4 +771,32 @@ class BoardTest {
         assertEquals(GameState.BLACK_TURN, board.getCurrentGameState());
     }
 
+    static Stream<Arguments> updateGameStateContinuesProvider() {
+        Piece[][] layout1 = emptyPieceGrid();
+        layout1[7][0] = new King(PieceColor.WHITE);
+        layout1[0][7] = new King(PieceColor.BLACK);
+        layout1[5][5] = new Rook(PieceColor.WHITE);
+        Board board1 = new Board(layout1);
+
+        Piece[][] layout2 = emptyPieceGrid();
+        layout2[7][0] = new King(PieceColor.WHITE);
+        layout2[0][7] = new King(PieceColor.BLACK);
+        layout2[5][5] = new Rook(PieceColor.BLACK);
+        Board board2 = new Board(layout2);
+        board2.halfMoveClock = 1;
+
+        return Stream.of(
+                Arguments.of(board1, PieceColor.WHITE, GameState.BLACK_TURN),
+                Arguments.of(board2, PieceColor.BLACK, GameState.WHITE_TURN)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("updateGameStateContinuesProvider")
+    void UpdateGameState_WhenGameContinues_SetsNextTurn(
+            Board board, PieceColor justMovedColor, GameState expected) {
+        board.updateGameState(justMovedColor);
+        assertEquals(expected, board.getCurrentGameState());
+    }
+
 }
