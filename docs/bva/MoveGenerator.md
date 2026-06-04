@@ -40,48 +40,37 @@
 
 ## Method: `generateLegalMoves(Location from)`
 
+Scope: pseudo-legal moves for the piece at `from`, then check filtering (see check-filtering section). File/rank are in-bounds `Location` values from callers; this slice does not vary min/max file or rank.
+
 ### Step 1: Equivalence Classes
 
-- **Input: source file** — column index of `from`
-- **Input: source rank** — row index of `from`
 - **Input: piece type at `from`** — the `PieceType` on the source square
-- **Input: board occupancy** — empty paths, blockers, capturable enemy pieces
+- **Input: board layout** — lone piece on empty board
 - **Output: move list size** — count of legal moves returned
-- **Output: move list contents** — destinations included or excluded
 
 ### Step 2: Data Types (from BVA Catalog)
 
-
-| Equivalence class           | Catalog data type | Parameters                                    |
-| --------------------------- | ----------------- | --------------------------------------------- |
-| Input: source file          | Interval          | [0, 7]                                        |
-| Input: source rank          | Interval          | [0, 7]                                        |
-| Input: piece type at `from` | Cases             | NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING |
-| Input: board occupancy      | Collections       | empty board, blockers, capturable pieces      |
-| Output: move list size      | Counts            | 0, 2, 6, 8, 13, 14, 27                        |
-| Output: move list contents  | Collections       | listed destination `(file, rank)`; excluded destination `(file, rank)` |
-
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: piece type at `from` | Cases | NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING |
+| Input: board layout | Collections | lone piece on otherwise empty board |
+| Output: move list size | Counts | `0`, `2`, `8`, `13`, `14`, `27` |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
-**Source file / rank — Interval [0, 7]:**
-
-- Center `(4, 4)` for full directional coverage
-- `(3, 3)` empty square → size `0`
-
 **Piece type at `from` — Cases:**
 
-- NONE
-- PAWN at `(4, 6)` with empty `(4, 5)` and `(4, 4)` → size `2`
-- KNIGHT at center → size `8`
-- BISHOP at center on empty board → size `13`
-- ROOK at center on empty board → size `14`
-- QUEEN at center on empty board → size `27`
-- KING at center on empty board → size `8`
+- NONE — `NonePiece` at `(3, 3)`
+- PAWN — white pawn at `(4, 6)`; `(4, 5)` and `(4, 4)` empty
+- KNIGHT — white knight at `(4, 4)`
+- BISHOP — white bishop at `(4, 4)`
+- ROOK — white rook at `(4, 4)`
+- QUEEN — white queen at `(4, 4)`
+- KING — white king at `(4, 4)`
 
 **Move list size — Counts:**
 
-- 0, 2, 6, 8, 13, 14, 27
+- `0`, `2`, `8`, `13`, `14`, `27`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -132,25 +121,25 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 | Equivalence class                   | Catalog data type | Parameters                                   |
 | ----------------------------------- | ----------------- | -------------------------------------------- |
-| Input: pin exposure                 | Cases             | move exposes king, move does not expose king |
-| Input: king in check                | Cases             | in check with escapes, square still in check |
-| Output: filtered move list size     | Counts            | 6                                            |
-| Output: filtered move list contents | Collections       | no move with `to` = `(3, 4)`; no move with `to` = `(4, 3)` |
+| Input: pin exposure | Cases | move exposes king |
+| Input: king in check | Cases | in check with escapes, square still in check |
+| Output: filtered move list size | Counts | `6` |
+| Output: filtered move list contents | Collections | excluded destination `(file, rank)` |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Pin exposure — Cases:**
 
-- Pinned white bishop at `(2, 3)`; white king `(2, 2)`; black rook `(2, 7)` — pseudo move to `(3, 4)` exposes king
+- Pinned white bishop `(2, 3)`; king `(2, 2)`; black rook `(2, 7)` — destination `(3, 4)` excluded
 
 **King in check — Cases:**
 
-- White king `(4, 4)`; black rook `(4, 0)` — six escapes off the file; `(4, 3)` still attacked
+- White king `(4, 4)`; black rook `(4, 0)` — six escapes; destination `(4, 3)` excluded
 
 **Filtered move list size — Counts:**
 
-- 6 (king escapes)
+- `6`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -193,10 +182,9 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 | Input: original board | Collections | 8×8 `Piece[][]` with one white knight at `(4, 4)`; otherwise `NonePiece` |
 | Input: move type | Cases | NORMAL |
 | Input: move endpoints | Pairs of variables | `from` `(4, 4)`, `to` `(5, 6)` |
-| Output: returned array vs `original` | Pairs of references | returned `Piece[][]` is not the same object as `original` |
-| Output: piece type at `move.getTo()` on returned board | Cases | KNIGHT (same `PieceType` as piece at `from` before the move) |
+| Output: piece type at `move.getTo()` on returned board | Cases | KNIGHT |
 | Output: piece type at `move.getFrom()` on returned board | Cases | NONE |
-| Output: piece type at `move.getFrom()` on `original` after call | Cases | KNIGHT (`original` not mutated in place) |
+| Output: piece type at `move.getFrom()` on `original` after call | Cases | KNIGHT |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -208,10 +196,6 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 **Move endpoints — Pairs of variables:**
 
 - `from` `(4, 4)` (white knight), `to` `(5, 6)` on otherwise empty board
-
-**Returned array vs `original` — Pairs of references:**
-
-- `applyMoveToBoard(original, move)` returns a different outer array than `original`
 
 **Piece at destination on returned board — Cases:**
 
@@ -257,7 +241,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 | ------------------------- | ----------------- | ------------------------------------- |
 | Input: color              | Cases             | WHITE, BLACK                          |
 | Input: board distribution | Collections       | single movable piece, multiple pieces |
-| Output: move list size    | Counts            | 8                                     |
+| Output: move list size | Counts | `8` |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -273,7 +257,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 
 **Move list size — Counts:**
 
-- 8 (single white knight)
+- `8` — white knight at `(4, 4)`; black king at `(0, 0)`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -301,7 +285,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 | Input: color              | Cases             | WHITE, BLACK                               |
 | Input: board distribution | Collections       | movable piece present, no pieces for color |
 | Input: king in check      | Cases             | in check with legal escape                 |
-| Output: result            | Boolean           | true, false                                |
+| Output: result | Boolean | `true`, `false` |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -322,8 +306,8 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 
 **Result — Boolean:**
 
-- true (movable piece or legal escape)
-- false (no pieces for color)
+- `true` — movable white piece; white in check with legal escape
+- `false` — no pieces of queried color on board
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -357,7 +341,7 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 | ------------------------ | ----------------- | ---------------------- |
 | Input: color             | Cases             | WHITE, BLACK           |
 | Input: king attack state | Cases             | attacked, not attacked |
-| Output: result           | Boolean           | true, false            |
+| Output: result | Boolean | `true`, `false` |
 
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -374,8 +358,8 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 
 **Result — Boolean:**
 
-- true
-- false
+- `true` — king attacked on open file
+- `false` — king not attacked
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
