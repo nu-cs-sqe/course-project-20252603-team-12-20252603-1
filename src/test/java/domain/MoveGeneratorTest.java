@@ -301,6 +301,72 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void ApplyMoveToBoard_OnPromotion_DestinationHasQueen() {
+        Piece[][] board = emptyBoard();
+        board[1][4] = new Pawn(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(4, 1), new Location(4, 0), MoveType.PROMOTION, PieceType.QUEEN);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.QUEEN;
+        PieceType actual = result[0][4].getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = result[7][2].getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = result[7][3].getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = result[7][6].getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = result[7][5].getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new Pawn(PieceColor.WHITE);
+        board[3][5] = new Pawn(PieceColor.BLACK);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.NONE;
+        PieceType actual = result[3][5].getType();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece() {
         Piece[][] board = emptyBoard();
         board[4][4] = new Knight(PieceColor.WHITE);

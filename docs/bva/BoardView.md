@@ -2,9 +2,10 @@
 
 Package: `ui.BoardView`
 
-Scope: **Refactor** — align with chess-master: direct screen-to-board coordinates (no rank flip), `mousePressed` instead of `mouseClicked`, remove stale `selectedRow` / `selectedCol` fields. **Constructor** (mouse-listener registration and preferred-size wiring) and **`BoardMouseListener.mousePressed`** (pixel-to-`Location` conversion and `handleSquareClick` delegation) remain testable. All graphics methods are **untestable** and excluded from this BVA.
+Scope: **Refactor** — direct screen-to-board coordinates (no rank flip), `mousePressed` instead of `mouseClicked`, remove stale `selectedRow` / `selectedCol` fields. **Constructor** (mouse-listener registration and preferred-size wiring) and **`BoardMouseListener.mousePressed`** (pixel-to-`Location` conversion and `handleSquareClick` delegation) remain testable. All graphics methods are **untestable** and excluded from this BVA.
 
 **Coordinate convention (refactored):** Screen pixel `(x, y)` maps directly to board coordinates:
+
 - `file = x / TILE_SIZE`
 - `rank = y / TILE_SIZE`
 
@@ -20,18 +21,18 @@ Rank 0 is the **top** row of the panel; rank 7 is the **bottom**. `BoardControll
 
 ### Step 1: Input and output equivalence classes
 
-| Concern | Equivalence classes |
-| ------- | ------------------- |
-| `boardController` | Valid non-null controller |
+| Concern                       | Equivalence classes                                                                                   |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `boardController`             | Valid non-null controller                                                                             |
 | Post-construction panel state | Exactly one `MouseListener` registered; preferred size is `BOARD_SIZE × TILE_SIZE` in both dimensions |
 
 ### Step 2: BVA catalog data types
 
-| Variable / output | Catalog type | Notes |
-| ----------------- | ------------ | ----- |
-| Mouse listener count | Counts | 0 vs 1 |
-| Preferred size width | Counts | 0 vs `BOARD_SIZE × TILE_SIZE` |
-| Preferred size height | Counts | 0 vs `BOARD_SIZE × TILE_SIZE` |
+| Variable / output     | Catalog type | Notes                         |
+| --------------------- | ------------ | ----------------------------- |
+| Mouse listener count  | Counts       | 0 vs 1                        |
+| Preferred size width  | Counts       | 0 vs `BOARD_SIZE × TILE_SIZE` |
+| Preferred size height | Counts       | 0 vs `BOARD_SIZE × TILE_SIZE` |
 
 ### Step 3: Concrete boundary values
 
@@ -61,41 +62,41 @@ Rank 0 is the **top** row of the panel; rank 7 is the **bottom**. `BoardControll
 
 ### Step 1: Input and output equivalence classes
 
-| Input | Equivalence classes |
-| ----- | ------------------- |
+| Input                | Equivalence classes                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------- |
 | `e.getX()` (pixel x) | Leftmost pixel of a tile; rightmost pixel of a tile; first pixel of next tile; last pixel of board |
-| `e.getY()` (pixel y) | Same four boundary positions as x |
+| `e.getY()` (pixel y) | Same four boundary positions as x                                                                  |
 
-| Output / effect | Classes |
-| --------------- | ------- |
+| Output / effect                          | Classes                                           |
+| ---------------------------------------- | ------------------------------------------------- |
 | `Location` passed to `handleSquareClick` | Correct `(file, rank)` per direct tile arithmetic |
 
 ### Step 2: BVA catalog data types
 
-| Variable | Catalog type | Notes |
-| -------- | ------------ | ----- |
-| `file = x / TILE_SIZE` | Intervals | division boundaries at tile edges |
-| `rank = y / TILE_SIZE` | Intervals | division boundaries at tile edges |
+| Variable               | Catalog type | Notes                             |
+| ---------------------- | ------------ | --------------------------------- |
+| `file = x / TILE_SIZE` | Intervals    | division boundaries at tile edges |
+| `rank = y / TILE_SIZE` | Intervals    | division boundaries at tile edges |
 
 ### Step 3: Concrete boundary values
 
 File (x) boundaries:
 
-| Pixel x | `x / TILE_SIZE` → file |
-| ------- | ----------------------- |
-| 0 | 0 |
-| TILE_SIZE − 1 | 0 |
-| TILE_SIZE | 1 |
-| BOARD_SIZE × TILE_SIZE − 1 | 7 |
+| Pixel x                    | `x / TILE_SIZE` → file |
+| -------------------------- | ---------------------- |
+| 0                          | 0                      |
+| TILE_SIZE − 1              | 0                      |
+| TILE_SIZE                  | 1                      |
+| BOARD_SIZE × TILE_SIZE − 1 | 7                      |
 
 Rank (y) boundaries:
 
-| Pixel y | `y / TILE_SIZE` → rank |
-| ------- | ----------------------- |
-| 0 | 0 (top row) |
-| TILE_SIZE − 1 | 0 |
-| TILE_SIZE | 1 |
-| BOARD_SIZE × TILE_SIZE − 1 | 7 (bottom row) |
+| Pixel y                    | `y / TILE_SIZE` → rank |
+| -------------------------- | ---------------------- |
+| 0                          | 0 (top row)            |
+| TILE_SIZE − 1              | 0                      |
+| TILE_SIZE                  | 1                      |
+| BOARD_SIZE × TILE_SIZE − 1 | 7 (bottom row)         |
 
 ### Step 4: Test cases
 

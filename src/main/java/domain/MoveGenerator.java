@@ -3,8 +3,14 @@ package domain;
 import domain.location.Location;
 import domain.move.Move;
 import domain.move.MoveType;
+import domain.piece.Bishop;
+import domain.piece.King;
+import domain.piece.Knight;
 import domain.piece.NonePiece;
+import domain.piece.Pawn;
 import domain.piece.Piece;
+import domain.piece.Queen;
+import domain.piece.Rook;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import java.util.ArrayList;
@@ -123,6 +129,41 @@ public class MoveGenerator {
         int fromFile = move.getFrom().getX();
         int toRank = move.getTo().getY();
         int toFile = move.getTo().getX();
+        if (move.getType() == MoveType.EN_PASSANT) {
+            copy[toRank][toFile] = copy[fromRank][fromFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][toFile] = new NonePiece();
+            return copy;
+        }
+        if (move.getType() == MoveType.CASTLING_KINGSIDE) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, true, color);
+            Piece king = copy[fromRank][fromFile];
+            Piece rook = copy[fromRank][rookFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][rookFile] = new NonePiece();
+            copy[fromRank][KINGSIDE_KING_DEST_FILE] = king;
+            copy[fromRank][KINGSIDE_ROOK_DEST_FILE] = rook;
+            return copy;
+        }
+        if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color);
+            Piece king = copy[fromRank][fromFile];
+            Piece rook = copy[fromRank][rookFile];
+            copy[fromRank][fromFile] = new NonePiece();
+            copy[fromRank][rookFile] = new NonePiece();
+            copy[fromRank][QUEENSIDE_KING_DEST_FILE] = king;
+            copy[fromRank][QUEENSIDE_ROOK_DEST_FILE] = rook;
+            return copy;
+        }
+        if (move.getType() == MoveType.PROMOTION) {
+            PieceColor color = copy[fromRank][fromFile].getColor();
+            PieceType promoType = move.getPromotionType().orElse(PieceType.QUEEN);
+            copy[toRank][toFile] = createPiece(promoType, color);
+            copy[fromRank][fromFile] = new NonePiece();
+            return copy;
+        }
         copy[toRank][toFile] = copy[fromRank][fromFile];
         copy[fromRank][fromFile] = new NonePiece();
         return copy;
@@ -429,5 +470,27 @@ public class MoveGenerator {
 
     private static PieceColor opponent(PieceColor color) {
         return color == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+    }
+
+    static Piece createPiece(PieceType type, PieceColor color) {
+        if (type == PieceType.QUEEN) {
+            return new Queen(color);
+        }
+        if (type == PieceType.ROOK) {
+            return new Rook(color);
+        }
+        if (type == PieceType.BISHOP) {
+            return new Bishop(color);
+        }
+        if (type == PieceType.KNIGHT) {
+            return new Knight(color);
+        }
+        if (type == PieceType.PAWN) {
+            return new Pawn(color);
+        }
+        if (type == PieceType.KING) {
+            return new King(color);
+        }
+        return new NonePiece();
     }
 }

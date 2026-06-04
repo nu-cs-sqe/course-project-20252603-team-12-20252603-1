@@ -107,7 +107,7 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
 
 ## Method / behavior: check filtering in `generateLegalMoves(Location from)`
 
-Scope: after pseudo-legal generation, remove moves that leave the moving side's king in check. Uses `filterLegalMoves`, `leavesOwnKingInCheck`, and `applyMoveToBoard` (NORMAL moves only in this slice).
+Scope: after pseudo-legal generation, remove moves that leave the moving side's king in check. Uses `filterLegalMoves`, `leavesOwnKingInCheck`, and `applyMoveToBoard` (all move types; see `applyMoveToBoard` section).
 
 ### Step 1: Equivalence Classes
 
@@ -162,52 +162,35 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 ## Method: `applyMoveToBoard(Piece[][] original, Move move)` (package-private static)
 
-Scope: simulate a **NORMAL** move on a deep copy of the board for check filtering. En passant, castling, and promotion are deferred to later slices.
+Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`, `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, and `PROMOTION`.
 
 ### Step 1: Equivalence Classes
 
-- **Input: original board** — board snapshot before the move
-- **Input: move type** — `NORMAL` (sole case in this slice)
-- **Input: move endpoints** — `from` and `to` locations on the board
-- **Output: returned board array** — new `Piece[][]` reference; simulates the move on a copy
-- **Output: piece at destination on returned board** — `move.getTo()` holds the piece that moved from `from`
-- **Output: piece at source on returned board** — `move.getFrom()` is `NONE` after the simulated move
-- **Output: piece at source on `original`** — `move.getFrom()` unchanged (still the moving piece type)
+- **Input: original board** — layout before the move
+- **Input: move type** — `NORMAL`, `EN_PASSANT`, castling, `PROMOTION`
+- **Input: move endpoints** — `from` / `to` (and promotion piece when applicable)
+- **Output: returned board** — new `Piece[][]`; special moves update king/rook/pawn capture squares
+- **Output: `original` unchanged** — input array not modified
 
 ### Step 2: Data Types (from BVA Catalog)
 
-
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
-| Input: original board | Collections | 8×8 `Piece[][]` with one white knight at `(4, 4)`; otherwise `NonePiece` |
-| Input: move type | Cases | NORMAL |
-| Input: move endpoints | Pairs of variables | `from` `(4, 4)`, `to` `(5, 6)` |
-| Output: piece type at `move.getTo()` on returned board | Cases | KNIGHT |
-| Output: piece type at `move.getFrom()` on returned board | Cases | NONE |
-| Output: piece type at `move.getFrom()` on `original` after call | Cases | KNIGHT |
-
+| Input: original board | Collections | knight-only; en-passant layout; castling layout |
+| Input: move type | Cases | NORMAL, EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
+| Input: move endpoints | Pairs of variables | per move type in Step 3 |
+| Output: piece at destination on returned board | Cases | KNIGHT, PAWN, KING, QUEEN |
+| Output: captured / bypassed squares on returned board | Cases | NONE at source, captured pawn square, cleared rook square |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
 **Move type — Cases:**
 
-- NORMAL
-
-**Move endpoints — Pairs of variables:**
-
-- `from` `(4, 4)` (white knight), `to` `(5, 6)` on otherwise empty board
-
-**Piece at destination on returned board — Cases:**
-
-- `result[6][5].getType()` is `KNIGHT` (rank 6, file 5 = location `(5, 6)`)
-
-**Piece at source on returned board — Cases:**
-
-- `result[4][4].getType()` is `NONE` (rank 4, file 4 = location `(4, 4)`)
-
-**Piece at source on `original` after call — Cases:**
-
-- `original[4][4].getType()` remains `KNIGHT` (pre-move layout preserved on input array)
+- NORMAL — knight `(4, 4)` → `(5, 6)`
+- EN_PASSANT — white pawn `(4, 3)` → `(5, 2)`; black pawn at `(5, 3)` (rank `3`, file `5`) removed
+- CASTLING_KINGSIDE — white king `(4, 7)` → `(6, 7)`; rook `(7, 7)` → `(5, 7)`
+- CASTLING_QUEENSIDE — white king `(4, 7)` → `(2, 7)`; rook `(0, 7)` → `(3, 7)`
+- PROMOTION — white pawn `(4, 1)` → `(4, 0)` with `PieceType.QUEEN`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -222,7 +205,23 @@ Scope: simulate a **NORMAL** move on a deep copy of the board for check filterin
 - **MG-TC20: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: same as MG-TC18
-  - **Expected output**: after the call, `original[4][4].getType()` is still `KNIGHT` (input array not modified)
+  - **Expected output**: after the call, `original[4][4].getType()` is still `KNIGHT`
+- **MG-TC33: ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn** ( :white_check_mark: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white pawn `(4, 3)`; black pawn `(5, 3)`; `EN_PASSANT` to `(5, 2)`
+  - **Expected output**: returned board at `(5, 3)` has type `NONE`
+- **MG-TC34: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; `CASTLING_KINGSIDE` to `(6, 7)`
+  - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
+- **MG-TC35: ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to `(2, 7)`
+  - **Expected output**: returned board at `(2, 7)` is `KING` and at `(3, 7)` is `ROOK`
+- **MG-TC36: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :white_check_mark: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.QUEEN`
+  - **Expected output**: returned board at `(4, 0)` has type `QUEEN`
 
 ---
 
