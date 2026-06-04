@@ -389,6 +389,23 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                2,
+                7,
+                MoveType.CASTLING_QUEENSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling() {
         Piece[][] board = emptyBoard();
         board[7][4] = new King(PieceColor.WHITE);
