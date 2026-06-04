@@ -432,11 +432,11 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
   - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
-- **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :x: )
+- **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; piece selected; click `(3, 3)` not in legal moves
   - **Expected output**: `board.makeMove` not called; `hasSelection()` is `false`
-- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :x: )
+- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
