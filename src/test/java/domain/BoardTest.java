@@ -545,17 +545,13 @@ class BoardTest {
     @Test
     void GetCurrentGameState_AfterBlackCheckmate_ReturnsBlackWin() {
         Piece[][] layout = emptyPieceGrid();
-        layout[7][0] = new King(PieceColor.WHITE);
-        layout[7][1] = new Pawn(PieceColor.WHITE);
-        layout[6][0] = new Pawn(PieceColor.WHITE);
-        layout[6][1] = new Pawn(PieceColor.WHITE);
-        layout[5][0] = new Pawn(PieceColor.BLACK);
-        layout[5][1] = new Pawn(PieceColor.BLACK);
-        layout[3][0] = new Knight(PieceColor.BLACK);
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[6][0] = new Rook(PieceColor.BLACK);
+        layout[0][7] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         board.switchTurn();
 
-        board.makeMove(new Move(new Location(0, 3), new Location(1, 5)));
+        board.makeMove(new Move(new Location(7, 0), new Location(7, 7)));
 
         assertEquals(GameState.BLACK_WIN, board.getCurrentGameState());
     }
@@ -596,19 +592,32 @@ class BoardTest {
     @Test
     void MakeMove_WhenBlackCausesCheckmate_GameStateIsBlackWin() {
         Piece[][] layout = emptyPieceGrid();
-        layout[7][0] = new King(PieceColor.WHITE);
-        layout[7][1] = new Pawn(PieceColor.WHITE);
-        layout[6][0] = new Pawn(PieceColor.WHITE);
-        layout[6][1] = new Pawn(PieceColor.WHITE);
-        layout[5][0] = new Pawn(PieceColor.BLACK);
-        layout[5][1] = new Pawn(PieceColor.BLACK);
-        layout[3][0] = new Knight(PieceColor.BLACK);
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[6][0] = new Rook(PieceColor.BLACK);
+        layout[0][7] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         board.switchTurn();
 
-        board.makeMove(new Move(new Location(0, 3), new Location(1, 5)));
+        board.makeMove(new Move(new Location(7, 0), new Location(7, 7)));
 
         assertEquals(GameState.BLACK_WIN, board.getCurrentGameState());
+    }
+
+    @Test
+    void MakeMove_WhenMoveCausesStalemate_GameStateIsDraw() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[0][0] = new King(PieceColor.BLACK);
+        layout[0][1] = new Pawn(PieceColor.BLACK);
+        layout[1][0] = new Pawn(PieceColor.BLACK);
+        layout[1][1] = new Pawn(PieceColor.BLACK);
+        layout[2][0] = new Pawn(PieceColor.WHITE);
+        layout[2][1] = new Pawn(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+
+        board.makeMove(new Move(new Location(7, 7), new Location(6, 7)));
+
+        assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
 
 }
