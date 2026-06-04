@@ -18,16 +18,16 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
-import java.util.stream.Stream;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class BoardTest {
 
@@ -74,7 +74,9 @@ class BoardTest {
     void Constructor_WhenPieceArrayHasPieceAtPosition_PieceTypeIsPiece(
             Piece piece, int row, int col, PieceType expectedType) {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[row][col] = piece;
         Board board = new Board(layout);
         assertEquals(expectedType, board.getSnapshot()[row][col].getType());
@@ -83,7 +85,9 @@ class BoardTest {
     @Test
     void Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[7][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         assertEquals(PieceColor.BLACK, board.getSnapshot()[7][0].getColor());
@@ -92,7 +96,9 @@ class BoardTest {
     @Test
     void Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getSnapshot()[0][0].getColor());
@@ -101,7 +107,9 @@ class BoardTest {
     @Test
     void Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         Board board = new Board(layout);
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
@@ -218,7 +226,9 @@ class BoardTest {
     void GetPieceAt_WhenBoardHasPieceAtPosition_PieceTypeMatches(
             Piece piece, int rank, int file, PieceType expectedType) {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[rank][file] = piece;
         Board board = new Board(layout);
         assertEquals(expectedType, board.getPieceAt(rank, file).getType());
@@ -227,7 +237,9 @@ class BoardTest {
     @Test
     void GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         assertEquals(PieceColor.BLACK, board.getPieceAt(0, 0).getColor());
@@ -236,7 +248,9 @@ class BoardTest {
     @Test
     void GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
         assertEquals(PieceColor.WHITE, board.getPieceAt(7, 7).getColor());
@@ -252,7 +266,7 @@ class BoardTest {
         Location from = new Location(5, 3);
 
         List<Move> expected =
-            new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
+                new MoveGenerator(board.getSnapshot(), enPassantTarget).generateLegalMoves(from);
         List<Move> actual = board.getLegalMoves(from);
 
         int expectedSize = expected.size();
@@ -520,7 +534,9 @@ class BoardTest {
     @Test
     void GetPieceAt_ReturnedPieceIsDifferentObject() {
         Piece[][] layout = new Piece[8][8];
-        for (Piece[] r : layout) Arrays.fill(r, new NonePiece());
+        for (Piece[] r : layout) {
+            Arrays.fill(r, new NonePiece());
+        }
         layout[0][0] = new Rook(PieceColor.BLACK);
         Board board = new Board(layout);
         Piece piece1 = board.getPieceAt(0, 0);
@@ -659,7 +675,6 @@ class BoardTest {
         layout1[7][7] = new King(PieceColor.WHITE);
         layout1[5][5] = new Knight(PieceColor.WHITE);
         layout1[0][0] = new King(PieceColor.BLACK);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][7] = new King(PieceColor.WHITE);
@@ -676,6 +691,7 @@ class BoardTest {
         Board board3 = new Board(layout3);
         board3.halfMoveClock = 5;
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, new Move(new Location(5, 5), new Location(4, 3)), 1),
                 Arguments.of(board2, new Move(new Location(4, 6), new Location(4, 5)), 0),
@@ -696,7 +712,6 @@ class BoardTest {
         layout1[7][4] = new King(PieceColor.BLACK);
         layout1[6][0] = new Rook(PieceColor.WHITE);
         layout1[7][7] = new Rook(PieceColor.WHITE);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][4] = new King(PieceColor.WHITE);
@@ -704,6 +719,7 @@ class BoardTest {
         layout2[7][7] = new Rook(PieceColor.BLACK);
         Board board2 = new Board(layout2);
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, PieceColor.WHITE, GameState.WHITE_WIN),
                 Arguments.of(board2, PieceColor.BLACK, GameState.BLACK_WIN)
@@ -780,7 +796,6 @@ class BoardTest {
         layout1[7][0] = new King(PieceColor.WHITE);
         layout1[0][7] = new King(PieceColor.BLACK);
         layout1[5][5] = new Rook(PieceColor.WHITE);
-        Board board1 = new Board(layout1);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[7][0] = new King(PieceColor.WHITE);
@@ -789,6 +804,7 @@ class BoardTest {
         Board board2 = new Board(layout2);
         board2.halfMoveClock = 1;
 
+        Board board1 = new Board(layout1);
         return Stream.of(
                 Arguments.of(board1, PieceColor.WHITE, GameState.BLACK_TURN),
                 Arguments.of(board2, PieceColor.BLACK, GameState.WHITE_TURN)
@@ -840,7 +856,8 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("isInsufficientMaterialProvider")
-    void IsInsufficientMaterial_WithVariousPieceCombinations_ReturnsCorrectResult(Board board, boolean expected) {
+    void IsInsufficientMaterial_WithVariousPieceCombinations_ReturnsCorrectResult(
+            Board board, boolean expected) {
         assertEquals(expected, board.isInsufficientMaterial());
     }
 
@@ -848,8 +865,6 @@ class BoardTest {
         Piece[][] layout1 = emptyPieceGrid();
         layout1[3][4] = new Pawn(PieceColor.WHITE);
         layout1[3][5] = new Pawn(PieceColor.BLACK);
-        Board board1 = new Board(layout1);
-        Move enPassant = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
 
         Piece[][] layout2 = emptyPieceGrid();
         layout2[6][4] = new Pawn(PieceColor.WHITE);
@@ -862,6 +877,8 @@ class BoardTest {
         Board board3 = new Board(layout3);
         Move normalToOccupied = new Move(new Location(3, 5), new Location(4, 3));
 
+        Board board1 = new Board(layout1);
+        Move enPassant = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
         return Stream.of(
                 Arguments.of(board1, enPassant, true),
                 Arguments.of(board2, normalToEmpty, false),

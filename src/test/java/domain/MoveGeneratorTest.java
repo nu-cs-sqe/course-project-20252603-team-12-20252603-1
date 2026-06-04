@@ -9,13 +9,13 @@ import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
-import domain.piece.Queen;
-import domain.piece.Rook;
 import domain.piece.NonePiece;
-import domain.piece.Piece;
 import domain.piece.Pawn;
+import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
+import domain.piece.Rook;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 

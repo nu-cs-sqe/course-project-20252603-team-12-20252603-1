@@ -16,8 +16,8 @@ class WelcomeViewTest {
     @BeforeAll
     static void requireDisplay() {
         assumeTrue(
-            !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
-            "Skipping WelcomeView tests: no display available");
+                !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
+                "Skipping WelcomeView tests: no display available");
     }
 
     @Test
