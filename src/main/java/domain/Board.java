@@ -102,7 +102,21 @@ public class Board {
         Piece movingPiece = pieces[move.getFrom().getY()][move.getFrom().getX()];
         applyMoveToInternalState(move);
         updateEnPassantTarget(move, movingPiece);
+        if (moveCreatesCheckmate(movingPiece.getColor())) {
+            currentGameState =
+                    movingPiece.getColor() == PieceColor.WHITE
+                            ? GameState.WHITE_WIN : GameState.BLACK_WIN;
+            return;
+        }
         switchTurn();
+    }
+
+    private boolean moveCreatesCheckmate(PieceColor movingColor) {
+        PieceColor opponentColor =
+                movingColor == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+        MoveGenerator moveGenerator = new MoveGenerator(pieces, enPassantTarget);
+        return moveGenerator.isInCheck(opponentColor)
+                && !moveGenerator.hasLegalMovesForColor(opponentColor);
     }
 
     private void applyMoveToInternalState(Move move) {

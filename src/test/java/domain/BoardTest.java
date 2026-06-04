@@ -526,4 +526,20 @@ class BoardTest {
         assertEquals(piece1.getColor(), piece2.getColor());
     }
 
+    @Test
+    void GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin() {
+        Piece[][] layout = emptyPieceGrid();
+        layout[0][0] = new King(PieceColor.BLACK);
+        layout[0][1] = new Pawn(PieceColor.BLACK);
+        layout[1][0] = new Pawn(PieceColor.BLACK);
+        layout[1][1] = new Pawn(PieceColor.BLACK);
+        layout[2][0] = new Rook(PieceColor.WHITE);
+        layout[4][0] = new Knight(PieceColor.WHITE);
+        Board board = new Board(layout);
+
+        board.makeMove(new Move(new Location(0, 4), new Location(1, 2)));
+
+        assertEquals(GameState.WHITE_WIN, board.getCurrentGameState());
+    }
+
 }

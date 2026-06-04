@@ -425,7 +425,7 @@
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` called once
   - **Expected output**: returns `BLACK_TURN`
 
-- **TC65: GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin** ( :x: )
+- **TC65: GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
   - **State of the system**: one-move checkmate position; white's move leaves black with no legal moves and in check
   - **Expected output**: returns `WHITE_WIN`
