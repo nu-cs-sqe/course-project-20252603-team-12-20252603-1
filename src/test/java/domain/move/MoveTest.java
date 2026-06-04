@@ -69,7 +69,8 @@ class MoveTest {
 
     @ParameterizedTest
     @EnumSource(PieceType.class)
-    void WithPromotionType_WhenCalledWithPieceType_ReturnedMovePromotionTypeMatchesPiece(PieceType piece) {
+    void WithPromotionType_WhenCalledWithPieceType_ReturnedMovePromotionTypeMatchesPiece(
+            PieceType piece) {
         Move original = new Move(new Location(1, 2), new Location(3, 4), MoveType.NORMAL);
 
         Move result = original.withPromotionType(piece);

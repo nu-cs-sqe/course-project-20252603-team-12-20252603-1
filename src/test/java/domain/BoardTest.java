@@ -856,7 +856,8 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("isInsufficientMaterialProvider")
-    void IsInsufficientMaterial_WithVariousPieceCombinations_ReturnsCorrectResult(Board board, boolean expected) {
+    void IsInsufficientMaterial_WithVariousPieceCombinations_ReturnsCorrectResult(
+            Board board, boolean expected) {
         assertEquals(expected, board.isInsufficientMaterial());
     }
 
