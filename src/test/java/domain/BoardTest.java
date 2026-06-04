@@ -799,4 +799,45 @@ class BoardTest {
         assertEquals(expected, board.getCurrentGameState());
     }
 
+    static Stream<Arguments> isInsufficientMaterialProvider() {
+        Piece[][] layout1 = emptyPieceGrid();
+        layout1[7][0] = new King(PieceColor.WHITE);
+        layout1[0][7] = new King(PieceColor.BLACK);
+
+        Piece[][] layout2 = emptyPieceGrid();
+        layout2[7][0] = new King(PieceColor.WHITE);
+        layout2[5][5] = new Bishop(PieceColor.WHITE);
+        layout2[0][7] = new King(PieceColor.BLACK);
+
+        Piece[][] layout3 = emptyPieceGrid();
+        layout3[7][0] = new King(PieceColor.WHITE);
+        layout3[5][5] = new Knight(PieceColor.WHITE);
+        layout3[0][7] = new King(PieceColor.BLACK);
+
+        Piece[][] layout4 = emptyPieceGrid();
+        layout4[7][0] = new King(PieceColor.WHITE);
+        layout4[5][5] = new Pawn(PieceColor.WHITE);
+        layout4[0][7] = new King(PieceColor.BLACK);
+
+        Piece[][] layout5 = emptyPieceGrid();
+        layout5[7][0] = new King(PieceColor.WHITE);
+        layout5[5][5] = new Bishop(PieceColor.WHITE);
+        layout5[0][7] = new King(PieceColor.BLACK);
+        layout5[2][2] = new Bishop(PieceColor.BLACK);
+
+        return Stream.of(
+                Arguments.of(new Board(layout1), true),
+                Arguments.of(new Board(layout2), true),
+                Arguments.of(new Board(layout3), true),
+                Arguments.of(new Board(layout4), false),
+                Arguments.of(new Board(layout5), false)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("isInsufficientMaterialProvider")
+    void IsInsufficientMaterial_ReturnsCorrectResult(Board board, boolean expected) {
+        assertEquals(expected, board.isInsufficientMaterial());
+    }
+
 }

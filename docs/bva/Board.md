@@ -924,31 +924,31 @@ Logic: returns `true` iff `!hasMajorOrPawn && nonKingCount <= 1`.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC84: IsInsufficientMaterial_WithOnlyKings_ReturnsTrue** ( :x: )
+- **TC84: IsInsufficientMaterial_WithOnlyKings_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: board with one white king and one black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
   - **Note**: TC85–TC88 are covered by this test case as a parameterized test
 
-- **TC85: IsInsufficientMaterial_WithKingAndBishopVsKing_ReturnsTrue** ( :x: )
+- **TC85: IsInsufficientMaterial_WithKingAndBishopVsKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white bishop, black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
   - **Covered by**: TC84 (parameterized test)
 
-- **TC86: IsInsufficientMaterial_WithKingAndKnightVsKing_ReturnsTrue** ( :x: )
+- **TC86: IsInsufficientMaterial_WithKingAndKnightVsKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white knight, black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
   - **Covered by**: TC84 (parameterized test)
 
-- **TC87: IsInsufficientMaterial_WithKingAndPawnVsKing_ReturnsFalse** ( :x: )
+- **TC87: IsInsufficientMaterial_WithKingAndPawnVsKing_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white pawn, black king
   - **Expected output**: `isInsufficientMaterial()` returns `false`
   - **Covered by**: TC84 (parameterized test)
 
-- **TC88: IsInsufficientMaterial_WithKingAndTwoBishopsVsKing_ReturnsFalse** ( :x: )
+- **TC88: IsInsufficientMaterial_WithKingAndTwoBishopsVsKing_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white bishop, black bishop, black king
   - **Expected output**: `isInsufficientMaterial()` returns `false`
