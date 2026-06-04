@@ -2,13 +2,13 @@ package domain;
 
 import domain.location.Location;
 import domain.move.Move;
+import domain.piece.Piece;
+import domain.piece.PieceColor;
+import domain.piece.PieceType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import domain.piece.Piece;
-import domain.piece.PieceColor;
-import domain.piece.PieceType;
 
 public class MoveGenerator {
 
