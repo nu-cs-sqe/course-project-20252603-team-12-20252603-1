@@ -107,18 +107,23 @@ public class Board {
         applyMoveToInternalState(move);
         updateEnPassantTarget(move, movingPiece);
         halfMoveClock = (isPawnMove || capture) ? 0 : halfMoveClock + 1;
-        PieceColor opponentColor = opponentOf(movingPiece.getColor());
-        MoveGenerator moveGenerator = new MoveGenerator(pieces, enPassantTarget);
-        if (hasKing(opponentColor) && !moveGenerator.hasLegalMovesForColor(opponentColor)) {
-            currentGameState = moveGenerator.isInCheck(opponentColor)
-                    ? winStateFor(movingPiece.getColor()) : GameState.DRAW;
+        updateGameState(movingPiece.getColor());
+    }
+
+    void updateGameState(PieceColor justMovedColor) {
+        PieceColor nextColor = opponentOf(justMovedColor);
+        MoveGenerator gen = new MoveGenerator(pieces, enPassantTarget);
+        if (hasKing(nextColor) && !gen.hasLegalMovesForColor(nextColor)) {
+            currentGameState = gen.isInCheck(nextColor)
+                    ? winStateFor(justMovedColor) : GameState.DRAW;
             return;
         }
         if (isInsufficientMaterial() || halfMoveClock >= FIFTY_MOVE_HALF_MOVE_LIMIT) {
             currentGameState = GameState.DRAW;
             return;
         }
-        switchTurn();
+        currentGameState = nextColor == PieceColor.WHITE
+                ? GameState.WHITE_TURN : GameState.BLACK_TURN;
     }
 
     int getHalfMoveClock() {

@@ -843,13 +843,13 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC76: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsWhite_GameStateIsWhiteWin** ( :x: )
+- **TC76: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsWhite_GameStateIsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where black has no legal moves and is in check; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `WHITE_WIN`
   - **Note**: TC77 is covered by this test case as a parameterized test
 
-- **TC77: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsBlack_GameStateIsBlackWin** ( :x: )
+- **TC77: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsBlack_GameStateIsBlackWin** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where white has no legal moves and is in check; call `updateGameState(BLACK)`
   - **Expected output**: `currentGameState` = `BLACK_WIN`

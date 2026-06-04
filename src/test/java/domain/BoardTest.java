@@ -681,10 +681,37 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("halfMoveClockProvider")
-    void MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements(
+    void MakeMove_HalfMoveClockUpdatesBasedOnMoveType(
             Board board, Move move, int expectedClock) {
         board.makeMove(move);
         assertEquals(expectedClock, board.getHalfMoveClock());
+    }
+
+    static Stream<Arguments> updateGameStateCheckmateProvider() {
+        Piece[][] layout1 = emptyPieceGrid();
+        layout1[7][4] = new King(PieceColor.BLACK);
+        layout1[6][0] = new Rook(PieceColor.WHITE);
+        layout1[7][7] = new Rook(PieceColor.WHITE);
+        Board board1 = new Board(layout1);
+
+        Piece[][] layout2 = emptyPieceGrid();
+        layout2[7][4] = new King(PieceColor.WHITE);
+        layout2[6][0] = new Rook(PieceColor.BLACK);
+        layout2[7][7] = new Rook(PieceColor.BLACK);
+        Board board2 = new Board(layout2);
+
+        return Stream.of(
+                Arguments.of(board1, PieceColor.WHITE, GameState.WHITE_WIN),
+                Arguments.of(board2, PieceColor.BLACK, GameState.BLACK_WIN)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("updateGameStateCheckmateProvider")
+    void UpdateGameState_WhenNextPlayerCheckmated_SetsWinState(
+            Board board, PieceColor justMovedColor, GameState expected) {
+        board.updateGameState(justMovedColor);
+        assertEquals(expected, board.getCurrentGameState());
     }
 
 }
