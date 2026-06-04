@@ -276,7 +276,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: white king at `(0, 0)`; black rooks at `(0, 7)` and `(1, 7)`; black king at `(7, 0)`
   - **Expected output**: returned move list size is `0` for `PieceColor.WHITE`
-- **MG-TC22: GenerateAllLegalMovesForColor_OnPawnWithOnlyOneStep_ReturnsOneMove** ( :x: )
+- **MG-TC22: GenerateAllLegalMovesForColor_OnPawnWithOnlyOneStep_ReturnsOneMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only white piece is pawn at `(4, 5)` (not on starting rank; one empty square ahead)
   - **Expected output**: returned move list size is `1` for `PieceColor.WHITE`
