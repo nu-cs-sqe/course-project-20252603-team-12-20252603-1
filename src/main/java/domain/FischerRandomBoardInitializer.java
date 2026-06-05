@@ -8,6 +8,8 @@ import java.util.Random;
 
 public class FischerRandomBoardInitializer implements BoardInitializer {
 
+    private static final int BOARD_SIZE = 8;
+
     private final Random random;
 
     @SuppressFBWarnings(
@@ -19,21 +21,21 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
 
     @Override
     public PieceType[][] getBoardLayout() {
-        PieceType[][] layout = new PieceType[8][8];
+        PieceType[][] layout = new PieceType[BOARD_SIZE][BOARD_SIZE];
 
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 layout[row][col] = PieceType.NONE;
             }
         }
 
         PieceType[] backRank = generateBackRank();
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             layout[0][col] = backRank[col];
             layout[7][col] = backRank[col];
         }
 
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             layout[1][col] = PieceType.PAWN;
             layout[6][col] = PieceType.PAWN;
         }
@@ -42,18 +44,18 @@ public class FischerRandomBoardInitializer implements BoardInitializer {
     }
 
     private PieceType[] generateBackRank() {
-        PieceType[] rank = new PieceType[8];
-        for (int col = 0; col < 8; col++) {
+        PieceType[] rank = new PieceType[BOARD_SIZE];
+        for (int col = 0; col < BOARD_SIZE; col++) {
             rank[col] = PieceType.NONE;
         }
 
         int[] evenCols = {0, 2, 4, 6};
         int[] oddCols = {1, 3, 5, 7};
-        rank[evenCols[random.nextInt(4)]] = PieceType.BISHOP;
-        rank[oddCols[random.nextInt(4)]] = PieceType.BISHOP;
+        rank[evenCols[random.nextInt(evenCols.length)]] = PieceType.BISHOP;
+        rank[oddCols[random.nextInt(oddCols.length)]] = PieceType.BISHOP;
 
         List<Integer> remaining = new ArrayList<>();
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             if (rank[col] == PieceType.NONE) {
                 remaining.add(col);
             }

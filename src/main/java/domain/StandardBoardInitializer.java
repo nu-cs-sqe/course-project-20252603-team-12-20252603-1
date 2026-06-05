@@ -4,12 +4,14 @@ import domain.piece.PieceType;
 
 public class StandardBoardInitializer implements BoardInitializer {
 
+    private static final int BOARD_SIZE = 8;
+
     @Override
     public PieceType[][] getBoardLayout() {
-        PieceType[][] layout = new PieceType[8][8];
+        PieceType[][] layout = new PieceType[BOARD_SIZE][BOARD_SIZE];
 
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 layout[row][col] = PieceType.NONE;
             }
         }
@@ -23,11 +25,11 @@ public class StandardBoardInitializer implements BoardInitializer {
         layout[0][6] = PieceType.KNIGHT;
         layout[0][7] = PieceType.ROOK;
 
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             layout[1][col] = PieceType.PAWN;
         }
 
-        for (int col = 0; col < 8; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             layout[6][col] = PieceType.PAWN;
         }
 
