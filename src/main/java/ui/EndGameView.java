@@ -14,6 +14,10 @@ class EndGameView extends JFrame {
         this.playAgainAction = action;
     }
 
+    void clickPlayAgain() {
+        playAgainAction.run();
+    }
+
     private void buildUi(String resultMessage) {
     }
 }
