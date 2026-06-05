@@ -43,11 +43,12 @@ public class MoveGenerator {
     }
 
     public boolean isInCheck(PieceColor color) {
-        Location kingLocation = findKing(color, board);
-        if (kingLocation == null) {
+        try {
+            Location kingLocation = findKing(color, board);
+            return isSquareAttackedBy(kingLocation, opponent(color), board);
+        } catch (IllegalStateException e) {
             return false;
         }
-        return isSquareAttackedBy(kingLocation, opponent(color), board);
     }
 
     public boolean hasLegalMovesForColor(PieceColor color) {
@@ -506,7 +507,7 @@ public class MoveGenerator {
                 }
             }
         }
-        return null;
+        throw new IllegalStateException("No king found for " + color);
     }
 
     private static PieceColor opponent(PieceColor color) {
