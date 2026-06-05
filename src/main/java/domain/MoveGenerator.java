@@ -9,10 +9,10 @@ import domain.piece.Knight;
 import domain.piece.NonePiece;
 import domain.piece.Pawn;
 import domain.piece.Piece;
-import domain.piece.Queen;
-import domain.piece.Rook;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
+import domain.piece.Queen;
+import domain.piece.Rook;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -139,7 +139,7 @@ public class MoveGenerator {
             PieceColor color = copy[fromRank][fromFile].getColor();
             int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, true, color);
             Piece king = copy[fromRank][fromFile];
-            Piece rook = copy[fromRank][rookFile];
+            final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
             copy[fromRank][rookFile] = new NonePiece();
             copy[fromRank][KINGSIDE_KING_DEST_FILE] = king;
@@ -150,7 +150,7 @@ public class MoveGenerator {
             PieceColor color = copy[fromRank][fromFile].getColor();
             int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color);
             Piece king = copy[fromRank][fromFile];
-            Piece rook = copy[fromRank][rookFile];
+            final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
             copy[fromRank][rookFile] = new NonePiece();
             copy[fromRank][QUEENSIDE_KING_DEST_FILE] = king;
@@ -263,7 +263,8 @@ public class MoveGenerator {
     }
 
     private boolean canCastle(
-            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile, PieceColor color) {
+            int rank, int kingFile, int rookFile,
+            int kingDestFile, int rookDestFile, PieceColor color) {
         return isPathClearForCastling(rank, kingFile, rookFile, kingDestFile, rookDestFile)
                 && isKingPathSafe(rank, kingFile, kingDestFile, color);
     }

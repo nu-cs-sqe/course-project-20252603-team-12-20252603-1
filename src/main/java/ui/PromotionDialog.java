@@ -70,7 +70,7 @@ class PromotionDialog {
         Image img = loadImage(type);
         if (img != null) {
             button.setIcon(new ImageIcon(
-                img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
+                    img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
         } else {
             button.setText(type.name().substring(0, 1));
             button.setForeground(TEXT_COLOR);
