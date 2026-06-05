@@ -503,7 +503,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
   - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
 
-- **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :x: )
+- **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: black pawn normal move; board stubs `BLACK_TURN` before move, `WHITE_TURN` after; `makeMove` expected once
   - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`

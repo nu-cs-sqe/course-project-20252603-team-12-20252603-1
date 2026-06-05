@@ -148,10 +148,10 @@ public class BoardController {
             return;
         }
 
-        executeMove(matchingMove.get());
+        executeMove(matchingMove.get(), currentColor);
     }
 
-    private void executeMove(Move move) {
+    private void executeMove(Move move, PieceColor currentColor) {
         board.makeMove(move);
         lastSelectedLoc = Optional.empty();
         updateCurrentPlayerLabel();
