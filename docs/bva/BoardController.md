@@ -693,12 +693,13 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases (All-combination)
 
-- **BC-TC71: PromptForPromotionPiece_White_ReturnsQueen** ( :x: )
+- **BC-TC71: PromptForPromotionPiece_White_ReturnsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
   - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `QUEEN`
   - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `QUEEN`
+  - **Covered by**: BC-TC61
 
-- **BC-TC72: PromptForPromotionPiece_White_ReturnsRook** ( :x: )
+- **BC-TC72: PromptForPromotionPiece_White_ReturnsRook** ( :white_check_mark: )
   - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
   - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `ROOK`
   - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `ROOK`
