@@ -15,6 +15,7 @@ class EndGameController {
 
     private void playAgain() {
         endGameView.dispose();
+        new WelcomeController().show();
     }
 
     EndGameView getEndGameView() {
