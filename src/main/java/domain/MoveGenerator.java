@@ -263,7 +263,8 @@ public class MoveGenerator {
     }
 
     private boolean canCastle(
-            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile, PieceColor color) {
+            int rank, int kingFile, int rookFile,
+            int kingDestFile, int rookDestFile, PieceColor color) {
         return isPathClearForCastling(rank, kingFile, rookFile, kingDestFile, rookDestFile)
                 && isKingPathSafe(rank, kingFile, kingDestFile, color);
     }
