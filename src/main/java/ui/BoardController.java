@@ -43,9 +43,6 @@ public class BoardController {
     }
 
     private void updateCurrentPlayerLabel() {
-        if (mainView == null) {
-            return;
-        }
         String text;
         switch (board.getCurrentGameState()) {
             case WHITE_TURN:

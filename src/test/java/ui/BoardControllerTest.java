@@ -1113,22 +1113,28 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
         EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
-        EasyMock.replay(boardMock);
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
 
         BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
         assertEquals(expected, actual);
-        EasyMock.verify(boardMock);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
     @Test
@@ -1316,22 +1322,28 @@ class BoardControllerTest {
         Location destination = new Location(0, 2);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(3);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(1, 0)).andReturn(standardGrid[1][0]);
         EasyMock.expect(boardMock.getPieceAt(2, 0)).andReturn(standardGrid[2][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
-        EasyMock.replay(boardMock);
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_TWO);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
 
         BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
         boolean expected = false;
         boolean actual = controller.hasSelection();
         assertEquals(expected, actual);
-        EasyMock.verify(boardMock);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
     @Test
@@ -1341,22 +1353,28 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
         Board boardMock = EasyMock.createMock(Board.class);
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
         EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
         Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));
         EasyMock.expectLastCall().once();
-        EasyMock.replay(boardMock);
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
 
         BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
         controller.setPromotionPicker(color -> PieceType.QUEEN);
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
         assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
-        EasyMock.verify(boardMock);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
     @Test
@@ -1366,22 +1384,28 @@ class BoardControllerTest {
         Location destination = new Location(0, 2);
         Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
         Board boardMock = EasyMock.createMock(Board.class);
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(3);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(1, 0)).andReturn(standardGrid[1][0]);
         EasyMock.expect(boardMock.getPieceAt(2, 0)).andReturn(standardGrid[2][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
         Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));
         EasyMock.expectLastCall().once();
-        EasyMock.replay(boardMock);
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_TWO);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
 
         BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
         controller.setPromotionPicker(color -> PieceType.QUEEN);
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
         assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
-        EasyMock.verify(boardMock);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
 }
