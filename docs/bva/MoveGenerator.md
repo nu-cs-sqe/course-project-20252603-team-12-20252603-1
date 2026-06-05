@@ -481,11 +481,6 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
 
-- MG-TC13: IsInCheck_WhenKingNotAttacked_ReturnsFalse ( :white_check_mark: )
-  - Method(s) under test: isInCheck(PieceColor)
-  - State of the system: white king present and no black piece attacks it
-  - Expected output: isInCheck(PieceColor.WHITE) is false
-
 ---
 
 ## Method: generateLegalMoves(Location from) — pawn promotion candidates and captures
@@ -514,24 +509,23 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 - Capture-promotion: enemy piece at (file±1, promotionRank).
 - En passant: enPassantTarget set to (file±1, rank+direction).
 
-### Step 4: Test cases
+### Step 4: Test Cases (Each-Choice Strategy)
 
-- MG-TC14: generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves ( :white_check_mark: )
-  - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at (4,1), square (4,0) empty, no diagonals, no en passant
-  - Expected output: returned move list size is 4 (four PROMOTION moves, no normal forward move)
+`addPawnForwardMoves`, `addPawnCaptureMoves`, and `addPromotionMoves` are private; exercised indirectly through `generateLegalMoves`.
 
-- MG-TC15: generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves ( :white_check_mark: )
-  - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at (4,4), black rook at (5,3), square (4,3) empty, no en passant
-  - Expected output: returned move list size is 2 (forward to (4,3) + capture to (5,3))
-
-- MG-TC16: generateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves ( :white_check_mark: )
-  - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at (4,1), black rook at (5,0), square (4,0) empty, no en passant
-  - Expected output: returned move list size is 8 (4 forward PROMOTION + 4 capture PROMOTION)
-
-- MG-TC17: generateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves ( :white_check_mark: )
-  - Method(s) under test: generateLegalMoves(Location)
-  - State of the system: white pawn at (4,3), enPassantTarget at (5,2), square (4,2) empty
-  - Expected output: returned move list size is 2 (forward to (4,2) + EN_PASSANT to (5,2))
+- **MG-TC37: GenerateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addPromotionMoves`)
+  - **State of the system**: white pawn at `(4, 1)`; square `(4, 0)` empty; no diagonals; no en-passant target
+  - **Expected output**: returned move list size is `4` (four `PROMOTION` moves; no normal forward move)
+- **MG-TC38: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
+  - **State of the system**: white pawn at `(4, 4)`; black rook at `(5, 3)`; square `(4, 3)` empty; no en-passant target
+  - **Expected output**: returned move list size is `2` (forward to `(4, 3)` + capture to `(5, 3)`)
+- **MG-TC39: GenerateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`, `addPromotionMoves`)
+  - **State of the system**: white pawn at `(4, 1)`; black rook at `(5, 0)`; square `(4, 0)` empty; no en-passant target
+  - **Expected output**: returned move list size is `8` (four forward `PROMOTION` + four capture `PROMOTION`)
+- **MG-TC40: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addEnPassantMoves`)
+  - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 2)`; square `(4, 2)` empty
+  - **Expected output**: returned move list size is `2` (forward to `(4, 2)` + `EN_PASSANT` to `(5, 2)`)
