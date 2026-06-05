@@ -400,7 +400,7 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ## Method / behavior: move execution via `handleSquareClick(Location loc)`
 
-Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion dialog and end-game UI are out of scope for this slice (separate features).
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion and end-game paths are covered in the sections below.
 
 ### Step 1: Equivalence Classes
 
@@ -440,3 +440,210 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
+
+---
+
+## Method: `executeMove(Move move, PieceColor currentColor)`
+
+### Step 1: Input and output equivalence classes
+
+| Input | Classes |
+| ----- | ------- |
+| `move.getType()` | `PROMOTION`; non-`PROMOTION` |
+| `board.getCurrentGameState()` after `makeMove` | game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`); game continues (`WHITE_TURN` / `BLACK_TURN`) |
+
+| Output | Classes |
+| ------ | ------- |
+| `promptForPromotionPiece` called | `true` (PROMOTION move) / `false` (non-PROMOTION) |
+| `showEndGame()` called | `true` (game over) / `false` (game continues) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `move.getType()` | Cases: PROMOTION, non-PROMOTION |
+| `board.getCurrentGameState()` after move | Cases: game over, game continues |
+| `promptForPromotionPiece` called | Boolean |
+| `showEndGame()` called | Boolean |
+
+### Step 3: Concrete boundary values
+
+- PROMOTION → `promptForPromotionPiece` called; CAN'T TEST (see BC-TC58)
+- non-PROMOTION → promotion skipped (covered by BC-TC55)
+- game over → `showEndGame()` called
+- game continues → `showEndGame()` not called (covered by BC-TC55)
+
+### Step 4: Test cases
+
+- **BC-TC58: ExecuteMove_WithPromotionMove_PromotionDialogIsTriggered** ( :x: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: move type is `PROMOTION`
+  - **Expected output**: `promptForPromotionPiece` is invoked
+  - **Note**: **CAN'T TEST** — `PromotionDialog` is constructed directly and requires a live display; EasyMock cannot intercept the constructor
+
+- **BC-TC59: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :x: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: non-PROMOTION move; board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
+
+---
+
+## Method: `promptForPromotionPiece(PieceColor color)`
+
+### Step 1: Input and output equivalence classes
+
+| Input | Classes |
+| ----- | ------- |
+| `color` | `WHITE`; `BLACK` |
+
+| Output | Classes |
+| ------ | ------- |
+| Returned `PieceType` | any valid promotion type (`QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `color` | Cases: WHITE, BLACK |
+| Returned `PieceType` | Cases: QUEEN, ROOK, BISHOP, KNIGHT |
+
+### Step 3: Concrete boundary values
+
+- `WHITE` / `BLACK` — both must produce a valid `PieceType`
+- Returned type: QUEEN (most common), KNIGHT (least common)
+- CAN'T TEST: `PromotionDialog` is modal and requires live user interaction; no EasyMock intercept possible
+
+### Step 4: Test cases
+
+- **BC-TC60: PromptForPromotionPiece_ForWhiteOrBlack_ReturnsValidPieceType** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)`
+  - **State of the system**: called with `WHITE` or `BLACK`
+  - **Expected output**: returned `PieceType` is one of `QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`
+  - **Note**: **CAN'T TEST** — `PromotionDialog` requires a live display
+
+---
+
+## Method: `isGameOver()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW`; `WHITE_TURN`; `BLACK_TURN` |
+
+| Output | Classes |
+| ------ | ------- |
+| Return value | `true` (terminal) / `false` (active) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW, WHITE_TURN, BLACK_TURN |
+| Return value | Boolean |
+
+### Step 3: Concrete boundary values
+
+- `WHITE_WIN` → `true`
+- `BLACK_WIN` → `true`
+- `DRAW` → `true`
+- `WHITE_TURN` → `false`
+- `BLACK_TURN` → `false` (covered by existing black-turn tests)
+
+### Step 4: Test cases
+
+- **BC-TC61: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; non-PROMOTION move executed
+  - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
+
+- **BC-TC62: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `BLACK_WIN`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC63: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :x: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `DRAW`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC64: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `WHITE_TURN` after move
+  - **Expected output**: no `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC55
+
+---
+
+## Method: `showEndGame()`
+
+### Step 1: Input and output equivalence classes
+
+| Output | Classes |
+| ------ | ------- |
+| `EndGameView` shown | `true` (always when called) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `EndGameView` visible | Boolean |
+
+### Step 3: Concrete boundary values
+
+- `true` — `showEndGame()` always makes `EndGameView` visible
+- `false` — CAN'T SET as a post-`showEndGame()` output
+
+### Step 4: Test cases
+
+- **BC-TC65: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :x: )
+  - **Method(s) under test**: `showEndGame()`
+  - **State of the system**: game is in a terminal state; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC61, BC-TC62, BC-TC63
+
+---
+
+## Method: `buildEndGameMessage()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW` |
+
+| Output | Classes |
+| ------ | ------- |
+| Returned message | `player1Name + " wins!"`; `player2Name + " wins!"`; `"Draw!"` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW |
+| Returned message | Cases: player1 wins, player2 wins, draw |
+
+### Step 3: Concrete boundary values
+
+- `WHITE_WIN` → `player1Name + " wins!"`
+- `BLACK_WIN` → `player2Name + " wins!"`
+- `DRAW` → `"Draw!"`
+
+### Step 4: Test cases
+
+`EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
+
+- **BC-TC66: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
+  - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
+
+- **BC-TC67: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
+  - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
+
+- **BC-TC68: BuildEndGameMessage_Draw_ReturnsDraw** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `DRAW`
+  - **Expected output**: `EndGameView` result label text equals `"Draw!"`
