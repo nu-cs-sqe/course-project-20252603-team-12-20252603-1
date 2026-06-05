@@ -1180,8 +1180,8 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        MainView mainViewMock = EasyMock.createMock(MainView.class);
-        GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
@@ -1214,8 +1214,8 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        MainView mainViewMock = EasyMock.createMock(MainView.class);
-        GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
@@ -1248,8 +1248,8 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        MainView mainViewMock = EasyMock.createMock(MainView.class);
-        GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.DRAW).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
