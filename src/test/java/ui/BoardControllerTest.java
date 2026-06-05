@@ -18,6 +18,7 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import java.awt.Window;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -1111,7 +1112,7 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move move = new Move(selected, destination);
         Board boardMock = EasyMock.createMock(Board.class);
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
         EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
@@ -1170,5 +1171,158 @@ class BoardControllerTest {
         Optional<Location> actual = controller.getSelectedLocation();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE + " wins!");
+        EasyMock.expectLastCall().once();
+        mainViewMock.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @Test
+    void IsGameOver_WhenStateIsBlackWin_ReturnsTrue() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_TWO + " wins!");
+        EasyMock.expectLastCall().once();
+        mainViewMock.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @Test
+    void IsGameOver_WhenStateIsDraw_ReturnsTrue() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.DRAW).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel("Draw!");
+        EasyMock.expectLastCall().once();
+        mainViewMock.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+
+        String expected = TEST_PLAYER_ONE + " wins!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+
+        String expected = TEST_PLAYER_TWO + " wins!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_Draw_ReturnsDraw() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.DRAW);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+
+        String expected = "Draw!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
+        for (Window window : Window.getWindows()) {
+            if (type.isInstance(window) && window.isVisible()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

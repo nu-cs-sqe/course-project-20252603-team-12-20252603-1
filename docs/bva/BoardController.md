@@ -400,7 +400,7 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ## Method / behavior: move execution via `handleSquareClick(Location loc)`
 
-Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion dialog and end-game UI are out of scope for this slice (separate features).
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion and end-game paths are covered in the sections below.
 
 ### Step 1: Equivalence Classes
 
@@ -440,3 +440,181 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
+
+---
+
+## Method: `executeMove(Move move, PieceColor currentColor)`
+
+### Step 1: Input and output equivalence classes
+
+| Input | Classes |
+| ----- | ------- |
+| `board.getCurrentGameState()` after `makeMove` | game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`); game continues (`WHITE_TURN` / `BLACK_TURN`) |
+
+| Output | Classes |
+| ------ | ------- |
+| `showEndGame()` called | `true` (game over) / `false` (game continues) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `board.getCurrentGameState()` after move | Cases: game over, game continues |
+| `showEndGame()` called | Boolean |
+
+### Step 3: Concrete boundary values
+
+**`board.getCurrentGameState()` after move — Cases:**
+- game over (WHITE_WIN / BLACK_WIN / DRAW) → `showEndGame()` called
+- game continues (WHITE_TURN / BLACK_TURN) → covered by BC-TC55
+
+**`showEndGame()` called — Boolean:**
+- `true`: game is over
+- `false`: game continues — covered by BC-TC55
+
+### Step 4: Test cases
+
+- **BC-TC58: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
+
+---
+
+## Method: `isGameOver()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW`; `WHITE_TURN`; `BLACK_TURN` |
+
+| Output | Classes |
+| ------ | ------- |
+| Return value | `true` (terminal) / `false` (active) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW, WHITE_TURN, BLACK_TURN |
+| Return value | Boolean |
+
+### Step 3: Concrete boundary values
+
+**`getCurrentGameState()` — Cases:**
+- `WHITE_WIN` → return `true`
+- `BLACK_WIN` → return `true`
+- `DRAW` → return `true`
+- `WHITE_TURN` → return `false`
+- `BLACK_TURN` → return `false` (covered by existing black-turn tests)
+
+**Return value — Boolean:**
+- `true`: game state is WHITE_WIN, BLACK_WIN, or DRAW
+- `false`: game state is WHITE_TURN or BLACK_TURN
+
+### Step 4: Test cases
+
+- **BC-TC59: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; move executed
+  - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
+  - **Covered by**: BC-TC58
+
+- **BC-TC60: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `BLACK_WIN`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC61: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `DRAW`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC62: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `WHITE_TURN` after move
+  - **Expected output**: no `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC58 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
+
+---
+
+## Method: `showEndGame()`
+
+### Step 1: Input and output equivalence classes
+
+| Output | Classes |
+| ------ | ------- |
+| `EndGameView` shown | `true` (always when called) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `EndGameView` visible | Boolean |
+
+### Step 3: Concrete boundary values
+
+**`EndGameView` visible — Boolean:**
+- `true`: `showEndGame()` always makes `EndGameView` visible
+- `false`: CAN'T SET as a post-`showEndGame()` output
+
+### Step 4: Test cases
+
+- **BC-TC63: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
+  - **Method(s) under test**: `showEndGame()`
+  - **State of the system**: game is in a terminal state; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC58, BC-TC60, BC-TC61 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
+
+---
+
+## Method: `buildEndGameMessage()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW` |
+
+| Output | Classes |
+| ------ | ------- |
+| Returned message | `player1Name + " wins!"`; `player2Name + " wins!"`; `"Draw!"` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW |
+| Returned message | Cases: player1 wins, player2 wins, draw |
+
+### Step 3: Concrete boundary values
+
+**`getCurrentGameState()` — Cases:**
+- `WHITE_WIN` → `player1Name + " wins!"`
+- `BLACK_WIN` → `player2Name + " wins!"`
+- `DRAW` → `"Draw!"`
+
+**Returned message — Cases:**
+- `player1Name + " wins!"`: WHITE_WIN state
+- `player2Name + " wins!"`: BLACK_WIN state
+- `"Draw!"`: DRAW state
+
+### Step 4: Test cases
+
+`EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
+
+- **BC-TC64: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
+  - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
+
+- **BC-TC65: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
+  - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
+
+- **BC-TC66: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `DRAW`
+  - **Expected output**: `EndGameView` result label text equals `"Draw!"`
