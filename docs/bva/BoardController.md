@@ -526,7 +526,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: board stubs `BLACK_WIN`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC61: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :x: )
+- **BC-TC61: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `DRAW`
   - **Expected output**: `EndGameView` visible
