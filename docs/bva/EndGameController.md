@@ -43,7 +43,7 @@
   - **State of the system**: `resultMessage = ""`, `mainView` = a non-null visible `JFrame`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`
 
-- **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :x: )
+- **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
   - **State of the system**: `resultMessage = "Alice wins!"`, `mainView` = a non-null visible `JFrame`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`; `getEndGameView().isVisible()` returns `true`
