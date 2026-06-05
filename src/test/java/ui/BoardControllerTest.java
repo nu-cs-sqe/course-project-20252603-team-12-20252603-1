@@ -1341,11 +1341,11 @@ class BoardControllerTest {
         Location destination = new Location(0, 5);
         Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
         Board boardMock = EasyMock.createMock(Board.class);
-        Capture<Move> capturedMove = EasyMock.newCapture();
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
         EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
+        Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));
         EasyMock.expectLastCall().once();
         EasyMock.replay(boardMock);
@@ -1366,11 +1366,11 @@ class BoardControllerTest {
         Location destination = new Location(0, 2);
         Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
         Board boardMock = EasyMock.createMock(Board.class);
-        Capture<Move> capturedMove = EasyMock.newCapture();
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(3);
         EasyMock.expect(boardMock.getPieceAt(1, 0)).andReturn(standardGrid[1][0]);
         EasyMock.expect(boardMock.getPieceAt(2, 0)).andReturn(standardGrid[2][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
+        Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));
         EasyMock.expectLastCall().once();
         EasyMock.replay(boardMock);
