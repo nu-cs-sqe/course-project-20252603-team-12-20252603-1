@@ -18,7 +18,7 @@
   - **State of the system**: two white pieces
   - **Expected output**: `true`
 
-- **TC2: IsSameColor_OnDifferentColorPieces_ReturnsFalse** ( :x: )
+- **TC2: IsSameColor_OnDifferentColorPieces_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isSameColor(Piece piece)`
   - **State of the system**: one white piece and one black piece
   - **Expected output**: `false`
