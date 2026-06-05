@@ -38,7 +38,7 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :x: )
+- **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
   - **State of the system**: `resultMessage = ""`, `mainView` = a non-null visible `JFrame`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`
