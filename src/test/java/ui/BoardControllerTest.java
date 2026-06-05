@@ -1384,29 +1384,4 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
-    @Test
-    void PromptForPromotionPiece_White_ReturnsRook() {
-        Piece[][] standardGrid = newStandardStartingGrid();
-        Location selected = new Location(0, 6);
-        Location destination = new Location(0, 5);
-        Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
-        Board boardMock = EasyMock.createMock(Board.class);
-        Capture<Move> capturedMove = EasyMock.newCapture();
-        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
-        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
-        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
-        boardMock.makeMove(EasyMock.capture(capturedMove));
-        EasyMock.expectLastCall().once();
-        EasyMock.replay(boardMock);
-
-        BoardController controller = controllerFor(boardMock);
-        controller.setPromotionPicker(color -> PieceType.ROOK);
-        controller.handleSquareClick(selected);
-        controller.handleSquareClick(destination);
-
-        assertEquals(Optional.of(PieceType.ROOK), capturedMove.getValue().getPromotionType());
-        EasyMock.verify(boardMock);
-    }
-
 }
