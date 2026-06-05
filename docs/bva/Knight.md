@@ -50,6 +50,7 @@
 | Parameter | Catalog clue | Values considered |
 |-----------|--------------|-------------------|
 | Input: original piece color | Cases | `WHITE`, `BLACK` |
+| Input: original piece `hasMoved` state | Boolean | `false`, `true` |
 | Output: returned piece type | Cases | `KNIGHT` |
 | Output: returned piece jump capability | Boolean | `true` |
 | Output: original and copy references | Pairs of references | same object is not allowed; copy must be a different object |
@@ -80,5 +81,15 @@
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black knight
   - **Expected output**: returned piece is a different object from the original
+
+- **TC9: MakeCopy_OnUnmovedWhiteKnight_CopyHasMovedIsFalse** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing white knight that has not moved
+  - **Expected output**: returned piece reports `hasMoved()` as `false`
+
+- **TC10: MakeCopy_OnMovedWhiteKnight_CopyHasMovedIsTrue** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing white knight on which `changeToMoved()` has been called
+  - **Expected output**: returned piece reports `hasMoved()` as `true`
 
 ---

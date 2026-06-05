@@ -50,6 +50,7 @@
 | Parameter | Catalog clue | Values considered |
 |-----------|--------------|-------------------|
 | Input: original piece color | Cases | `WHITE`, `BLACK` |
+| Input: original piece `hasMoved` state | Boolean | `false`, `true` |
 | Output: returned piece type | Cases | `QUEEN` |
 | Output: returned piece jump capability | Boolean | `false` |
 | Output: original and copy references | Pairs of references | same object is not allowed; copy must be a different object |
@@ -80,5 +81,15 @@
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black queen
   - **Expected output**: returned piece is a different object from the original
+
+- **TC9: MakeCopy_OnUnmovedWhiteQueen_CopyHasMovedIsFalse** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing white queen that has not moved
+  - **Expected output**: returned piece reports `hasMoved()` as `false`
+
+- **TC10: MakeCopy_OnMovedWhiteQueen_CopyHasMovedIsTrue** ( :x: )
+  - **Method(s) under test**: `makeCopy()`
+  - **State of the system**: an existing white queen on which `changeToMoved()` has been called
+  - **Expected output**: returned piece reports `hasMoved()` as `true`
 
 ---
