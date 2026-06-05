@@ -30,7 +30,7 @@ class MainViewTest {
 
     @Test
     void Constructor_OnAliceAndBob_WiresStatsBoardAndLayout() {
-        Board boardMock = replayNiceBoard();
+        Board boardMock = replayEmptyBoard();
         MainView view = new MainView("Alice", "Bob",
                 new BoardController("Alice", "Bob", boardMock));
 
@@ -50,7 +50,7 @@ class MainViewTest {
 
     @Test
     void Constructor_InitialReadinessFromInjectedController() {
-        Board boardMock = EasyMock.createNiceMock(Board.class);
+        Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.replay(boardMock);
         MainView view = new MainView("Alice", "Bob",
@@ -66,8 +66,8 @@ class MainViewTest {
         EasyMock.verify(boardMock);
     }
 
-    private static Board replayNiceBoard() {
-        Board boardMock = EasyMock.createNiceMock(Board.class);
+    private static Board replayEmptyBoard() {
+        Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.replay(boardMock);
         return boardMock;
     }

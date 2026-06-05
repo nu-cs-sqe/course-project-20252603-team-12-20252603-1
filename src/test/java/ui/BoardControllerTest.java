@@ -33,7 +33,7 @@ class BoardControllerTest {
 
     @Test
     void Constructor_FreshInstance_LastSelectedUnset() {
-        Board boardMock = replayNiceBoard();
+        Board boardMock = replayEmptyBoard();
         BoardController controller = controllerFor(boardMock);
 
         boolean expected = false;
@@ -44,7 +44,7 @@ class BoardControllerTest {
 
     @Test
     void GetSelectedLocation_FreshInstance_ReturnsEmpty() {
-        Board boardMock = replayNiceBoard();
+        Board boardMock = replayEmptyBoard();
         BoardController controller = controllerFor(boardMock);
 
         Optional<Location> expected = Optional.empty();
@@ -95,7 +95,7 @@ class BoardControllerTest {
 
     @Test
     void GetLegalMovesForSelection_NoSelection_ReturnsEmptyList() {
-        Board boardMock = replayNiceBoard();
+        Board boardMock = replayEmptyBoard();
         BoardController controller = controllerFor(boardMock);
 
         int expected = 0;
@@ -571,7 +571,7 @@ class BoardControllerTest {
 
     @Test
     void HandleSquareClick_InvalidLocation_NoSelectionAfterClick() {
-        Board boardMock = replayNiceBoard();
+        Board boardMock = replayEmptyBoard();
         BoardController controller = controllerFor(boardMock);
 
         controller.handleSquareClick(new Location(-1, 0));
@@ -838,8 +838,8 @@ class BoardControllerTest {
         return controller;
     }
 
-    private static Board replayNiceBoard() {
-        Board boardMock = EasyMock.createNiceMock(Board.class);
+    private static Board replayEmptyBoard() {
+        Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.replay(boardMock);
         return boardMock;
     }
