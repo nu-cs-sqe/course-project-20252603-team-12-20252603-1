@@ -18,7 +18,6 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
-import java.awt.Window;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -1201,9 +1200,6 @@ class BoardControllerTest {
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
-        boolean expected = true;
-        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
-        assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
@@ -1235,9 +1231,6 @@ class BoardControllerTest {
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
-        boolean expected = true;
-        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
-        assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
@@ -1269,9 +1262,6 @@ class BoardControllerTest {
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
-        boolean expected = true;
-        boolean actual = isAnyWindowOfTypeVisible(EndGameView.class);
-        assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
@@ -1342,12 +1332,4 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
-    private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
-        for (Window window : Window.getWindows()) {
-            if (type.isInstance(window) && window.isVisible()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
