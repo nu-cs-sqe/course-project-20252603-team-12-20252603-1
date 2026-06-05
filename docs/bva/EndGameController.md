@@ -77,13 +77,13 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC3: Show_HidesMainView** ( :x: )
+- **TC3: Show_HidesMainView** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: `EndGameController` constructed with a non-null visible `mainView`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`
   - **Covered by**: TC1, TC2
 
-- **TC4: Show_DisplaysEndGameView** ( :x: )
+- **TC4: Show_DisplaysEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: `EndGameController` constructed; `show()` is called
   - **Expected output**: `getEndGameView().isVisible()` returns `true`
