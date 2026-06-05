@@ -614,7 +614,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
   - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
 
-- **BC-TC66: BuildEndGameMessage_Draw_ReturnsDraw** ( :x: )
+- **BC-TC66: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: board returns `DRAW`
   - **Expected output**: `EndGameView` result label text equals `"Draw!"`

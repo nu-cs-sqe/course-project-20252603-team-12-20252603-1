@@ -71,6 +71,10 @@ public class BoardController {
         return mainView;
     }
 
+    void setMainView(MainView mainView) {
+        this.mainView = mainView;
+    }
+
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
             justification = "Intentional shared reference for collaboration")
@@ -177,7 +181,7 @@ public class BoardController {
         new EndGameController(buildEndGameMessage(), mainView).show();
     }
 
-    private String buildEndGameMessage() {
+    String buildEndGameMessage() {
         switch (board.getCurrentGameState()) {
             case WHITE_WIN: return player1Name + " wins!";
             case BLACK_WIN: return player2Name + " wins!";
