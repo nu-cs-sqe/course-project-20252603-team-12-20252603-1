@@ -36,4 +36,21 @@ class EndGameControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(mainView);
     }
+
+    @Test
+    void PlayAgain_WhenShowHasBeenCalled_EndGameViewIsDisposed() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        mainView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView);
+
+        EndGameController controller = new EndGameController("Alice wins!", mainView);
+        controller.show();
+        controller.getEndGameView().clickPlayAgain();
+
+        boolean expected = false;
+        boolean actual = controller.getEndGameView().isDisplayable();
+        assertEquals(expected, actual);
+        EasyMock.verify(mainView);
+    }
 }

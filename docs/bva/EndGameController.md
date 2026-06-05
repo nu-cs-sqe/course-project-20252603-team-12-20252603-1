@@ -117,12 +117,12 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC5: PlayAgain_DisposesEndGameView** ( :x: )
+- **TC5: PlayAgain_DisposesEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
   - **Expected output**: `getEndGameView().isDisplayable()` returns `false`
 
-- **TC6: PlayAgain_ShowsWelcomeView** ( :x: )
+- **TC6: PlayAgain_WhenShowHasBeenCalled_WelcomeViewIsVisible** ( :x: )
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
   - **Expected output**: a new `WelcomeView` is visible

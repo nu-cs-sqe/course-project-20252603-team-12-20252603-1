@@ -10,6 +10,11 @@ class EndGameController {
     EndGameController(String resultMessage, JFrame mainView) {
         this.mainView = mainView;
         endGameView = new EndGameView(resultMessage);
+        endGameView.setPlayAgainAction(this::playAgain);
+    }
+
+    private void playAgain() {
+        endGameView.dispose();
     }
 
     EndGameView getEndGameView() {
