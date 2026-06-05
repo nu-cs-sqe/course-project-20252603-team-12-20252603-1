@@ -38,12 +38,12 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :white_check_mark: )
+- **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :x: )
   - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
   - **State of the system**: `resultMessage = ""`, `mainView` = a non-null visible `JFrame`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`
 
-- **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :white_check_mark: )
+- **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :x: )
   - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
   - **State of the system**: `resultMessage = "Alice wins!"`, `mainView` = a non-null visible `JFrame`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`; `getEndGameView().isVisible()` returns `true`
@@ -77,13 +77,13 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC3: Show_HidesMainView** ( :white_check_mark: )
+- **TC3: Show_HidesMainView** ( :x: )
   - **Method(s) under test**: `show()`
   - **State of the system**: `EndGameController` constructed with a non-null visible `mainView`; `show()` is called
   - **Expected output**: `mainView.isVisible()` returns `false`
   - **Covered by**: TC1, TC2
 
-- **TC4: Show_DisplaysEndGameView** ( :white_check_mark: )
+- **TC4: Show_DisplaysEndGameView** ( :x: )
   - **Method(s) under test**: `show()`
   - **State of the system**: `EndGameController` constructed; `show()` is called
   - **Expected output**: `getEndGameView().isVisible()` returns `true`
@@ -117,12 +117,12 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC5: PlayAgain_DisposesEndGameView** ( :white_check_mark: )
+- **TC5: PlayAgain_DisposesEndGameView** ( :x: )
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
   - **Expected output**: `getEndGameView().isDisplayable()` returns `false`
 
-- **TC6: PlayAgain_ShowsWelcomeView** ( :white_check_mark: )
+- **TC6: PlayAgain_ShowsWelcomeView** ( :x: )
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
   - **Expected output**: a new `WelcomeView` is visible
