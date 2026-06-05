@@ -449,24 +449,42 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 | Input | Classes |
 | ----- | ------- |
+| `move.getType()` | `PROMOTION`; non-promotion (`NORMAL`, `EN_PASSANT`, etc.) |
+| `currentColor` | `WHITE`; `BLACK` |
 | `board.getCurrentGameState()` after `makeMove` | game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`); game continues (`WHITE_TURN` / `BLACK_TURN`) |
 
 | Output | Classes |
 | ------ | ------- |
+| `promptForPromotionPiece` called | `true` (promotion) / `false` (non-promotion) |
 | `showEndGame()` called | `true` (game over) / `false` (game continues) |
 
 ### Step 2: BVA catalog data types
 
-| Variable / output | Catalog type |
-| ----------------- | ------------ |
-| `board.getCurrentGameState()` after move | Cases: game over, game continues |
-| `showEndGame()` called | Boolean |
+| Variable / output | Catalog type | Parameters |
+| --- | --- | --- |
+| `move.getType()` | Cases | PROMOTION, non-promotion |
+| `currentColor` | Cases | WHITE, BLACK |
+| `board.getCurrentGameState()` after move | Cases | game over, game continues |
+| `promptForPromotionPiece` called | Boolean | true, false |
+| `showEndGame()` called | Boolean | true, false |
 
 ### Step 3: Concrete boundary values
 
+**`move.getType()` — Cases:**
+- non-promotion (e.g. `NORMAL`)
+- `PROMOTION`
+
+**`currentColor` — Cases:**
+- `WHITE`
+- `BLACK`
+
 **`board.getCurrentGameState()` after move — Cases:**
-- game over (WHITE_WIN / BLACK_WIN / DRAW) → `showEndGame()` called
-- game continues (WHITE_TURN / BLACK_TURN) → covered by BC-TC55
+- game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`) → `showEndGame()` called
+- game continues (`WHITE_TURN` / `BLACK_TURN`) → covered by BC-TC55
+
+**`promptForPromotionPiece` called — Boolean:**
+- `false`: non-promotion move — covered by BC-TC55
+- `true`: promotion move
 
 **`showEndGame()` called — Boolean:**
 - `true`: game is over
@@ -474,10 +492,31 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC58: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
+- **BC-TC58: ExecuteMove_OnNonPromotionMove_AsWhite_MakeMoveCalledDirectly** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: white pawn normal move; board stubs `WHITE_TURN` before move, `BLACK_TURN` after; `makeMove` expected once
+  - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
+  - **Covered by**: BC-TC55
+
+- **BC-TC59: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
   - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
+
+- **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :x: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: black pawn normal move; board stubs `BLACK_TURN` before move, `WHITE_TURN` after; `makeMove` expected once
+  - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
+
+- **BC-TC61: ExecuteMove_OnPromotionMove_AsWhite_CallsPromptForPromotionPiece** ( :x: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: white pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `WHITE_TURN` → `BLACK_TURN`; dialog returns `QUEEN`
+  - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
+
+- **BC-TC62: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :x: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: black pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `BLACK_TURN` → `WHITE_TURN`; dialog returns `QUEEN`
+  - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
 
 ---
 
@@ -515,27 +554,27 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC59: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
+- **BC-TC63: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; move executed
   - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
-  - **Covered by**: BC-TC58
+  - **Covered by**: BC-TC59
 
-- **BC-TC60: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
+- **BC-TC64: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `BLACK_WIN`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC61: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
+- **BC-TC65: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `DRAW`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC62: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
+- **BC-TC66: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `WHITE_TURN` after move
   - **Expected output**: no `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC58 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
+  - **Covered by**: BC-TC59 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
 
 ---
 
@@ -561,11 +600,11 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC63: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
+- **BC-TC67: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `showEndGame()`
   - **State of the system**: game is in a terminal state; `boardController.show()` called first
   - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC58, BC-TC60, BC-TC61 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
+  - **Covered by**: BC-TC59, BC-TC64, BC-TC65 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
 
 ---
 
@@ -604,17 +643,92 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 `EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
 
-- **BC-TC64: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
+- **BC-TC68: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
   - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
 
-- **BC-TC65: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
+- **BC-TC69: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
   - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
 
-- **BC-TC66: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
+- **BC-TC70: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: board returns `DRAW`
   - **Expected output**: `EndGameView` result label text equals `"Draw!"`
+
+---
+
+## Method: `promptForPromotionPiece(PieceColor color)`
+
+### Step 1: Input and output equivalence classes
+
+| Input | Classes |
+| ----- | ------- |
+| `color` | `WHITE`; `BLACK` |
+
+| Output | Classes |
+| ------ | ------- |
+| Returned `PieceType` | `QUEEN`; `ROOK`; `BISHOP`; `KNIGHT` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Parameters |
+| --- | --- | --- |
+| `color` | Cases | WHITE, BLACK |
+| Returned `PieceType` | Cases | QUEEN, ROOK, BISHOP, KNIGHT |
+
+### Step 3: Concrete boundary values
+
+**`color` — Cases:**
+- `WHITE`
+- `BLACK`
+
+**Returned `PieceType` — Cases:**
+- `QUEEN`
+- `ROOK`
+- `BISHOP`
+- `KNIGHT`
+
+### Step 4: Test cases (All-combination)
+
+- **BC-TC71: PromptForPromotionPiece_White_ReturnsQueen** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `QUEEN`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `QUEEN`
+
+- **BC-TC72: PromptForPromotionPiece_White_ReturnsRook** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `ROOK`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `ROOK`
+
+- **BC-TC73: PromptForPromotionPiece_White_ReturnsBishop** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `BISHOP`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `BISHOP`
+
+- **BC-TC74: PromptForPromotionPiece_White_ReturnsKnight** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = WHITE`; dialog driven to return `KNIGHT`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `KNIGHT`
+
+- **BC-TC75: PromptForPromotionPiece_Black_ReturnsQueen** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = BLACK`; dialog driven to return `QUEEN`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `QUEEN`
+
+- **BC-TC76: PromptForPromotionPiece_Black_ReturnsRook** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = BLACK`; dialog driven to return `ROOK`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `ROOK`
+
+- **BC-TC77: PromptForPromotionPiece_Black_ReturnsBishop** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = BLACK`; dialog driven to return `BISHOP`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `BISHOP`
+
+- **BC-TC78: PromptForPromotionPiece_Black_ReturnsKnight** ( :x: )
+  - **Method(s) under test**: `promptForPromotionPiece(PieceColor)` via `executeMove`
+  - **State of the system**: promotion move executed with `currentColor = BLACK`; dialog driven to return `KNIGHT`
+  - **Expected output**: `board.makeMove` called with a `PROMOTION` move whose promotion type is `KNIGHT`
