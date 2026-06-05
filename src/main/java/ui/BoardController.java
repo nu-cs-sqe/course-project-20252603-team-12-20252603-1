@@ -203,9 +203,7 @@ public class BoardController {
     }
 
     private void repaintBoardView() {
-        if (boardView != null) {
-            boardView.repaint();
-        }
+        boardView.repaint();
     }
 
     private static boolean isInBounds(Location loc) {
