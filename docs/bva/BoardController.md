@@ -531,11 +531,11 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: board stubs `DRAW`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC62: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :x: )
+- **BC-TC62: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `WHITE_TURN` after move
   - **Expected output**: no `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC55
+  - **Covered by**: BC-TC58 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
 
 ---
 
@@ -561,11 +561,11 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC63: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :x: )
+- **BC-TC63: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `showEndGame()`
   - **State of the system**: game is in a terminal state; `boardController.show()` called first
   - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC59, BC-TC60, BC-TC61
+  - **Covered by**: BC-TC58, BC-TC60, BC-TC61 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
 
 ---
 
