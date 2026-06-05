@@ -408,6 +408,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void generateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves() {
+        Piece[][] board = emptyBoard();
+        board[1][4] = new Pawn(PieceColor.WHITE);
+        board[0][5] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 8;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 1)).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove() {
         Piece[][] board = emptyBoard();
         board[3][4] = new Pawn(PieceColor.WHITE);
@@ -514,6 +527,31 @@ class MoveGeneratorTest {
         boolean actual = hasMoveType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
                 MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void generateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Pawn(PieceColor.WHITE);
+        board[3][5] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 2;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void generateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves() {
+        Piece[][] board = emptyBoard();
+        board[1][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 4;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 1)).size();
 
         assertEquals(expected, actual);
     }
