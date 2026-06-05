@@ -513,7 +513,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: white pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `WHITE_TURN` → `BLACK_TURN`; dialog returns `QUEEN`
   - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
 
-- **BC-TC62: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :x: )
+- **BC-TC62: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: black pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `BLACK_TURN` → `WHITE_TURN`; dialog returns `QUEEN`
   - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
