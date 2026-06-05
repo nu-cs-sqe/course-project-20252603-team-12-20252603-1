@@ -1257,6 +1257,34 @@ class BoardControllerTest {
         EasyMock.verify(boardMock);
     }
 
+    @Test
+    void BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        EasyMock.expect(boardMock.getSnapshot()).andStubReturn(standardGrid);
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.show();
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        String expected = TEST_PLAYER_ONE + " wins!";
+        String actual = findVisibleEndGameView().getResultMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
     private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
         for (Window window : Window.getWindows()) {
             if (type.isInstance(window) && window.isVisible()) {
@@ -1264,5 +1292,14 @@ class BoardControllerTest {
             }
         }
         return false;
+    }
+
+    private static EndGameView findVisibleEndGameView() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof EndGameView && window.isVisible()) {
+                return (EndGameView) window;
+            }
+        }
+        return null;
     }
 }

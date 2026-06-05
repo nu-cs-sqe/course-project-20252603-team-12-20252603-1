@@ -604,7 +604,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 `EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
 
-- **BC-TC64: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :x: )
+- **BC-TC64: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
   - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
