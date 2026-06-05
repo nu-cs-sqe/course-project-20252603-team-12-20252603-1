@@ -144,10 +144,17 @@ public class BoardController {
             return;
         }
 
-        board.makeMove(matchingMove.get());
+        executeMove(matchingMove.get());
+    }
+
+    private void executeMove(Move move) {
+        board.makeMove(move);
         lastSelectedLoc = Optional.empty();
         updateCurrentPlayerLabel();
         repaintBoardView();
+        if (isGameOver()) {
+            showEndGame();
+        }
     }
 
     private Optional<Move> findMoveToDestination(List<Move> moves, Location dest) {
@@ -157,6 +164,26 @@ public class BoardController {
             }
         }
         return Optional.empty();
+    }
+
+    private boolean isGameOver() {
+        GameState state = board.getCurrentGameState();
+        return state == GameState.WHITE_WIN
+                || state == GameState.BLACK_WIN
+                || state == GameState.DRAW;
+    }
+
+    private void showEndGame() {
+        new EndGameController(buildEndGameMessage(), mainView).show();
+    }
+
+    private String buildEndGameMessage() {
+        switch (board.getCurrentGameState()) {
+            case WHITE_WIN: return player1Name + " wins!";
+            case BLACK_WIN: return player2Name + " wins!";
+            case DRAW: return "Draw!";
+            default: return "";
+        }
     }
 
     private void repaintBoardView() {
