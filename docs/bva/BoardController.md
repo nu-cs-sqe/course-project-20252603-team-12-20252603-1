@@ -515,12 +515,13 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC59: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :x: )
+- **BC-TC59: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; move executed
   - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
+  - **Covered by**: BC-TC58
 
-- **BC-TC60: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :x: )
+- **BC-TC60: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `BLACK_WIN`
   - **Expected output**: `EndGameView` visible
