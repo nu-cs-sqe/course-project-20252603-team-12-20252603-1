@@ -22,4 +22,14 @@ class PieceTest {
 
         assertFalse(piece1.isSameColor(piece2));
     }
+
+    @Test
+    void ResetHasMoved_OnMovedPiece_HasMovedIsFalse() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+        piece.changeToMoved();
+
+        piece.resetHasMoved();
+
+        assertFalse(piece.hasMoved());
+    }
 }

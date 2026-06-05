@@ -36,7 +36,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC3: ResetHasMoved_OnMovedPiece_HasMovedIsFalse** ( :x: )
+- **TC3: ResetHasMoved_OnMovedPiece_HasMovedIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `resetHasMoved()`
   - **State of the system**: a piece on which `changeToMoved()` has been called
   - **Expected output**: `hasMoved()` returns `false`
