@@ -68,14 +68,8 @@ class PromotionDialog {
         button.setBorderPainted(false);
         button.setOpaque(true);
         Image img = loadImage(type);
-        if (img != null) {
-            button.setIcon(new ImageIcon(
-                    img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
-        } else {
-            button.setText(type.name().substring(0, 1));
-            button.setForeground(TEXT_COLOR);
-            button.setFont(LABEL_FONT);
-        }
+        button.setIcon(new ImageIcon(
+                img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
         button.addActionListener(e -> {
             chosenType = type;
             dialog.dispose();
@@ -89,7 +83,7 @@ class PromotionDialog {
         String path = "pieces/" + prefix + "_" + type.name().toLowerCase() + ".png";
         java.net.URL resource = getClass().getClassLoader().getResource(path);
         if (resource == null) {
-            return null;
+            throw new IllegalStateException("Missing image resource: " + path);
         }
         return new ImageIcon(resource).getImage();
     }

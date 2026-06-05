@@ -129,7 +129,7 @@ public class BoardView extends JPanel {
         // untestable: I/O / resource loading
         java.net.URL resource = getClass().getClassLoader().getResource(imagePath);
         if (resource == null) {
-            return;
+            throw new IllegalStateException("Missing image resource: " + imagePath);
         }
         Image image = new javax.swing.ImageIcon(resource).getImage();
         if (color == PieceColor.WHITE) {
@@ -152,7 +152,7 @@ public class BoardView extends JPanel {
                         piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
                 Image img = images.get(piece.getType());
                 if (img == null) {
-                    continue;
+                    throw new IllegalStateException("No image loaded for piece: " + piece.getType());
                 }
                 int screenRow = rank;
                 g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE,
