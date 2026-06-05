@@ -481,3 +481,51 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
 
+---
+
+## Method: generateLegalMoves(Location from) — pawn promotion candidates and captures
+
+### Step 1: Inputs and outputs
+
+| Input / state      | Equivalence classes                                                      |
+| ------------------ | ------------------------------------------------------------------------ |
+| from               | Pairs of variables - file/rank on board                                  |
+| pawn rank          | Cases - at promotion rank boundary vs elsewhere                          |
+| board occupancy    | Cases - forward clear, diagonal enemy, diagonal friendly, en passant set |
+| Output             | Collection - list of legal moves (MoveType may be PROMOTION, EN_PASSANT) |
+
+### Step 2: Catalog data types
+
+| Variable / output | Catalog data type |
+| ----------------- | ----------------- |
+| from.x, from.y    | Intervals [0,7]   |
+| promotionRank     | Cases             |
+| move list         | Collections       |
+
+### Step 3: Concrete boundary values
+
+- White promotion rank: 0. White pawn at rank 1 is one step from back rank.
+- Diagonal capture: enemy piece at (file±1, rank+direction).
+- Capture-promotion: enemy piece at (file±1, promotionRank).
+- En passant: enPassantTarget set to (file±1, rank+direction).
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+`addPawnForwardMoves`, `addPawnCaptureMoves`, and `addPromotionMoves` are private; exercised indirectly through `generateLegalMoves`.
+
+- **MG-TC37: GenerateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addPromotionMoves`)
+  - **State of the system**: white pawn at `(4, 1)`; square `(4, 0)` empty; no diagonals; no en-passant target
+  - **Expected output**: returned move list size is `4` (four `PROMOTION` moves; no normal forward move)
+- **MG-TC38: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
+  - **State of the system**: white pawn at `(4, 4)`; black rook at `(5, 3)`; square `(4, 3)` empty; no en-passant target
+  - **Expected output**: returned move list size is `2` (forward to `(4, 3)` + capture to `(5, 3)`)
+- **MG-TC39: GenerateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`, `addPromotionMoves`)
+  - **State of the system**: white pawn at `(4, 1)`; black rook at `(5, 0)`; square `(4, 0)` empty; no en-passant target
+  - **Expected output**: returned move list size is `8` (four forward `PROMOTION` + four capture `PROMOTION`)
+- **MG-TC40: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves** ( :white_check_mark: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addEnPassantMoves`)
+  - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 2)`; square `(4, 2)` empty
+  - **Expected output**: returned move list size is `2` (forward to `(4, 2)` + `EN_PASSANT` to `(5, 2)`)

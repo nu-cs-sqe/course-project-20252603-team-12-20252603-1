@@ -185,25 +185,65 @@ public class MoveGenerator {
         int file = from.getX();
         PieceColor color = pawn.getColor();
         int direction = (color == PieceColor.WHITE) ? -1 : 1;
+        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
+        int promotionRank = (color == PieceColor.WHITE) ? 0 : 7;
+        addPawnForwardMoves(moves, from, rank, file, direction, startRank, promotionRank);
+        addPawnCaptureMoves(moves, from, rank, file, direction, promotionRank, color);
+        addEnPassantMoves(moves, from, rank, file, direction);
+        return moves;
+    }
 
+    private void addPawnForwardMoves(
+            List<Move> moves, Location from, int rank, int file,
+            int direction, int startRank, int promotionRank) {
         int oneAhead = rank + direction;
         if (!isOnBoard(oneAhead, file)) {
-            return moves;
+            return;
         }
         if (board[oneAhead][file].getType() != PieceType.NONE) {
-            return moves;
+            return;
         }
-        moves.add(new Move(from, new Location(file, oneAhead)));
-
+        Location oneStep = new Location(file, oneAhead);
+        if (oneAhead == promotionRank) {
+            addPromotionMoves(moves, from, oneStep);
+        } else {
+            moves.add(new Move(from, oneStep));
+        }
         int twoAhead = rank + 2 * direction;
-        int startRank = (color == PieceColor.WHITE) ? 6 : 1;
         if (rank == startRank
                 && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
             moves.add(new Move(from, new Location(file, twoAhead)));
         }
-        addEnPassantMoves(moves, from, rank, file, direction);
-        return moves;
+    }
+
+    private void addPawnCaptureMoves(
+            List<Move> moves, Location from, int rank, int file,
+            int direction, int promotionRank, PieceColor color) {
+        int targetRank = rank + direction;
+        for (int df : new int[]{-1, 1}) {
+            int targetFile = file + df;
+            if (!isOnBoard(targetRank, targetFile)) {
+                continue;
+            }
+            Piece target = board[targetRank][targetFile];
+            if (target.getType() == PieceType.NONE || target.getColor() == color) {
+                continue;
+            }
+            Location dest = new Location(targetFile, targetRank);
+            if (targetRank == promotionRank) {
+                addPromotionMoves(moves, from, dest);
+            } else {
+                moves.add(new Move(from, dest));
+            }
+        }
+    }
+
+    private void addPromotionMoves(List<Move> moves, Location from, Location to) {
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.QUEEN));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.ROOK));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.BISHOP));
+        moves.add(new Move(from, to, MoveType.PROMOTION, PieceType.KNIGHT));
     }
 
     private void addEnPassantMoves(

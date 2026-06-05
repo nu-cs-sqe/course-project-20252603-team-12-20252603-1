@@ -579,16 +579,12 @@ class BoardTest {
     @Test
     void GetCurrentGameState_AfterStalemate_ReturnsDraw() {
         Piece[][] layout = emptyPieceGrid();
-        layout[0][0] = new King(PieceColor.BLACK);
-        layout[0][1] = new Pawn(PieceColor.BLACK);
-        layout[1][0] = new Pawn(PieceColor.BLACK);
-        layout[1][1] = new Pawn(PieceColor.BLACK);
-        layout[2][0] = new Pawn(PieceColor.WHITE);
-        layout[2][1] = new Pawn(PieceColor.WHITE);
-        layout[7][7] = new Rook(PieceColor.WHITE);
+        layout[7][0] = new King(PieceColor.BLACK);
+        layout[6][2] = new Queen(PieceColor.WHITE);
+        layout[5][2] = new King(PieceColor.WHITE);
         Board board = new Board(layout);
 
-        board.makeMove(new Move(new Location(7, 7), new Location(6, 7)));
+        board.makeMove(new Move(new Location(2, 5), new Location(2, 4)));
 
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
@@ -626,16 +622,12 @@ class BoardTest {
     @Test
     void MakeMove_WhenMoveCausesStalemate_GameStateIsDraw() {
         Piece[][] layout = emptyPieceGrid();
-        layout[0][0] = new King(PieceColor.BLACK);
-        layout[0][1] = new Pawn(PieceColor.BLACK);
-        layout[1][0] = new Pawn(PieceColor.BLACK);
-        layout[1][1] = new Pawn(PieceColor.BLACK);
-        layout[2][0] = new Pawn(PieceColor.WHITE);
-        layout[2][1] = new Pawn(PieceColor.WHITE);
-        layout[7][7] = new Rook(PieceColor.WHITE);
+        layout[7][0] = new King(PieceColor.BLACK);
+        layout[6][2] = new Queen(PieceColor.WHITE);
+        layout[5][2] = new King(PieceColor.WHITE);
         Board board = new Board(layout);
 
-        board.makeMove(new Move(new Location(7, 7), new Location(6, 7)));
+        board.makeMove(new Move(new Location(2, 5), new Location(2, 4)));
 
         assertEquals(GameState.DRAW, board.getCurrentGameState());
     }
@@ -737,13 +729,9 @@ class BoardTest {
     @Test
     void UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw() {
         Piece[][] layout = emptyPieceGrid();
-        layout[0][0] = new King(PieceColor.BLACK);
-        layout[0][1] = new Pawn(PieceColor.BLACK);
-        layout[1][0] = new Pawn(PieceColor.BLACK);
-        layout[1][1] = new Pawn(PieceColor.BLACK);
-        layout[2][0] = new Pawn(PieceColor.WHITE);
-        layout[2][1] = new Pawn(PieceColor.WHITE);
-        layout[6][7] = new Rook(PieceColor.WHITE);
+        layout[7][0] = new King(PieceColor.BLACK);
+        layout[6][2] = new Queen(PieceColor.WHITE);
+        layout[5][2] = new King(PieceColor.WHITE);
         Board board = new Board(layout);
 
         board.updateGameState(PieceColor.WHITE);
