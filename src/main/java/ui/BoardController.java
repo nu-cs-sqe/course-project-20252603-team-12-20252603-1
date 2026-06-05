@@ -4,6 +4,7 @@ import domain.Board;
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
@@ -11,6 +12,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class BoardController {
 
@@ -22,6 +24,7 @@ public class BoardController {
     private MainView mainView;
     private BoardView boardView;
     private Optional<Location> lastSelectedLoc;
+    private Function<PieceColor, PieceType> promotionPicker = this::promptForPromotionPiece;
 
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
@@ -73,6 +76,10 @@ public class BoardController {
 
     void setMainView(MainView mainView) {
         this.mainView = mainView;
+    }
+
+    void setPromotionPicker(Function<PieceColor, PieceType> promotionPicker) {
+        this.promotionPicker = promotionPicker;
     }
 
     @SuppressFBWarnings(
@@ -152,6 +159,10 @@ public class BoardController {
     }
 
     private void executeMove(Move move, PieceColor currentColor) {
+        if (move.getType() == MoveType.PROMOTION) {
+            PieceType choice = promotionPicker.apply(currentColor);
+            move = move.withPromotionType(choice);
+        }
         board.makeMove(move);
         lastSelectedLoc = Optional.empty();
         updateCurrentPlayerLabel();
@@ -175,6 +186,10 @@ public class BoardController {
         return state == GameState.WHITE_WIN
                 || state == GameState.BLACK_WIN
                 || state == GameState.DRAW;
+    }
+
+    private PieceType promptForPromotionPiece(PieceColor color) {
+        return new PromotionDialog(mainView, color).showAndGetChoice();
     }
 
     private void showEndGame() {

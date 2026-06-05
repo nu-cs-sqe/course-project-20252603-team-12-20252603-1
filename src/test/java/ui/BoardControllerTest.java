@@ -8,6 +8,7 @@ import domain.StandardBoardInitializer;
 import domain.gamestate.GameState;
 import domain.location.Location;
 import domain.move.Move;
+import domain.move.MoveType;
 import domain.piece.Bishop;
 import domain.piece.King;
 import domain.piece.Knight;
@@ -21,6 +22,7 @@ import domain.piece.Rook;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -1329,6 +1331,31 @@ class BoardControllerTest {
         boolean expected = false;
         boolean actual = controller.hasSelection();
         assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void ExecuteMove_OnPromotionMove_AsWhite_CallsPromptForPromotionPiece() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move promotionMove = new Move(selected, destination, MoveType.PROMOTION);
+        Board boardMock = EasyMock.createMock(Board.class);
+        Capture<Move> capturedMove = EasyMock.newCapture();
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
+        boardMock.makeMove(EasyMock.capture(capturedMove));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.setPromotionPicker(color -> PieceType.QUEEN);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
         EasyMock.verify(boardMock);
     }
 
