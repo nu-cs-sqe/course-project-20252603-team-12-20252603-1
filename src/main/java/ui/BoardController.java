@@ -186,7 +186,7 @@ public class BoardController {
     }
 
     private PieceType promptForPromotionPiece(PieceColor color) {
-        return new PromotionDialog(mainView, color).showAndGetChoice();
+        return new PromotionView(mainView, color).showAndGetChoice();
     }
 
     private void showEndGame() {

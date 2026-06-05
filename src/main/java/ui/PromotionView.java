@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class PromotionDialog {
+class PromotionView {
 
     private static final Color BACKGROUND = new Color(30, 20, 12);
     private static final Color BUTTON_BG = new Color(181, 136, 99);
@@ -27,7 +27,7 @@ class PromotionDialog {
     private final PieceColor color;
     private PieceType chosenType = PieceType.QUEEN;
 
-    PromotionDialog(JFrame parent, PieceColor color) {
+    PromotionView(JFrame parent, PieceColor color) {
         // untestable: creates JDialog (Swing/AWT component)
         this.color = color;
         this.dialog = new JDialog(parent, "Promote Pawn", true);
