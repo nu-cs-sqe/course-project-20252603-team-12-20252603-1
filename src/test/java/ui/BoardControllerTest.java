@@ -829,7 +829,8 @@ class BoardControllerTest {
     }
 
     private static BoardController controllerFor(Board board) {
-        BoardController controller = new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board);
+        final BoardController controller =
+                new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
         boardViewMock.repaint();
         EasyMock.expectLastCall().anyTimes();
