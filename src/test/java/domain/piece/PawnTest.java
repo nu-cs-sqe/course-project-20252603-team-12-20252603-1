@@ -73,4 +73,11 @@ class PawnTest {
 
         assertNotSame(pawn, pawn.makeCopy());
     }
+
+    @Test
+    void MakeCopy_OnUnmovedWhitePawn_CopyHasMovedIsFalse() {
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        assertFalse(pawn.makeCopy().hasMoved());
+    }
 }
