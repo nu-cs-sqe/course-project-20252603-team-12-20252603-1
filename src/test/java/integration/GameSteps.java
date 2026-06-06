@@ -26,7 +26,7 @@ public class GameSteps {
 
     @Then("the {word} king is at {word}")
     public void the_king_is_at(String color, String square) {
-        Location loc = alg(square);
+        Location loc = parseAlgebraic(square);
         var piece = board.getPieceAt(loc.getY(), loc.getX());
         PieceColor expected = color.equals("white") ? PieceColor.WHITE : PieceColor.BLACK;
         assertEquals(PieceType.KING, piece.getType());
@@ -35,12 +35,12 @@ public class GameSteps {
 
     @When("white moves {word} to {word}")
     public void white_moves_to(String from, String to) {
-        board.makeMove(findMove(alg(from), alg(to)));
+        board.makeMove(findMove(parseAlgebraic(from), parseAlgebraic(to)));
     }
 
     @When("black moves {word} to {word}")
     public void black_moves_to(String from, String to) {
-        board.makeMove(findMove(alg(from), alg(to)));
+        board.makeMove(findMove(parseAlgebraic(from), parseAlgebraic(to)));
     }
 
     @Then("it is white's turn")
@@ -48,7 +48,7 @@ public class GameSteps {
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
 
-    Location alg(String square) {
+    Location parseAlgebraic(String square) {
         int file = square.charAt(0) - 'a';
         int rank = Character.getNumericValue(square.charAt(1));
         return new Location(file, 8 - rank);

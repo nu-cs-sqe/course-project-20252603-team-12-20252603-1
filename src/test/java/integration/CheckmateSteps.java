@@ -19,8 +19,8 @@ public class CheckmateSteps {
     @When("the following moves are made")
     public void the_following_moves_are_made(DataTable dataTable) {
         dataTable.asMaps().forEach(row -> {
-            var from = gameSteps.alg(row.get("from"));
-            var to = gameSteps.alg(row.get("to"));
+            var from = gameSteps.parseAlgebraic(row.get("from"));
+            var to = gameSteps.parseAlgebraic(row.get("to"));
             gameSteps.board.makeMove(gameSteps.findMove(from, to));
         });
     }
