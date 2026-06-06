@@ -81,7 +81,7 @@
   - **State of the system**: an existing black king
   - **Expected output**: returned piece is a different object from the original
 
-- **TC8: MakeCopy_OnUnmovedWhiteKing_CopyHasMovedIsFalse** ( :x: )
+- **TC8: MakeCopy_OnUnmovedWhiteKing_CopyHasMovedIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`

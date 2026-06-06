@@ -73,4 +73,11 @@ class KingTest {
 
         assertNotSame(king, king.makeCopy());
     }
+
+    @Test
+    void MakeCopy_OnUnmovedWhiteKing_CopyHasMovedIsFalse() {
+        King king = new King(PieceColor.WHITE);
+
+        assertFalse(king.makeCopy().hasMoved());
+    }
 }
