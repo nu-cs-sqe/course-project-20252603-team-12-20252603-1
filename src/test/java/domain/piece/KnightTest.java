@@ -86,4 +86,12 @@ class KnightTest {
 
         assertFalse(knight.makeCopy().hasMoved());
     }
+
+    @Test
+    void MakeCopy_OnMovedWhiteKnight_CopyHasMovedIsTrue() {
+        Knight knight = new Knight(PieceColor.WHITE);
+        knight.changeToMoved();
+
+        assertTrue(knight.makeCopy().hasMoved());
+    }
 }
