@@ -33,13 +33,8 @@ public class GameSteps {
         assertEquals(expected, piece.getColor());
     }
 
-    @When("white moves {word} to {word}")
-    public void white_moves_to(String from, String to) {
-        board.makeMove(findMove(parseAlgebraic(from), parseAlgebraic(to)));
-    }
-
-    @When("black moves {word} to {word}")
-    public void black_moves_to(String from, String to) {
+    @When("{word} moves {word} to {word}")
+    public void player_moves_to(String player, String from, String to) {
         board.makeMove(findMove(parseAlgebraic(from), parseAlgebraic(to)));
     }
 
