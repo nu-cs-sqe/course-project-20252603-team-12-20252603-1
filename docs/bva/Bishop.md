@@ -82,7 +82,7 @@
   - **State of the system**: an existing black bishop
   - **Expected output**: returned piece is a different object from the original
 
-- **TC9: MakeCopy_OnUnmovedWhiteBishop_CopyHasMovedIsFalse** ( :x: )
+- **TC9: MakeCopy_OnUnmovedWhiteBishop_CopyHasMovedIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white bishop that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`
