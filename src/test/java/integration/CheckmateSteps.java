@@ -27,14 +27,17 @@ public class CheckmateSteps {
 
     @Then("the game is over")
     public void the_game_is_over() {
-        GameState state = gameSteps.board.getCurrentGameState();
-        assertTrue(state == GameState.WHITE_WIN
-                || state == GameState.BLACK_WIN
-                || state == GameState.DRAW);
+        GameState actual = gameSteps.board.getCurrentGameState();
+        boolean gameOver = actual == GameState.WHITE_WIN
+                || actual == GameState.BLACK_WIN
+                || actual == GameState.DRAW;
+        assertTrue(gameOver);
     }
 
     @Then("black wins")
     public void black_wins() {
-        assertEquals(GameState.BLACK_WIN, gameSteps.board.getCurrentGameState());
+        GameState expected = GameState.BLACK_WIN;
+        GameState actual = gameSteps.board.getCurrentGameState();
+        assertEquals(expected, actual);
     }
 }

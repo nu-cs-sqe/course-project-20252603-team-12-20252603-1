@@ -28,9 +28,10 @@ public class GameSteps {
     public void the_king_is_at(String color, String square) {
         Location loc = parseAlgebraic(square);
         var piece = board.getPieceAt(loc.getY(), loc.getX());
-        PieceColor expected = color.equals("white") ? PieceColor.WHITE : PieceColor.BLACK;
-        assertEquals(PieceType.KING, piece.getType());
-        assertEquals(expected, piece.getColor());
+        PieceType expectedType = PieceType.KING;
+        PieceColor expectedColor = color.equals("white") ? PieceColor.WHITE : PieceColor.BLACK;
+        assertEquals(expectedType, piece.getType());
+        assertEquals(expectedColor, piece.getColor());
     }
 
     @When("{word} moves {word} to {word}")
