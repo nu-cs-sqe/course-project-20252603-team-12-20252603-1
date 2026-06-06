@@ -1,5 +1,6 @@
 package domain.piece;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,6 +41,13 @@ class PieceTest {
         piece.resetHasMoved();
 
         assertFalse(piece.hasMoved());
+    }
+
+    @Test
+    void ToString_OnWhitePawn_ReturnsWhitePawn() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+
+        assertEquals("WHITE PAWN", piece.toString());
     }
 
 }

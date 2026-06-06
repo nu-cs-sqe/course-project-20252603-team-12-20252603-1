@@ -59,7 +59,7 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC5: ToString_OnWhitePawn_ReturnsWhitePawn** ( :x: )
+- **TC5: ToString_OnWhitePawn_ReturnsWhitePawn** ( :white_check_mark: )
   - **Method(s) under test**: `toString()`
   - **State of the system**: a white pawn
   - **Expected output**: `"WHITE PAWN"`
