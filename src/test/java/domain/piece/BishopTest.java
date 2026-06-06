@@ -81,4 +81,12 @@ class BishopTest {
 
         assertFalse(bishop.makeCopy().hasMoved());
     }
+
+    @Test
+    void MakeCopy_OnMovedWhiteBishop_CopyHasMovedIsTrue() {
+        Bishop bishop = new Bishop(PieceColor.WHITE);
+        bishop.changeToMoved();
+
+        assertTrue(bishop.makeCopy().hasMoved());
+    }
 }
