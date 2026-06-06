@@ -64,7 +64,7 @@
   - **State of the system**: a white pawn
   - **Expected output**: `"WHITE PAWN"`
 
-- **TC6: ToString_OnBlackPawn_ReturnsBlackPawn** ( :x: )
+- **TC6: ToString_OnBlackPawn_ReturnsBlackPawn** ( :white_check_mark: )
   - **Method(s) under test**: `toString()`
   - **State of the system**: a black pawn
   - **Expected output**: `"BLACK PAWN"`

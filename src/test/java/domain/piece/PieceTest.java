@@ -50,4 +50,11 @@ class PieceTest {
         assertEquals("WHITE PAWN", piece.toString());
     }
 
+    @Test
+    void ToString_OnBlackPawn_ReturnsBlackPawn() {
+        Piece piece = new Pawn(PieceColor.BLACK);
+
+        assertEquals("BLACK PAWN", piece.toString());
+    }
+
 }
