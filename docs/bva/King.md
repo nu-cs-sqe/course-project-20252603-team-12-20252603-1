@@ -86,7 +86,7 @@
   - **State of the system**: an existing white king that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`
 
-- **TC9: MakeCopy_OnMovedWhiteKing_CopyHasMovedIsTrue** ( :x: )
+- **TC9: MakeCopy_OnMovedWhiteKing_CopyHasMovedIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king on which `changeToMoved()` has been called
   - **Expected output**: returned piece reports `hasMoved()` as `true`
