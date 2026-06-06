@@ -9,6 +9,7 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class GameSteps {
         PieceColor expected = color.equals("white") ? PieceColor.WHITE : PieceColor.BLACK;
         assertEquals(PieceType.KING, piece.getType());
         assertEquals(expected, piece.getColor());
+    }
+
+    @When("white moves {word} to {word}")
+    public void white_moves_to(String from, String to) {
+        board.makeMove(findMove(alg(from), alg(to)));
+    }
+
+    @When("black moves {word} to {word}")
+    public void black_moves_to(String from, String to) {
+        board.makeMove(findMove(alg(from), alg(to)));
     }
 
     @Then("it is white's turn")
