@@ -87,7 +87,7 @@
   - **State of the system**: an existing white pawn that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`
 
-- **TC10: MakeCopy_OnMovedWhitePawn_CopyHasMovedIsTrue** ( :x: )
+- **TC10: MakeCopy_OnMovedWhitePawn_CopyHasMovedIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white pawn on which `changeToMoved()` has been called
   - **Expected output**: returned piece reports `hasMoved()` as `true`
