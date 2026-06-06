@@ -32,4 +32,14 @@ class PieceTest {
 
         assertFalse(piece.hasMoved());
     }
+
+    @Test
+    void ResetHasMoved_OnUnmovedPiece_HasMovedIsFalse() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+
+        piece.resetHasMoved();
+
+        assertFalse(piece.hasMoved());
+    }
+
 }

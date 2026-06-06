@@ -41,7 +41,7 @@
   - **State of the system**: a piece on which `changeToMoved()` has been called
   - **Expected output**: `hasMoved()` returns `false`
 
-- **TC4: ResetHasMoved_OnUnmovedPiece_HasMovedIsFalse** ( :x: )
+- **TC4: ResetHasMoved_OnUnmovedPiece_HasMovedIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `resetHasMoved()`
   - **State of the system**: a fresh piece that has not moved
   - **Expected output**: `hasMoved()` returns `false`
