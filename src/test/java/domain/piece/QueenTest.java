@@ -81,4 +81,12 @@ class QueenTest {
 
         assertFalse(queen.makeCopy().hasMoved());
     }
+
+    @Test
+    void MakeCopy_OnMovedWhiteQueen_CopyHasMovedIsTrue() {
+        Queen queen = new Queen(PieceColor.WHITE);
+        queen.changeToMoved();
+
+        assertTrue(queen.makeCopy().hasMoved());
+    }
 }
