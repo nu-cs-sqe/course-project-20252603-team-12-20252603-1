@@ -149,7 +149,8 @@ public class BoardView extends JPanel {
                         piece.getColor() == PieceColor.WHITE ? whitePieceImages : blackPieceImages;
                 Image img = images.get(piece.getType());
                 if (img == null) {
-                    throw new IllegalStateException("No image loaded for piece: " + piece.getType());
+                    throw new IllegalStateException(
+                            "No image loaded for piece: " + piece.getType());
                 }
                 int screenRow = rank;
                 g.drawImage(img, file * TILE_SIZE, screenRow * TILE_SIZE,
