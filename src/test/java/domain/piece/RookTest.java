@@ -81,4 +81,12 @@ class RookTest {
 
         assertFalse(rook.makeCopy().hasMoved());
     }
+
+    @Test
+    void MakeCopy_OnMovedWhiteRook_CopyHasMovedIsTrue() {
+        Rook rook = new Rook(PieceColor.WHITE);
+        rook.changeToMoved();
+
+        assertTrue(rook.makeCopy().hasMoved());
+    }
 }

@@ -87,7 +87,7 @@
   - **State of the system**: an existing white rook that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`
 
-- **TC10: MakeCopy_OnMovedWhiteRook_CopyHasMovedIsTrue** ( :x: )
+- **TC10: MakeCopy_OnMovedWhiteRook_CopyHasMovedIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white rook on which `changeToMoved()` has been called
   - **Expected output**: returned piece reports `hasMoved()` as `true`
