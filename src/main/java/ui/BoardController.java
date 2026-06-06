@@ -43,9 +43,6 @@ public class BoardController {
     }
 
     private void updateCurrentPlayerLabel() {
-        if (mainView == null) {
-            return;
-        }
         String text;
         switch (board.getCurrentGameState()) {
             case WHITE_TURN:
@@ -189,7 +186,7 @@ public class BoardController {
     }
 
     private PieceType promptForPromotionPiece(PieceColor color) {
-        return new PromotionDialog(mainView, color).showAndGetChoice();
+        return new PromotionView(mainView, color).showAndGetChoice();
     }
 
     private void showEndGame() {
@@ -206,9 +203,7 @@ public class BoardController {
     }
 
     private void repaintBoardView() {
-        if (boardView != null) {
-            boardView.repaint();
-        }
+        boardView.repaint();
     }
 
     private static boolean isInBounds(Location loc) {

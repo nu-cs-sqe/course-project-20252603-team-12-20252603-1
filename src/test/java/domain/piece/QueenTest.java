@@ -3,6 +3,7 @@ package domain.piece;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,5 +73,20 @@ class QueenTest {
         Queen queen = new Queen(PieceColor.BLACK);
 
         assertNotSame(queen, queen.makeCopy());
+    }
+
+    @Test
+    void MakeCopy_OnUnmovedWhiteQueen_CopyHasMovedIsFalse() {
+        Queen queen = new Queen(PieceColor.WHITE);
+
+        assertFalse(queen.makeCopy().hasMoved());
+    }
+
+    @Test
+    void MakeCopy_OnMovedWhiteQueen_CopyHasMovedIsTrue() {
+        Queen queen = new Queen(PieceColor.WHITE);
+        queen.changeToMoved();
+
+        assertTrue(queen.makeCopy().hasMoved());
     }
 }

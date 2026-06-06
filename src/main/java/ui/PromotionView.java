@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class PromotionDialog {
+class PromotionView {
 
     private static final Color BACKGROUND = new Color(30, 20, 12);
     private static final Color BUTTON_BG = new Color(181, 136, 99);
@@ -27,7 +27,7 @@ class PromotionDialog {
     private final PieceColor color;
     private PieceType chosenType = PieceType.QUEEN;
 
-    PromotionDialog(JFrame parent, PieceColor color) {
+    PromotionView(JFrame parent, PieceColor color) {
         // untestable: creates JDialog (Swing/AWT component)
         this.color = color;
         this.dialog = new JDialog(parent, "Promote Pawn", true);
@@ -68,14 +68,8 @@ class PromotionDialog {
         button.setBorderPainted(false);
         button.setOpaque(true);
         Image img = loadImage(type);
-        if (img != null) {
-            button.setIcon(new ImageIcon(
-                    img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
-        } else {
-            button.setText(type.name().substring(0, 1));
-            button.setForeground(TEXT_COLOR);
-            button.setFont(LABEL_FONT);
-        }
+        button.setIcon(new ImageIcon(
+                img.getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH)));
         button.addActionListener(e -> {
             chosenType = type;
             dialog.dispose();
@@ -88,9 +82,6 @@ class PromotionDialog {
         String prefix = (color == PieceColor.WHITE) ? "white" : "black";
         String path = "pieces/" + prefix + "_" + type.name().toLowerCase() + ".png";
         java.net.URL resource = getClass().getClassLoader().getResource(path);
-        if (resource == null) {
-            return null;
-        }
         return new ImageIcon(resource).getImage();
     }
 }

@@ -1,6 +1,6 @@
 # BVA Analysis for PromotionDialog
 
-Package: `ui.PromotionDialog`
+Package: `ui.PromotionView`
 
 Scope: `PromotionDialog` is a package-private modal `JDialog` shown when a pawn reaches the back rank. It presents four image buttons (Queen, Rook, Bishop, Knight); clicking one sets `chosenType` and disposes the dialog. `showAndGetChoice()` blocks until a button is clicked and returns the chosen `PieceType`.
 
