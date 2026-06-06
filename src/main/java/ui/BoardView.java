@@ -128,9 +128,6 @@ public class BoardView extends JPanel {
     private void loadOnePieceImage(PieceType pieceType, PieceColor color, String imagePath) {
         // untestable: I/O / resource loading
         java.net.URL resource = getClass().getClassLoader().getResource(imagePath);
-        if (resource == null) {
-            throw new IllegalStateException("Missing image resource: " + imagePath);
-        }
         Image image = new javax.swing.ImageIcon(resource).getImage();
         if (color == PieceColor.WHITE) {
             whitePieceImages.put(pieceType, image);

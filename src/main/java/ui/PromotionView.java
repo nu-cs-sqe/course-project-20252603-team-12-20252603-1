@@ -82,9 +82,6 @@ class PromotionView {
         String prefix = (color == PieceColor.WHITE) ? "white" : "black";
         String path = "pieces/" + prefix + "_" + type.name().toLowerCase() + ".png";
         java.net.URL resource = getClass().getClassLoader().getResource(path);
-        if (resource == null) {
-            throw new IllegalStateException("Missing image resource: " + path);
-        }
         return new ImageIcon(resource).getImage();
     }
 }
