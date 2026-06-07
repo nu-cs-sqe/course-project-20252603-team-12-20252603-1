@@ -55,12 +55,12 @@ Both the constructor (`buildUi()` creates a `JDialog`) and `showAndGetChoice()` 
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: prompt label is `"Choose promotion piece:"`
 
-- **PV-TC3: Constructor_OnSpanishLocale_DialogTitleFromBundle** ( :x: )
+- **PV-TC3: Constructor_OnSpanishLocale_DialogTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: dialog title is `"Promover peón"`
 
-- **PV-TC4: Constructor_OnSpanishLocale_PromptLabelFromBundle** ( :x: )
+- **PV-TC4: Constructor_OnSpanishLocale_PromptLabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: prompt label is `"Elija la pieza de promoción:"`
