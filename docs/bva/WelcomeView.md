@@ -2,6 +2,8 @@
 
 Package: `ui.WelcomeView`
 
+**API contract:** All `String` and `Locale` parameters are **non-null**. Callers must not pass `null`. Invalid null input is **out of scope** (unrepresentable boundary — not tested here).
+
 Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPlayer2Name()`** (getter delegation to JTextField), **`isChess960Selected()`** (radio button state), and **`setStartGameAction(Runnable)`** (action wiring). `createWelcomeScreenUI` is **untestable** (Swing UI assembly side-effect) and is excluded from this BVA.
 
 **Headless guard:** `WelcomeView` extends `JFrame`, which cannot be instantiated in a headless JVM. All TCs use a `@BeforeAll assumeTrue(!GraphicsEnvironment.isHeadless())` guard so they skip cleanly on headless CI and run on machines with a display.
@@ -16,7 +18,7 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
 
 | Concern | Equivalence classes |
 | ------- | ------------------- |
-| `locale`                               | valid `Locale` (`Locale.ENGLISH` or `Locale.forLanguageTag("es")`). **`null` — unrepresentable** |
+| `locale`                               | **Cases** — `Locale.ENGLISH` (app default) or `Locale.forLanguageTag("es")`                    |
 | Post-construction `player1NameField` | Initialized; `getPlayer1Name()` returns `""` (JTextField default) |
 | Post-construction `player2NameField` | Initialized; `getPlayer2Name()` returns `""` (JTextField default) |
 
