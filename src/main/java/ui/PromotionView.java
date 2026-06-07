@@ -61,7 +61,7 @@ class PromotionView {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panel.setBackground(BACKGROUND);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel label = new JLabel("Choose promotion piece:");
+        JLabel label = new JLabel(messages.getString("choosePromotionPiece"));
         label.setForeground(TEXT_COLOR);
         label.setFont(LABEL_FONT);
         panel.add(label);

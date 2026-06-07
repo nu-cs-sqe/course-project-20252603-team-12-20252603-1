@@ -50,7 +50,7 @@ Both the constructor (`buildUi()` creates a `JDialog`) and `showAndGetChoice()` 
   - **State of the system**: `locale = Locale.ENGLISH`; `color = PieceColor.WHITE`
   - **Expected output**: dialog title is `"Promote Pawn"`
 
-- **PV-TC2: Constructor_OnEnglishLocale_PromptLabelFromBundle** ( :x: )
+- **PV-TC2: Constructor_OnEnglishLocale_PromptLabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: prompt label is `"Choose promotion piece:"`
