@@ -50,4 +50,14 @@ class PromotionViewTest {
         String actual = view.getDialogTitleText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnSpanishLocale_PromptLabelFromBundle() {
+        PromotionView view = new PromotionView(
+                new JFrame(), PieceColor.WHITE, Locale.forLanguageTag("es"));
+
+        String expected = "Elija la pieza de promoci\u00F3n:";
+        String actual = view.getPromptLabelText();
+        assertEquals(expected, actual);
+    }
 }
