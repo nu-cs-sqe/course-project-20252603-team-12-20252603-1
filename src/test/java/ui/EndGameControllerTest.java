@@ -6,9 +6,19 @@ import java.awt.Window;
 import java.util.Locale;
 import javax.swing.JFrame;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class EndGameControllerTest {
+
+    @AfterEach
+    void disposeOpenUiWindows() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof WelcomeView || window instanceof EndGameView) {
+                window.dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_WithEmptyResultMessage_ShowHidesMainView() {
