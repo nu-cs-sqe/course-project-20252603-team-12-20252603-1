@@ -132,6 +132,18 @@
   - **State of the system**: `player1Name = "Alice"`, `player2Name = ""`; `startGame()` called
   - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
 
+### Step 4 (i18n): error message text from bundle
+
+- **WC-TC18: StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController` constructed with `Locale.ENGLISH`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
+  - **Expected output**: `getErrorText()` is `"Player name cannot be empty"`
+
+- **WC-TC19: StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController(Locale.forLanguageTag("es"))`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
+  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
+
 ---
 
 ## Method: `selectedInitializer()`
