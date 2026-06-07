@@ -45,7 +45,7 @@ Both the constructor (`buildUi()` creates a `JDialog`) and `showAndGetChoice()` 
 
 **Headless guard:** i18n TCs use `@BeforeAll assumeTrue(!GraphicsEnvironment.isHeadless())`. Tests read dialog title and prompt label after construction without calling `showAndGetChoice()`.
 
-- **PV-TC1: Constructor_OnEnglishLocale_DialogTitleFromBundle** ( :x: )
+- **PV-TC1: Constructor_OnEnglishLocale_DialogTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`; `color = PieceColor.WHITE`
   - **Expected output**: dialog title is `"Promote Pawn"`
