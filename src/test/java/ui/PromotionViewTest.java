@@ -7,7 +7,9 @@ import domain.piece.PieceColor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.GraphicsEnvironment;
 import java.util.Locale;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +23,15 @@ class PromotionViewTest {
         assumeTrue(
                 !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
                 "Skipping PromotionView tests: no display available");
+    }
+
+    @AfterEach
+    void disposeOpenSwingWindows() {
+        for (java.awt.Window window : java.awt.Window.getWindows()) {
+            if (window instanceof JFrame || window instanceof JDialog) {
+                window.dispose();
+            }
+        }
     }
 
     @Test
