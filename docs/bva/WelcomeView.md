@@ -181,7 +181,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: start button text is `"Start Game"`
 
-- **WV-TC16: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :x: )
+- **WV-TC16: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: frame title is `"Ajedrez"`

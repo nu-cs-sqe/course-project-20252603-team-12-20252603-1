@@ -158,4 +158,13 @@ class WelcomeViewTest {
         String actual = view.getStartGameButtonText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnSpanishLocale_WindowTitleFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
+
+        String expected = "Ajedrez";
+        String actual = view.getTitle();
+        assertEquals(expected, actual);
+    }
 }
