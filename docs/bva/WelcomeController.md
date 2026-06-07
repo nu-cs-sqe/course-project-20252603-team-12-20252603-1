@@ -261,7 +261,7 @@ Scope: After name validation, create `BoardController(player1Name, player2Name, 
   - **State of the system**: `WelcomeController()` with Spanish selected; valid player names; game started
   - **Expected output**: visible `MainView` title is `"Ajedrez"`
 
-- **WC-TC21: StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle** ( :x: )
+- **WC-TC21: StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `WelcomeController()` (English welcome); Spanish selected; `player1Name = ""`; start triggered
   - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`

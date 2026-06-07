@@ -192,6 +192,20 @@ class WelcomeControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().selectLanguageIndex(1);
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String actual = controller.getWelcomeView().getErrorText();
+        assertEquals(expected, actual);
+    }
+
     private static MainView findVisibleMainView() {
         for (Window window : Window.getWindows()) {
             if (window instanceof MainView) {
