@@ -256,7 +256,7 @@ User picks **English** or **Español** from a combo box. `getSelectedLocale()` r
   - **State of the system**: `WelcomeView(Locale.ENGLISH)`; Spanish option selected via test seam
   - **Expected output**: `Locale.forLanguageTag("es")`
 
-- **WV-TC25: Constructor_OnEnglishLocale_LanguageLabelFromBundle** ( :x: )
+- **WV-TC25: Constructor_OnEnglishLocale_LanguageLabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: language label is `"Language:"`

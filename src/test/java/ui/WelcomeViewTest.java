@@ -240,4 +240,23 @@ class WelcomeViewTest {
         Locale actual = view.getSelectedLocale();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnEnglishLocale_LanguageLabelFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+
+        String expected = "Language:";
+        String actual = view.getLanguageLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void SelectLanguage_WhenSpanishChosen_RelocalizesWelcomeTitle() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+        view.selectLanguageIndex(1);
+
+        String expected = "\u265F  Ajedrez  \u265F";
+        String actual = view.getWelcomeTitleText();
+        assertEquals(expected, actual);
+    }
 }
