@@ -24,4 +24,13 @@ class MessagesTest {
         String actual = messages.getString("nonexistentKey");
         assertEquals(expected, actual);
     }
+
+    @Test
+    void GetString_OnSpanishLocale_ReturnsSpanishBundleValue() {
+        Messages messages = new Messages(Locale.forLanguageTag("es"));
+
+        String expected = "{0} contra {1}";
+        String actual = messages.getString("matchupPattern");
+        assertEquals(expected, actual);
+    }
 }

@@ -24,7 +24,7 @@ Thin facade over `ResourceBundle` (lab 5 pattern). Loads `messages.properties` f
 
 ### Step 3: Concrete boundary values
 
-- **Cases:** `locale = Locale.ENGLISH`.
+- **Cases:** `locale = Locale.ENGLISH`; `locale = Locale.forLanguageTag("es")`.
 
 ### Step 4: Test cases
 
@@ -65,7 +65,7 @@ Constructor-only behavior is covered indirectly by `getString` TCs below.
   - **State of the system**: `Messages` constructed with `Locale.ENGLISH`; key `"nonexistentKey"` is absent
   - **Expected output**: returns `"!nonexistentKey!"`
 
-- **MS-TC3: GetString_OnSpanishLocale_ReturnsSpanishBundleValue** ( :x: )
+- **MS-TC3: GetString_OnSpanishLocale_ReturnsSpanishBundleValue** ( :white_check_mark: )
   - **Method(s) under test**: `getString(String)`
   - **State of the system**: `Messages` constructed with `Locale.forLanguageTag("es")`; `messages_es.properties` defines `matchupPattern`
   - **Expected output**: returns `"{0} contra {1}"`

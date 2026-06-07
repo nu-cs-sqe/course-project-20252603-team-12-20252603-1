@@ -53,5 +53,5 @@ Externalize user-visible UI text so the chess application can support multiple l
 | --------------------- | -------------------------------------------------------------------------------- |
 | **Phase 0 (this PR)** | Document plan; add `messages.properties`; no UI refactor                         |
 | **Phase 1**           | Replace hard-coded UI strings in existing views (start with `GameStatsView`); pass `Locale` through constructors |
-| **Phase 2**           | Add `messages_es.properties` (or agreed second locale) with complete keys        |
+| **Phase 2**           | Keep `messages_es.properties` in sync as keys are added (target locales: **English** + **Spanish**) |
 | **Phase 3**           | In-app language menu in `WelcomeView`; user-selected `Locale` passed to `MainView` and all child views |
