@@ -55,7 +55,7 @@ class EndGameView extends JFrame {
         panel.add(resultLabel);
         panel.add(Box.createVerticalStrut(40));
 
-        playAgainButton = new JButton("Play Again");
+        playAgainButton = new JButton(messages.getString("playAgain"));
         playAgainButton.setFont(BUTTON_FONT);
         playAgainButton.setBackground(ACCENT_COLOR);
         playAgainButton.setForeground(TEXT_COLOR);

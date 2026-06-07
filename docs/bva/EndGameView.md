@@ -39,7 +39,7 @@ Scope: **Constructor** UI strings from bundle. `resultMessage` is caller-supplie
   - **State of the system**: `locale = Locale.ENGLISH`; `resultMessage = "Alice wins!"`
   - **Expected output**: frame title is `"Game Over"`
 
-- **EG-TC2: Constructor_OnEnglishLocale_PlayAgainButtonFromBundle** ( :x: )
+- **EG-TC2: Constructor_OnEnglishLocale_PlayAgainButtonFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameView(String, Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: play-again button text is `"Play Again"`

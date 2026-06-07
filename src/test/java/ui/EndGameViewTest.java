@@ -29,4 +29,13 @@ class EndGameViewTest {
         String actual = view.getTitle();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnEnglishLocale_PlayAgainButtonFromBundle() {
+        EndGameView view = new EndGameView("Alice wins!", Locale.ENGLISH);
+
+        String expected = "Play Again";
+        String actual = view.getPlayAgainButtonText();
+        assertEquals(expected, actual);
+    }
 }
