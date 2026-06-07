@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.GraphicsEnvironment;
+import java.util.Locale;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class WelcomeViewTest {
 
     @Test
     void Constructor_OnFreshWelcomeView_Player1NameIsEmpty() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
 
         String expected = "";
         String actual = view.getPlayer1Name();
@@ -31,7 +32,7 @@ class WelcomeViewTest {
 
     @Test
     void Constructor_OnFreshWelcomeView_Player2NameIsEmpty() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
 
         String expected = "";
         String actual = view.getPlayer2Name();
@@ -40,7 +41,7 @@ class WelcomeViewTest {
 
     @Test
     void GetPlayer1Name_WhenFieldHasText_ReturnsEnteredName() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
         view.setPlayer1Name("Alice");
 
         String expected = "Alice";
@@ -50,7 +51,7 @@ class WelcomeViewTest {
 
     @Test
     void GetPlayer2Name_WhenFieldHasText_ReturnsEnteredName() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
         view.setPlayer2Name("Bob");
 
         String expected = "Bob";
@@ -60,7 +61,7 @@ class WelcomeViewTest {
 
     @Test
     void IsChess960Selected_OnFreshWelcomeView_ReturnsFalse() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
 
         boolean expected = false;
         boolean actual = view.isChess960Selected();
@@ -69,7 +70,7 @@ class WelcomeViewTest {
 
     @Test
     void IsChess960Selected_WhenChess960RadioIsSelected_ReturnsTrue() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
         view.setChess960Selected(true);
 
         boolean expected = true;
@@ -79,7 +80,7 @@ class WelcomeViewTest {
 
     @Test
     void SetStartGameAction_WhenStartGameClicked_ActionIsInvoked() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
         int[] callCount = {0};
         view.setStartGameAction(() -> callCount[0]++);
         view.clickStartGame();
@@ -91,7 +92,16 @@ class WelcomeViewTest {
 
     @Test
     void ClickStartGame_WhenNoActionRegistered_DoesNotThrow() {
-        WelcomeView view = new WelcomeView();
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
         view.clickStartGame();
+    }
+
+    @Test
+    void Constructor_OnEnglishLocale_WindowTitleFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+
+        String expected = "Chess";
+        String actual = view.getTitle();
+        assertEquals(expected, actual);
     }
 }

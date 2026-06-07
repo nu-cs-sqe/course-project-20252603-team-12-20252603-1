@@ -4,6 +4,7 @@ import domain.Board;
 import domain.BoardInitializer;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import java.util.Locale;
 import java.util.Random;
 
 public class WelcomeController {
@@ -11,7 +12,7 @@ public class WelcomeController {
     private final WelcomeView welcomeView;
 
     public WelcomeController() {
-        welcomeView = new WelcomeView();
+        welcomeView = new WelcomeView(Locale.getDefault());
         welcomeView.setStartGameAction(this::startGame);
     }
 

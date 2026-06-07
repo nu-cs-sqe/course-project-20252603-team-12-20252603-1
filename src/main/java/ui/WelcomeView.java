@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,6 +30,7 @@ public class WelcomeView extends JFrame {
     private static final Font RADIO_FONT  = new Font("SansSerif", Font.PLAIN, 18);
     private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD,  16);
 
+    private final Messages messages;
     private JTextField player1NameField;
     private JTextField player2NameField;
     private JRadioButton standardRadioButton;
@@ -36,7 +38,11 @@ public class WelcomeView extends JFrame {
     private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
-    public WelcomeView() {
+    /**
+     * @param locale non-null locale used to load UI strings
+     */
+    public WelcomeView(Locale locale) {
+        messages = new Messages(locale);
         player1NameField    = new JTextField();
         player2NameField    = new JTextField();
         standardRadioButton = new JRadioButton();
@@ -184,7 +190,7 @@ public class WelcomeView extends JFrame {
     }
 
     private void configureWindow(JPanel panel) {
-        setTitle("Chess");
+        setTitle(messages.getString("appTitle"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BACKGROUND);
         getContentPane().add(panel);
