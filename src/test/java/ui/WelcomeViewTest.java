@@ -221,4 +221,13 @@ class WelcomeViewTest {
         String actual = view.getStartGameButtonText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void GetSelectedLocale_OnFreshEnglishView_ReturnsEnglish() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+
+        Locale expected = Locale.ENGLISH;
+        Locale actual = view.getSelectedLocale();
+        assertEquals(expected, actual);
+    }
 }

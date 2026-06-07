@@ -246,7 +246,7 @@ User picks **English** or **Español** from a combo box. `getSelectedLocale()` r
 
 ### Step 4: Test cases
 
-- **WV-TC23: GetSelectedLocale_OnFreshEnglishView_ReturnsEnglish** ( :x: )
+- **WV-TC23: GetSelectedLocale_OnFreshEnglishView_ReturnsEnglish** ( :white_check_mark: )
   - **Method(s) under test**: `getSelectedLocale()`
   - **State of the system**: `WelcomeView(Locale.ENGLISH)` freshly constructed
   - **Expected output**: `Locale.ENGLISH`

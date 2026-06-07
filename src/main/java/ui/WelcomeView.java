@@ -11,6 +11,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,7 +31,10 @@ public class WelcomeView extends JFrame {
     private static final Font RADIO_FONT  = new Font("SansSerif", Font.PLAIN, 18);
     private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD,  16);
 
-    private final Messages messages;
+    private static final int ENGLISH_LANGUAGE_INDEX = 0;
+    private static final int SPANISH_LANGUAGE_INDEX = 1;
+
+    private Messages messages;
     private JTextField player1NameField;
     private JTextField player2NameField;
     private JRadioButton standardRadioButton;
@@ -39,6 +43,8 @@ public class WelcomeView extends JFrame {
     private JLabel player1Label;
     private JLabel player2Label;
     private JButton startGameButton;
+    private JLabel languageLabel;
+    private JComboBox<String> languageComboBox;
     private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
@@ -52,7 +58,22 @@ public class WelcomeView extends JFrame {
         standardRadioButton = new JRadioButton();
         chess960RadioButton = new JRadioButton();
         standardRadioButton.setSelected(true);
-        createWelcomeScreenUi();
+        createWelcomeScreenUi(locale);
+    }
+
+    Locale getSelectedLocale() {
+        if (languageComboBox.getSelectedIndex() == SPANISH_LANGUAGE_INDEX) {
+            return Locale.forLanguageTag("es");
+        }
+        return Locale.ENGLISH;
+    }
+
+    void selectLanguageIndex(int index) {
+        languageComboBox.setSelectedIndex(index);
+    }
+
+    String getLanguageLabelText() {
+        return languageLabel.getText();
     }
 
     public String getPlayer1Name() {
@@ -120,12 +141,13 @@ public class WelcomeView extends JFrame {
         return startGameButton.getText();
     }
 
-    private void createWelcomeScreenUi() {
+    private void createWelcomeScreenUi(Locale initialLocale) {
         // untestable: Swing UI assembly
         JPanel panel = buildMainPanel();
         addTitle(panel);
         addPlayerNameFields(panel);
         addModeSelector(panel);
+        addLanguageSelector(panel, initialLocale);
         addStartButton(panel);
         addErrorLabel(panel);
         configureWindow(panel);
@@ -196,6 +218,47 @@ public class WelcomeView extends JFrame {
             radioPanel.add(btn);
         }
         return radioPanel;
+    }
+
+    private void addLanguageSelector(JPanel panel, Locale initialLocale) {
+        languageLabel = new JLabel(messages.getString("languageLabel"));
+        languageLabel.setFont(LABEL_FONT);
+        languageLabel.setForeground(TEXT_COLOR);
+        languageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(languageLabel);
+        panel.add(Box.createVerticalStrut(5));
+
+        String[] languageOptions = {
+            messages.getString("languageEnglish"),
+            messages.getString("languageSpanish")
+        };
+        languageComboBox = new JComboBox<>(languageOptions);
+        languageComboBox.setFont(FIELD_FONT);
+        languageComboBox.setMaximumSize(new Dimension(180, 36));
+        languageComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        languageComboBox.setSelectedIndex(languageIndexFor(initialLocale));
+        languageComboBox.addActionListener(e -> applyLocale(getSelectedLocale()));
+        panel.add(languageComboBox);
+        panel.add(Box.createVerticalStrut(18));
+    }
+
+    private static int languageIndexFor(Locale locale) {
+        if ("es".equals(locale.getLanguage())) {
+            return SPANISH_LANGUAGE_INDEX;
+        }
+        return ENGLISH_LANGUAGE_INDEX;
+    }
+
+    private void applyLocale(Locale locale) {
+        messages = new Messages(locale);
+        welcomeTitleLabel.setText(messages.getString("welcomeTitle"));
+        player1Label.setText(messages.getString("player1Label"));
+        player2Label.setText(messages.getString("player2Label"));
+        standardRadioButton.setText(messages.getString("standardMode"));
+        chess960RadioButton.setText(messages.getString("chess960Mode"));
+        startGameButton.setText(messages.getString("startGame"));
+        languageLabel.setText(messages.getString("languageLabel"));
+        setTitle(messages.getString("appTitle"));
     }
 
     private void addStartButton(JPanel panel) {
