@@ -251,7 +251,7 @@ User picks **English** or **Español** from a combo box. `getSelectedLocale()` r
   - **State of the system**: `WelcomeView(Locale.ENGLISH)` freshly constructed
   - **Expected output**: `Locale.ENGLISH`
 
-- **WV-TC24: GetSelectedLocale_WhenSpanishOptionSelected_ReturnsSpanish** ( :x: )
+- **WV-TC24: GetSelectedLocale_WhenSpanishOptionSelected_ReturnsSpanish** ( :white_check_mark: )
   - **Method(s) under test**: `getSelectedLocale()`
   - **State of the system**: `WelcomeView(Locale.ENGLISH)`; Spanish option selected via test seam
   - **Expected output**: `Locale.forLanguageTag("es")`

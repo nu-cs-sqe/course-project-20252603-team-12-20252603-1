@@ -230,4 +230,14 @@ class WelcomeViewTest {
         Locale actual = view.getSelectedLocale();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void GetSelectedLocale_WhenSpanishOptionSelected_ReturnsSpanish() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+        view.selectLanguageIndex(1);
+
+        Locale expected = Locale.forLanguageTag("es");
+        Locale actual = view.getSelectedLocale();
+        assertEquals(expected, actual);
+    }
 }
