@@ -171,7 +171,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: standard radio label is `"Standard"`
 
-- **WV-TC14: Constructor_OnEnglishLocale_Chess960ModeLabelFromBundle** ( :x: )
+- **WV-TC14: Constructor_OnEnglishLocale_Chess960ModeLabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: Chess960 radio label is `"Chess960"`

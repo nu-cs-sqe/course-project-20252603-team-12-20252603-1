@@ -111,6 +111,10 @@ public class WelcomeView extends JFrame {
         return standardRadioButton.getText();
     }
 
+    String getChess960ModeLabelText() {
+        return chess960RadioButton.getText();
+    }
+
     private void createWelcomeScreenUi() {
         // untestable: Swing UI assembly
         JPanel panel = buildMainPanel();
@@ -167,7 +171,7 @@ public class WelcomeView extends JFrame {
 
     private void addModeSelector(JPanel panel) {
         standardRadioButton.setText(messages.getString("standardMode"));
-        chess960RadioButton.setText("Chess960");
+        chess960RadioButton.setText(messages.getString("chess960Mode"));
         ButtonGroup modeGroup = new ButtonGroup();
         modeGroup.add(standardRadioButton);
         modeGroup.add(chess960RadioButton);

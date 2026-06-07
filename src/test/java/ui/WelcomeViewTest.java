@@ -140,4 +140,13 @@ class WelcomeViewTest {
         String actual = view.getStandardModeLabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnEnglishLocale_Chess960ModeLabelFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+
+        String expected = "Chess960";
+        String actual = view.getChess960ModeLabelText();
+        assertEquals(expected, actual);
+    }
 }
