@@ -12,9 +12,9 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `player1Name`                            | **Strings** — empty `""`; whitespace-only; short ASCII; long string; non-ASCII (e.g. accented or CJK)                                                                          |
 | `player2Name`                            | **Strings** — same dimensions as `player1Name`                                                                                                                                   |
-| `locale`                                 | **Cases** — `Locale.ENGLISH` (app default); Spanish deferred to Phase 3 language selection                                                                                     |
+| `locale`                                 | **Cases** — `Locale.ENGLISH` (app default); `Locale.forLanguageTag("es")` (Spanish bundle)                                                                                       |
 | **Pairs** (`player1Name`, `player2Name`) | both empty; one empty / one non-empty (`("", "Bob")` representative); both non-empty and equal; both non-empty and different                                                     |
-| Initial labels                           | Constructor leaves the panel in a **consistent** initial state: current-player label shows player 1 name; matchup label uses `"<p1> versus <p2>"` via `formatMatchupLine`        |
+| Initial labels                           | Constructor leaves the panel in a **consistent** initial state: current-player label shows player 1 name; matchup label uses `matchupPattern` via `formatMatchupLine`            |
 
 ### Step 2: BVA catalog data types
 
@@ -22,16 +22,15 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 | ----------------------------- | ---------------------- | ---------------------------------------------------------------------------- |
 | Each name parameter           | **Strings**            | empty; same length differ in last char; one shorter prefix of the other      |
 | Pair of names                 | **Pairs of variables** | smallest/largest length pairs if you cap length                              |
-| `locale`                      | **Cases**              | valid locale only; locale-switching behavior deferred to Phase 3             |
-| Label text after construction | **String** / **Cases** | `<p1> versus <p2>` via MessageFormat pattern (empty names yield empty side, separator kept) |
+| `locale`                      | **Cases**              | English vs Spanish (`matchupPattern` key)                                    |
+| Label text after construction | **String** / **Cases** | formatted `matchupPattern` (empty names yield empty side, separator kept)  |
 | Swing tree                    | **IMPLEMENTATION**     | focus tests on **public text outcomes**, not pixel layout                    |
 
 ### Step 3: Concrete boundary values (catalog-aligned)
 
 - Strings: `""`; `" "` or `"\t"`; `"A"`; `"Alice"`; a long repeated `'a'` (constructor names only in this scope).
 - Pairs: `("", "")`; `("", "Bob")`; `("Pat", "Pat")`; `("Alice", "Bob")`.
-- **`null`:** not a valid input — documented caller contract; no unit test.
-
+- **Cases (`locale`):** `Locale.ENGLISH` → `{0} versus {1}`; `Locale.forLanguageTag("es")` → `{0} contra {1}`.
 ### Step 4: Test cases (each-choice; avoid combinatorial explosion)
 
 - **GS-TC1: Constructor_OnBothNamesNonEmpty_CurrentPlayerLabelShowsPlayerOneName** ( :white_check_mark: )
@@ -41,7 +40,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 
 - **GS-TC2: Constructor_OnBothNamesNonEmpty_MatchupLabelShowsVersusLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String, Locale)`
-  - **State of the system**: same as GS-TC1
+  - **State of the system**: `locale = Locale.ENGLISH`; same names as GS-TC1
   - **Expected output**: `gameStateLabel` shows `"Alice versus Bob"` for `"Alice"`, `"Bob"` — **one assertion**
 
 - **GS-TC3: Constructor_OnBothNamesEmpty_CurrentPlayerLabelEmpty** ( :white_check_mark: )
@@ -79,6 +78,16 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
   - **State of the system**: `("Bob", "")` swapped pair vs GS-TC5
   - **Expected output**: same `<p1> versus <p2>` rule as GS-TC6 (`"Bob versus "`); redundant with formatting logic already covered by GS-TC5–GS-TC6
 
+- **GS-TC10: Constructor_OnSpanishLocale_MatchupLabelShowsContraLine** ( :x: )
+  - **Method(s) under test**: `GameStatsView(String, String, Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; `player1Name = "Alice"`, `player2Name = "Bob"`
+  - **Expected output**: `gameStateLabel` shows `"Alice contra Bob"`
+
+- **GS-TC16: Constructor_OnSpanishLocale_EmptyNamesMatchupShowsContraSeparator** ( :x: )
+  - **Method(s) under test**: `GameStatsView(String, String, Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; both names are `""`
+  - **Expected output**: `gameStateLabel` shows `" contra "`
+
 ---
 
 ## Method: `updateCurrentPlayerLabel(String playerName)`
@@ -87,7 +96,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 
 | Input            | Classes                                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------------------- |
-| `playerName`     | `""`; whitespace-only; normal name; very long. **`null` — unrepresentable** (caller contract)     |
+| `playerName`     | **Strings** — `""`; whitespace-only; normal name; very long                                       |
 | Prior label text | non-empty from construction, then overwritten (**overwriting previous contents**)                |
 
 ### Step 2: BVA catalog data types
@@ -103,7 +112,6 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 - `""` vs non-empty overwrite; whitespace-only string verbatim.
 - Two calls: `"Alice"` then `"Bob"`.
 - Long string (500 ASCII chars): full text shown (no truncation in this story).
-- **`null`:** not a valid input — documented caller contract; no unit test.
 
 ### Step 4: Test cases
 
