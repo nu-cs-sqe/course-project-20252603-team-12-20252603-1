@@ -127,7 +127,7 @@
   - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
   - **Expected output**: a new `WelcomeView` is visible
 
-- **EC-TC7: PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle** ( :x: )
+- **EC-TC7: PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle** ( :white_check_mark: )
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController(..., Locale.forLanguageTag("es"))`; `show()` called; play again clicked
   - **Expected output**: new visible `WelcomeView` title is `"Ajedrez"`
