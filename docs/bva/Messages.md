@@ -55,7 +55,7 @@ Constructor-only behavior is covered indirectly by `getString` TCs below.
 
 ### Step 4: Test cases
 
-- **MS-TC1: GetString_OnKnownKey_ReturnsBundleValue** ( :x: )
+- **MS-TC1: GetString_OnKnownKey_ReturnsBundleValue** ( :white_check_mark: )
   - **Method(s) under test**: `Messages(Locale)`, `getString(String)`
   - **State of the system**: `Messages` constructed with `Locale.ENGLISH`; key `"matchupPattern"` exists in default bundle
   - **Expected output**: returns `"{0} versus {1}"`
