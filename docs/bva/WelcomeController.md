@@ -256,7 +256,7 @@ Scope: After name validation, create `BoardController(player1Name, player2Name, 
 
 ### Step 4: Test cases
 
-- **WC-TC20: StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle** ( :x: )
+- **WC-TC20: StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `WelcomeController()` with Spanish selected; valid player names; game started
   - **Expected output**: visible `MainView` title is `"Ajedrez"`

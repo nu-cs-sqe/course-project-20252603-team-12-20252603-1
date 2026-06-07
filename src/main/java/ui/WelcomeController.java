@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class WelcomeController {
 
-    private final Messages messages;
     private final WelcomeView welcomeView;
 
     public WelcomeController() {
@@ -17,7 +16,6 @@ public class WelcomeController {
     }
 
     WelcomeController(Locale locale) {
-        messages = new Messages(locale);
         welcomeView = new WelcomeView(locale);
         welcomeView.setStartGameAction(this::startGame);
     }
@@ -33,12 +31,17 @@ public class WelcomeController {
     private void startGame() {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
+        Messages localeMessages = new Messages(welcomeView.getSelectedLocale());
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            welcomeView.showError(messages.getString("playerNameEmptyError"));
+            welcomeView.showError(localeMessages.getString("playerNameEmptyError"));
             return;
         }
         closeWelcomeView();
-        new BoardController(player1Name, player2Name, new Board(selectedInitializer())).show();
+        new BoardController(
+                player1Name,
+                player2Name,
+                new Board(selectedInitializer()),
+                welcomeView.getSelectedLocale()).show();
     }
 
     BoardInitializer selectedInitializer() {

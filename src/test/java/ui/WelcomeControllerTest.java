@@ -174,6 +174,24 @@ class WelcomeControllerTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().selectLanguageIndex(1);
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.getWelcomeView().clickStartGame();
+
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
+        String expected = "Ajedrez";
+        String actual = mainView.getTitle();
+        assertEquals(expected, actual);
+    }
+
     private static MainView findVisibleMainView() {
         for (Window window : Window.getWindows()) {
             if (window instanceof MainView) {
