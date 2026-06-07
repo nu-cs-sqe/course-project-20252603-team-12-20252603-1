@@ -10,9 +10,9 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 
 | Input / concern                          | Equivalence classes                                                                                                                                                              |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `player1Name`                            | empty `""`; whitespace-only; short ASCII; long string; non-ASCII (e.g. accented or CJK). **`null` — unrepresentable** (caller contract)                                         |
-| `player2Name`                            | same dimensions as `player1Name`                                                                                                                                                 |
-| `locale`                                 | valid `Locale` (e.g. `Locale.ENGLISH`). **`null` — unrepresentable** (caller contract). Locale-specific bundle values are out of scope until Phase 3 exposes locale switching.  |
+| `player1Name`                            | **Strings** — empty `""`; whitespace-only; short ASCII; long string; non-ASCII (e.g. accented or CJK)                                                                          |
+| `player2Name`                            | **Strings** — same dimensions as `player1Name`                                                                                                                                   |
+| `locale`                                 | **Cases** — `Locale.ENGLISH` (app default); Spanish deferred to Phase 3 language selection                                                                                     |
 | **Pairs** (`player1Name`, `player2Name`) | both empty; one empty / one non-empty (`("", "Bob")` representative); both non-empty and equal; both non-empty and different                                                     |
 | Initial labels                           | Constructor leaves the panel in a **consistent** initial state: current-player label shows player 1 name; matchup label uses `"<p1> versus <p2>"` via `formatMatchupLine`        |
 
