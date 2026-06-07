@@ -187,3 +187,33 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: frame title is `"Ajedrez"`
+
+- **WV-TC17: Constructor_OnSpanishLocale_WelcomeTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: welcome title label is `"♟  Ajedrez  ♟"`
+
+- **WV-TC18: Constructor_OnSpanishLocale_Player1LabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: player 1 label is `"Jugador 1"`
+
+- **WV-TC19: Constructor_OnSpanishLocale_Player2LabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: player 2 label is `"Jugador 2"`
+
+- **WV-TC20: Constructor_OnSpanishLocale_StandardModeLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: standard radio label is `"Estándar"`
+
+- **WV-TC21: Constructor_OnSpanishLocale_Chess960ModeLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: Chess960 radio label is `"Chess960"`
+
+- **WV-TC22: Constructor_OnSpanishLocale_StartGameButtonFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: start button text is `"Iniciar juego"`
