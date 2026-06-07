@@ -104,4 +104,13 @@ class WelcomeViewTest {
         String actual = view.getTitle();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnEnglishLocale_WelcomeTitleFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.ENGLISH);
+
+        String expected = "\u265F  Chess  \u265F";
+        String actual = view.getWelcomeTitleText();
+        assertEquals(expected, actual);
+    }
 }

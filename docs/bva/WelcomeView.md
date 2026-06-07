@@ -151,7 +151,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: frame title is `"Chess"`
 
-- **WV-TC10: Constructor_OnEnglishLocale_WelcomeTitleFromBundle** ( :x: )
+- **WV-TC10: Constructor_OnEnglishLocale_WelcomeTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: welcome title label is `"♟  Chess  ♟"`
