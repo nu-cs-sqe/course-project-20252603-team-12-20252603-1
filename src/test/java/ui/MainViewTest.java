@@ -51,6 +51,18 @@ class MainViewTest {
     }
 
     @Test
+    void Constructor_OnEnglishLocale_WindowTitleFromBundle() {
+        Board boardMock = replayEmptyBoard();
+        MainView view = new MainView("Alice", "Bob",
+                new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
+
+        String expected = "Chess";
+        String actual = view.getTitle();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void Constructor_InitialReadinessFromInjectedController() {
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);

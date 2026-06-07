@@ -63,7 +63,7 @@ Package: `ui.MainView`
 
 ### Step 4 (i18n): window title from bundle
 
-- **MV-TC4: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :x: )
+- **MV-TC4: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, BoardController, Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`; otherwise same as MV-TC1
   - **Expected output**: frame title is `"Chess"` via `appTitle` key

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 public class MainView extends JFrame {
 
+    private final Messages messages;
     private final BoardController boardController;
     private final BoardView boardView;
     private final GameStatsView gameStatsView;
@@ -19,6 +20,7 @@ public class MainView extends JFrame {
             String player2Name,
             BoardController boardController,
             Locale locale) {
+        messages = new Messages(locale);
         this.boardController = boardController;
         boardView = new BoardView(boardController);
         gameStatsView = new GameStatsView(player1Name, player2Name, locale);
@@ -26,7 +28,7 @@ public class MainView extends JFrame {
     }
 
     private void configureMainView() {
-        setTitle("Chess");
+        setTitle(messages.getString("appTitle"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addGameStatsView();
         addBoardViewToContentPane();
