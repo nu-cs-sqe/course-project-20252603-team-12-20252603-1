@@ -228,3 +228,40 @@ Scope: After name validation, create `BoardController(player1Name, player2Name, 
   - **Method(s) under test**: `startGame()`
   - **State of the system**: valid player names; standard new game (`WHITE_TURN`)
   - **Expected output**: game stats current-player label text is `player1Name`
+
+---
+
+## Method / behavior: language selection → `BoardController` locale
+
+`startGame()` reads `welcomeView.getSelectedLocale()` and passes it to `BoardController` and error messages.
+
+### Step 1: Equivalence classes
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| Language combo | English; Spanish |
+| Output | `MainView` title and error text match selected bundle |
+
+### Step 2: Data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| Selected locale | **Cases** |
+| Main view title | **String** |
+| Error message | **String** |
+
+### Step 3: Boundary values
+
+- **Cases:** English selected → `"Chess"` title; Spanish selected → `"Ajedrez"` title.
+
+### Step 4: Test cases
+
+- **WC-TC20: StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController()` with Spanish selected; valid player names; game started
+  - **Expected output**: visible `MainView` title is `"Ajedrez"`
+
+- **WC-TC21: StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle** ( :x: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController()` (English welcome); Spanish selected; `player1Name = ""`; start triggered
+  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`

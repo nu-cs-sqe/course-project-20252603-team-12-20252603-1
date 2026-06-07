@@ -217,3 +217,51 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: start button text is `"Iniciar juego"`
+
+---
+
+## Method / behavior: language selection (`WelcomeView`)
+
+User picks **English** or **Español** from a combo box. `getSelectedLocale()` returns the choice. Changing the selection relocalizes welcome-screen labels via `applyLocale`. Combo item text stays `"English"` / `"Español"` (native language names).
+
+### Step 1: Input and output equivalence classes
+
+| Input / concern | Equivalence classes |
+| --------------- | ------------------- |
+| Language combo selection | English (`Locale.ENGLISH`); Spanish (`Locale.forLanguageTag("es")`) |
+| Initial constructor `locale` | Sets default combo selection and initial label language |
+| Bundle keys | `languageLabel`, `languageEnglish`, `languageSpanish` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| Combo selection | **Cases** | English vs Spanish |
+| `getSelectedLocale()` result | **Cases** | matches combo |
+| `languageLabel` text | **String** | from bundle for current UI locale |
+
+### Step 3: Concrete boundary values
+
+- **Cases:** combo index 0 → `Locale.ENGLISH`; index 1 → `Locale.forLanguageTag("es")`.
+
+### Step 4: Test cases
+
+- **WV-TC23: GetSelectedLocale_OnFreshEnglishView_ReturnsEnglish** ( :x: )
+  - **Method(s) under test**: `getSelectedLocale()`
+  - **State of the system**: `WelcomeView(Locale.ENGLISH)` freshly constructed
+  - **Expected output**: `Locale.ENGLISH`
+
+- **WV-TC24: GetSelectedLocale_WhenSpanishOptionSelected_ReturnsSpanish** ( :x: )
+  - **Method(s) under test**: `getSelectedLocale()`
+  - **State of the system**: `WelcomeView(Locale.ENGLISH)`; Spanish option selected via test seam
+  - **Expected output**: `Locale.forLanguageTag("es")`
+
+- **WV-TC25: Constructor_OnEnglishLocale_LanguageLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: language label is `"Language:"`
+
+- **WV-TC26: SelectLanguage_WhenSpanishChosen_RelocalizesWelcomeTitle** ( :x: )
+  - **Method(s) under test**: language combo action / `applyLocale`
+  - **State of the system**: `WelcomeView(Locale.ENGLISH)`; user selects Spanish
+  - **Expected output**: welcome title label is `"♟  Ajedrez  ♟"`
