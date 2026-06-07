@@ -12,7 +12,7 @@ public class WelcomeController {
     private final WelcomeView welcomeView;
 
     public WelcomeController() {
-        welcomeView = new WelcomeView(Locale.getDefault());
+        welcomeView = new WelcomeView(Locale.ENGLISH);
         welcomeView.setStartGameAction(this::startGame);
     }
 

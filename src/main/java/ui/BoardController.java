@@ -38,7 +38,7 @@ public class BoardController {
     }
 
     public void show() {
-        mainView = new MainView(player1Name, player2Name, this, Locale.getDefault());
+        mainView = new MainView(player1Name, player2Name, this, Locale.ENGLISH);
         mainView.setVisible(true);
         updateCurrentPlayerLabel();
     }

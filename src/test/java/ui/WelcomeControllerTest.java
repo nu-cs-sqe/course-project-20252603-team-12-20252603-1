@@ -31,6 +31,15 @@ class WelcomeControllerTest {
     }
 
     @Test
+    void Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale() {
+        WelcomeController controller = new WelcomeController();
+
+        String expected = "Chess";
+        String actual = controller.getWelcomeView().getTitle();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void Show_WhenCalled_WelcomeViewBecomesVisible() {
         WelcomeController controller = new WelcomeController();
         controller.show();
