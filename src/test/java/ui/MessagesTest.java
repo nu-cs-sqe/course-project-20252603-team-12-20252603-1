@@ -15,4 +15,13 @@ class MessagesTest {
         String actual = messages.getString("matchupPattern");
         assertEquals(expected, actual);
     }
+
+    @Test
+    void GetString_OnMissingKey_ReturnsBangWrappedKey() {
+        Messages messages = new Messages(Locale.ENGLISH);
+
+        String expected = "!nonexistentKey!";
+        String actual = messages.getString("nonexistentKey");
+        assertEquals(expected, actual);
+    }
 }

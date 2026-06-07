@@ -60,7 +60,7 @@ Constructor-only behavior is covered indirectly by `getString` TCs below.
   - **State of the system**: `Messages` constructed with `Locale.ENGLISH`; key `"matchupPattern"` exists in default bundle
   - **Expected output**: returns `"{0} versus {1}"`
 
-- **MS-TC2: GetString_OnMissingKey_ReturnsBangWrappedKey** ( :x: )
+- **MS-TC2: GetString_OnMissingKey_ReturnsBangWrappedKey** ( :white_check_mark: )
   - **Method(s) under test**: `getString(String)`
   - **State of the system**: `Messages` constructed with `Locale.ENGLISH`; key `"nonexistentKey"` is absent
   - **Expected output**: returns `"!nonexistentKey!"`

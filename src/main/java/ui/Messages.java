@@ -1,10 +1,13 @@
 package ui;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
  * Loads UI strings from {@code messages.properties} for a given locale.
+ *
+ * <p>Missing keys return {@code !key!} so untranslated labels are visible during development.
  */
 public class Messages {
 
@@ -20,9 +23,13 @@ public class Messages {
 
     /**
      * @param key non-null property key
-     * @return bundle value for the key
+     * @return bundle value, or {@code !key!} when the key is absent
      */
     public String getString(String key) {
-        return bundle.getString(key);
+        try {
+            return bundle.getString(key);
+        } catch (MissingResourceException e) {
+            return '!' + key + '!';
+        }
     }
 }
