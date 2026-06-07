@@ -11,6 +11,7 @@ import domain.piece.PieceType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -37,7 +38,7 @@ public class BoardController {
     }
 
     public void show() {
-        mainView = new MainView(player1Name, player2Name, this);
+        mainView = new MainView(player1Name, player2Name, this, Locale.getDefault());
         mainView.setVisible(true);
         updateCurrentPlayerLabel();
     }
