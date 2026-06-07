@@ -21,13 +21,11 @@ class EndGameView extends JFrame {
     private static final Font RESULT_FONT = new Font("Serif", Font.BOLD, 36);
     private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD, 16);
 
-    private final Messages messages;
     private JButton playAgainButton;
     private Runnable playAgainAction = () -> {};
 
     EndGameView(String resultMessage, Locale locale) {
-        messages = new Messages(locale);
-        buildUi(resultMessage);
+        buildUi(resultMessage, locale);
     }
 
     void setPlayAgainAction(Runnable action) {
@@ -42,7 +40,8 @@ class EndGameView extends JFrame {
         return playAgainButton.getText();
     }
 
-    private void buildUi(String resultMessage) {
+    private void buildUi(String resultMessage, Locale locale) {
+        Messages messages = new Messages(locale);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(BACKGROUND);
