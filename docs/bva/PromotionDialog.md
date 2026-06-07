@@ -39,6 +39,32 @@ Both the constructor (`buildUi()` creates a `JDialog`) and `showAndGetChoice()` 
 
 *Untestable — constructor calls `buildUi()` which creates a `JDialog`; cannot be exercised in a headless test environment.*
 
+### Step 4 (i18n): bundle-loaded dialog strings (`PromotionView(JFrame, PieceColor, Locale)`)
+
+**API contract:** `parent`, `color`, and `locale` are **non-null**. Invalid null input is **out of scope**.
+
+**Headless guard:** i18n TCs use `@BeforeAll assumeTrue(!GraphicsEnvironment.isHeadless())`. Tests read dialog title and prompt label after construction without calling `showAndGetChoice()`.
+
+- **PV-TC1: Constructor_OnEnglishLocale_DialogTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`; `color = PieceColor.WHITE`
+  - **Expected output**: dialog title is `"Promote Pawn"`
+
+- **PV-TC2: Constructor_OnEnglishLocale_PromptLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: prompt label is `"Choose promotion piece:"`
+
+- **PV-TC3: Constructor_OnSpanishLocale_DialogTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: dialog title is `"Promover peón"`
+
+- **PV-TC4: Constructor_OnSpanishLocale_PromptLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `PromotionView(JFrame, PieceColor, Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: prompt label is `"Elija la pieza de promoción:"`
+
 ---
 
 ## Method / behavior: `showAndGetChoice(): PieceType`
