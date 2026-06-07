@@ -44,12 +44,12 @@ Scope: **Constructor** UI strings from bundle. `resultMessage` is caller-supplie
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: play-again button text is `"Play Again"`
 
-- **EG-TC3: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :x: )
+- **EG-TC3: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameView(String, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: frame title is `"Fin del juego"`
 
-- **EG-TC4: Constructor_OnSpanishLocale_PlayAgainButtonFromBundle** ( :x: )
+- **EG-TC4: Constructor_OnSpanishLocale_PlayAgainButtonFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameView(String, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: play-again button text is `"Jugar de nuevo"`
