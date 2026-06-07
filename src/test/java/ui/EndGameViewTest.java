@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.util.Locale;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +21,15 @@ class EndGameViewTest {
         assumeTrue(
                 !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
                 "Skipping EndGameView tests: no display available");
+    }
+
+    @AfterEach
+    void disposeOpenEndGameViews() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof EndGameView) {
+                window.dispose();
+            }
+        }
     }
 
     @Test
