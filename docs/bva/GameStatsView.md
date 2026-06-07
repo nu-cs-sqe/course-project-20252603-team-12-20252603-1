@@ -74,12 +74,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
   - **State of the system**: both names are `"Pat"`, `"Pat"`
   - **Expected output**: `gameStateLabel` shows `"Pat versus Pat"`
 
-- **GS-TC9: Constructor_OnNullName_N/A** ( N/A )
-  - **Method(s) under test**: `GameStatsView(String, String, Locale)`
-  - **State of the system**: `null` name argument
-  - **Expected output**: not specified — **callers must not pass null**; no defensive check in `GameStatsView`
-
-- **GS-TC10: Constructor_OnPlayerTwoEmptyPlayerOneNonEmpty_N/A** ( N/A )
+- **GS-TC9: Constructor_OnPlayerTwoEmptyPlayerOneNonEmpty_N/A** ( N/A )
   - **Method(s) under test**: `GameStatsView(String, String, Locale)`
   - **State of the system**: `("Bob", "")` swapped pair vs GS-TC5
   - **Expected output**: same `<p1> versus <p2>` rule as GS-TC6 (`"Bob versus "`); redundant with formatting logic already covered by GS-TC5–GS-TC6
@@ -99,7 +94,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
 
 | Concern          | Catalog type                                                                                  |
 | ---------------- | --------------------------------------------------------------------------------------------- |
-| `playerName`     | **Strings** (empty, whitespace-only, long); **null** unrepresentable per API contract         |
+| `playerName`     | **Strings** (empty, whitespace-only, long)                                                    |
 | Repeated updates | **Overwriting the previous contents** (shorter then longer replacement)                       |
 | `JLabel` display | **Streaming / fixed UI string** — displayed text is the output per call                       |
 
@@ -136,8 +131,3 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
   - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
   - **State of the system**: argument is 500 ASCII `'a'` characters
   - **Expected output**: no exception; label text equals the full argument
-
-- **GS-TC16: UpdateCurrentPlayerLabel_OnNullName_N/A** ( N/A )
-  - **Method(s) under test**: `updateCurrentPlayerLabel(String)`
-  - **State of the system**: `playerName` is `null`
-  - **Expected output**: not specified — **callers must not pass null**
