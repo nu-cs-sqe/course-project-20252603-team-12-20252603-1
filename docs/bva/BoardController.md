@@ -610,50 +610,66 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ## Method: `buildEndGameMessage()`
 
+Win and draw text load from `messages.properties` / `messages_es.properties` via `ui.Messages` (`winPattern`, `drawResult`). `updateCurrentPlayerLabel()` uses the same keys for terminal states.
+
 ### Step 1: Input and output equivalence classes
 
 | Input (implicit) | Classes |
 | ---------------- | ------- |
+| `locale` (constructor) | `Locale.ENGLISH` (app default); `Locale.forLanguageTag("es")` |
 | `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW` |
 
 | Output | Classes |
 | ------ | ------- |
-| Returned message | `player1Name + " wins!"`; `player2Name + " wins!"`; `"Draw!"` |
+| Returned message | formatted `winPattern` with player name; `drawResult` literal |
 
 ### Step 2: BVA catalog data types
 
 | Variable / output | Catalog type |
 | ----------------- | ------------ |
-| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW |
-| Returned message | Cases: player1 wins, player2 wins, draw |
+| `locale` | **Cases** — English vs Spanish |
+| `getCurrentGameState()` | **Cases** — WHITE_WIN, BLACK_WIN, DRAW |
+| Returned message | **String** — one outcome per TC |
 
 ### Step 3: Concrete boundary values
 
-**`getCurrentGameState()` — Cases:**
-- `WHITE_WIN` → `player1Name + " wins!"`
-- `BLACK_WIN` → `player2Name + " wins!"`
-- `DRAW` → `"Draw!"`
+**`locale` — Cases:** `Locale.ENGLISH`; `Locale.forLanguageTag("es")`.
 
-**Returned message — Cases:**
-- `player1Name + " wins!"`: WHITE_WIN state
-- `player2Name + " wins!"`: BLACK_WIN state
-- `"Draw!"`: DRAW state
+**`getCurrentGameState()` — Cases:**
+- `WHITE_WIN` → `MessageFormat.format(winPattern, player1Name)`
+- `BLACK_WIN` → `MessageFormat.format(winPattern, player2Name)`
+- `DRAW` → `drawResult`
+
+**Bundle keys:** `winPattern` (`{0}` placeholder); `drawResult`.
 
 ### Step 4: Test cases
 
-`EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
-
 - **BC-TC68: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
-  - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
-  - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
+  - **State of the system**: `locale = Locale.ENGLISH`; board returns `WHITE_WIN`; `player1Name = "Alice"`
+  - **Expected output**: `"Alice wins!"`
 
 - **BC-TC69: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
-  - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
-  - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
+  - **State of the system**: `locale = Locale.ENGLISH`; board returns `BLACK_WIN`; `player2Name = "Bob"`
+  - **Expected output**: `"Bob wins!"`
 
 - **BC-TC70: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
-  - **State of the system**: board returns `DRAW`
-  - **Expected output**: `EndGameView` result label text equals `"Draw!"`
+  - **State of the system**: `locale = Locale.ENGLISH`; board returns `DRAW`
+  - **Expected output**: `"Draw!"`
+
+- **BC-TC71: BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `WHITE_WIN`; `player1Name = "Alice"`
+  - **Expected output**: `"¡Alice gana!"`
+
+- **BC-TC72: BuildEndGameMessage_OnSpanishLocale_BlackWin_ReturnsSpanishWinMessage** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `BLACK_WIN`; `player2Name = "Bob"`
+  - **Expected output**: `"¡Bob gana!"`
+
+- **BC-TC73: BuildEndGameMessage_OnSpanishLocale_Draw_ReturnsSpanishDrawMessage** ( :x: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `DRAW`
+  - **Expected output**: `"¡Empate!"`
