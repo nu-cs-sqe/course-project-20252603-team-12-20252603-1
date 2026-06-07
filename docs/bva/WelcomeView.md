@@ -10,12 +10,13 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
 
 ---
 
-## Method / behavior: `WelcomeView()`
+## Method / behavior: `WelcomeView(Locale locale)`
 
 ### Step 1: Input and output equivalence classes
 
 | Concern | Equivalence classes |
 | ------- | ------------------- |
+| `locale`                               | valid `Locale` (`Locale.ENGLISH` or `Locale.forLanguageTag("es")`). **`null` — unrepresentable** |
 | Post-construction `player1NameField` | Initialized; `getPlayer1Name()` returns `""` (JTextField default) |
 | Post-construction `player2NameField` | Initialized; `getPlayer2Name()` returns `""` (JTextField default) |
 
@@ -34,12 +35,12 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
 ### Step 4: Test cases
 
 - **WV-TC1: Constructor_OnFreshWelcomeView_Player1NameIsEmpty** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeView()`, `getPlayer1Name()`
+  - **Method(s) under test**: `WelcomeView(Locale)`, `getPlayer1Name()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer1Name()` returns `""`
 
 - **WV-TC2: Constructor_OnFreshWelcomeView_Player2NameIsEmpty** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeView()`, `getPlayer2Name()`
+  - **Method(s) under test**: `WelcomeView(Locale)`, `getPlayer2Name()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `getPlayer2Name()` returns `""`
 
@@ -77,7 +78,7 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
 ### Step 4: Test cases
 
 - **WV-TC5: IsChess960Selected_OnFreshWelcomeView_ReturnsFalse** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeView()`, `isChess960Selected()`
+  - **Method(s) under test**: `WelcomeView(Locale)`, `isChess960Selected()`
   - **State of the system**: freshly constructed `WelcomeView`
   - **Expected output**: `isChess960Selected()` returns `false`
 
@@ -118,3 +119,69 @@ Scope: **Constructor** (field initialization), **`getPlayer1Name()`** / **`getPl
   - **Method(s) under test**: `clickStartGame()`
   - **State of the system**: `WelcomeView` constructed; no action registered; `clickStartGame()` called
   - **Expected output**: no exception thrown
+
+---
+
+## Method / behavior: i18n label text (`WelcomeView(Locale locale)`)
+
+UI strings load from `messages.properties` / `messages_es.properties` via `ui.Messages`. Tests assert **public text outcomes** through package-private getters; Swing layout is not tested.
+
+### Step 1: Input and output equivalence classes
+
+| Input / concern | Equivalence classes |
+| --------------- | ------------------- |
+| `locale`        | `Locale.ENGLISH` (default bundle); `Locale.forLanguageTag("es")` (Spanish bundle) |
+| Bundle keys     | `appTitle`, `welcomeTitle`, `player1Label`, `player2Label`, `standardMode`, `chess960Mode`, `startGame` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `locale`          | **Cases**    | English vs Spanish |
+| Label / button text | **String** | one visible string per TC |
+
+### Step 3: Concrete boundary values
+
+- **Cases:** `Locale.ENGLISH`; `Locale.forLanguageTag("es")`.
+
+### Step 4: Test cases
+
+- **WV-TC9: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: frame title is `"Chess"`
+
+- **WV-TC10: Constructor_OnEnglishLocale_WelcomeTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: welcome title label is `"♟  Chess  ♟"`
+
+- **WV-TC11: Constructor_OnEnglishLocale_Player1LabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: player 1 label is `"Player 1"`
+
+- **WV-TC12: Constructor_OnEnglishLocale_Player2LabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: player 2 label is `"Player 2"`
+
+- **WV-TC13: Constructor_OnEnglishLocale_StandardModeLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: standard radio label is `"Standard"`
+
+- **WV-TC14: Constructor_OnEnglishLocale_Chess960ModeLabelFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: Chess960 radio label is `"Chess960"`
+
+- **WV-TC15: Constructor_OnEnglishLocale_StartGameButtonFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`
+  - **Expected output**: start button text is `"Start Game"`
+
+- **WV-TC16: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `WelcomeView(Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`
+  - **Expected output**: frame title is `"Ajedrez"`
