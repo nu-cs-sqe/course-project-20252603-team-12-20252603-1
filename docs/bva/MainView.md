@@ -2,6 +2,8 @@
 
 Package: `ui.MainView`
 
+**API contract:** All `String`, `Locale`, and `BoardController` parameters are **non-null**. Callers must not pass `null`. Invalid null input is **out of scope** (unrepresentable boundary — not tested here).
+
 **Testing:** Unit tests inject a `ui.BoardController` built around a mock `domain.Board` (EasyMock). `MainView` does **not** construct or initialize `BoardController`; the caller passes an already-initialized controller (e.g. from `WelcomeController` after creating the board). **Do not** name tests or TCs by Standard vs Fischer—`MainView` has no mode input; one injected controller is enough.
 
 ## Method: `MainView(String player1Name, String player2Name, BoardController boardController, Locale locale)`
@@ -13,7 +15,7 @@ Package: `ui.MainView`
 | `player1Name`     | **Strings**                                                                |
 | `player2Name`     | **Strings**                                                                |
 | `boardController` | **Pointers** — mock or real `BoardController` supplied by caller           |
-| `locale`          | **Cases** — valid `Locale` (e.g. `Locale.ENGLISH`) for `GameStatsView`     |
+| `locale`          | **Cases** — `Locale.ENGLISH` (app default) or `Locale.forLanguageTag("es")`; loads `appTitle` and `GameStatsView` strings |
 | Frame             | newly constructed; no clicks; no moves applied                             |
 | Outputs           | collaborators wired; stats labels; board on content pane; controller ready |
 
@@ -58,5 +60,17 @@ Package: `ui.MainView`
   - **Method(s) under test**: `MainView(String, String, BoardController, Locale)`
   - **State of the system**: mock `BoardController` wrapping a mock `Board` returns `WHITE_TURN`; `locale = Locale.ENGLISH`; no clicks yet
   - **Expected output**: `getBoardController().getCurrentGameState() == GameState.WHITE_TURN` and `hasSelection() == false`
+
+### Step 4 (i18n): window title from bundle
+
+- **MV-TC4: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `MainView(String, String, BoardController, Locale)`
+  - **State of the system**: `locale = Locale.ENGLISH`; otherwise same as MV-TC1
+  - **Expected output**: frame title is `"Chess"` via `appTitle` key
+
+- **MV-TC5: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :x: )
+  - **Method(s) under test**: `MainView(String, String, BoardController, Locale)`
+  - **State of the system**: `locale = Locale.forLanguageTag("es")`; otherwise same as MV-TC1
+  - **Expected output**: frame title is `"Ajedrez"` via `appTitle` key in `messages_es.properties`
 
 ---
