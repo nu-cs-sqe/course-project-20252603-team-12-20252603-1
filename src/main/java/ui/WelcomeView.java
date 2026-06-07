@@ -34,6 +34,7 @@ public class WelcomeView extends JFrame {
     private static final int ENGLISH_LANGUAGE_INDEX = 0;
     private static final int SPANISH_LANGUAGE_INDEX = 1;
 
+    // Reassigned by applyLocale when the user changes the language combo; not final by design.
     private Messages messages;
     private JTextField player1NameField;
     private JTextField player2NameField;
