@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.awt.Window;
+import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,19 @@ class WelcomeControllerTest {
         controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
+    }
+
+    @Test
+    void StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "Player name cannot be empty";
+        String actual = controller.getWelcomeView().getErrorText();
+        assertEquals(expected, actual);
     }
 
     @Test

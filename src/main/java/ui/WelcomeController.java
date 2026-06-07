@@ -9,10 +9,16 @@ import java.util.Random;
 
 public class WelcomeController {
 
+    private final Messages messages;
     private final WelcomeView welcomeView;
 
     public WelcomeController() {
-        welcomeView = new WelcomeView(Locale.ENGLISH);
+        this(Locale.ENGLISH);
+    }
+
+    WelcomeController(Locale locale) {
+        messages = new Messages(locale);
+        welcomeView = new WelcomeView(locale);
         welcomeView.setStartGameAction(this::startGame);
     }
 
@@ -28,7 +34,7 @@ public class WelcomeController {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            welcomeView.showError("Player name cannot be empty");
+            welcomeView.showError(messages.getString("playerNameEmptyError"));
             return;
         }
         closeWelcomeView();

@@ -134,7 +134,7 @@
 
 ### Step 4 (i18n): error message text from bundle
 
-- **WC-TC18: StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle** ( :x: )
+- **WC-TC18: StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `WelcomeController` constructed with `Locale.ENGLISH`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: `getErrorText()` is `"Player name cannot be empty"`
