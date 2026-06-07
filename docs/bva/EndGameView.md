@@ -34,7 +34,7 @@ Scope: **Constructor** UI strings from bundle. `resultMessage` is caller-supplie
 
 ### Step 4: Test cases
 
-- **EG-TC1: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :x: )
+- **EG-TC1: Constructor_OnEnglishLocale_WindowTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameView(String, Locale)`
   - **State of the system**: `locale = Locale.ENGLISH`; `resultMessage = "Alice wins!"`
   - **Expected output**: frame title is `"Game Over"`

@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.Locale;
 import javax.swing.JFrame;
 
 class EndGameController {
@@ -8,8 +9,12 @@ class EndGameController {
     private final JFrame mainView;
 
     EndGameController(String resultMessage, JFrame mainView) {
+        this(resultMessage, mainView, Locale.ENGLISH);
+    }
+
+    EndGameController(String resultMessage, JFrame mainView, Locale locale) {
         this.mainView = mainView;
-        endGameView = new EndGameView(resultMessage);
+        endGameView = new EndGameView(resultMessage, locale);
         endGameView.setPlayAgainAction(this::playAgain);
     }
 
