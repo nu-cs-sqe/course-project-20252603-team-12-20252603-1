@@ -36,6 +36,7 @@ public class WelcomeView extends JFrame {
     private JRadioButton standardRadioButton;
     private JRadioButton chess960RadioButton;
     private JLabel welcomeTitleLabel;
+    private JLabel player1Label;
     private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
@@ -97,6 +98,10 @@ public class WelcomeView extends JFrame {
         return welcomeTitleLabel.getText();
     }
 
+    String getPlayer1LabelText() {
+        return player1Label.getText();
+    }
+
     private void createWelcomeScreenUi() {
         // untestable: Swing UI assembly
         JPanel panel = buildMainPanel();
@@ -126,11 +131,12 @@ public class WelcomeView extends JFrame {
     }
 
     private void addPlayerNameFields(JPanel panel) {
-        addPlayerNameField(panel, "Player 1", player1NameField);
+        player1Label = addPlayerNameField(
+                panel, messages.getString("player1Label"), player1NameField);
         addPlayerNameField(panel, "Player 2", player2NameField);
     }
 
-    private void addPlayerNameField(JPanel panel, String labelText, JTextField field) {
+    private JLabel addPlayerNameField(JPanel panel, String labelText, JTextField field) {
         JLabel label = new JLabel(labelText);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_COLOR);
@@ -146,6 +152,7 @@ public class WelcomeView extends JFrame {
                 BorderFactory.createEmptyBorder(4, 8, 4, 8)));
         panel.add(field);
         panel.add(Box.createVerticalStrut(18));
+        return label;
     }
 
     private void addModeSelector(JPanel panel) {
