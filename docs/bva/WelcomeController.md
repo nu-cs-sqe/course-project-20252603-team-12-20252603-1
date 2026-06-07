@@ -6,6 +6,7 @@
 
 - **Output: WelcomeView initial visibility** — whether the welcome screen is visible immediately after construction, before `show()` is called
 - **Output: start-game action wired** — whether clicking the Start Game button invokes `startGame()`
+- **Output: default locale** — `WelcomeView` is constructed with `Locale.ENGLISH` until Phase 3 language selection
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -13,6 +14,7 @@
 | -------------------------------------- | ----------------- | ----------------------------------- |
 | Output: WelcomeView initial visibility | Boolean           | true (visible), false (not visible) |
 | Output: start-game action wired        | Boolean           | true (wired), false (not wired)     |
+| Output: default locale                 | **Cases**         | `Locale.ENGLISH`                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -37,6 +39,11 @@
   - **Method(s) under test**: `WelcomeController()`
   - **State of the system**: freshly constructed controller; `player1Name = "Alice"`, `player2Name = "Bob"`; `show()` called; `clickStartGame()` called on the view
   - **Expected output**: `WelcomeView` is disposed (`isDisplayable()` is `false`)
+
+- **WC-TC17: Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale** ( :white_check_mark: )
+  - **Method(s) under test**: `WelcomeController()`
+  - **State of the system**: freshly constructed controller; JVM default locale may differ from English
+  - **Expected output**: `getWelcomeView().getTitle()` is `"Chess"` (English bundle, not system locale)
 
 ---
 

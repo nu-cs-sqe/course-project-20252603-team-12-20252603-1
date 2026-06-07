@@ -31,7 +31,7 @@ Externalize user-visible UI text so the chess application can support multiple l
 | Loading                 | `ui.Messages` wraps `ResourceBundle.getBundle("messages", locale)`; views call `messages.getString(key)` |
 | Key naming              | Flat camelCase: `matchupPattern`, `currentTurnPattern`, etc.                 |
 
-`Locale` is passed into each view constructor and forwarded by `MainView`. This supports runtime locale switching without any refactor.
+`Locale` is passed into each view constructor and forwarded by `MainView`. Until Phase 3, production code uses **`Locale.ENGLISH`** as the app default (not `Locale.getDefault()`). This supports runtime locale switching without any refactor once the language menu lands.
 
 ### 3.2 Build and dependencies
 
