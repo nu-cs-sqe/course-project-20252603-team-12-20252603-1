@@ -1342,6 +1342,20 @@ class BoardControllerTest {
     }
 
     @Test
+    void BuildEndGameMessage_OnSpanishLocale_BlackWin_ReturnsSpanishWinMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
+
+        String expected = "\u00A1Bob gana!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Location selected = new Location(0, 1);
