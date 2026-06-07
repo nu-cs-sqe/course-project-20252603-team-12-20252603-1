@@ -2,7 +2,6 @@ package ui;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,7 +12,7 @@ import javax.swing.JPanel;
  */
 public class GameStatsView extends JPanel {
 
-    private final ResourceBundle bundle;
+    private final Messages messages;
     private final JLabel currentPlayerLabel;
     private final JLabel gameStateLabel;
 
@@ -23,7 +22,7 @@ public class GameStatsView extends JPanel {
      * @param locale non-null locale used to load UI strings
      */
     public GameStatsView(String player1Name, String player2Name, Locale locale) {
-        bundle = ResourceBundle.getBundle("messages", locale);
+        messages = new Messages(locale);
         currentPlayerLabel = new JLabel(player1Name);
         gameStateLabel = new JLabel(formatMatchupLine(player1Name, player2Name));
         add(currentPlayerLabel);
@@ -31,7 +30,7 @@ public class GameStatsView extends JPanel {
     }
 
     private String formatMatchupLine(String player1Name, String player2Name) {
-        return MessageFormat.format(bundle.getString("matchupPattern"), player1Name, player2Name);
+        return MessageFormat.format(messages.getString("matchupPattern"), player1Name, player2Name);
     }
 
     String getCurrentPlayerLabelText() {
