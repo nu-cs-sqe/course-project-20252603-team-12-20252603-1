@@ -31,8 +31,8 @@ public class WelcomeController {
     private void startGame() {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
-        Messages localeMessages = new Messages(welcomeView.getSelectedLocale());
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
+            Messages localeMessages = new Messages(welcomeView.getSelectedLocale());
             welcomeView.showError(localeMessages.getString("playerNameEmptyError"));
             return;
         }
