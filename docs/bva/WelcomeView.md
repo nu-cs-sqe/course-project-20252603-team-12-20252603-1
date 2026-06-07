@@ -203,7 +203,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: player 2 label is `"Jugador 2"`
 
-- **WV-TC20: Constructor_OnSpanishLocale_StandardModeLabelFromBundle** ( :x: )
+- **WV-TC20: Constructor_OnSpanishLocale_StandardModeLabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: standard radio label is `"Estándar"`

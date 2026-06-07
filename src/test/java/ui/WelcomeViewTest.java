@@ -194,4 +194,13 @@ class WelcomeViewTest {
         String actual = view.getPlayer2LabelText();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void Constructor_OnSpanishLocale_StandardModeLabelFromBundle() {
+        WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
+
+        String expected = "Est\u00E1ndar";
+        String actual = view.getStandardModeLabelText();
+        assertEquals(expected, actual);
+    }
 }
