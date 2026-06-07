@@ -659,7 +659,7 @@ Win and draw text load from `messages.properties` / `messages_es.properties` via
   - **State of the system**: `locale = Locale.ENGLISH`; board returns `DRAW`
   - **Expected output**: `"Draw!"`
 
-- **BC-TC71: BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage** ( :x: )
+- **BC-TC71: BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `WHITE_WIN`; `player1Name = "Alice"`
   - **Expected output**: `"¡Alice gana!"`
