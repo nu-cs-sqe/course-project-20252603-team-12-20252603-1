@@ -83,7 +83,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; `player1Name = "Alice"`, `player2Name = "Bob"`
   - **Expected output**: `gameStateLabel` shows `"Alice contra Bob"`
 
-- **GS-TC16: Constructor_OnSpanishLocale_EmptyNamesMatchupShowsContraSeparator** ( :x: )
+- **GS-TC16: Constructor_OnSpanishLocale_EmptyNamesMatchupShowsContraSeparator** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; both names are `""`
   - **Expected output**: `gameStateLabel` shows `" contra "`
