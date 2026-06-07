@@ -6,7 +6,7 @@
 
 - **Output: WelcomeView initial visibility** — whether the welcome screen is visible immediately after construction, before `show()` is called
 - **Output: start-game action wired** — whether clicking the Start Game button invokes `startGame()`
-- **Output: default locale** — `WelcomeView` is constructed with `Locale.ENGLISH` until Phase 3 language selection
+- **Output: default locale** — no-arg constructor builds `WelcomeView` with `Locale.ENGLISH`; user may switch language on the welcome screen before start
 
 ### Step 2: Data Types (from BVA Catalog)
 
