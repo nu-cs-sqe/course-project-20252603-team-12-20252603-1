@@ -80,6 +80,16 @@ class GameStatsViewTest {
     }
 
     @Test
+    void Constructor_OnSpanishLocale_MatchupLabelShowsContraLine() {
+        GameStatsView view = new GameStatsView(
+                "Alice", "Bob", Locale.forLanguageTag("es"));
+
+        String expected = "Alice contra Bob";
+        String actual = view.getGameStateLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void UpdateCurrentPlayerLabel_OnTypicalName_LabelTextMatches() {
         GameStatsView view = new GameStatsView("Alice", "Bob", Locale.ENGLISH);
         view.updateCurrentPlayerLabel("Carol");

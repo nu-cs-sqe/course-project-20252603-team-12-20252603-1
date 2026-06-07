@@ -78,7 +78,7 @@ Scope: **Game Initialization** (constructor through `updateCurrentPlayerLabel`).
   - **State of the system**: `("Bob", "")` swapped pair vs GS-TC5
   - **Expected output**: same `<p1> versus <p2>` rule as GS-TC6 (`"Bob versus "`); redundant with formatting logic already covered by GS-TC5–GS-TC6
 
-- **GS-TC10: Constructor_OnSpanishLocale_MatchupLabelShowsContraLine** ( :x: )
+- **GS-TC10: Constructor_OnSpanishLocale_MatchupLabelShowsContraLine** ( :white_check_mark: )
   - **Method(s) under test**: `GameStatsView(String, String, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; `player1Name = "Alice"`, `player2Name = "Bob"`
   - **Expected output**: `gameStateLabel` shows `"Alice contra Bob"`
