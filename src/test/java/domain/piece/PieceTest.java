@@ -1,0 +1,60 @@
+package domain.piece;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+class PieceTest {
+
+    @Test
+    void IsSameColor_OnSameColorPieces_ReturnsTrue() {
+        Piece piece1 = new Pawn(PieceColor.WHITE);
+        Piece piece2 = new Pawn(PieceColor.WHITE);
+
+        assertTrue(piece1.isSameColor(piece2));
+    }
+
+    @Test
+    void IsSameColor_OnDifferentColorPieces_ReturnsFalse() {
+        Piece piece1 = new Pawn(PieceColor.WHITE);
+        Piece piece2 = new Pawn(PieceColor.BLACK);
+
+        assertFalse(piece1.isSameColor(piece2));
+    }
+
+    @Test
+    void ResetHasMoved_OnMovedPiece_HasMovedIsFalse() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+        piece.changeToMoved();
+
+        piece.resetHasMoved();
+
+        assertFalse(piece.hasMoved());
+    }
+
+    @Test
+    void ResetHasMoved_OnUnmovedPiece_HasMovedIsFalse() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+
+        piece.resetHasMoved();
+
+        assertFalse(piece.hasMoved());
+    }
+
+    @Test
+    void ToString_OnWhitePawn_ReturnsWhitePawn() {
+        Piece piece = new Pawn(PieceColor.WHITE);
+
+        assertEquals("WHITE PAWN", piece.toString());
+    }
+
+    @Test
+    void ToString_OnBlackPawn_ReturnsBlackPawn() {
+        Piece piece = new Pawn(PieceColor.BLACK);
+
+        assertEquals("BLACK PAWN", piece.toString());
+    }
+
+}

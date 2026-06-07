@@ -184,7 +184,7 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 
 | Effect            | Classes                                              |
 | ----------------- | ---------------------------------------------------- |
-| Selection / guard | White may select; black or empty must not change board |
+| Selection / guard | Active player may select own-color pieces only; opponent or empty must not change board |
 
 ### Step 4: Test cases
 
@@ -267,3 +267,393 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: Chess960 fixed start; white piece click
   - **Expected output**: `GameState.WHITE_TURN`
+
+---
+
+## Method / behavior: `handleSquareClick` — alternating turn enforcement
+
+Scope addition: derive **current player color** from `board.getCurrentGameState()` (`WHITE_TURN` → white pieces only; `BLACK_TURN` → black pieces only). Wrong-color and empty squares must not change selection or turn. Terminal states (`WHITE_WIN`, `BLACK_WIN`, `DRAW`) ignore clicks.
+
+### Step 1: Input and output equivalence classes
+
+| Input | Equivalence classes |
+| ----- | ------------------- |
+| `board.getCurrentGameState()` | `WHITE_TURN`; `BLACK_TURN`; terminal (win/draw) |
+| Square at `loc` | `NonePiece`; own-color piece; opponent-color piece |
+
+| Effect | Classes |
+| ------ | ------- |
+| Source selection | Own-color piece on active turn → selection set |
+| Rejection | Empty, opponent piece, or terminal state → no selection |
+
+### Step 2: BVA catalog data types
+
+| Variable | Catalog type | Notes |
+| -------- | ------------ | ----- |
+| `currentGameState` | Cases | WHITE_TURN vs BLACK_TURN vs terminal |
+| Piece at square | Cases | NONE vs own color vs opponent color |
+| `lastSelectedLoc` | Optional | empty vs present |
+
+### Step 3: Concrete boundary values
+
+- Turn: `WHITE_TURN` (existing BC-TC27–35) vs **`BLACK_TURN`** (new)
+- Black turn own piece: standard grid rank `1` file `0` (black pawn)
+- Black turn opponent: standard grid rank `6` file `0` (white pawn)
+- Black turn empty: rank `3` file `3`
+
+### Step 4: Test cases — `BLACK_TURN` source selection
+
+- **BC-TC43: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; click black piece at `Location(0, 1)`
+  - **Expected output**: `hasSelection()` is `true`
+
+- **BC-TC44: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: `GameState.BLACK_TURN`; click `Location(0, 1)`
+  - **Expected output**: `getSelectedLocation()` present with same coordinates
+
+- **BC-TC45: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; click black piece
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC46: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece at `Location(0, 6)`
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC47: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece
+  - **Expected output**: `GameState.BLACK_TURN`
+
+- **BC-TC48: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; click white piece
+  - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC49: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square `Location(3, 3)`
+  - **Expected output**: `hasSelection()` is `false`
+
+- **BC-TC50: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square
+  - **Expected output**: `GameState.BLACK_TURN`
+
+- **BC-TC51: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
+  - **State of the system**: `GameState.BLACK_TURN`; empty square
+  - **Expected output**: snapshot unchanged cell-wise
+
+---
+
+## Method: `getLegalMovesForSelection(): List<Move>`
+
+Scope: After the player selects an own-color piece on their turn, expose that piece's **legal** moves from `Board.getLegalMoves` for UI highlighting (`BoardView`). When nothing is selected, return an empty list without calling the board.
+
+### Step 1: Input and output equivalence classes
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| `lastSelectedLoc` | `Optional.empty()` vs present |
+| `board.getLegalMoves(from)` | empty collection vs non-empty collection |
+
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| Returned list | empty; non-empty (same as board) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `lastSelectedLoc` | Optional | empty vs present |
+| Board move list | Collections | empty vs one-or-many |
+| Returned list | Collections | mirrors board when selected |
+
+### Step 3: Concrete boundary values
+
+- No selection: fresh controller; `getLegalMovesForSelection()` before any click.
+- With selection: white turn; click white pawn at `Location(0, 6)`; stub `board.getLegalMoves(Location(0, 6))`.
+- Board returns empty: same selection state; stub empty list from `getLegalMoves`.
+
+### Step 4: Test cases
+
+- **BC-TC52: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`
+  - **State of the system**: newly constructed controller; no piece selected
+  - **Expected output**: returned list size is `0`
+
+- **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
+  - **State of the system**: white turn; white pawn selected at `Location(0, 6)`; board stubs one legal move
+  - **Expected output**: returned list equals board's `getLegalMoves` result for selected square
+
+- **BC-TC54: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
+  - **State of the system**: white turn; own piece selected; board stubs empty legal-move list
+  - **Expected output**: returned list size is `0`
+
+---
+
+## Method / behavior: move execution via `handleSquareClick(Location loc)`
+
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion and end-game paths are covered in the sections below.
+
+### Step 1: Equivalence Classes
+
+- **Input: selection state** — `lastSelectedLoc` present vs absent (second click path)
+- **Input: destination square** — legal move target vs illegal vs another own piece
+- **Output: board interaction** — `makeMove` invoked vs not
+- **Output: selection after click** — cleared vs updated
+
+### Step 2: Data Types (from BVA Catalog)
+
+| Equivalence class | Catalog data type | Parameters |
+| --- | --- | --- |
+| Input: selection state | Cases | selected, not selected |
+| Input: destination square | Cases | legal destination, illegal empty, own piece |
+| Output: `makeMove` called | Boolean | `true`, `false` |
+| Output: selection cleared | Boolean | `true`, `false` |
+
+### Step 3: Boundary Values (from BVA Catalog)
+
+- Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once
+- Illegal destination: stub returns move list with no matching `to` → selection cleared
+- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`
+
+### Step 4: Test Cases (Each-Choice Strategy)
+
+Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`.
+
+- **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
+  - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
+- **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: white turn; piece selected; click `(3, 3)` not in legal moves
+  - **Expected output**: `board.makeMove` not called; `hasSelection()` is `false`
+- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
+  - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
+  - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
+
+---
+
+## Method: `executeMove(Move move, PieceColor currentColor)`
+
+### Step 1: Input and output equivalence classes
+
+| Input | Classes |
+| ----- | ------- |
+| `move.getType()` | `PROMOTION`; non-promotion (`NORMAL`, `EN_PASSANT`, etc.) |
+| `currentColor` | `WHITE`; `BLACK` |
+| `board.getCurrentGameState()` after `makeMove` | game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`); game continues (`WHITE_TURN` / `BLACK_TURN`) |
+
+| Output | Classes |
+| ------ | ------- |
+| `promptForPromotionPiece` called | `true` (promotion) / `false` (non-promotion) |
+| `showEndGame()` called | `true` (game over) / `false` (game continues) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Parameters |
+| --- | --- | --- |
+| `move.getType()` | Cases | PROMOTION, non-promotion |
+| `currentColor` | Cases | WHITE, BLACK |
+| `board.getCurrentGameState()` after move | Cases | game over, game continues |
+| `promptForPromotionPiece` called | Boolean | true, false |
+| `showEndGame()` called | Boolean | true, false |
+
+### Step 3: Concrete boundary values
+
+**`move.getType()` — Cases:**
+- non-promotion (e.g. `NORMAL`)
+- `PROMOTION`
+
+**`currentColor` — Cases:**
+- `WHITE`
+- `BLACK`
+
+**`board.getCurrentGameState()` after move — Cases:**
+- game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`) → `showEndGame()` called
+- game continues (`WHITE_TURN` / `BLACK_TURN`) → covered by BC-TC55
+
+**`promptForPromotionPiece` called — Boolean:**
+- `false`: non-promotion move — covered by BC-TC55
+- `true`: promotion move
+
+**`showEndGame()` called — Boolean:**
+- `true`: game is over
+- `false`: game continues — covered by BC-TC55
+
+### Step 4: Test cases
+
+- **BC-TC58: ExecuteMove_OnNonPromotionMove_AsWhite_MakeMoveCalledDirectly** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: white pawn normal move; board stubs `WHITE_TURN` before move, `BLACK_TURN` after; `makeMove` expected once
+  - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
+  - **Covered by**: BC-TC55
+
+- **BC-TC59: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
+
+- **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: black pawn normal move; board stubs `BLACK_TURN` before move, `WHITE_TURN` after; `makeMove` expected once
+  - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
+
+- **BC-TC61: ExecuteMove_OnPromotionMove_AsWhite_CallsPromptForPromotionPiece** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: white pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `WHITE_TURN` → `BLACK_TURN`; dialog returns `QUEEN`
+  - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
+
+- **BC-TC62: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)`
+  - **State of the system**: black pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `BLACK_TURN` → `WHITE_TURN`; dialog returns `QUEEN`
+  - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
+
+---
+
+## Method: `isGameOver()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW`; `WHITE_TURN`; `BLACK_TURN` |
+
+| Output | Classes |
+| ------ | ------- |
+| Return value | `true` (terminal) / `false` (active) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW, WHITE_TURN, BLACK_TURN |
+| Return value | Boolean |
+
+### Step 3: Concrete boundary values
+
+**`getCurrentGameState()` — Cases:**
+- `WHITE_WIN` → return `true`
+- `BLACK_WIN` → return `true`
+- `DRAW` → return `true`
+- `WHITE_TURN` → return `false`
+- `BLACK_TURN` → return `false` (covered by existing black-turn tests)
+
+**Return value — Boolean:**
+- `true`: game state is WHITE_WIN, BLACK_WIN, or DRAW
+- `false`: game state is WHITE_TURN or BLACK_TURN
+
+### Step 4: Test cases
+
+- **BC-TC63: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; move executed
+  - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
+  - **Covered by**: BC-TC59
+
+- **BC-TC64: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `BLACK_WIN`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC65: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `DRAW`
+  - **Expected output**: `EndGameView` visible
+
+- **BC-TC66: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
+  - **Method(s) under test**: `isGameOver()`
+  - **State of the system**: board stubs `WHITE_TURN` after move
+  - **Expected output**: no `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC59 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
+
+---
+
+## Method: `showEndGame()`
+
+### Step 1: Input and output equivalence classes
+
+| Output | Classes |
+| ------ | ------- |
+| `EndGameView` shown | `true` (always when called) |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `EndGameView` visible | Boolean |
+
+### Step 3: Concrete boundary values
+
+**`EndGameView` visible — Boolean:**
+- `true`: `showEndGame()` always makes `EndGameView` visible
+- `false`: CAN'T SET as a post-`showEndGame()` output
+
+### Step 4: Test cases
+
+- **BC-TC67: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
+  - **Method(s) under test**: `showEndGame()`
+  - **State of the system**: game is in a terminal state; `boardController.show()` called first
+  - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
+  - **Covered by**: BC-TC59, BC-TC64, BC-TC65 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
+
+---
+
+## Method: `buildEndGameMessage()`
+
+### Step 1: Input and output equivalence classes
+
+| Input (implicit) | Classes |
+| ---------------- | ------- |
+| `board.getCurrentGameState()` | `WHITE_WIN`; `BLACK_WIN`; `DRAW` |
+
+| Output | Classes |
+| ------ | ------- |
+| Returned message | `player1Name + " wins!"`; `player2Name + " wins!"`; `"Draw!"` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `getCurrentGameState()` | Cases: WHITE_WIN, BLACK_WIN, DRAW |
+| Returned message | Cases: player1 wins, player2 wins, draw |
+
+### Step 3: Concrete boundary values
+
+**`getCurrentGameState()` — Cases:**
+- `WHITE_WIN` → `player1Name + " wins!"`
+- `BLACK_WIN` → `player2Name + " wins!"`
+- `DRAW` → `"Draw!"`
+
+**Returned message — Cases:**
+- `player1Name + " wins!"`: WHITE_WIN state
+- `player2Name + " wins!"`: BLACK_WIN state
+- `"Draw!"`: DRAW state
+
+### Step 4: Test cases
+
+`EndGameView` result label text is retrieved by traversing its component tree to find the `JLabel`.
+
+- **BC-TC68: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `WHITE_WIN`; `player1Name = "Alice"`
+  - **Expected output**: `EndGameView` result label text equals `"Alice wins!"`
+
+- **BC-TC69: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `BLACK_WIN`; `player2Name = "Bob"`
+  - **Expected output**: `EndGameView` result label text equals `"Bob wins!"`
+
+- **BC-TC70: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
+  - **Method(s) under test**: `buildEndGameMessage()`
+  - **State of the system**: board returns `DRAW`
+  - **Expected output**: `EndGameView` result label text equals `"Draw!"`
