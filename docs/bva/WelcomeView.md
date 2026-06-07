@@ -213,7 +213,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: Chess960 radio label is `"Chess960"`
 
-- **WV-TC22: Constructor_OnSpanishLocale_StartGameButtonFromBundle** ( :x: )
+- **WV-TC22: Constructor_OnSpanishLocale_StartGameButtonFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: start button text is `"Iniciar juego"`
