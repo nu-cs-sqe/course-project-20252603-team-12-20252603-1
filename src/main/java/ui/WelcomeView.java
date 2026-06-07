@@ -38,6 +38,7 @@ public class WelcomeView extends JFrame {
     private JLabel welcomeTitleLabel;
     private JLabel player1Label;
     private JLabel player2Label;
+    private JButton startGameButton;
     private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
@@ -113,6 +114,10 @@ public class WelcomeView extends JFrame {
 
     String getChess960ModeLabelText() {
         return chess960RadioButton.getText();
+    }
+
+    String getStartGameButtonText() {
+        return startGameButton.getText();
     }
 
     private void createWelcomeScreenUi() {
@@ -194,17 +199,17 @@ public class WelcomeView extends JFrame {
     }
 
     private void addStartButton(JPanel panel) {
-        JButton startButton = new JButton("Start Game");
-        startButton.setFont(BUTTON_FONT);
-        startButton.setBackground(ACCENT_COLOR);
-        startButton.setForeground(TEXT_COLOR);
-        startButton.setFocusPainted(false);
-        startButton.setOpaque(true);
-        startButton.setBorderPainted(false);
-        startButton.setMaximumSize(new Dimension(180, 42));
-        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        startButton.addActionListener(e -> clickStartGame());
-        panel.add(startButton);
+        startGameButton = new JButton(messages.getString("startGame"));
+        startGameButton.setFont(BUTTON_FONT);
+        startGameButton.setBackground(ACCENT_COLOR);
+        startGameButton.setForeground(TEXT_COLOR);
+        startGameButton.setFocusPainted(false);
+        startGameButton.setOpaque(true);
+        startGameButton.setBorderPainted(false);
+        startGameButton.setMaximumSize(new Dimension(180, 42));
+        startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        startGameButton.addActionListener(e -> clickStartGame());
+        panel.add(startGameButton);
     }
 
     private void addErrorLabel(JPanel panel) {
