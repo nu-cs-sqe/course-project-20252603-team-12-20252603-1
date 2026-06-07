@@ -193,7 +193,7 @@ UI strings load from `messages.properties` / `messages_es.properties` via `ui.Me
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: welcome title label is `"♟  Ajedrez  ♟"`
 
-- **WV-TC18: Constructor_OnSpanishLocale_Player1LabelFromBundle** ( :x: )
+- **WV-TC18: Constructor_OnSpanishLocale_Player1LabelFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `WelcomeView(Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`
   - **Expected output**: player 1 label is `"Jugador 1"`
