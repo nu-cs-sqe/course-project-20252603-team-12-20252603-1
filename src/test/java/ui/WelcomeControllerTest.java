@@ -82,6 +82,19 @@ class WelcomeControllerTest {
     }
 
     @Test
+    void StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController(Locale.forLanguageTag("es"));
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String actual = controller.getWelcomeView().getErrorText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void StartGame_EmptyPlayer2Name_GameDoesNotStart() {
         WelcomeController controller = new WelcomeController();
         controller.show();

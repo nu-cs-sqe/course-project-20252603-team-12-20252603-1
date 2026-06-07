@@ -139,7 +139,7 @@
   - **State of the system**: `WelcomeController` constructed with `Locale.ENGLISH`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: `getErrorText()` is `"Player name cannot be empty"`
 
-- **WC-TC19: StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle** ( :x: )
+- **WC-TC19: StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle** ( :white_check_mark: )
   - **Method(s) under test**: `startGame()`
   - **State of the system**: `WelcomeController(Locale.forLanguageTag("es"))`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
   - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
