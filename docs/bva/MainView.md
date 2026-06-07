@@ -68,7 +68,7 @@ Package: `ui.MainView`
   - **State of the system**: `locale = Locale.ENGLISH`; otherwise same as MV-TC1
   - **Expected output**: frame title is `"Chess"` via `appTitle` key
 
-- **MV-TC5: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :x: )
+- **MV-TC5: Constructor_OnSpanishLocale_WindowTitleFromBundle** ( :white_check_mark: )
   - **Method(s) under test**: `MainView(String, String, BoardController, Locale)`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; otherwise same as MV-TC1
   - **Expected output**: frame title is `"Ajedrez"` via `appTitle` key in `messages_es.properties`
