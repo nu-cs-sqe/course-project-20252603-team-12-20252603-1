@@ -261,7 +261,7 @@ User picks **English** or **Español** from a combo box. `getSelectedLocale()` r
   - **State of the system**: `locale = Locale.ENGLISH`
   - **Expected output**: language label is `"Language:"`
 
-- **WV-TC26: SelectLanguage_WhenSpanishChosen_RelocalizesWelcomeTitle** ( :x: )
+- **WV-TC26: SelectLanguage_WhenSpanishChosen_RelocalizesWelcomeTitle** ( :white_check_mark: )
   - **Method(s) under test**: language combo action / `applyLocale`
   - **State of the system**: `WelcomeView(Locale.ENGLISH)`; user selects Spanish
   - **Expected output**: welcome title label is `"♟  Ajedrez  ♟"`
