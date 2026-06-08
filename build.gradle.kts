@@ -46,6 +46,26 @@ dependencies {
     testImplementation("org.easymock:easymock:5.6.0")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.easymock:easymock:5.4.0")
+    testImplementation(platform("io.cucumber:cucumber-bom:7.20.1"))
+    testImplementation("io.cucumber:cucumber-java")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine")
+    testImplementation("io.cucumber:cucumber-picocontainer:7.20.1")
+    testImplementation("org.junit.platform:junit-platform-suite")
+}
+
+val cucumberRuntime by configurations.creating {
+    extendsFrom(configurations["testImplementation"])
+}
+
+task("cucumber") {
+    dependsOn("assemble", "compileTestJava")
+    doLast {
+        javaexec {
+            mainClass.set("io.cucumber.core.cli.Main")
+            classpath = cucumberRuntime + sourceSets.main.get().output + sourceSets.test.get().output
+            args = listOf("--plugin", "pretty", "--glue", "integration", "src/test/resources")
+        }
+    }
 }
 
 java {
