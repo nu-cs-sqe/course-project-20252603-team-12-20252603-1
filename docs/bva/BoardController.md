@@ -726,7 +726,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(7, 7)` white rook on white turn
   - **Expected output**: `hasSelection()` is `true`
-- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :x: )
+- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
   - **Expected output**: `hasSelection()` remains `false`

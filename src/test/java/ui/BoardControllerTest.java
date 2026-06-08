@@ -1678,5 +1678,22 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @Test
+    void HandleSquareClick_WhenGameOver_IgnoresClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN);
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(0, 6));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
