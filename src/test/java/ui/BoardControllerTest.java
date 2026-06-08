@@ -1680,7 +1680,6 @@ class BoardControllerTest {
     }
     @Test
     void HandleSquareClick_WhenGameOver_IgnoresClick() {
-        Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN);
         EasyMock.replay(boardMock);
@@ -1695,6 +1694,9 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
+            justification = "Return value not needed; called for side-effectful headless check")
     @Test
     void ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible() {
         assumeTrue(
@@ -1735,6 +1737,9 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
+            justification = "Return value not needed; called for side-effectful headless check")
     @Test
     void Show_WhenCalled_MainViewBecomesVisible() {
         assumeTrue(
