@@ -734,7 +734,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `executeMove` → `showEndGame()` → `EndGameController.show()`
   - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`
   - **Expected output**: an `EndGameView` window is visible after the move
-- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :x: )
+- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: real `Board` standard start; display available (not headless)
   - **Expected output**: `getMainView().isVisible()` is `true`

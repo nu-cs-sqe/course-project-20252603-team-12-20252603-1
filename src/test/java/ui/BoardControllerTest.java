@@ -1735,5 +1735,22 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
+    @Test
+    void Show_WhenCalled_MainViewBecomesVisible() {
+        assumeTrue(
+                !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
+                "Skipping: no display available");
+        Board board = new Board(new StandardBoardInitializer());
+        BoardController controller = newController(board);
+        BoardView boardViewMock = EasyMock.createNiceMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+        controller.setBoardView(boardViewMock);
+
+        controller.show();
+
+        boolean expected = true;
+        boolean actual = controller.getMainView().isVisible();
+        assertEquals(expected, actual);
+    }
 
 }
