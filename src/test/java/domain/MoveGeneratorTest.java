@@ -16,6 +16,8 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -1067,6 +1069,23 @@ class MoveGeneratorTest {
         boolean expected = true;
         boolean actual = moveGenerator.isInCheck(PieceColor.WHITE);
 
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GeneratePseudoLegalMoves_OnNonePiece_ReturnsEmptyList() throws Exception {
+        Piece[][] board = emptyBoard();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+        Method generatePseudoLegalMoves = MoveGenerator.class.getDeclaredMethod(
+                "generatePseudoLegalMoves", Location.class, Piece.class);
+        generatePseudoLegalMoves.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<Move> moves = (List<Move>) generatePseudoLegalMoves.invoke(
+                moveGenerator, new Location(3, 3), new NonePiece());
+
+        int expected = 0;
+        int actual = moves.size();
         assertEquals(expected, actual);
     }
 
