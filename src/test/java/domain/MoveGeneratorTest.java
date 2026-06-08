@@ -882,6 +882,20 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void ApplyMoveToBoard_OnPromotionKnight_DestinationHasKnight() {
+        Piece[][] board = emptyBoard();
+        board[1][4] = new Pawn(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(4, 1), new Location(4, 0), MoveType.PROMOTION, PieceType.KNIGHT);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.KNIGHT;
+        PieceType actual = result[0][4].getType();
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
