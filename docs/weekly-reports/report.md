@@ -101,10 +101,58 @@
 11. [done] Group: Redesigned project to have controllers create views; Main only instantiates WelcomeController, it no longer wires everything together
 
 **Planning Tracking**:
-1. [not started] Matthew: Complete and merge i18n
+1. [not started] Matthew: Add feature to render legal move highlights ([#71](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/71)), implement end game logic (i.e. EndGameView, EndGameConroller, wiring, win/draw conditions), refactor tests for style and coverage. 
    ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38)). Update BoardView to render legal move and capture highlights. Fix WelcomeController to work with new wiring.
-2. [not started] Didier: Add check filtering to MoveGenerator. Add BoardController.getLegalMovesForSelection(). 
-3. [not started] Alex: Add PromotionDialog.
+2. [not started] Didier: Complete and merge i18n ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38)). Add check filtering to MoveGenerator. Add BoardController.getLegalMovesForSelection(). 
+3. [not started] Alex: Add PromotionDialog ([#70](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/70)). Implement integration tests.
+
+# Week 10 (06/01/2026-06/07/2026) 
+**Progress Tracking**:
+1. [done] Matthew: Updated Main.java to invoke WelcomeController and updated build entry point
+   ([#69](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/69))
+2. [done] Matthew: Rendered legal move highlights in BoardView (drawLegalMoveHighlights)
+   ([#71](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/71))
+3. [done] Matthew: Set up SpotBugs and fixed CheckStyle violations. Emailed Dr. Yiji about late setup.
+   ([#75](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/75))
+4. [done] Matthew: Implemented Board.makeMove win/draw detection (updateGameState: checkmate, stalemate, insufficient material, fifty-move rule)
+   ([#77](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/77))
+5. [done] Matthew: Refactored tests according to CheckStyle
+   ([#78](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/78))
+6. [done] Matthew: Implemented EndGameView (constructor, setPlayAgainAction, buildUI)
+   ([#79](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/79))
+7. [done] Matthew: Implemented EndGameController (BVA, show, playAgain, buildEndGameMessage)
+   ([#80](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/80))
+8. [done] Matthew: Finished BoardController wiring (connected BoardController to EndGameController)
+   ([#81](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/81))
+9. [done] Matthew: Refactored codebase to satisfy CheckStyle
+   ([#82](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/82))
+10. [done] Matthew: Implemented promotion wiring in BoardController (ExecuteMove, promptForPromotionPiece)
+    ([#83](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/83))
+11. [done] Matthew: Refactored tests for code coverage and style — removed null checks in MoveGenerator, MainView, BoardView, PromotionView; added full Piece unit tests (isSameColor, hasMoved, resetHasMoved, toString, makeCopy for all piece types)
+    ([#84](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/84))
+12. [done] Didier: Implemented MoveGenerator check filtering (generateAllLegalMovesForColor)
+    ([#63](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/63))
+13. [done] Didier: Implemented BoardController legal move selection
+    ([#64](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/64))
+14. [done] Didier: Added en passant and castling to MoveGenerator
+    ([#66](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/66))
+15. [done] Didier: Added en passant and castling execution to Board.makeMove
+    ([#67](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/67))
+16. [done] Didier: Fixed WelcomeController game launch wiring
+    ([#68](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/68))
+17. [done] Didier: Implementing full i18n across all views and controllers (Messages class, Spanish/English bundles, WelcomeView, MainView, EndGameView, PromotionView, WelcomeController, GameStatsView, BoardController)
+    ([#38](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/38))
+18. [done] Alex: Implemented PromotionDialog (constructor, showAndGetChoice, buildUi, buildPromotionButton, loadImage)
+    ([#70](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/70))
+19. [done] Alex: Added promotion candidates to MoveGenerator
+    ([#74](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/74))
+20. [done] Alex: Added Cucumber BDD integration test infrastructure (GameInitialization, FirstMoves, FoolsMate scenarios)
+    ([#39](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/39))
+
+**Planning Tracking**:
+1. [not started] Matthew: Update Board tests to kill mutants
+2. [not started] Didier: Update MoveGenerator and BoardController for code coverage and mutants
+3. [not started] Alex: Update EndGameController for code coverage and mutants
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
