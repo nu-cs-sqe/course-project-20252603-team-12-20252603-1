@@ -9,6 +9,7 @@ import domain.piece.NonePiece;
 import domain.piece.Piece;
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.util.Locale;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ class MainViewTest {
     void Constructor_OnAliceAndBob_BoardControllerExposesSnapshot() {
         Board boardMock = stubSnapshot(eightByEightGrid());
         MainView view = new MainView("Alice", "Bob",
-                new BoardController("Alice", "Bob", boardMock));
+                new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
 
         int expected = BOARD_SIZE;
         int actual = view.getBoardController().getBoardSnapshot().length;
@@ -32,13 +33,14 @@ class MainViewTest {
     void Constructor_OnAliceAndBob_WiresStatsBoardAndLayout() {
         Board boardMock = replayEmptyBoard();
         MainView view = new MainView("Alice", "Bob",
-                new BoardController("Alice", "Bob", boardMock));
+                new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
 
         boolean wired =
                 view.getGameStatsView() != null
                         && view.getBoardView() != null
                         && "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
-                        && "Alice vs Bob".equals(view.getGameStatsView().getGameStateLabelText());
+                        && "Alice versus Bob".equals(
+                                view.getGameStatsView().getGameStateLabelText());
         Container contentPane = view.getContentPane();
         BorderLayout layout = (BorderLayout) contentPane.getLayout();
         boolean layoutOk =
@@ -49,12 +51,36 @@ class MainViewTest {
     }
 
     @Test
+    void Constructor_OnEnglishLocale_WindowTitleFromBundle() {
+        Board boardMock = replayEmptyBoard();
+        MainView view = new MainView("Alice", "Bob",
+                new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
+
+        String expected = "Chess";
+        String actual = view.getTitle();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void Constructor_OnSpanishLocale_WindowTitleFromBundle() {
+        Board boardMock = replayEmptyBoard();
+        MainView view = new MainView("Alice", "Bob",
+                new BoardController("Alice", "Bob", boardMock), Locale.forLanguageTag("es"));
+
+        String expected = "Ajedrez";
+        String actual = view.getTitle();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void Constructor_InitialReadinessFromInjectedController() {
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN);
         EasyMock.replay(boardMock);
         MainView view = new MainView("Alice", "Bob",
-                new BoardController("Alice", "Bob", boardMock));
+                new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
 
         GameState expectedState = GameState.WHITE_TURN;
         GameState actualState = view.getBoardController().getCurrentGameState();

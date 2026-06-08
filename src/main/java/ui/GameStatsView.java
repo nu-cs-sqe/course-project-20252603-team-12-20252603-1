@@ -1,33 +1,36 @@
 package ui;
 
+import java.text.MessageFormat;
+import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
-* Panel showing current player and matchup line for game initialization.
-*
-* <p>All {@link String} parameters are non-null; callers must not pass {@code null}.
-*/
+ * Panel showing current player and matchup line for game initialization.
+ *
+ * <p>All {@link String} parameters are non-null; callers must not pass {@code null}.
+ */
 public class GameStatsView extends JPanel {
 
-    private static final String MATCHUP_SEPARATOR = " vs ";
-
+    private final Messages messages;
     private final JLabel currentPlayerLabel;
     private final JLabel gameStateLabel;
 
     /**
-    * @param player1Name non-null player one name (may be empty)
-    * @param player2Name non-null player two name (may be empty)
-    */
-    public GameStatsView(String player1Name, String player2Name) {
+     * @param player1Name non-null player one name (may be empty)
+     * @param player2Name non-null player two name (may be empty)
+     * @param locale non-null locale used to load UI strings
+     */
+    public GameStatsView(String player1Name, String player2Name, Locale locale) {
+        messages = new Messages(locale);
         currentPlayerLabel = new JLabel(player1Name);
         gameStateLabel = new JLabel(formatMatchupLine(player1Name, player2Name));
         add(currentPlayerLabel);
         add(gameStateLabel);
     }
 
-    private static String formatMatchupLine(String player1Name, String player2Name) {
-        return player1Name + MATCHUP_SEPARATOR + player2Name;
+    private String formatMatchupLine(String player1Name, String player2Name) {
+        return MessageFormat.format(messages.getString("matchupPattern"), player1Name, player2Name);
     }
 
     String getCurrentPlayerLabelText() {
@@ -39,8 +42,8 @@ public class GameStatsView extends JPanel {
     }
 
     /**
-    * @param playerName non-null name to display (may be empty)
-    */
+     * @param playerName non-null name to display (may be empty)
+     */
     public void updateCurrentPlayerLabel(String playerName) {
         currentPlayerLabel.setText(playerName);
     }

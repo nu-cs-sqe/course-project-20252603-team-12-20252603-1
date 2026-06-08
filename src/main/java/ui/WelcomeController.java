@@ -4,6 +4,7 @@ import domain.Board;
 import domain.BoardInitializer;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import java.util.Locale;
 import java.util.Random;
 
 public class WelcomeController {
@@ -11,7 +12,11 @@ public class WelcomeController {
     private final WelcomeView welcomeView;
 
     public WelcomeController() {
-        welcomeView = new WelcomeView();
+        this(Locale.ENGLISH);
+    }
+
+    WelcomeController(Locale locale) {
+        welcomeView = new WelcomeView(locale);
         welcomeView.setStartGameAction(this::startGame);
     }
 
@@ -27,11 +32,16 @@ public class WelcomeController {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            welcomeView.showError("Player name cannot be empty");
+            Messages localeMessages = new Messages(welcomeView.getSelectedLocale());
+            welcomeView.showError(localeMessages.getString("playerNameEmptyError"));
             return;
         }
         closeWelcomeView();
-        new BoardController(player1Name, player2Name, new Board(selectedInitializer())).show();
+        new BoardController(
+                player1Name,
+                player2Name,
+                new Board(selectedInitializer()),
+                welcomeView.getSelectedLocale()).show();
     }
 
     BoardInitializer selectedInitializer() {

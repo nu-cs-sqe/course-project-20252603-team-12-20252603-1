@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,15 +24,22 @@ class PromotionView {
     private static final Font LABEL_FONT = new Font("SansSerif", Font.BOLD, 16);
     private static final int BUTTON_SIZE = 72;
 
+    private final Messages messages;
     private final JDialog dialog;
     private final PieceColor color;
+    private final JLabel promptLabel;
     private PieceType chosenType = PieceType.QUEEN;
 
     PromotionView(JFrame parent, PieceColor color) {
+        this(parent, color, Locale.ENGLISH);
+    }
+
+    PromotionView(JFrame parent, PieceColor color, Locale locale) {
         // untestable: creates JDialog (Swing/AWT component)
+        messages = new Messages(locale);
         this.color = color;
-        this.dialog = new JDialog(parent, "Promote Pawn", true);
-        buildUi();
+        this.dialog = new JDialog(parent, messages.getString("promotePawnTitle"), true);
+        promptLabel = buildUi();
     }
 
     PieceType showAndGetChoice() {
@@ -40,12 +48,20 @@ class PromotionView {
         return chosenType;
     }
 
-    private void buildUi() {
+    String getDialogTitleText() {
+        return dialog.getTitle();
+    }
+
+    String getPromptLabelText() {
+        return promptLabel.getText();
+    }
+
+    private JLabel buildUi() {
         // untestable: Swing layout construction
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panel.setBackground(BACKGROUND);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel label = new JLabel("Choose promotion piece:");
+        JLabel label = new JLabel(messages.getString("choosePromotionPiece"));
         label.setForeground(TEXT_COLOR);
         label.setFont(LABEL_FONT);
         panel.add(label);
@@ -57,6 +73,7 @@ class PromotionView {
         dialog.pack();
         dialog.setLocationRelativeTo(dialog.getParent());
         dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        return label;
     }
 
     private JButton buildPromotionButton(PieceType type) {

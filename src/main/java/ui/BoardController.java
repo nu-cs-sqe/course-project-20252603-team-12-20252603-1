@@ -9,8 +9,10 @@ import domain.piece.Piece;
 import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -21,6 +23,8 @@ public class BoardController {
     private final String player1Name;
     private final String player2Name;
     private final Board board;
+    private final Messages messages;
+    private final Locale locale;
     private MainView mainView;
     private BoardView boardView;
     private Optional<Location> lastSelectedLoc;
@@ -30,14 +34,20 @@ public class BoardController {
             value = "EI_EXPOSE_REP2",
             justification = "Intentional shared reference for collaboration")
     public BoardController(String player1Name, String player2Name, Board board) {
+        this(player1Name, player2Name, board, Locale.ENGLISH);
+    }
+
+    BoardController(String player1Name, String player2Name, Board board, Locale locale) {
         this.player1Name = player1Name;
         this.player2Name = player2Name;
         this.board = board;
+        this.locale = locale;
+        messages = new Messages(locale);
         lastSelectedLoc = Optional.empty();
     }
 
     public void show() {
-        mainView = new MainView(player1Name, player2Name, this);
+        mainView = new MainView(player1Name, player2Name, this, locale);
         mainView.setVisible(true);
         updateCurrentPlayerLabel();
     }
@@ -52,13 +62,13 @@ public class BoardController {
                 text = player2Name;
                 break;
             case WHITE_WIN:
-                text = player1Name + " wins!";
+                text = formatWinMessage(player1Name);
                 break;
             case BLACK_WIN:
-                text = player2Name + " wins!";
+                text = formatWinMessage(player2Name);
                 break;
             case DRAW:
-                text = "Draw!";
+                text = messages.getString("drawResult");
                 break;
             default:
                 text = "";
@@ -186,20 +196,24 @@ public class BoardController {
     }
 
     private PieceType promptForPromotionPiece(PieceColor color) {
-        return new PromotionView(mainView, color).showAndGetChoice();
+        return new PromotionView(mainView, color, locale).showAndGetChoice();
     }
 
     private void showEndGame() {
-        new EndGameController(buildEndGameMessage(), mainView).show();
+        new EndGameController(buildEndGameMessage(), mainView, locale).show();
     }
 
     String buildEndGameMessage() {
         switch (board.getCurrentGameState()) {
-            case WHITE_WIN: return player1Name + " wins!";
-            case BLACK_WIN: return player2Name + " wins!";
-            case DRAW: return "Draw!";
+            case WHITE_WIN: return formatWinMessage(player1Name);
+            case BLACK_WIN: return formatWinMessage(player2Name);
+            case DRAW: return messages.getString("drawResult");
             default: return "";
         }
+    }
+
+    private String formatWinMessage(String playerName) {
+        return MessageFormat.format(messages.getString("winPattern"), playerName);
     }
 
     private void repaintBoardView() {

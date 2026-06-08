@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,10 +21,11 @@ class EndGameView extends JFrame {
     private static final Font RESULT_FONT = new Font("Serif", Font.BOLD, 36);
     private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD, 16);
 
+    private JButton playAgainButton;
     private Runnable playAgainAction = () -> {};
 
-    EndGameView(String resultMessage) {
-        buildUi(resultMessage);
+    EndGameView(String resultMessage, Locale locale) {
+        buildUi(resultMessage, locale);
     }
 
     void setPlayAgainAction(Runnable action) {
@@ -34,7 +36,12 @@ class EndGameView extends JFrame {
         playAgainAction.run();
     }
 
-    private void buildUi(String resultMessage) {
+    String getPlayAgainButtonText() {
+        return playAgainButton.getText();
+    }
+
+    private void buildUi(String resultMessage, Locale locale) {
+        Messages messages = new Messages(locale);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(BACKGROUND);
@@ -47,7 +54,7 @@ class EndGameView extends JFrame {
         panel.add(resultLabel);
         panel.add(Box.createVerticalStrut(40));
 
-        JButton playAgainButton = new JButton("Play Again");
+        playAgainButton = new JButton(messages.getString("playAgain"));
         playAgainButton.setFont(BUTTON_FONT);
         playAgainButton.setBackground(ACCENT_COLOR);
         playAgainButton.setForeground(TEXT_COLOR);
@@ -59,7 +66,7 @@ class EndGameView extends JFrame {
         playAgainButton.addActionListener(e -> clickPlayAgain());
         panel.add(playAgainButton);
 
-        setTitle("Game Over");
+        setTitle(messages.getString("gameOverTitle"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BACKGROUND);
         getContentPane().add(panel);

@@ -20,6 +20,7 @@ import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 import org.easymock.Capture;
@@ -829,8 +830,12 @@ class BoardControllerTest {
     }
 
     private static BoardController controllerFor(Board board) {
+        return controllerFor(board, Locale.ENGLISH);
+    }
+
+    private static BoardController controllerFor(Board board, Locale locale) {
         final BoardController controller =
-                new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board);
+                new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board, locale);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
         boardViewMock.repaint();
         EasyMock.expectLastCall().anyTimes();
@@ -1317,6 +1322,48 @@ class BoardControllerTest {
         BoardController controller = controllerFor(boardMock);
 
         String expected = "Draw!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
+
+        String expected = "\u00A1Alice gana!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_OnSpanishLocale_BlackWin_ReturnsSpanishWinMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
+
+        String expected = "\u00A1Bob gana!";
+        String actual = controller.buildEndGameMessage();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void BuildEndGameMessage_OnSpanishLocale_Draw_ReturnsSpanishDrawMessage() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.DRAW);
+        EasyMock.replay(boardMock);
+
+        BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
+
+        String expected = "\u00A1Empate!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);

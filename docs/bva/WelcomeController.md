@@ -6,6 +6,7 @@
 
 - **Output: WelcomeView initial visibility** — whether the welcome screen is visible immediately after construction, before `show()` is called
 - **Output: start-game action wired** — whether clicking the Start Game button invokes `startGame()`
+- **Output: default locale** — no-arg constructor builds `WelcomeView` with `Locale.ENGLISH`; user may switch language on the welcome screen before start
 
 ### Step 2: Data Types (from BVA Catalog)
 
@@ -13,6 +14,7 @@
 | -------------------------------------- | ----------------- | ----------------------------------- |
 | Output: WelcomeView initial visibility | Boolean           | true (visible), false (not visible) |
 | Output: start-game action wired        | Boolean           | true (wired), false (not wired)     |
+| Output: default locale                 | **Cases**         | `Locale.ENGLISH`                    |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
@@ -37,6 +39,11 @@
   - **Method(s) under test**: `WelcomeController()`
   - **State of the system**: freshly constructed controller; `player1Name = "Alice"`, `player2Name = "Bob"`; `show()` called; `clickStartGame()` called on the view
   - **Expected output**: `WelcomeView` is disposed (`isDisplayable()` is `false`)
+
+- **WC-TC17: Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale** ( :white_check_mark: )
+  - **Method(s) under test**: `WelcomeController()`
+  - **State of the system**: freshly constructed controller; JVM default locale may differ from English
+  - **Expected output**: `getWelcomeView().getTitle()` is `"Chess"` (English bundle, not system locale)
 
 ---
 
@@ -125,6 +132,18 @@
   - **State of the system**: `player1Name = "Alice"`, `player2Name = ""`; `startGame()` called
   - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
 
+### Step 4 (i18n): error message text from bundle
+
+- **WC-TC18: StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle** ( :white_check_mark: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController` constructed with `Locale.ENGLISH`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
+  - **Expected output**: `getErrorText()` is `"Player name cannot be empty"`
+
+- **WC-TC19: StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle** ( :white_check_mark: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController(Locale.forLanguageTag("es"))`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
+  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
+
 ---
 
 ## Method: `selectedInitializer()`
@@ -209,3 +228,40 @@ Scope: After name validation, create `BoardController(player1Name, player2Name, 
   - **Method(s) under test**: `startGame()`
   - **State of the system**: valid player names; standard new game (`WHITE_TURN`)
   - **Expected output**: game stats current-player label text is `player1Name`
+
+---
+
+## Method / behavior: language selection → `BoardController` locale
+
+`startGame()` reads `welcomeView.getSelectedLocale()` and passes it to `BoardController` and error messages.
+
+### Step 1: Equivalence classes
+
+| Input / state | Equivalence classes |
+| ------------- | ------------------- |
+| Language combo | English; Spanish |
+| Output | `MainView` title and error text match selected bundle |
+
+### Step 2: Data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| Selected locale | **Cases** |
+| Main view title | **String** |
+| Error message | **String** |
+
+### Step 3: Boundary values
+
+- **Cases:** English selected → `"Chess"` title; Spanish selected → `"Ajedrez"` title.
+
+### Step 4: Test cases
+
+- **WC-TC20: StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle** ( :white_check_mark: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController()` with Spanish selected; valid player names; game started
+  - **Expected output**: visible `MainView` title is `"Ajedrez"`
+
+- **WC-TC21: StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle** ( :white_check_mark: )
+  - **Method(s) under test**: `startGame()`
+  - **State of the system**: `WelcomeController()` (English welcome); Spanish selected; `player1Name = ""`; start triggered
+  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
