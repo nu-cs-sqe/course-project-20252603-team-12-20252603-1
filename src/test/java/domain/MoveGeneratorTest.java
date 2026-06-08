@@ -581,6 +581,19 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void IsInCheck_WhenPawnAttacksKing_ReturnsTrue() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new King(PieceColor.BLACK);
+        board[5][3] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = moveGenerator.isInCheck(PieceColor.BLACK);
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
