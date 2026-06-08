@@ -1581,5 +1581,26 @@ class BoardControllerTest {
 
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @Test
+    void HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(3, 3)).andReturn(standardGrid[3][3]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(new Location(3, 3));
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
