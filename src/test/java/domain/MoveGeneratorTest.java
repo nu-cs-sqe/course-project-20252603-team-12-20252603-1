@@ -1188,6 +1188,20 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnKingWithoutRooks_ExcludesAllCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
