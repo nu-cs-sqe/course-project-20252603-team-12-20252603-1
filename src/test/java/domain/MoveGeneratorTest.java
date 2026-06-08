@@ -694,6 +694,21 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnEmptySquare_ReturnsMutableEmptyList() {
+        Piece[][] board = emptyBoard();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        java.util.List<Move> moves = moveGenerator.generateLegalMoves(new Location(3, 3));
+        int sizeBefore = moves.size();
+        moves.add(new Move(new Location(0, 0), new Location(1, 1)));
+
+        int expected = sizeBefore + 1;
+        int actual = moves.size();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
