@@ -673,3 +673,68 @@ Win and draw text load from `messages.properties` / `messages_es.properties` via
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `DRAW`
   - **Expected output**: `"¡Empate!"`
+
+---
+
+## Method / behavior: coverage gaps — getters, repaint, bounds, `show()`
+
+Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock strict `verify` on `BoardView.repaint()` where void-call mutants survived; headless-gated `show()` for Swing UI.
+
+### Step 4: Test cases
+
+- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :x: )
+  - **Method(s) under test**: `getMainView()`
+  - **State of the system**: fresh controller; `show()` not called
+  - **Expected output**: `null`
+- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :x: )
+  - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
+  - **State of the system**: `MainView` mock injected via `setMainView`
+  - **Expected output**: `getMainView()` returns the same mock instance
+- **BC-TC75: GetBoardView_AfterSetBoardView_ReturnsInjectedView** ( :x: )
+  - **Method(s) under test**: `getBoardView()`, `setBoardView(BoardView)`
+  - **State of the system**: `BoardView` mock injected via `setBoardView`
+  - **Expected output**: `getBoardView()` returns the same mock instance
+- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :x: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`
+  - **State of the system**: no selection (`Optional.empty()`)
+  - **Expected output**: returned list accepts an added element (mutable `ArrayList`)
+- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
+  - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
+  - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes
+- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
+  - **State of the system**: selection then click second own piece
+  - **Expected output**: `boardView.repaint()` called twice
+- **BC-TC79: HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (illegal destination path)
+  - **State of the system**: selection then illegal empty destination with no matching move
+  - **Expected output**: `boardView.repaint()` called twice
+- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
+  - **State of the system**: selection then legal destination; `makeMove` invoked
+  - **Expected output**: `boardView.repaint()` called twice
+- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(8, 0)` out of bounds; white turn
+  - **Expected output**: `hasSelection()` remains `false`
+- **BC-TC87: HandleSquareClick_OnRankEight_IgnoresClick** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(0, 8)` out of bounds; white turn
+  - **Expected output**: `hasSelection()` remains `false`
+- **BC-TC82: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(7, 7)` white rook on white turn
+  - **Expected output**: `hasSelection()` is `true`
+- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
+  - **Expected output**: `hasSelection()` remains `false`
+- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :x: )
+  - **Method(s) under test**: `executeMove` → `showEndGame()` → `EndGameController.show()`
+  - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`
+  - **Expected output**: an `EndGameView` window is visible after the move
+- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :x: )
+  - **Method(s) under test**: `show()`
+  - **State of the system**: real `Board` standard start; display available (not headless)
+  - **Expected output**: `getMainView().isVisible()` is `true`
