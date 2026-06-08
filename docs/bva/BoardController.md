@@ -710,7 +710,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `handleSquareClick(Location)` (illegal destination path)
   - **State of the system**: selection then illegal empty destination with no matching move
   - **Expected output**: `boardView.repaint()` called twice
-- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :x: )
+- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
   - **State of the system**: selection then legal destination; `makeMove` invoked
   - **Expected output**: `boardView.repaint()` called twice
