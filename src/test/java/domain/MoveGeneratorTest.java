@@ -1089,6 +1089,25 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GeneratePseudoLegalMoves_OnNonePiece_ReturnsMutableEmptyList() throws Exception {
+        Piece[][] board = emptyBoard();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+        Method generatePseudoLegalMoves = MoveGenerator.class.getDeclaredMethod(
+                "generatePseudoLegalMoves", Location.class, Piece.class);
+        generatePseudoLegalMoves.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<Move> moves = (List<Move>) generatePseudoLegalMoves.invoke(
+                moveGenerator, new Location(3, 3), new NonePiece());
+        int sizeBefore = moves.size();
+        moves.add(new Move(new Location(0, 0), new Location(1, 1)));
+
+        int expected = sizeBefore + 1;
+        int actual = moves.size();
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
