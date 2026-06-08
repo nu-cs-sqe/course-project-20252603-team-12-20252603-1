@@ -1202,6 +1202,21 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnUnmovedQueensideRookAtAFile_FindsRookAtFileZero() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expected = PieceType.ROOK;
+        PieceType actual = result[7][3].getType();
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
