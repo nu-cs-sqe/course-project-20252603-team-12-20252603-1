@@ -1136,6 +1136,19 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnRookFacingEnemy_ReturnsThirteenMoves() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Rook(PieceColor.WHITE);
+        board[4][6] = new Rook(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 13;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 4)).size();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
