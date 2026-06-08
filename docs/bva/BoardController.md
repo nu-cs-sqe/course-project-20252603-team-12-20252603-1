@@ -698,7 +698,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: no selection (`Optional.empty()`)
   - **Expected output**: returned list accepts an added element (mutable `ArrayList`)
-- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :x: )
+- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
   - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
   - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes

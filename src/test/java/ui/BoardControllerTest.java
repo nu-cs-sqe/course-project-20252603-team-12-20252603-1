@@ -1547,5 +1547,20 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+    @Test
+    void HandleSquareClick_OnWhitePiece_RepaintsBoardView() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(selected);
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
