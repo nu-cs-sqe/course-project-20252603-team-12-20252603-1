@@ -1661,5 +1661,22 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @Test
+    void HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForWhitePieceClick(standardGrid, 7, 7);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(7, 7));
+
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
