@@ -1519,5 +1519,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock);
     }
+    @Test
+    void GetBoardView_AfterSetBoardView_ReturnsInjectedView() {
+        Board boardMock = replayEmptyBoard();
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = newController(boardMock);
+        controller.setBoardView(boardViewMock);
+
+        BoardView expected = boardViewMock;
+        BoardView actual = controller.getBoardView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
