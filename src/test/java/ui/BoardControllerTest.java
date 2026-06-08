@@ -1633,5 +1633,19 @@ class BoardControllerTest {
 
         EasyMock.verify(boardMock, mainViewMock, statsMock, boardViewMock);
     }
+    @Test
+    void HandleSquareClick_OnFileEight_IgnoresClick() {
+        Board boardMock = replayEmptyBoard();
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(8, 0));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }

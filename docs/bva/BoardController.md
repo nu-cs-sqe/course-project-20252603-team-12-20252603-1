@@ -714,7 +714,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
   - **State of the system**: selection then legal destination; `makeMove` invoked
   - **Expected output**: `boardView.repaint()` called twice
-- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :x: )
+- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(8, 0)` out of bounds; white turn
   - **Expected output**: `hasSelection()` remains `false`
