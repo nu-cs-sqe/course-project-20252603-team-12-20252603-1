@@ -702,7 +702,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
   - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
   - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes
-- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :x: )
+- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
   - **State of the system**: selection then click second own piece
   - **Expected output**: `boardView.repaint()` called twice

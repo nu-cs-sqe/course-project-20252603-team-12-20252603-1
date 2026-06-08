@@ -1562,5 +1562,24 @@ class BoardControllerTest {
 
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @Test
+    void HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(0, 6));
+        controller.handleSquareClick(new Location(1, 7));
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
 
 }
