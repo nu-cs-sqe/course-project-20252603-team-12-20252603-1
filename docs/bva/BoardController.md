@@ -686,7 +686,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `getMainView()`
   - **State of the system**: fresh controller; `show()` not called
   - **Expected output**: `null`
-- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :x: )
+- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
   - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
   - **State of the system**: `MainView` mock injected via `setMainView`
   - **Expected output**: `getMainView()` returns the same mock instance
