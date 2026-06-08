@@ -682,7 +682,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
 
 ### Step 4: Test cases
 
-- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :x: )
+- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :white_check_mark: )
   - **Method(s) under test**: `getMainView()`
   - **State of the system**: fresh controller; `show()` not called
   - **Expected output**: `null`

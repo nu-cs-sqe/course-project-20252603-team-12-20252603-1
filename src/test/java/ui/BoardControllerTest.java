@@ -1,6 +1,7 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import domain.Board;
 import domain.FischerRandomBoardInitializer;
@@ -19,18 +20,31 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class BoardControllerTest {
 
     private static final String TEST_PLAYER_ONE = "Alice";
     private static final String TEST_PLAYER_TWO = "Bob";
+
+    @AfterEach
+    void disposeOpenUiWindows() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView || window instanceof EndGameView) {
+                window.dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_FreshInstance_LastSelectedUnset() {
@@ -844,6 +858,25 @@ class BoardControllerTest {
         return controller;
     }
 
+    private static BoardController newController(Board board) {
+        return new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board, Locale.ENGLISH);
+    }
+
+    private static BoardController controllerWithBoardView(Board board, BoardView boardView) {
+        BoardController controller = newController(board);
+        controller.setBoardView(boardView);
+        return controller;
+    }
+
+    private static boolean anyEndGameViewVisible() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof EndGameView && window.isVisible()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static Board replayEmptyBoard() {
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.replay(boardMock);
@@ -1460,6 +1493,17 @@ class BoardControllerTest {
 
         assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
         EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @Test
+    void GetMainView_BeforeShow_ReturnsNull() {
+        Board boardMock = replayEmptyBoard();
+        BoardController controller = newController(boardMock);
+
+        MainView expected = null;
+        MainView actual = controller.getMainView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
     }
 
 }
