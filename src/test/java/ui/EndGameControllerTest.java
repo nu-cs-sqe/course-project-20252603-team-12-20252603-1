@@ -3,11 +3,22 @@ package ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.Window;
+import java.util.Locale;
 import javax.swing.JFrame;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class EndGameControllerTest {
+
+    @AfterEach
+    void disposeOpenUiWindows() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof WelcomeView || window instanceof EndGameView) {
+                window.dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_WithEmptyResultMessage_ShowHidesMainView() {
@@ -72,6 +83,24 @@ class EndGameControllerTest {
         EasyMock.verify(mainView);
     }
 
+    @Test
+    void PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        mainView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView);
+
+        EndGameController controller = new EndGameController(
+                "\u00A1Alice gana!", mainView, Locale.forLanguageTag("es"));
+        controller.show();
+        controller.getEndGameView().clickPlayAgain();
+
+        String expected = "Ajedrez";
+        String actual = findVisibleWelcomeViewTitle();
+        assertEquals(expected, actual);
+        EasyMock.verify(mainView);
+    }
+
     private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
         for (Window window : Window.getWindows()) {
             if (type.isInstance(window) && window.isVisible()) {
@@ -79,5 +108,15 @@ class EndGameControllerTest {
             }
         }
         return false;
+    }
+
+    private static String findVisibleWelcomeViewTitle() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof WelcomeView && window.isVisible()) {
+                WelcomeView welcomeView = (WelcomeView) window;
+                return welcomeView.getTitle();
+            }
+        }
+        return "";
     }
 }

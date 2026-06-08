@@ -5,11 +5,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,20 +31,50 @@ public class WelcomeView extends JFrame {
     private static final Font RADIO_FONT  = new Font("SansSerif", Font.PLAIN, 18);
     private static final Font BUTTON_FONT = new Font("SansSerif", Font.BOLD,  16);
 
+    private static final int ENGLISH_LANGUAGE_INDEX = 0;
+    private static final int SPANISH_LANGUAGE_INDEX = 1;
+
+    // Reassigned by applyLocale when the user changes the language combo; not final by design.
+    private Messages messages;
     private JTextField player1NameField;
     private JTextField player2NameField;
     private JRadioButton standardRadioButton;
     private JRadioButton chess960RadioButton;
+    private JLabel welcomeTitleLabel;
+    private JLabel player1Label;
+    private JLabel player2Label;
+    private JButton startGameButton;
+    private JLabel languageLabel;
+    private JComboBox<String> languageComboBox;
     private JLabel errorLabel = new JLabel("");
     private Runnable startGameAction = () -> {};
 
-    public WelcomeView() {
+    /**
+     * @param locale non-null locale used to load UI strings
+     */
+    public WelcomeView(Locale locale) {
+        messages = new Messages(locale);
         player1NameField    = new JTextField();
         player2NameField    = new JTextField();
         standardRadioButton = new JRadioButton();
         chess960RadioButton = new JRadioButton();
         standardRadioButton.setSelected(true);
-        createWelcomeScreenUi();
+        createWelcomeScreenUi(locale);
+    }
+
+    Locale getSelectedLocale() {
+        if (languageComboBox.getSelectedIndex() == SPANISH_LANGUAGE_INDEX) {
+            return Locale.forLanguageTag("es");
+        }
+        return Locale.ENGLISH;
+    }
+
+    void selectLanguageIndex(int index) {
+        languageComboBox.setSelectedIndex(index);
+    }
+
+    String getLanguageLabelText() {
+        return languageLabel.getText();
     }
 
     public String getPlayer1Name() {
@@ -86,12 +118,37 @@ public class WelcomeView extends JFrame {
         return errorLabel.getText();
     }
 
-    private void createWelcomeScreenUi() {
+    String getWelcomeTitleText() {
+        return welcomeTitleLabel.getText();
+    }
+
+    String getPlayer1LabelText() {
+        return player1Label.getText();
+    }
+
+    String getPlayer2LabelText() {
+        return player2Label.getText();
+    }
+
+    String getStandardModeLabelText() {
+        return standardRadioButton.getText();
+    }
+
+    String getChess960ModeLabelText() {
+        return chess960RadioButton.getText();
+    }
+
+    String getStartGameButtonText() {
+        return startGameButton.getText();
+    }
+
+    private void createWelcomeScreenUi(Locale initialLocale) {
         // untestable: Swing UI assembly
         JPanel panel = buildMainPanel();
         addTitle(panel);
         addPlayerNameFields(panel);
         addModeSelector(panel);
+        addLanguageSelector(panel, initialLocale);
         addStartButton(panel);
         addErrorLabel(panel);
         configureWindow(panel);
@@ -106,20 +163,22 @@ public class WelcomeView extends JFrame {
     }
 
     private void addTitle(JPanel panel) {
-        JLabel title = new JLabel("♟  Chess  ♟");
-        title.setFont(TITLE_FONT);
-        title.setForeground(TEXT_COLOR);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(title);
+        welcomeTitleLabel = new JLabel(messages.getString("welcomeTitle"));
+        welcomeTitleLabel.setFont(TITLE_FONT);
+        welcomeTitleLabel.setForeground(TEXT_COLOR);
+        welcomeTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(welcomeTitleLabel);
         panel.add(Box.createVerticalStrut(45));
     }
 
     private void addPlayerNameFields(JPanel panel) {
-        addPlayerNameField(panel, "Player 1", player1NameField);
-        addPlayerNameField(panel, "Player 2", player2NameField);
+        player1Label = addPlayerNameField(
+                panel, messages.getString("player1Label"), player1NameField);
+        player2Label = addPlayerNameField(
+                panel, messages.getString("player2Label"), player2NameField);
     }
 
-    private void addPlayerNameField(JPanel panel, String labelText, JTextField field) {
+    private JLabel addPlayerNameField(JPanel panel, String labelText, JTextField field) {
         JLabel label = new JLabel(labelText);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_COLOR);
@@ -135,11 +194,12 @@ public class WelcomeView extends JFrame {
                 BorderFactory.createEmptyBorder(4, 8, 4, 8)));
         panel.add(field);
         panel.add(Box.createVerticalStrut(18));
+        return label;
     }
 
     private void addModeSelector(JPanel panel) {
-        standardRadioButton.setText("Standard");
-        chess960RadioButton.setText("Chess960");
+        standardRadioButton.setText(messages.getString("standardMode"));
+        chess960RadioButton.setText(messages.getString("chess960Mode"));
         ButtonGroup modeGroup = new ButtonGroup();
         modeGroup.add(standardRadioButton);
         modeGroup.add(chess960RadioButton);
@@ -161,18 +221,59 @@ public class WelcomeView extends JFrame {
         return radioPanel;
     }
 
+    private void addLanguageSelector(JPanel panel, Locale initialLocale) {
+        languageLabel = new JLabel(messages.getString("languageLabel"));
+        languageLabel.setFont(LABEL_FONT);
+        languageLabel.setForeground(TEXT_COLOR);
+        languageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(languageLabel);
+        panel.add(Box.createVerticalStrut(5));
+
+        String[] languageOptions = {
+            messages.getString("languageEnglish"),
+            messages.getString("languageSpanish")
+        };
+        languageComboBox = new JComboBox<>(languageOptions);
+        languageComboBox.setFont(FIELD_FONT);
+        languageComboBox.setMaximumSize(new Dimension(180, 36));
+        languageComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        languageComboBox.setSelectedIndex(languageIndexFor(initialLocale));
+        languageComboBox.addActionListener(e -> applyLocale(getSelectedLocale()));
+        panel.add(languageComboBox);
+        panel.add(Box.createVerticalStrut(18));
+    }
+
+    private static int languageIndexFor(Locale locale) {
+        if ("es".equals(locale.getLanguage())) {
+            return SPANISH_LANGUAGE_INDEX;
+        }
+        return ENGLISH_LANGUAGE_INDEX;
+    }
+
+    private void applyLocale(Locale locale) {
+        messages = new Messages(locale);
+        welcomeTitleLabel.setText(messages.getString("welcomeTitle"));
+        player1Label.setText(messages.getString("player1Label"));
+        player2Label.setText(messages.getString("player2Label"));
+        standardRadioButton.setText(messages.getString("standardMode"));
+        chess960RadioButton.setText(messages.getString("chess960Mode"));
+        startGameButton.setText(messages.getString("startGame"));
+        languageLabel.setText(messages.getString("languageLabel"));
+        setTitle(messages.getString("appTitle"));
+    }
+
     private void addStartButton(JPanel panel) {
-        JButton startButton = new JButton("Start Game");
-        startButton.setFont(BUTTON_FONT);
-        startButton.setBackground(ACCENT_COLOR);
-        startButton.setForeground(TEXT_COLOR);
-        startButton.setFocusPainted(false);
-        startButton.setOpaque(true);
-        startButton.setBorderPainted(false);
-        startButton.setMaximumSize(new Dimension(180, 42));
-        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        startButton.addActionListener(e -> clickStartGame());
-        panel.add(startButton);
+        startGameButton = new JButton(messages.getString("startGame"));
+        startGameButton.setFont(BUTTON_FONT);
+        startGameButton.setBackground(ACCENT_COLOR);
+        startGameButton.setForeground(TEXT_COLOR);
+        startGameButton.setFocusPainted(false);
+        startGameButton.setOpaque(true);
+        startGameButton.setBorderPainted(false);
+        startGameButton.setMaximumSize(new Dimension(180, 42));
+        startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        startGameButton.addActionListener(e -> clickStartGame());
+        panel.add(startGameButton);
     }
 
     private void addErrorLabel(JPanel panel) {
@@ -184,7 +285,7 @@ public class WelcomeView extends JFrame {
     }
 
     private void configureWindow(JPanel panel) {
-        setTitle("Chess");
+        setTitle(messages.getString("appTitle"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BACKGROUND);
         getContentPane().add(panel);

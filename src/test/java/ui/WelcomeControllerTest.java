@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.awt.Window;
+import java.util.Locale;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,15 @@ class WelcomeControllerTest {
     void Constructor_FreshInstance_WelcomeViewNotVisible() {
         WelcomeController controller = new WelcomeController();
         assertFalse(controller.getWelcomeView().isVisible());
+    }
+
+    @Test
+    void Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale() {
+        WelcomeController controller = new WelcomeController();
+
+        String expected = "Chess";
+        String actual = controller.getWelcomeView().getTitle();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -56,6 +66,32 @@ class WelcomeControllerTest {
         controller.getWelcomeView().clickStartGame();
         assertTrue(controller.getWelcomeView().isDisplayable());
         assertNotEquals("", controller.getWelcomeView().getErrorText());
+    }
+
+    @Test
+    void StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "Player name cannot be empty";
+        String actual = controller.getWelcomeView().getErrorText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController(Locale.forLanguageTag("es"));
+        controller.show();
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String actual = controller.getWelcomeView().getErrorText();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -135,6 +171,38 @@ class WelcomeControllerTest {
 
         String expected = "Alice";
         String actual = mainView.getGameStatsView().getCurrentPlayerLabelText();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().selectLanguageIndex(1);
+        controller.getWelcomeView().setPlayer1Name("Alice");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+
+        controller.getWelcomeView().clickStartGame();
+
+        MainView mainView = findVisibleMainView();
+        assertNotNull(mainView);
+
+        String expected = "Ajedrez";
+        String actual = mainView.getTitle();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle() {
+        WelcomeController controller = new WelcomeController();
+        controller.show();
+        controller.getWelcomeView().selectLanguageIndex(1);
+        controller.getWelcomeView().setPlayer1Name("");
+        controller.getWelcomeView().setPlayer2Name("Bob");
+        controller.getWelcomeView().clickStartGame();
+
+        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String actual = controller.getWelcomeView().getErrorText();
         assertEquals(expected, actual);
     }
 
