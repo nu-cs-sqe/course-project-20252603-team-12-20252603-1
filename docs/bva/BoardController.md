@@ -730,7 +730,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
   - **Expected output**: `hasSelection()` remains `false`
-- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :x: )
+- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove` → `showEndGame()` → `EndGameController.show()`
   - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`
   - **Expected output**: an `EndGameView` window is visible after the move
