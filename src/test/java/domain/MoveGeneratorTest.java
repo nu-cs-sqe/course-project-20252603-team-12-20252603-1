@@ -686,6 +686,14 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void CreatePiece_OnNoneType_ReturnsNonePiece() {
+        PieceType expected = PieceType.NONE;
+        PieceType actual = MoveGenerator.createPiece(PieceType.NONE, PieceColor.WHITE).getType();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
