@@ -694,7 +694,7 @@ Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock s
   - **Method(s) under test**: `getBoardView()`, `setBoardView(BoardView)`
   - **State of the system**: `BoardView` mock injected via `setBoardView`
   - **Expected output**: `getBoardView()` returns the same mock instance
-- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :x: )
+- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: no selection (`Optional.empty()`)
   - **Expected output**: returned list accepts an added element (mutable `ArrayList`)

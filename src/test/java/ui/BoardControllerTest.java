@@ -1533,5 +1533,19 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+    @Test
+    void GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList() {
+        Board boardMock = replayEmptyBoard();
+        BoardController controller = newController(boardMock);
+
+        List<Move> moves = controller.getLegalMovesForSelection();
+        int sizeBefore = moves.size();
+        moves.add(new Move(new Location(0, 0), new Location(0, 1)));
+
+        int expected = sizeBefore + 1;
+        int actual = moves.size();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
 
 }
