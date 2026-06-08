@@ -966,6 +966,18 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnKnightAtCorner_ReturnsTwoMoves() {
+        Piece[][] board = emptyBoard();
+        board[0][0] = new Knight(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 2;
+        int actual = moveGenerator.generateLegalMoves(new Location(0, 0)).size();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
