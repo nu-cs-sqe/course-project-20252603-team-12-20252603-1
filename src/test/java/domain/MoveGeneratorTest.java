@@ -678,6 +678,14 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void CreatePiece_OnKingType_ReturnsKing() {
+        PieceType expected = PieceType.KING;
+        PieceType actual = MoveGenerator.createPiece(PieceType.KING, PieceColor.WHITE).getType();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
