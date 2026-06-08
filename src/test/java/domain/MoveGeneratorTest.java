@@ -991,6 +991,18 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void GenerateLegalMoves_OnWhitePawnAtBackRankWithNoCaptures_ReturnsEmptyList() {
+        Piece[][] board = emptyBoard();
+        board[0][4] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        int expected = 0;
+        int actual = moveGenerator.generateLegalMoves(new Location(4, 0)).size();
+
+        assertEquals(expected, actual);
+    }
+
     private static boolean hasMoveToWithType(
             java.util.List<Move> moves, int file, int rank, MoveType type) {
         for (Move move : moves) {
