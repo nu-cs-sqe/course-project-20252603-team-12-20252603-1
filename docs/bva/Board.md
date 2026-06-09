@@ -104,7 +104,7 @@
   - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
   - **Expected output**: piece at that position has color WHITE
 
-- **TC94: Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack** ( :x: )
+- **TC94: Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at row 3 (max of BLACK sub-range [0, 3]); all other positions NONE; board is constructed
   - **Expected output**: piece at `[3][0]` has color BLACK
