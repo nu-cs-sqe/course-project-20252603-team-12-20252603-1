@@ -5,7 +5,7 @@
 ### Step 1: Equivalence Classes
 
 - **Input: piece type returned by initializer** — the `PieceType` at each position in the layout
-- **Input: position half** — whether the position is in the top half (rows 0–3) or bottom half (rows 4–7)
+- **Input: row position (color-assignment threshold)** — the row index of a position in the layout; implementation assigns BLACK to rows 0–3 and WHITE to rows 4–7 via the comparison `row < BLACK_RANK_ROWS` (= 4)
 - **Output: piece type at position** — the type of the `Piece` placed on the board
 - **Output: piece color at an occupied position** — the color assigned to the piece
 - **Output: initial game state** — the game state immediately after construction
@@ -15,7 +15,7 @@
 | Equivalence class                              | Catalog data type | Parameters                                    |
 | ---------------------------------------------- | ----------------- | --------------------------------------------- |
 | Input: piece type returned by initializer      | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
-| Input: position half                           | Cases             | top (rows 0–3), bottom (rows 4–7)             |
+| Input: row position (color-assignment threshold) | Interval        | [0, 7], threshold at 4; rows [0, 3] → BLACK, rows [4, 7] → WHITE |
 | Output: piece type at position                 | Cases             | ROOK, KNIGHT, BISHOP, QUEEN, KING, PAWN, NONE |
 | Output: piece color at an occupied position    | Cases             | BLACK, WHITE                                  |
 | Output: initial game state                     | Cases             | WHITE_TURN                                    |
@@ -31,9 +31,11 @@
 - PAWN
 - NONE
 
-**Position half — Cases:**
-- top (rows 0–3)
-- bottom (rows 4–7)
+**Row position — Interval [0, 7] with color-assignment threshold at row 4:**
+- 0 (min of [0, 3] BLACK sub-range — tested by TC9)
+- 3 (max of [0, 3] BLACK sub-range — boundary, one step below threshold)
+- 4 (min of [4, 7] WHITE sub-range — boundary, at threshold)
+- 7 (max of [4, 7] WHITE sub-range — tested by TC10)
 
 **Piece color — Cases:**
 - BLACK
@@ -101,6 +103,16 @@
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
   - **Expected output**: piece at that position has color WHITE
+
+- **TC94: Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a non-NONE piece type at row 3 (max of BLACK sub-range [0, 3]); all other positions NONE; board is constructed
+  - **Expected output**: piece at `[3][0]` has color BLACK
+
+- **TC95: Constructor_WhenInitializerHasNonNoneTypeAtRowFour_PieceColorIsWhite** ( :x: )
+  - **Method(s) under test**: `Board(BoardInitializer)`
+  - **State of the system**: initializer returns a non-NONE piece type at row 4 (min of WHITE sub-range [4, 7]); all other positions NONE; board is constructed
+  - **Expected output**: piece at `[4][0]` has color WHITE
 
 - **TC11: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`, `getCurrentGameState()`
@@ -593,6 +605,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
 - **Input: current `halfMoveClock` value** — Count with threshold at HIGH = 100
 - **Output: piece at destination** — moved piece type and color match the piece that was at source
 - **Output: piece at source** — `NonePiece` after move
+- **Output: hasMoved flag on moving piece** — whether the piece now at the destination is marked as having moved
 - **Output: `halfMoveClock` after move** — 0 if reset, prior value + 1 if incremented
 - **Output: game state after move** — `WHITE_TURN`, `BLACK_TURN`, `WHITE_WIN`, `BLACK_WIN`, or `DRAW`
 
@@ -608,6 +621,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
 | Input: halfMoveClock | Count | 0, 99, 100 |
 | Output: destination piece type | Cases | PAWN, etc. |
 | Output: source piece type | Cases | NONE |
+| Output: hasMoved flag on moving piece | Boolean | true, false |
 | Output: halfMoveClock | Count | 0, prior value + 1 |
 | Output: game state after | Cases | WHITE_TURN, BLACK_TURN, WHITE_WIN, BLACK_WIN, DRAW |
 
@@ -629,12 +643,21 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
 **halfMoveClock — Count:**
 - 0, 99, 100 (threshold at HIGH = 100)
 
+**hasMoved flag — Boolean:**
+- true (piece is marked as moved after execution; only achievable post-condition)
+- false is CAN'T SET as a post-condition of a normal move
+
 ### Step 4: Test Cases
 
 - **TC53: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
+
+- **TC96: MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
+  - **Expected output**: after move, `getPieceAt(5, 4).hasMoved()` returns `true`
 
 - **TC54: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
@@ -705,8 +728,12 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 ### Step 1: Equivalence Classes
 
 - **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`
+- **Input: initial file of the queenside rook** — which file the unmoved rook occupies before queenside castling
 - **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
+- **Output: hasMoved flag on capturing pawn (EN_PASSANT)** — the pawn that performed the capture is marked as having moved
 - **Output: castling effect** — king and rook relocate to castling destination files
+- **Output: hasMoved flag on king after castling** — the king is marked as having moved
+- **Output: hasMoved flag on rook after castling** — the rook is marked as having moved
 - **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
 - **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
 - **Output: promotion execution** — pawn replaced by promoted piece type at the destination
@@ -716,7 +743,11 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: move type | Cases | EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
+| Input: queenside rook initial file | Interval | [0, kingFile−1] = [0, 3] (assuming standard king at file 4) |
 | Output: piece positions | Cases | expected squares occupied/empty |
+| Output: hasMoved on capturing pawn (EN_PASSANT) | Boolean | true |
+| Output: hasMoved on king after castling | Boolean | true |
+| Output: hasMoved on rook after castling | Boolean | true |
 | Output: enPassantTarget | Cases | target set, no target |
 | Output: invalid castling | Cases | exception thrown vs successful relocation |
 | Output: promotion | Cases | promoted piece at destination |
@@ -732,6 +763,14 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 **piece positions — Cases:**
 - expected squares occupied
 - expected squares empty
+
+**hasMoved flag — Boolean (applies to EN_PASSANT pawn and castling king/rook):**
+- true (only achievable post-condition; `changeToMoved()` is always called)
+- false is CAN'T SET as a post-condition of these move types
+
+**queenside rook initial file — Interval [0, 3] (Searching: using position of match):**
+- 0 (min — rook found in the first searched position; tested by TC60)
+- 3 (max = kingFile−1 — rook found in the last searched position; not yet tested)
 
 **enPassantTarget — Cases:**
 - target set
@@ -756,15 +795,45 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: same as TC57
   - **Expected output**: captured pawn square `(5,3)` is `NONE`
 
+- **TC97: MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: same as TC57 — white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
+  - **Expected output**: `getPieceAt(5, 2).hasMoved()` returns `true`
+
 - **TC59: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
   - **Expected output**: king at `(6,7)` and rook at `(5,7)`
 
+- **TC98: MakeMove_OnKingsideCastling_KingIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **Expected output**: `getPieceAt(7, 6).hasMoved()` returns `true`
+
+- **TC99: MakeMove_OnKingsideCastling_RookIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **Expected output**: `getPieceAt(7, 5).hasMoved()` returns `true`
+
 - **TC60: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)`
+
+- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **Expected output**: `getPieceAt(7, 2).hasMoved()` returns `true`
+
+- **TC101: MakeMove_OnQueensideCastling_RookIsMarkedAsMoved** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **Expected output**: `getPieceAt(7, 3).hasMoved()` returns `true`
+
+- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of [0, 3] queenside interval — rook in the last searched position), move type `CASTLING_QUEENSIDE`
+  - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook's file equals its destination; it effectively stays in place)
 
 - **TC61: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
