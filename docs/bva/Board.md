@@ -820,7 +820,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)`
 
-- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :x: )
+- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
   - **Expected output**: `getPieceAt(7, 2).hasMoved()` returns `true`
