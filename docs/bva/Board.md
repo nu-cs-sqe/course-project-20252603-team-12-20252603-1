@@ -830,7 +830,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
   - **Expected output**: `getPieceAt(7, 3).hasMoved()` returns `true`
 
-- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :x: )
+- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of [0, 3] queenside interval — rook in the last searched position), move type `CASTLING_QUEENSIDE`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook's file equals its destination; it effectively stays in place)
