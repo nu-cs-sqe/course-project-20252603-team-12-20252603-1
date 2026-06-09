@@ -795,7 +795,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: same as TC57
   - **Expected output**: captured pawn square `(5,3)` is `NONE`
 
-- **TC97: MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved** ( :x: )
+- **TC97: MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: same as TC57 — white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
   - **Expected output**: `getPieceAt(5, 2).hasMoved()` returns `true`

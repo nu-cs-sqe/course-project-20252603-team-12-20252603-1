@@ -453,6 +453,22 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[3][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(2, 5).hasMoved());
+    }
+
+    @Test
     void MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
