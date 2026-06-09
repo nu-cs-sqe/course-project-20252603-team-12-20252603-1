@@ -2,14 +2,14 @@
 
 Package: `ui.BoardController`
 
-Scope: **Game Initialization** — selection state, snapshot/turn delegation to `domain.Board`, first-click policy, optional `BoardView` wiring. The real `Board` implementation is another feature branch; **unit tests use EasyMock** (`createMock` / `createNiceMock`, `expect`, `replay`, `verify`) to stub `getSnapshot()`, `getCurrentGameState()`, and `getPieceAt()` with test-built `Piece[][]` grids.
+Scope: **Game Initialization and interaction** — selection state, snapshot/turn delegation to `domain.Board`, click handling, move execution, UI wiring (`MainView`, `BoardView`), and end-game flow. The real `Board` implementation is another feature branch; **unit tests use EasyMock** (`createMock` / `createNiceMock`, `expect`, `replay`, `verify`) to stub collaborators. `BoardView.repaint()` is verified with strict mocks where UI refresh is part of the behavior under test.
 
 ### Step 1: Input and output equivalence classes
 
 | Concern           | Equivalence classes                                                                 |
 | ----------------- | ----------------------------------------------------------------------------------- |
 | Object life cycle | Fresh instance; no clicks yet                                                       |
-| Collaborators     | `Board` (mocked); **no `BoardView`** in controller unit tests |
+| Collaborators     | `Board` (mocked); `BoardView` / `MainView` (mocked or real for headed `show()`) |
 
 ### Step 2: BVA catalog data types
 
@@ -33,6 +33,76 @@ Scope: **Game Initialization** — selection state, snapshot/turn delegation to 
   - **Method(s) under test**: `getSelectedLocation()`
   - **State of the system**: newly constructed controller; no clicks yet
   - **Expected output**: `Optional.empty()`
+
+---
+
+## Method: `getMainView()` / `setMainView(MainView mainView)`
+
+### Step 1: Input and output equivalence classes
+
+| State | Equivalence classes |
+| ----- | ------------------- |
+| `mainView` field | unset (`show()` not called); injected via `setMainView` |
+
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| `getMainView()` | `null`; same instance as injected mock |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `mainView` | Pointers | unset vs injected reference |
+| Return value | Pointers | `null` vs non-null |
+
+### Step 3: Concrete boundary values
+
+- Before `show()` / `setMainView`: `getMainView()` → `null`
+- After `setMainView(mock)`: `getMainView()` → same mock reference
+
+### Step 4: Test cases
+
+- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :white_check_mark: )
+  - **Method(s) under test**: `getMainView()`
+  - **State of the system**: fresh controller; `show()` not called
+  - **Expected output**: `null`
+
+- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
+  - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
+  - **State of the system**: `MainView` mock injected via `setMainView`
+  - **Expected output**: `getMainView()` returns the same mock instance
+
+---
+
+## Method: `getBoardView()` / `setBoardView(BoardView boardView)`
+
+### Step 1: Input and output equivalence classes
+
+| State | Equivalence classes |
+| ----- | ------------------- |
+| `boardView` field | unset; injected via `setBoardView` |
+
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| `getBoardView()` | `null`; same instance as injected mock |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| `boardView` | Pointers |
+| Return value | Pointers |
+
+### Step 3: Concrete boundary values
+
+- After `setBoardView(mock)`: `getBoardView()` returns the injected mock
+
+### Step 4: Test cases
+
+- **BC-TC75: GetBoardView_AfterSetBoardView_ReturnsInjectedView** ( :white_check_mark: )
+  - **Method(s) under test**: `getBoardView()`, `setBoardView(BoardView)`
+  - **State of the system**: `BoardView` mock injected via `setBoardView`
+  - **Expected output**: `getBoardView()` returns the same mock instance
 
 ---
 
@@ -179,12 +249,28 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 
 | Input           | Classes                                       |
 | --------------- | --------------------------------------------- |
-| `loc`           | In-bounds; out-of-bounds                      |
+| `loc`           | In-bounds; out-of-bounds (negative; file `8`; rank `8`; max `(7, 7)`) |
 | Square at start | `NonePiece`; white piece; black piece         |
 
 | Effect            | Classes                                              |
 | ----------------- | ---------------------------------------------------- |
 | Selection / guard | Active player may select own-color pieces only; opponent or empty must not change board |
+| UI refresh        | `BoardView.repaint()` after selection changes when `BoardView` is wired |
+
+### Step 2: BVA catalog data types
+
+| Variable | Catalog type | Notes |
+| -------- | ------------ | ----- |
+| `loc.x`, `loc.y` | Counts | valid `[0, 7]` vs out-of-range |
+| `boardView` | Pointers | strict mock for repaint verification |
+
+### Step 3: Concrete boundary values
+
+- In-bounds max: `Location(7, 7)` on white turn with white rook → selection set
+- Out-of-bounds file: `Location(8, 0)` → early return, no board calls
+- Out-of-bounds rank: `Location(0, 8)` → early return, no board calls
+- Out-of-bounds negative: `Location(-1, 0)` (BC-TC36–38)
+- Repaint: strict `BoardView` mock; one `repaint()` on successful source click
 
 ### Step 4: Test cases
 
@@ -202,6 +288,11 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: standard new game; click white piece
   - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
+  - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
+  - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes
 
 - **BC-TC30: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
@@ -247,6 +338,21 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: out-of-bounds `loc`
   - **Expected output**: snapshot unchanged cell-wise
+
+- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(8, 0)` — file index at upper boundary + 1
+  - **Expected output**: `hasSelection()` remains `false`; board not consulted
+
+- **BC-TC87: HandleSquareClick_OnRankEight_IgnoresClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(0, 8)` — rank index at upper boundary + 1
+  - **Expected output**: `hasSelection()` remains `false`; board not consulted
+
+- **BC-TC82: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(7, 7)` white rook on white turn
+  - **Expected output**: `hasSelection()` is `true`
 
 - **BC-TC39: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
@@ -348,6 +454,11 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: snapshot unchanged cell-wise
 
+- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)`
+  - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
+  - **Expected output**: `hasSelection()` remains `false`
+
 ---
 
 ## Method: `getLegalMovesForSelection(): List<Move>`
@@ -363,7 +474,7 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 | Output | Equivalence classes |
 | ------ | ------------------- |
-| Returned list | empty; non-empty (same as board) |
+| Returned list | empty; non-empty (same as board); **mutable** empty (`ArrayList`) when no selection |
 
 ### Step 2: BVA catalog data types
 
@@ -375,7 +486,7 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ### Step 3: Concrete boundary values
 
-- No selection: fresh controller; `getLegalMovesForSelection()` before any click.
+- No selection: fresh controller; `getLegalMovesForSelection()` before any click; returned list must be a **mutable** `ArrayList` (not `Collections.emptyList()`).
 - With selection: white turn; click white pawn at `Location(0, 6)`; stub `board.getLegalMoves(Location(0, 6))`.
 - Board returns empty: same selection state; stub empty list from `getLegalMoves`.
 
@@ -385,6 +496,11 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: newly constructed controller; no piece selected
   - **Expected output**: returned list size is `0`
+
+- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :white_check_mark: )
+  - **Method(s) under test**: `getLegalMovesForSelection()`
+  - **State of the system**: no selection (`Optional.empty()`)
+  - **Expected output**: returned list accepts an added element (mutable `ArrayList`)
 
 - **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
@@ -417,29 +533,47 @@ Scope: when a piece is already selected, a second click either executes a legal 
 | Input: destination square | Cases | legal destination, illegal empty, own piece |
 | Output: `makeMove` called | Boolean | `true`, `false` |
 | Output: selection cleared | Boolean | `true`, `false` |
+| Output: `BoardView.repaint()` | Counts | 0, 1, 2 calls per click sequence |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
-- Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once
-- Illegal destination: stub returns move list with no matching `to` → selection cleared
-- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`
+- Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once; **two** `repaint()` calls (select + move)
+- Illegal destination: stub returns move list with no matching `to` → selection cleared; **two** `repaint()` calls
+- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`; **two** `repaint()` calls
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`.
+Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`. Repaint tests use strict `BoardView` mocks via `controllerWithBoardView`.
 
 - **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
   - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
+
+- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
+  - **State of the system**: selection then legal destination; `makeMove` invoked; strict `BoardView` mock
+  - **Expected output**: `boardView.repaint()` called twice
+
 - **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; piece selected; click `(3, 3)` not in legal moves
   - **Expected output**: `board.makeMove` not called; `hasSelection()` is `false`
+
+- **BC-TC79: HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (illegal destination path)
+  - **State of the system**: selection then illegal empty destination with no matching move; strict `BoardView` mock
+  - **Expected output**: `boardView.repaint()` called twice
+
 - **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
+
+- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
+  - **State of the system**: selection then click second own piece; strict `BoardView` mock
+  - **Expected output**: `boardView.repaint()` called twice
 
 ---
 
@@ -499,9 +633,14 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **Covered by**: BC-TC55
 
 - **BC-TC59: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
-  - **Method(s) under test**: `executeMove(Move, PieceColor)`
-  - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `boardController.show()` called first
-  - **Expected output**: a visible `EndGameView` window found in `Window.getWindows()`
+  - **Method(s) under test**: `executeMove(Move, PieceColor)` (via `showEndGame()`)
+  - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `mainView` wired
+  - **Expected output**: `mainView.setVisible(false)` called once (EndGameController.show side effect)
+
+- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :white_check_mark: )
+  - **Method(s) under test**: `executeMove(Move, PieceColor)` → `showEndGame()` → `EndGameController.show()`
+  - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`; display available (not headless)
+  - **Expected output**: an `EndGameView` window is visible after the move
 
 - **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
@@ -602,9 +741,44 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 - **BC-TC67: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `showEndGame()`
-  - **State of the system**: game is in a terminal state; `boardController.show()` called first
+  - **State of the system**: game is in a terminal state; move path triggers `showEndGame()`
   - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC59, BC-TC64, BC-TC65 (each triggers `showEndGame()` and verifies `EndGameView` is visible)
+  - **Covered by**: BC-TC59, BC-TC64, BC-TC65, BC-TC84
+
+---
+
+## Method: `show()`
+
+### Step 1: Input and output equivalence classes
+
+| State | Equivalence classes |
+| ----- | ------------------- |
+| Display | headed environment vs headless (skip) |
+| Board | real standard start via `StandardBoardInitializer` |
+
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| `mainView` | created and visible |
+| Current player label | updated via `updateCurrentPlayerLabel()` |
+
+### Step 2: BVA catalog data types
+
+| Variable / output | Catalog type |
+| ----------------- | ------------ |
+| Display available | Boolean |
+| `mainView.isVisible()` | Boolean |
+
+### Step 3: Concrete boundary values
+
+- Headed environment: `show()` → `getMainView().isVisible()` is `true`
+- Headless: test skipped via `assumeTrue`
+
+### Step 4: Test cases
+
+- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :white_check_mark: )
+  - **Method(s) under test**: `show()`
+  - **State of the system**: real `Board` standard start; display available (not headless)
+  - **Expected output**: `getMainView().isVisible()` is `true`
 
 ---
 
@@ -673,68 +847,3 @@ Win and draw text load from `messages.properties` / `messages_es.properties` via
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `DRAW`
   - **Expected output**: `"¡Empate!"`
-
----
-
-## Method / behavior: coverage gaps — getters, repaint, bounds, `show()`
-
-Scope: PIT line/mutation gaps not exercised by BC-TC1–73. Tests use EasyMock strict `verify` on `BoardView.repaint()` where void-call mutants survived; headless-gated `show()` for Swing UI.
-
-### Step 4: Test cases
-
-- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :white_check_mark: )
-  - **Method(s) under test**: `getMainView()`
-  - **State of the system**: fresh controller; `show()` not called
-  - **Expected output**: `null`
-- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
-  - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
-  - **State of the system**: `MainView` mock injected via `setMainView`
-  - **Expected output**: `getMainView()` returns the same mock instance
-- **BC-TC75: GetBoardView_AfterSetBoardView_ReturnsInjectedView** ( :white_check_mark: )
-  - **Method(s) under test**: `getBoardView()`, `setBoardView(BoardView)`
-  - **State of the system**: `BoardView` mock injected via `setBoardView`
-  - **Expected output**: `getBoardView()` returns the same mock instance
-- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :white_check_mark: )
-  - **Method(s) under test**: `getLegalMovesForSelection()`
-  - **State of the system**: no selection (`Optional.empty()`)
-  - **Expected output**: returned list accepts an added element (mutable `ArrayList`)
-- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
-  - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
-  - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes
-- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
-  - **State of the system**: selection then click second own piece
-  - **Expected output**: `boardView.repaint()` called twice
-- **BC-TC79: HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (illegal destination path)
-  - **State of the system**: selection then illegal empty destination with no matching move
-  - **Expected output**: `boardView.repaint()` called twice
-- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
-  - **State of the system**: selection then legal destination; `makeMove` invoked
-  - **Expected output**: `boardView.repaint()` called twice
-- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
-  - **State of the system**: `Location(8, 0)` out of bounds; white turn
-  - **Expected output**: `hasSelection()` remains `false`
-- **BC-TC87: HandleSquareClick_OnRankEight_IgnoresClick** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
-  - **State of the system**: `Location(0, 8)` out of bounds; white turn
-  - **Expected output**: `hasSelection()` remains `false`
-- **BC-TC82: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
-  - **State of the system**: `Location(7, 7)` white rook on white turn
-  - **Expected output**: `hasSelection()` is `true`
-- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :white_check_mark: )
-  - **Method(s) under test**: `handleSquareClick(Location)`
-  - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
-  - **Expected output**: `hasSelection()` remains `false`
-- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `executeMove` → `showEndGame()` → `EndGameController.show()`
-  - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`
-  - **Expected output**: an `EndGameView` window is visible after the move
-- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `show()`
-  - **State of the system**: real `Board` standard start; display available (not headless)
-  - **Expected output**: `getMainView().isVisible()` is `true`
