@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.gamestate.GameState;
 import domain.location.Location;
@@ -398,6 +399,21 @@ class BoardTest {
         PieceType expected = PieceType.PAWN;
         PieceType actual = board.getPieceAt(5, 4).getType();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(5, 4).hasMoved());
     }
 
     @Test

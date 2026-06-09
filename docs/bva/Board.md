@@ -654,7 +654,7 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
 
-- **TC96: MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved** ( :x: )
+- **TC96: MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4).hasMoved()` returns `true`
