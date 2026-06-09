@@ -160,6 +160,21 @@ class BoardTest {
     }
 
     @Test
+    void Constructor_WhenInitializerHasNonNoneTypeAtRowFour_PieceColorIsWhite() {
+        PieceType[][] layout = new PieceType[8][8];
+        for (PieceType[] r : layout) {
+            Arrays.fill(r, PieceType.NONE);
+        }
+        layout[4][0] = PieceType.ROOK;
+        BoardInitializer initializer = EasyMock.createMock(BoardInitializer.class);
+        EasyMock.expect(initializer.getBoardLayout()).andReturn(layout);
+        EasyMock.replay(initializer);
+        Board board = new Board(initializer);
+        assertEquals(PieceColor.WHITE, board.getSnapshot()[4][0].getColor());
+        EasyMock.verify(initializer);
+    }
+
+    @Test
     void Constructor_OnNewBoard_GameStateIsWhiteTurn() {
         Board board = new Board(new StandardBoardInitializer());
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
