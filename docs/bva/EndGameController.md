@@ -131,3 +131,34 @@
   - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
   - **State of the system**: `EndGameController(..., Locale.forLanguageTag("es"))`; `show()` called; play again clicked
   - **Expected output**: new visible `WelcomeView` title is `"Ajedrez"`
+
+---
+
+## Mock-injection test cases (mutation coverage)
+
+These test cases use the 4-arg injection constructor `EndGameController(String, JFrame, Locale, EndGameView)` to inject an `EasyMock`-mocked `EndGameView`, eliminating the Swing dependency that caused all 6 mutations to appear as NO_COVERAGE in PIT.
+
+- **EC-TC8: Constructor_WithAnyResultMessage_SetsPlayAgainAction** ( :x: )
+  - **Method(s) under test**: `EndGameController(String, JFrame, Locale, EndGameView)`
+  - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`; `setPlayAgainAction` call is expected
+  - **Expected output**: `setPlayAgainAction` is called exactly once on the injected view
+
+- **EC-TC9: GetEndGameView_AfterConstruction_ReturnsSameView** ( :x: )
+  - **Method(s) under test**: `getEndGameView()`
+  - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`
+  - **Expected output**: `getEndGameView()` returns the same mock instance that was injected
+
+- **EC-TC10: Show_WhenCalled_HidesMainViewAndShowsEndGameView** ( :x: )
+  - **Method(s) under test**: `show()`
+  - **State of the system**: controller constructed via 4-arg constructor with mocked `EndGameView` and mocked `mainView`; `show()` is called
+  - **Expected output**: `mainView.setVisible(false)` called once; `endGameView.setVisible(true)` called once
+
+- **EC-TC11: PlayAgain_WhenCalled_DisposesEndGameView** ( :x: )
+  - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
+  - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
+  - **Expected output**: `endGameView.dispose()` called exactly once
+
+- **EC-TC12: PlayAgain_WhenCalled_ShowsWelcomeView** ( :x: )
+  - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
+  - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
+  - **Expected output**: a `WelcomeView` window is visible (integration assertion; `WelcomeController` cannot be mocked)
