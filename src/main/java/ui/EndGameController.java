@@ -20,6 +20,14 @@ class EndGameController {
         endGameView.setPlayAgainAction(this::playAgain);
     }
 
+    EndGameController(
+            String resultMessage, JFrame mainView, Locale locale, EndGameView endGameView) {
+        this.mainView = mainView;
+        this.locale = locale;
+        this.endGameView = endGameView;
+        endGameView.setPlayAgainAction(this::playAgain);
+    }
+
     private void playAgain() {
         endGameView.dispose();
         new WelcomeController(locale).show();
