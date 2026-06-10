@@ -41,7 +41,6 @@ class EndGameView extends JFrame {
     }
 
     private void buildUi(String resultMessage, Locale locale) {
-        Messages messages = new Messages(locale);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(BACKGROUND);
@@ -54,6 +53,7 @@ class EndGameView extends JFrame {
         panel.add(resultLabel);
         panel.add(Box.createVerticalStrut(40));
 
+        Messages messages = new Messages(locale);
         playAgainButton = new JButton(messages.getString("playAgain"));
         playAgainButton.setFont(BUTTON_FONT);
         playAgainButton.setBackground(ACCENT_COLOR);
