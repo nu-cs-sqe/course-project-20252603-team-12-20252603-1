@@ -153,7 +153,7 @@ These test cases use the 4-arg injection constructor `EndGameController(String, 
   - **State of the system**: controller constructed via 4-arg constructor with mocked `EndGameView` and mocked `mainView`; `show()` is called
   - **Expected output**: `mainView.setVisible(false)` called once; `endGameView.setVisible(true)` called once
 
-- **EC-TC11: PlayAgain_WhenCalled_DisposesEndGameView** ( :x: )
+- **EC-TC11: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
   - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
   - **Expected output**: `endGameView.dispose()` called exactly once
