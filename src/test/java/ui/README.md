@@ -1,2 +1,0 @@
-Placeholder for EndGameController mock-injection tests. This file marks the feature-endgamecontroller-mock-tests branch.
-The mock-based tests killing the 6 NO_COVERAGE mutations will be added in subsequent commits following the TDD workflow.
