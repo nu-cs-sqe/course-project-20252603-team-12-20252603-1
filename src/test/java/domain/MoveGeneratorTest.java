@@ -645,7 +645,7 @@ class MoveGeneratorTest {
         assertEquals(expected, actual);
     }
     @Test
-    void GenerateLegalMoves_OnUnmovedQueensideRookAtAFile_FindsRookAtFileZero() {
+    void GenerateLegalMoves_OnUnmovedQueensideRookAtFileZero_FindsRookAtFileThree() {
         Piece[][] board = emptyBoard();
         board[7][4] = new King(PieceColor.WHITE);
         board[7][0] = new Rook(PieceColor.WHITE);

@@ -286,7 +286,7 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.KNIGHT`
   - **Expected output**: returned board at `(4, 0)` has type `KNIGHT`
-- **MG-TC81: GenerateLegalMoves_OnUnmovedQueensideRookAtAFile_FindsRookAtFileZero** ( :white_check_mark: )
+- **MG-TC81: GenerateLegalMoves_OnUnmovedQueensideRookAtFileZero_FindsRookAtFileThree** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)` (via `findUnmovedRookFileIn`)
   - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to `(2, 7)`
   - **Expected output**: returned board at `(3, 7)` has type `ROOK`
