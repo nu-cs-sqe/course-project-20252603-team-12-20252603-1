@@ -52,8 +52,11 @@ Feature: Game Initialization and First Moves
   Scenario Outline: Both players make their first moves
     Given a new standard chess game is started
     When white moves <white_from> to <white_to>
-    And black moves <black_from> to <black_to>
+    Then it is black's turn
+    And the white pawn is at <white_to>
+    When black moves <black_from> to <black_to>
     Then it is white's turn
+    And the black pawn is at <black_to>
 
     Examples:
       | white_from | white_to | black_from | black_to |

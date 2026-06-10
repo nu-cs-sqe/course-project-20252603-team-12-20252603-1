@@ -44,6 +44,11 @@ public class GameSteps {
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
     }
 
+    @Then("it is black's turn")
+    public void it_is_black_s_turn() {
+        assertEquals(GameState.BLACK_TURN, board.getCurrentGameState());
+    }
+
     Location parseAlgebraic(String square) {
         int file = square.charAt(0) - 'a';
         int rank = Character.getNumericValue(square.charAt(1));
