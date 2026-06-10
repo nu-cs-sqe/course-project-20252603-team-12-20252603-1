@@ -1335,7 +1335,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Alice gana!";
+        String expected = "¡Alice gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1349,7 +1349,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Bob gana!";
+        String expected = "¡Bob gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1363,7 +1363,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Empate!";
+        String expected = "¡Empate!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);

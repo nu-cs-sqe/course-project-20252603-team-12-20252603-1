@@ -91,7 +91,7 @@ class EndGameControllerTest {
         EasyMock.replay(mainView);
 
         EndGameController controller = new EndGameController(
-                "\u00A1Alice gana!", mainView, Locale.forLanguageTag("es"));
+                "¡Alice gana!", mainView, Locale.forLanguageTag("es"));
         controller.show();
         controller.getEndGameView().clickPlayAgain();
 
