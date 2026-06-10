@@ -67,6 +67,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void GetMainView_BeforeShow_ReturnsNull() {
         Board boardMock = replayEmptyBoard();
@@ -77,6 +78,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void GetMainView_AfterSetMainView_ReturnsInjectedView() {
         Board boardMock = replayEmptyBoard();
@@ -91,6 +93,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock);
     }
+
     @Test
     void GetBoardView_AfterSetBoardView_ReturnsInjectedView() {
         Board boardMock = replayEmptyBoard();
@@ -156,6 +159,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList() {
         Board boardMock = replayEmptyBoard();
@@ -551,11 +555,12 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void HandleSquareClick_OnWhitePiece_RepaintsBoardView() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Location selected = new Location(0, 6);
-        Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
+        final Location selected = new Location(0, 6);
+        final Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
         boardViewMock.repaint();
         EasyMock.expectLastCall().once();
@@ -694,6 +699,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void HandleSquareClick_OnFileEight_IgnoresClick() {
         Board boardMock = replayEmptyBoard();
@@ -708,6 +714,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+
     @Test
     void HandleSquareClick_OnRankEight_IgnoresClick() {
         Board boardMock = replayEmptyBoard();
@@ -722,10 +729,11 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, boardViewMock);
     }
+
     @Test
     void HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
-        Board boardMock = boardForWhitePieceClick(standardGrid, 7, 7);
+        final Board boardMock = boardForWhitePieceClick(standardGrid, 7, 7);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
         boardViewMock.repaint();
         EasyMock.expectLastCall().once();
@@ -868,6 +876,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void HandleSquareClick_WhenGameOver_IgnoresClick() {
         Board boardMock = EasyMock.createMock(Board.class);
@@ -1309,6 +1318,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
+
     @Test
     void ExecuteMove_OnLegalMove_RepaintsBoardViewTwice() {
         Piece[][] standardGrid = newStandardStartingGrid();
@@ -1362,6 +1372,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice() {
         Piece[][] standardGrid = newStandardStartingGrid();
@@ -1404,6 +1415,7 @@ class BoardControllerTest {
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
+
     @Test
     void HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice() {
         Piece[][] standardGrid = newStandardStartingGrid();
@@ -1454,6 +1466,7 @@ class BoardControllerTest {
 
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
+
     @SuppressFBWarnings(
             value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
             justification = "Return value not needed; called for side-effectful headless check")
@@ -1610,7 +1623,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Alice gana!";
+        String expected = "¡Alice gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1624,7 +1637,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Bob gana!";
+        String expected = "¡Bob gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1638,7 +1651,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Empate!";
+        String expected = "¡Empate!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1736,6 +1749,7 @@ class BoardControllerTest {
         assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
+
     @SuppressFBWarnings(
             value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
             justification = "Return value not needed; called for side-effectful headless check")
