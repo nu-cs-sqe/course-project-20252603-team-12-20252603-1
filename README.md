@@ -13,5 +13,21 @@
 - JUnit 5.10
 - Gradle 8.10
 
+## Mutation Testing
+
+Mutation analysis uses [PIT](https://pitest.org/). The UI classes construct real Swing windows,
+so PIT must run **non-headless under a virtual display** — otherwise its forked minion JVMs throw
+`HeadlessException` and the Swing lines report as `NO_COVERAGE`:
+
+```bash
+xvfb-run -a ./gradlew pitest
+```
+
+The HTML report is written to `build/reports/pitest/`. The `mainProcessJvmArgs` setting in the
+`pitest` block of `build.gradle.kts` forces the PIT process non-headless so that
+`java.awt.headless=false` propagates to the minions; `xvfb-run` supplies the off-screen display so
+the tests' windows render virtually and none appear on the desktop. This is the same `xvfb` the CI
+workflow already installs for `build`.
+
 ## Acknowledgements
 REFERENCES, SOURCE OF HELP ETC

@@ -127,6 +127,13 @@ pitest {
     testSourceSets.set(listOf(sourceSets.test.get()))
     mainSourceSets.set(listOf(sourceSets.main.get()))
     jvmArgs.set(listOf("-Xmx1024m"))
+    // PIT forks its minions from a headless Gradle worker and re-applies
+    // java.awt.headless=true inside each minion, so Swing UI classes throw
+    // HeadlessException and report their lines as NO_COVERAGE. Force the PIT main
+    // process non-headless so headless=false propagates to the minions. Run the task
+    // under a virtual display (xvfb-run, as CI already does for `build`) so the
+    // tests' real JFrames render off-screen and no windows appear on the desktop.
+    mainProcessJvmArgs.set(listOf("-Djava.awt.headless=false"))
     useClasspathFile.set(true)
     exportLineCoverage = true
 }
