@@ -158,7 +158,7 @@ These test cases use the 4-arg injection constructor `EndGameController(String, 
   - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
   - **Expected output**: `endGameView.dispose()` called exactly once
 
-- **EC-TC12: PlayAgain_WhenCalled_ShowsWelcomeView** ( :x: )
+- **EC-TC12: PlayAgain_WhenCalled_ShowsWelcomeView** ( :white_check_mark: )
   - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
   - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
   - **Expected output**: a `WelcomeView` window is visible (integration assertion; `WelcomeController` cannot be mocked)
