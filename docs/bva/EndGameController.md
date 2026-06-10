@@ -136,7 +136,16 @@
 
 ## Mock-injection test cases (mutation coverage)
 
-These test cases use the 4-arg injection constructor `EndGameController(String, JFrame, Locale, EndGameView)` to inject an `EasyMock`-mocked `EndGameView`, eliminating the Swing dependency that caused all 6 mutations to appear as NO_COVERAGE in PIT.
+These test cases use the 4-arg injection constructor `EndGameController(String, JFrame, Locale, EndGameView)` to drive `EndGameController` logic directly:
+
+- **EC-TC8–EC-TC10** inject an `EasyMock`-mocked `EndGameView` and verify the exact calls the controller makes (`setPlayAgainAction`, `setVisible`). These run **headless-safe** — no display required.
+- **EC-TC11–EC-TC12** inject a **real** `EndGameView` and assert the `playAgain()` side effects, because `dispose()` is inherited from `java.awt.Window` and EasyMock/ByteBuddy cannot intercept it under the Java module system.
+
+### Root cause of the original NO_COVERAGE
+
+The 6 mutations did **not** appear as NO_COVERAGE because the production code was untestable — the existing TC1–TC7 already exercise the constructor and `playAgain()` lines. The real cause was that **PIT runs its minion JVMs headless** (`java.awt.headless=true`, inherited from the Gradle worker). Any test that constructs a real Swing window (`EndGameView` / `WelcomeView`) threw `HeadlessException` before reaching the mutated line, so PIT recorded no coverage.
+
+The fix is to run PIT **non-headless under a virtual display**: `mainProcessJvmArgs = ["-Djava.awt.headless=false"]` in the `pitest` block of `build.gradle.kts`, invoked as `xvfb-run -a ./gradlew pitest` (the same `xvfb` CI already uses for `build`). With that in place all 6 original mutants are killed by TC1–TC7; EC-TC8–EC-TC10 add fast, display-free unit coverage of the controller's interactions, and EC-TC8 additionally covers the injection constructor introduced for them.
 
 - **EC-TC8: Constructor_WithAnyResultMessage_SetsPlayAgainAction** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameController(String, JFrame, Locale, EndGameView)`
@@ -154,11 +163,13 @@ These test cases use the 4-arg injection constructor `EndGameController(String, 
   - **Expected output**: `mainView.setVisible(false)` called once; `endGameView.setVisible(true)` called once
 
 - **EC-TC11: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
-  - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
-  - **Expected output**: `endGameView.dispose()` called exactly once
+  - **Method(s) under test**: `playAgain()` (via `endGameView.clickPlayAgain()`)
+  - **State of the system**: controller constructed via the 4-arg injection constructor with a **real** `EndGameView` and a mocked `mainView`; play again is clicked
+  - **Expected output**: `endGameView.isDisplayable()` returns `false`
+  - **Note**: asserts the disposal *side effect* rather than verifying `dispose()` on a mock — `dispose()` is inherited from `java.awt.Window`, which EasyMock cannot intercept. Requires PIT to run non-headless (see `build.gradle.kts`).
 
 - **EC-TC12: PlayAgain_WhenCalled_ShowsWelcomeView** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (invoked via captured `Runnable` from `setPlayAgainAction`)
-  - **State of the system**: controller constructed via 4-arg constructor; captured `Runnable` is invoked directly
-  - **Expected output**: a `WelcomeView` window is visible (integration assertion; `WelcomeController` cannot be mocked)
+  - **Method(s) under test**: `playAgain()` (via `endGameView.clickPlayAgain()`)
+  - **State of the system**: controller constructed via the 4-arg injection constructor with a **real** `EndGameView` and a mocked `mainView`; play again is clicked
+  - **Expected output**: a `WelcomeView` window is visible
+  - **Note**: integration-style — `WelcomeController` is instantiated internally by `playAgain()` and cannot be mocked, so the test asserts the resulting `WelcomeView` became visible. Requires PIT to run non-headless.

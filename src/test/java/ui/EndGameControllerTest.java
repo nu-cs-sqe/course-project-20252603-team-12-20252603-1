@@ -71,39 +71,32 @@ class EndGameControllerTest {
 
     @Test
     void PlayAgain_WhenCalled_DisposesEndGameView() {
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
-        Capture<Runnable> captured = EasyMock.newCapture();
-        endGameView.setPlayAgainAction(EasyMock.capture(captured));
-        EasyMock.expectLastCall().once();
-        endGameView.dispose();
-        EasyMock.expectLastCall().once();
+        EndGameView endGameView = new EndGameView("", Locale.ENGLISH);
         JFrame mainView = EasyMock.createMock(JFrame.class);
-        EasyMock.replay(mainView, endGameView);
+        EasyMock.replay(mainView);
 
         new EndGameController("", mainView, Locale.ENGLISH, endGameView);
-        captured.getValue().run();
+        endGameView.clickPlayAgain();
 
-        EasyMock.verify(mainView, endGameView);
+        boolean expected = false;
+        boolean actual = endGameView.isDisplayable();
+        assertEquals(expected, actual);
+        EasyMock.verify(mainView);
     }
 
     @Test
     void PlayAgain_WhenCalled_ShowsWelcomeView() {
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
-        Capture<Runnable> captured = EasyMock.newCapture();
-        endGameView.setPlayAgainAction(EasyMock.capture(captured));
-        EasyMock.expectLastCall().once();
-        endGameView.dispose();
-        EasyMock.expectLastCall().once();
+        EndGameView endGameView = new EndGameView("", Locale.ENGLISH);
         JFrame mainView = EasyMock.createMock(JFrame.class);
-        EasyMock.replay(mainView, endGameView);
+        EasyMock.replay(mainView);
 
         new EndGameController("", mainView, Locale.ENGLISH, endGameView);
-        captured.getValue().run();
+        endGameView.clickPlayAgain();
 
         boolean expected = true;
         boolean actual = isAnyWindowOfTypeVisible(WelcomeView.class);
         assertEquals(expected, actual);
-        EasyMock.verify(mainView, endGameView);
+        EasyMock.verify(mainView);
     }
 
     @Test
