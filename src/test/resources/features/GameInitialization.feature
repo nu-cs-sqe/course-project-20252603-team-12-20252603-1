@@ -32,6 +32,29 @@ Feature: Game Initialization and First Moves
       | black | knight | g8     |
       | black | rook   | h8     |
 
+  Scenario Outline: Standard board has correct pawn placement
+    Given a new standard chess game is started
+    Then the <color> pawn is at <square>
+
+    Examples:
+      | color | square |
+      | white | a2     |
+      | white | b2     |
+      | white | c2     |
+      | white | d2     |
+      | white | e2     |
+      | white | f2     |
+      | white | g2     |
+      | white | h2     |
+      | black | a7     |
+      | black | b7     |
+      | black | c7     |
+      | black | d7     |
+      | black | e7     |
+      | black | f7     |
+      | black | g7     |
+      | black | h7     |
+
   Scenario Outline: Both players make their first moves
     Given a new standard chess game is started
     When white moves <white_from> to <white_to>
