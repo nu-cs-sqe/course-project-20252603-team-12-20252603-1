@@ -138,7 +138,7 @@
 
 These test cases use the 4-arg injection constructor `EndGameController(String, JFrame, Locale, EndGameView)` to inject an `EasyMock`-mocked `EndGameView`, eliminating the Swing dependency that caused all 6 mutations to appear as NO_COVERAGE in PIT.
 
-- **EC-TC8: Constructor_WithAnyResultMessage_SetsPlayAgainAction** ( :x: )
+- **EC-TC8: Constructor_WithAnyResultMessage_SetsPlayAgainAction** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameController(String, JFrame, Locale, EndGameView)`
   - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`; `setPlayAgainAction` call is expected
   - **Expected output**: `setPlayAgainAction` is called exactly once on the injected view

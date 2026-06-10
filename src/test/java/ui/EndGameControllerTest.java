@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.awt.Window;
 import java.util.Locale;
 import javax.swing.JFrame;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,20 @@ class EndGameControllerTest {
                 window.dispose();
             }
         }
+    }
+
+    @Test
+    void Constructor_WithAnyResultMessage_SetsPlayAgainAction() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        Capture<Runnable> captured = EasyMock.newCapture();
+        endGameView.setPlayAgainAction(EasyMock.capture(captured));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
+
+        new EndGameController("", mainView, Locale.ENGLISH, endGameView);
+
+        EasyMock.verify(mainView, endGameView);
     }
 
     @Test
