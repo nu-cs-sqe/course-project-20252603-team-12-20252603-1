@@ -143,7 +143,7 @@ These test cases use the 4-arg injection constructor `EndGameController(String, 
   - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`; `setPlayAgainAction` call is expected
   - **Expected output**: `setPlayAgainAction` is called exactly once on the injected view
 
-- **EC-TC9: GetEndGameView_AfterConstruction_ReturnsSameView** ( :x: )
+- **EC-TC9: GetEndGameView_AfterConstruction_ReturnsSameView** ( :white_check_mark: )
   - **Method(s) under test**: `getEndGameView()`
   - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`
   - **Expected output**: `getEndGameView()` returns the same mock instance that was injected
