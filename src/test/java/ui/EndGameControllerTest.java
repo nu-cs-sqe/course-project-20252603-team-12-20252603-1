@@ -51,6 +51,25 @@ class EndGameControllerTest {
     }
 
     @Test
+    void Show_WhenCalled_HidesMainViewAndShowsEndGameView() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        mainView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        endGameView.setVisible(true);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
+
+        EndGameController controller =
+                new EndGameController("", mainView, Locale.ENGLISH, endGameView);
+        controller.show();
+
+        EasyMock.verify(mainView, endGameView);
+    }
+
+    @Test
     void Constructor_WithEmptyResultMessage_ShowHidesMainView() {
         JFrame mainView = EasyMock.createMock(JFrame.class);
         mainView.setVisible(false);

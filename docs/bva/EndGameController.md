@@ -148,7 +148,7 @@ These test cases use the 4-arg injection constructor `EndGameController(String, 
   - **State of the system**: controller constructed via 4-arg constructor with a mocked `EndGameView`
   - **Expected output**: `getEndGameView()` returns the same mock instance that was injected
 
-- **EC-TC10: Show_WhenCalled_HidesMainViewAndShowsEndGameView** ( :x: )
+- **EC-TC10: Show_WhenCalled_HidesMainViewAndShowsEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: controller constructed via 4-arg constructor with mocked `EndGameView` and mocked `mainView`; `show()` is called
   - **Expected output**: `mainView.setVisible(false)` called once; `endGameView.setVisible(true)` called once
