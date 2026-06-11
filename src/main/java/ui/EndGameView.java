@@ -56,7 +56,7 @@ class EndGameView extends JFrame {
 
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
         String playAgain = bundle.getString("playAgain");
-        String gameOverTitle = bundle.getString("gameOverTitle");
+        final String gameOverTitle = bundle.getString("gameOverTitle");
         playAgainButton = new JButton(playAgain);
         playAgainButton.setFont(BUTTON_FONT);
         playAgainButton.setBackground(ACCENT_COLOR);

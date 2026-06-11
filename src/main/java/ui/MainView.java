@@ -3,6 +3,7 @@ package ui;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.BorderLayout;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.JFrame;
 
 public class MainView extends JFrame {
@@ -26,8 +27,9 @@ public class MainView extends JFrame {
     }
 
     private void configureMainView(Locale locale) {
-        Messages messages = new Messages(locale);
-        setTitle(messages.getString("appTitle"));
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        String appTitle = bundle.getString("appTitle");
+        setTitle(appTitle);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addGameStatsView();
         addBoardViewToContentPane();

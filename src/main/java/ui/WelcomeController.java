@@ -6,6 +6,7 @@ import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 public class WelcomeController {
 
@@ -32,8 +33,10 @@ public class WelcomeController {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
-            Messages localeMessages = new Messages(welcomeView.getSelectedLocale());
-            welcomeView.showError(localeMessages.getString("playerNameEmptyError"));
+            Locale selected = welcomeView.getSelectedLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", selected);
+            String playerNameEmptyError = bundle.getString("playerNameEmptyError");
+            welcomeView.showError(playerNameEmptyError);
             return;
         }
         closeWelcomeView();

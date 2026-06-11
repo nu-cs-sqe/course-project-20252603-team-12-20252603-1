@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,7 +25,7 @@ class PromotionView {
     private static final Font LABEL_FONT = new Font("SansSerif", Font.BOLD, 16);
     private static final int BUTTON_SIZE = 72;
 
-    private final Messages messages;
+    private final ResourceBundle bundle;
     private final JDialog dialog;
     private final PieceColor color;
     private final JLabel promptLabel;
@@ -36,9 +37,10 @@ class PromotionView {
 
     PromotionView(JFrame parent, PieceColor color, Locale locale) {
         // untestable: creates JDialog (Swing/AWT component)
-        messages = new Messages(locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
         this.color = color;
-        this.dialog = new JDialog(parent, messages.getString("promotePawnTitle"), true);
+        String promotePawnTitle = bundle.getString("promotePawnTitle");
+        this.dialog = new JDialog(parent, promotePawnTitle, true);
         promptLabel = buildUi();
     }
 
@@ -61,7 +63,8 @@ class PromotionView {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panel.setBackground(BACKGROUND);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel label = new JLabel(messages.getString("choosePromotionPiece"));
+        String choosePromotionPiece = bundle.getString("choosePromotionPiece");
+        JLabel label = new JLabel(choosePromotionPiece);
         label.setForeground(TEXT_COLOR);
         label.setFont(LABEL_FONT);
         panel.add(label);

@@ -256,11 +256,11 @@ public class WelcomeView extends JFrame {
         String welcomeTitle = bundle.getString("welcomeTitle");
         String player1Text  = bundle.getString("player1Label");
         String player2Text  = bundle.getString("player2Label");
-        String standardMode = bundle.getString("standardMode");
-        String chess960Mode = bundle.getString("chess960Mode");
-        String startGame    = bundle.getString("startGame");
-        String languageText = bundle.getString("languageLabel");
-        String appTitle     = bundle.getString("appTitle");
+        final String standardMode = bundle.getString("standardMode");
+        final String chess960Mode = bundle.getString("chess960Mode");
+        final String startGame    = bundle.getString("startGame");
+        final String languageText = bundle.getString("languageLabel");
+        final String appTitle     = bundle.getString("appTitle");
         welcomeTitleLabel.setText(welcomeTitle);
         player1Label.setText(player1Text);
         player2Label.setText(player2Text);
