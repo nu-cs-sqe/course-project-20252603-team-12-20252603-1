@@ -1,8 +1,11 @@
 package ui;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Window;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +25,20 @@ class WelcomeControllerTest {
         WelcomeController controller = new WelcomeController();
         controller.show();
         assertTrue(controller.getWelcomeView().isVisible());
+    }
+
+    @Test
+    void SetWelcomeView_WhenCalled_WiresStartGameAction() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        Capture<Runnable> action = EasyMock.newCapture();
+        welcomeView.setStartGameAction(EasyMock.capture(action));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+
+        EasyMock.verify(welcomeView);
+        assertNotNull(action.getValue());
     }
 }

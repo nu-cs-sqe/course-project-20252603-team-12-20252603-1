@@ -47,7 +47,7 @@ No standalone output; verified through `show()` (WC-TC3) and `startGame()` (WC-T
 - Return: same reference as injected; `null` before first `setWelcomeView`/`show()`
 
 ### Step 4: Test Cases
-- **WC-TC1: SetWelcomeView_WhenCalled_WiresStartGameAction** ( :x: )
+- **WC-TC1: SetWelcomeView_WhenCalled_WiresStartGameAction** ( :white_check_mark: )
   - Method(s) under test: `setWelcomeView(WelcomeView)`
   - State of the system: mock `WelcomeView` injected via `setWelcomeView`
   - Expected output: `setStartGameAction` called once with a non-null action

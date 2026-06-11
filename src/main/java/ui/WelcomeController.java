@@ -4,20 +4,29 @@ import domain.Board;
 import domain.BoardInitializer;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class WelcomeController {
 
-    private final WelcomeView welcomeView;
+    private WelcomeView welcomeView;
+    private final Locale locale;
 
     public WelcomeController() {
         this(Locale.ENGLISH);
     }
 
     WelcomeController(Locale locale) {
-        welcomeView = new WelcomeView(locale);
+        this.locale = locale;
+    }
+
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
+    void setWelcomeView(WelcomeView welcomeView) {
+        this.welcomeView = welcomeView;
         welcomeView.setStartGameAction(this::startGame);
     }
 
@@ -26,6 +35,7 @@ public class WelcomeController {
     }
 
     public void show() {
+        setWelcomeView(new WelcomeView(locale));
         welcomeView.setVisible(true);
     }
 
