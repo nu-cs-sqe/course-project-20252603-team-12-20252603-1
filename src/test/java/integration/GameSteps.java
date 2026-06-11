@@ -24,14 +24,14 @@ public class GameSteps {
         board = new Board(new StandardBoardInitializer());
     }
 
-    @Then("the {word} king is at {word}")
-    public void the_king_is_at(String color, String square) {
+    @Then("the {word} {word} is at {word}")
+    public void the_piece_is_at(String color, String piece, String square) {
         Location loc = parseAlgebraic(square);
-        var piece = board.getPieceAt(loc.getY(), loc.getX());
-        PieceType expectedType = PieceType.KING;
+        var actual = board.getPieceAt(loc.getY(), loc.getX());
+        PieceType expectedType = PieceType.valueOf(piece.toUpperCase());
         PieceColor expectedColor = color.equals("white") ? PieceColor.WHITE : PieceColor.BLACK;
-        assertEquals(expectedType, piece.getType());
-        assertEquals(expectedColor, piece.getColor());
+        assertEquals(expectedType, actual.getType());
+        assertEquals(expectedColor, actual.getColor());
     }
 
     @When("{word} moves {word} to {word}")
@@ -42,6 +42,11 @@ public class GameSteps {
     @Then("it is white's turn")
     public void it_is_white_s_turn() {
         assertEquals(GameState.WHITE_TURN, board.getCurrentGameState());
+    }
+
+    @Then("it is black's turn")
+    public void it_is_black_s_turn() {
+        assertEquals(GameState.BLACK_TURN, board.getCurrentGameState());
     }
 
     Location parseAlgebraic(String square) {
