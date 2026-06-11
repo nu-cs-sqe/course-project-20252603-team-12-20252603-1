@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public class MoveGenerator {
 
@@ -138,7 +139,8 @@ public class MoveGenerator {
         }
         if (move.getType() == MoveType.CASTLING_KINGSIDE) {
             PieceColor color = copy[fromRank][fromFile].getColor();
-            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, true, color);
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, true, color)
+                    .orElseThrow(() -> new IllegalStateException("No unmoved kingside rook found"));
             Piece king = copy[fromRank][fromFile];
             final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
@@ -149,7 +151,8 @@ public class MoveGenerator {
         }
         if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
             PieceColor color = copy[fromRank][fromFile].getColor();
-            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color);
+            int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color)
+                    .orElseThrow(() -> new IllegalStateException("No unmoved queenside rook found"));
             Piece king = copy[fromRank][fromFile];
             final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
@@ -287,16 +290,16 @@ public class MoveGenerator {
         int rank = from.getY();
         int file = from.getX();
         PieceColor color = king.getColor();
-        int kingsideRook = findUnmovedRookFileIn(board, rank, file, true, color);
-        if (kingsideRook >= 0
-                && canCastle(rank, file, kingsideRook, KINGSIDE_KING_DEST_FILE,
+        OptionalInt kingsideRook = findUnmovedRookFileIn(board, rank, file, true, color);
+        if (kingsideRook.isPresent()
+                && canCastle(rank, file, kingsideRook.getAsInt(), KINGSIDE_KING_DEST_FILE,
                 KINGSIDE_ROOK_DEST_FILE, color)) {
             moves.add(new Move(from, new Location(KINGSIDE_KING_DEST_FILE, rank),
                     MoveType.CASTLING_KINGSIDE));
         }
-        int queensideRook = findUnmovedRookFileIn(board, rank, file, false, color);
-        if (queensideRook >= 0
-                && canCastle(rank, file, queensideRook, QUEENSIDE_KING_DEST_FILE,
+        OptionalInt queensideRook = findUnmovedRookFileIn(board, rank, file, false, color);
+        if (queensideRook.isPresent()
+                && canCastle(rank, file, queensideRook.getAsInt(), QUEENSIDE_KING_DEST_FILE,
                 QUEENSIDE_ROOK_DEST_FILE, color)) {
             moves.add(new Move(from, new Location(QUEENSIDE_KING_DEST_FILE, rank),
                     MoveType.CASTLING_QUEENSIDE));
@@ -337,24 +340,24 @@ public class MoveGenerator {
         return true;
     }
 
-    private static int findUnmovedRookFileIn(
+    private static OptionalInt findUnmovedRookFileIn(
             Piece[][] board, int rank, int kingFile, boolean kingside, PieceColor color) {
         if (kingside) {
             for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
                 Piece p = board[rank][f];
                 if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
-                    return f;
+                    return OptionalInt.of(f);
                 }
             }
         } else {
             for (int f = 0; f < kingFile; f++) {
                 Piece p = board[rank][f];
                 if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
-                    return f;
+                    return OptionalInt.of(f);
                 }
             }
         }
-        return -1;
+        return OptionalInt.empty();
     }
 
     private List<Move> generateSlidingMoves(Location from, Piece piece, int[][] directions) {
