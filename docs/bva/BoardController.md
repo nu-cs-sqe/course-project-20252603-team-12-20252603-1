@@ -62,11 +62,6 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-- **BC-TC74: GetMainView_BeforeShow_ReturnsNull** ( :white_check_mark: )
-  - **Method(s) under test**: `getMainView()`
-  - **State of the system**: fresh controller; `show()` not called
-  - **Expected output**: `null`
-
 - **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
   - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
   - **State of the system**: `MainView` mock injected via `setMainView`

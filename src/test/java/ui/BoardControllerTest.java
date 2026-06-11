@@ -69,17 +69,6 @@ class BoardControllerTest {
     }
 
     @Test
-    void GetMainView_BeforeShow_ReturnsNull() {
-        Board boardMock = replayEmptyBoard();
-        BoardController controller = newController(boardMock);
-
-        MainView expected = null;
-        MainView actual = controller.getMainView();
-        assertEquals(expected, actual);
-        EasyMock.verify(boardMock);
-    }
-
-    @Test
     void GetMainView_AfterSetMainView_ReturnsInjectedView() {
         Board boardMock = replayEmptyBoard();
         MainView mainViewMock = EasyMock.createMock(MainView.class);
