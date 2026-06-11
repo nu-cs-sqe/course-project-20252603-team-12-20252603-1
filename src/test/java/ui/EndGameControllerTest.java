@@ -84,20 +84,21 @@ class EndGameControllerTest {
     }
 
     @Test
-    void PlayAgain_WhenShowHasBeenCalled_EndGameViewIsDisposed() {
+    void PlayAgain_WhenCalled_DisposesEndGameView() {
         JFrame mainView = EasyMock.createMock(JFrame.class);
-        mainView.setVisible(false);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
-        EasyMock.replay(mainView);
+        endGameView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
-        controller.show();
-        controller.getEndGameView().clickPlayAgain();
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+        controller.setPlayAgainAction(loc -> { });
+        controller.playAgain();
 
-        boolean expected = false;
-        boolean actual = controller.getEndGameView().isDisplayable();
-        assertEquals(expected, actual);
-        EasyMock.verify(mainView);
+        EasyMock.verify(mainView, endGameView);
     }
 
     @Test

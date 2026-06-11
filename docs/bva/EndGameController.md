@@ -108,7 +108,7 @@ Verified through `playAgain()` (EC-TC11, EC-TC12).
 EC-TC10–EC-TC12 replace the headed TC5/TC6/EC-TC7, which scanned `Window.getWindows()`
 for a real `WelcomeView`.
 
-- **EC-TC10: PlayAgain_WhenCalled_DisposesEndGameView** ( :x: )
+- **EC-TC10: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`
   - State of the system: mock view injected; stub action injected; `playAgain()` called
   - Expected output: `dispose()` called once on the view

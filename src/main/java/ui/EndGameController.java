@@ -2,6 +2,7 @@ package ui;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Locale;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
 
 class EndGameController {
@@ -10,6 +11,7 @@ class EndGameController {
     private final JFrame mainView;
     private final Locale locale;
     private final String resultMessage;
+    private Consumer<Locale> playAgainAction = loc -> new WelcomeController(loc).show();
 
     EndGameController(String resultMessage, JFrame mainView, Locale locale) {
         this.resultMessage = resultMessage;
@@ -25,9 +27,13 @@ class EndGameController {
         endGameView.setPlayAgainAction(this::playAgain);
     }
 
-    private void playAgain() {
+    void setPlayAgainAction(Consumer<Locale> playAgainAction) {
+        this.playAgainAction = playAgainAction;
+    }
+
+    void playAgain() {
         endGameView.dispose();
-        new WelcomeController(locale).show();
+        playAgainAction.accept(locale);
     }
 
     EndGameView getEndGameView() {
