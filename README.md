@@ -14,4 +14,6 @@
 - Gradle 8.10
 
 ## Acknowledgements
-REFERENCES, SOURCE OF HELP ETC
+ - Dr Yiji Zhang
+ - PM Eiko Reisz
+ - Uncle Bob (Robert Cecil Martin)
