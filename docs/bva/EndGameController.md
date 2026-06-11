@@ -51,7 +51,7 @@ Constructor has no standalone output; each stored input is verified where it is 
 - Exceptions: none
 
 ### Step 4: Test Cases
-- **EC-TC8: SetEndGameView_WhenCalled_WiresPlayAgainAction** ( :x: )
+- **EC-TC8: SetEndGameView_WhenCalled_WiresPlayAgainAction** ( :white_check_mark: )
   - Method(s) under test: `setEndGameView(EndGameView)`
   - State of the system: mock `EndGameView` injected via `setEndGameView`
   - Expected output: `setPlayAgainAction` called once with a non-null action

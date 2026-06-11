@@ -1,10 +1,12 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.Window;
 import java.util.Locale;
 import javax.swing.JFrame;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,22 @@ class EndGameControllerTest {
         boolean actual = controller.getEndGameView().isVisible();
         assertEquals(expected, actual);
         EasyMock.verify(mainView);
+    }
+
+    @Test
+    void SetEndGameView_WhenCalled_WiresPlayAgainAction() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        Capture<Runnable> action = EasyMock.newCapture();
+        endGameView.setPlayAgainAction(EasyMock.capture(action));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
+
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+
+        EasyMock.verify(mainView, endGameView);
+        assertNotNull(action.getValue());
     }
 
     @Test
