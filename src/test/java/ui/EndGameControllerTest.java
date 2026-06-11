@@ -26,7 +26,7 @@ class EndGameControllerTest {
 
     @Test
     void Show_HidesMainView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
         mainView.setVisible(false);
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
@@ -39,12 +39,13 @@ class EndGameControllerTest {
 
     @Test
     void Show_DisplaysEndGameView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
         mainView.setVisible(false);
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
+        EndGameController controller =
+                new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
         controller.show();
 
         boolean expected = true;
@@ -55,8 +56,8 @@ class EndGameControllerTest {
 
     @Test
     void SetEndGameView_WhenCalled_WiresPlayAgainAction() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
         Capture<Runnable> action = EasyMock.newCapture();
         endGameView.setPlayAgainAction(EasyMock.capture(action));
         EasyMock.expectLastCall().once();
@@ -71,8 +72,8 @@ class EndGameControllerTest {
 
     @Test
     void GetEndGameView_AfterSetEndGameView_ReturnsSameView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
         endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView, endGameView);
@@ -86,8 +87,8 @@ class EndGameControllerTest {
 
     @Test
     void PlayAgain_WhenCalled_DisposesEndGameView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
         endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
         endGameView.dispose();
@@ -96,7 +97,7 @@ class EndGameControllerTest {
 
         EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
         controller.setEndGameView(endGameView);
-        controller.setPlayAgainAction(loc -> { });
+        controller.setPlayAgainAction(loc -> {});
         controller.playAgain();
 
         EasyMock.verify(mainView, endGameView);
@@ -104,10 +105,10 @@ class EndGameControllerTest {
 
     @Test
     void PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
         @SuppressWarnings("unchecked")
-        Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
+        final Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
         endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
         endGameView.dispose();
@@ -128,10 +129,10 @@ class EndGameControllerTest {
 
     @Test
     void PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
         @SuppressWarnings("unchecked")
-        Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
+        final Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
         endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
         endGameView.dispose();
