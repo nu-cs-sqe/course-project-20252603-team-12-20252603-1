@@ -1,34 +1,35 @@
 package ui;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Locale;
 import javax.swing.JFrame;
 
 class EndGameController {
 
-    private final EndGameView endGameView;
+    private EndGameView endGameView;
     private final JFrame mainView;
     private final Locale locale;
+    private final String resultMessage;
 
     EndGameController(String resultMessage, JFrame mainView) {
         this(resultMessage, mainView, Locale.ENGLISH);
     }
 
     EndGameController(String resultMessage, JFrame mainView, Locale locale) {
+        this.resultMessage = resultMessage;
         this.mainView = mainView;
         this.locale = locale;
-        endGameView = new EndGameView(resultMessage, locale);
-        endGameView.setPlayAgainAction(this::playAgain);
     }
 
-    EndGameController(
-            String resultMessage, JFrame mainView, Locale locale, EndGameView endGameView) {
-        this.mainView = mainView;
-        this.locale = locale;
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
+    void setEndGameView(EndGameView endGameView) {
         this.endGameView = endGameView;
         endGameView.setPlayAgainAction(this::playAgain);
     }
 
-    private void playAgain() {
+    void playAgain() {
         endGameView.dispose();
         new WelcomeController(locale).show();
     }
@@ -38,6 +39,10 @@ class EndGameController {
     }
 
     void show() {
+        if (endGameView == null) {
+            endGameView = new EndGameView(resultMessage, locale);
+            endGameView.setPlayAgainAction(this::playAgain);
+        }
         mainView.setVisible(false);
         endGameView.setVisible(true);
     }
