@@ -1,14 +1,12 @@
 # BVA Analysis for EndGameController
 
-## Method: `EndGameController(String resultMessage, JFrame mainView)` / `EndGameController(String, JFrame, Locale)` / `EndGameController(String, JFrame, Locale, EndGameView)`
+## Method: `EndGameController(String resultMessage, JFrame mainView)` / `EndGameController(String, JFrame, Locale)`
 
 ### Step 1: Equivalence Classes
 
 - **Input: result message** — the game outcome text to display in the end-game screen
 - **Input: main view reference** — the main game `JFrame` to be hidden when the end-game screen is shown
 - **Input: locale** — resource bundle locale for end-game and welcome screens
-- **Input: end-game view** — optional injected `EndGameView` (4-arg constructor); otherwise created internally
-- **Output: play-again action wiring** — `setPlayAgainAction` is registered on the end-game view at construction
 - **Output: main view visibility after `show()`** — whether the main game window is hidden
 - **Output: end-game view visibility after `show()`** — whether the end-game screen is showing
 
@@ -19,8 +17,6 @@
 | Input: result message | Strings |
 | Input: main view reference | Pointers |
 | Input: locale | Pointers |
-| Input: end-game view | Pointers |
-| Output: play-again action wiring | Cases |
 | Output: main view visibility after `show()` | Cases |
 | Output: end-game view visibility after `show()` | Cases |
 
@@ -37,13 +33,6 @@
 - `Locale.ENGLISH` (default)
 - `Locale.forLanguageTag("es")` (non-default bundle)
 
-**End-game view — Pointers:**
-- internally created `EndGameView` (2-arg / 3-arg constructors)
-- injected mock or real `EndGameView` (4-arg constructor)
-
-**Play-again action wiring — Cases:**
-- `setPlayAgainAction` called once at construction
-
 **Main view visibility after `show()` — Cases:**
 - `false` — `show()` hides `mainView`
 
@@ -54,7 +43,7 @@
 
 - **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :white_check_mark: )
   - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
-  - **State of the system**: `resultMessage = ""`, mocked visible `mainView`; `show()` is called
+  - **State of the system**: `resultMessage = ""`, mocked visible `mainView`; `show()` is called (lazy-creates `EndGameView`)
   - **Expected output**: `mainView.setVisible(false)` is called once
 
 - **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :white_check_mark: )
@@ -62,41 +51,45 @@
   - **State of the system**: `resultMessage = "Alice wins!"`, mocked visible `mainView`; `show()` is called
   - **Expected output**: `mainView.setVisible(false)` is called once; `getEndGameView().isVisible()` returns `true`
 
-- **EC-TC8: Constructor_WithAnyResultMessage_SetsPlayAgainAction** ( :white_check_mark: )
-  - **Method(s) under test**: `EndGameController(String, JFrame, Locale, EndGameView)`
-  - **State of the system**: 4-arg constructor with mocked `EndGameView` and mocked `mainView`
-  - **Expected output**: `setPlayAgainAction` is called exactly once on the injected view
-
 ---
 
-## Method: `getEndGameView()`
+## Method: `getEndGameView()` / `setEndGameView(EndGameView endGameView)`
 
 ### Step 1: Equivalence Classes
 
-- **Object state: end-game view field** — reference set at construction (internal or injected)
-- **Output: returned view** — same instance as the controller's `endGameView` field
+| State | Equivalence classes |
+| ----- | ------------------- |
+| `endGameView` field | injected via `setEndGameView`; lazy-created on first `show()` |
 
-### Step 2: Data Types (from BVA Catalog)
+| Output | Equivalence classes |
+| ------ | ------------------- |
+| `getEndGameView()` | same instance as injected mock; lazy-created instance after `show()` |
+| `setEndGameView` side effect | `setPlayAgainAction` registered on injected view |
 
-| Equivalence class | Catalog data type |
-| --- | --- |
-| Object state: end-game view field | Pointers |
-| Output: returned view | Pointers |
+### Step 2: BVA catalog data types
 
-### Step 3: Boundary Values (from BVA Catalog)
+| Variable / output | Catalog type | Notes |
+| ----------------- | ------------ | ----- |
+| `endGameView` | Pointers | injected reference |
+| Return value | Pointers | same reference as field |
+| `setPlayAgainAction` call | Cases | wired once on injection |
 
-**End-game view field — Pointers:**
-- injected mock `EndGameView` (4-arg constructor)
+### Step 3: Concrete boundary values
 
-**Returned view — Pointers:**
-- same reference as injected instance
+- After `setEndGameView(mock)`: `getEndGameView()` → same mock reference
+- After `setEndGameView(mock)`: `setPlayAgainAction` called once on mock
 
-### Step 4: Test Cases (Each-Choice Strategy)
+### Step 4: Test cases
 
-- **EC-TC9: GetEndGameView_AfterConstruction_ReturnsSameView** ( :white_check_mark: )
-  - **Method(s) under test**: `getEndGameView()`
-  - **State of the system**: controller constructed via 4-arg constructor with mocked `EndGameView`
-  - **Expected output**: `getEndGameView()` returns the same mock instance that was injected
+- **EC-TC8: SetEndGameView_WhenCalled_SetsPlayAgainAction** ( :white_check_mark: )
+  - **Method(s) under test**: `setEndGameView(EndGameView)`
+  - **State of the system**: mocked `EndGameView` injected via setter
+  - **Expected output**: `setPlayAgainAction` is called exactly once on the injected view
+
+- **EC-TC9: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :white_check_mark: )
+  - **Method(s) under test**: `getEndGameView()`, `setEndGameView(EndGameView)`
+  - **State of the system**: mocked `EndGameView` injected via `setEndGameView`
+  - **Expected output**: `getEndGameView()` returns the same mock instance
 
 ---
 
@@ -104,6 +97,7 @@
 
 ### Step 1: Equivalence Classes
 
+- **Object state: end-game view** — injected via `setEndGameView` vs lazy-created on first `show()`
 - **Output: main view visibility** — `mainView` is hidden after `show()`
 - **Output: end-game view visibility** — end-game screen is displayed after `show()`
 
@@ -111,10 +105,15 @@
 
 | Equivalence class | Catalog data type |
 | --- | --- |
+| Object state: end-game view | Pointers |
 | Output: main view visibility | Cases |
 | Output: end-game view visibility | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+
+**End-game view — Pointers:**
+- injected mock via `setEndGameView` (no lazy creation)
+- lazy-created real `EndGameView` when unset
 
 **Main view visibility — Cases:**
 - `false` — `show()` always hides `mainView`
@@ -127,7 +126,7 @@
 - **TC3: Show_HidesMainView** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: `EndGameController` constructed with a non-null visible `mainView`; `show()` is called
-  - **Expected output**: `mainView.isVisible()` returns `false`
+  - **Expected output**: `mainView.setVisible(false)` is called once
   - **Covered by**: TC1, TC2, EC-TC10
 
 - **TC4: Show_DisplaysEndGameView** ( :white_check_mark: )
@@ -138,41 +137,41 @@
 
 - **EC-TC10: Show_WhenCalled_HidesMainViewAndShowsEndGameView** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
-  - **State of the system**: 4-arg constructor with mocked `EndGameView` and mocked `mainView`; `show()` is called
+  - **State of the system**: mocked `EndGameView` injected via `setEndGameView`; mocked `mainView`; `show()` is called
   - **Expected output**: `mainView.setVisible(false)` called once; `endGameView.setVisible(true)` called once
 
 ---
 
-## Method: `playAgain()` (invoked via `getEndGameView().clickPlayAgain()`)
+## Method: `playAgain()`
 
 ### Step 1: Equivalence Classes
 
-- **Object state: construction path** — internal `EndGameView` (2-arg / 3-arg) vs injected real `EndGameView` (4-arg)
+- **Object state: end-game view** — injected mock vs lazy-created real view after `show()`
 - **Object state: locale** — default English vs Spanish resource bundle
-- **Output: end-game view disposal** — end-game screen is disposed after play again
+- **Output: end-game view disposal** — `dispose()` called on end-game view
 - **Output: welcome screen shown** — a new `WelcomeView` becomes visible
 
 ### Step 2: Data Types (from BVA Catalog)
 
 | Equivalence class | Catalog data type |
 | --- | --- |
-| Object state: construction path | Cases |
+| Object state: end-game view | Pointers |
 | Object state: locale | Pointers |
 | Output: end-game view disposal | Cases |
 | Output: welcome screen shown | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
 
-**Construction path — Cases:**
-- 2-arg / 3-arg constructor with internally created `EndGameView`
-- 4-arg constructor with injected real `EndGameView`
+**End-game view — Pointers:**
+- injected mock via `setEndGameView`
+- lazy-created real `EndGameView` after `show()`
 
 **Locale — Pointers:**
 - `Locale.ENGLISH`
 - `Locale.forLanguageTag("es")`
 
 **End-game view disposal — Cases:**
-- `isDisplayable()` returns `false` after `playAgain()`
+- `dispose()` called once on mock; or `isDisplayable()` returns `false` on real view after `playAgain()`
 
 **Welcome screen shown — Cases:**
 - a `WelcomeView` window is visible after `playAgain()`
@@ -181,26 +180,26 @@
 ### Step 4: Test Cases (Each-Choice Strategy)
 
 - **EC-TC11: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `endGameView.clickPlayAgain()`)
-  - **State of the system**: 4-arg constructor with injected real `EndGameView` and mocked `mainView`; play again clicked
-  - **Expected output**: `endGameView.isDisplayable()` returns `false`
+  - **Method(s) under test**: `playAgain()`
+  - **State of the system**: mocked `EndGameView` injected via `setEndGameView`; `playAgain()` called directly
+  - **Expected output**: `dispose()` is called once on the mock
 
 - **EC-TC12: PlayAgain_WhenCalled_ShowsWelcomeView** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `endGameView.clickPlayAgain()`)
-  - **State of the system**: 4-arg constructor with injected real `EndGameView` and mocked `mainView`; play again clicked
+  - **Method(s) under test**: `playAgain()`
+  - **State of the system**: mocked `EndGameView` injected via `setEndGameView`; `playAgain()` called directly
   - **Expected output**: a `WelcomeView` window is visible
 
 - **TC5: PlayAgain_WhenShowHasBeenCalled_EndGameViewIsDisposed** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: 2-arg constructor; `show()` called; play again clicked
+  - **Method(s) under test**: `playAgain()`
+  - **State of the system**: 2-arg constructor; `show()` called (lazy-creates view); `playAgain()` called directly
   - **Expected output**: `getEndGameView().isDisplayable()` returns `false`
 
 - **TC6: PlayAgain_WhenShowHasBeenCalled_WelcomeViewIsVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: 2-arg constructor; `show()` called; play again clicked
+  - **Method(s) under test**: `playAgain()`
+  - **State of the system**: 2-arg constructor; `show()` called; `playAgain()` called directly
   - **Expected output**: a new `WelcomeView` is visible
 
 - **EC-TC7: PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: 3-arg constructor with `Locale.forLanguageTag("es")`; `show()` called; play again clicked
+  - **Method(s) under test**: `playAgain()`
+  - **State of the system**: 3-arg constructor with `Locale.forLanguageTag("es")`; `show()` called; `playAgain()` called directly
   - **Expected output**: visible `WelcomeView` title is `"Ajedrez"`
