@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -41,7 +42,6 @@ class EndGameView extends JFrame {
     }
 
     private void buildUi(String resultMessage, Locale locale) {
-        Messages messages = new Messages(locale);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(BACKGROUND);
@@ -54,7 +54,10 @@ class EndGameView extends JFrame {
         panel.add(resultLabel);
         panel.add(Box.createVerticalStrut(40));
 
-        playAgainButton = new JButton(messages.getString("playAgain"));
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        String playAgain = bundle.getString("playAgain");
+        final String gameOverTitle = bundle.getString("gameOverTitle");
+        playAgainButton = new JButton(playAgain);
         playAgainButton.setFont(BUTTON_FONT);
         playAgainButton.setBackground(ACCENT_COLOR);
         playAgainButton.setForeground(TEXT_COLOR);
@@ -66,7 +69,7 @@ class EndGameView extends JFrame {
         playAgainButton.addActionListener(e -> clickPlayAgain());
         panel.add(playAgainButton);
 
-        setTitle(messages.getString("gameOverTitle"));
+        setTitle(gameOverTitle);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BACKGROUND);
         getContentPane().add(panel);
