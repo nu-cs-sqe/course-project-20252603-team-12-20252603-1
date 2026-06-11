@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.gamestate.GameState;
 import domain.location.Location;
@@ -130,6 +131,21 @@ class BoardTest {
     }
 
     @Test
+    void Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack() {
+        PieceType[][] layout = new PieceType[8][8];
+        for (PieceType[] r : layout) {
+            Arrays.fill(r, PieceType.NONE);
+        }
+        layout[3][0] = PieceType.ROOK;
+        BoardInitializer initializer = EasyMock.createMock(BoardInitializer.class);
+        EasyMock.expect(initializer.getBoardLayout()).andReturn(layout);
+        EasyMock.replay(initializer);
+        Board board = new Board(initializer);
+        assertEquals(PieceColor.BLACK, board.getSnapshot()[3][0].getColor());
+        EasyMock.verify(initializer);
+    }
+
+    @Test
     void Constructor_WhenInitializerHasNonNoneTypeInBottomHalf_PieceColorIsWhite() {
         PieceType[][] layout = new PieceType[8][8];
         for (PieceType[] r : layout) {
@@ -141,6 +157,21 @@ class BoardTest {
         EasyMock.replay(initializer);
         Board board = new Board(initializer);
         assertEquals(PieceColor.WHITE, board.getSnapshot()[7][0].getColor());
+        EasyMock.verify(initializer);
+    }
+
+    @Test
+    void Constructor_WhenInitializerHasNonNoneTypeAtRowFour_PieceColorIsWhite() {
+        PieceType[][] layout = new PieceType[8][8];
+        for (PieceType[] r : layout) {
+            Arrays.fill(r, PieceType.NONE);
+        }
+        layout[4][0] = PieceType.ROOK;
+        BoardInitializer initializer = EasyMock.createMock(BoardInitializer.class);
+        EasyMock.expect(initializer.getBoardLayout()).andReturn(layout);
+        EasyMock.replay(initializer);
+        Board board = new Board(initializer);
+        assertEquals(PieceColor.WHITE, board.getSnapshot()[4][0].getColor());
         EasyMock.verify(initializer);
     }
 
@@ -371,6 +402,21 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[6][4] = new Pawn(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 6), new Location(4, 5));
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(5, 4).hasMoved());
+    }
+
+    @Test
     void MakeMove_OnEnPassantMove_DestinationHasMovingPawn() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
@@ -407,6 +453,22 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[3][4] = new Pawn(PieceColor.WHITE);
+        layout[3][5] = new Pawn(PieceColor.BLACK);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 3), new Location(5, 2), MoveType.EN_PASSANT);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(2, 5).hasMoved());
+    }
+
+    @Test
     void MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
@@ -426,6 +488,38 @@ class BoardTest {
         PieceType expectedRook = PieceType.ROOK;
         PieceType actualRook = board.getPieceAt(7, 5).getType();
         assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void MakeMove_OnKingsideCastling_KingIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(7, 6).hasMoved());
+    }
+
+    @Test
+    void MakeMove_OnKingsideCastling_RookIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][7] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(7, 5).hasMoved());
     }
 
     @Test
@@ -476,6 +570,55 @@ class BoardTest {
         PieceType expectedRook = PieceType.ROOK;
         PieceType actualRook = board.getPieceAt(7, 3).getType();
         assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void MakeMove_OnQueensideCastling_KingIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][0] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(7, 2).hasMoved());
+    }
+
+    @Test
+    void MakeMove_OnQueensideCastling_RookIsMarkedAsMoved() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][0] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        board.makeMove(move);
+
+        assertTrue(board.getPieceAt(7, 3).hasMoved());
+    }
+
+    @Test
+    void MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][4] = new King(PieceColor.WHITE);
+        layout[7][3] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+
+        board.makeMove(move);
+
+        assertEquals(PieceType.KING, board.getPieceAt(7, 2).getType());
+        assertEquals(PieceType.ROOK, board.getPieceAt(7, 3).getType());
     }
 
     @Test
