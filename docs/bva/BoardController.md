@@ -42,22 +42,21 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 | State | Equivalence classes |
 | ----- | ------------------- |
-| `mainView` field | unset (`show()` not called); injected via `setMainView` |
+| `mainView` field | injected via `setMainView` |
 
 | Output | Equivalence classes |
 | ------ | ------------------- |
-| `getMainView()` | `null`; same instance as injected mock |
+| `getMainView()` | same instance as injected mock |
 
 ### Step 2: BVA catalog data types
 
 | Variable / output | Catalog type | Notes |
 | ----------------- | ------------ | ----- |
-| `mainView` | Pointers | unset vs injected reference |
-| Return value | Pointers | `null` vs non-null |
+| `mainView` | Pointers | injected reference |
+| Return value | Pointers | same reference as field |
 
 ### Step 3: Concrete boundary values
 
-- Before `show()` / `setMainView`: `getMainView()` → `null`
 - After `setMainView(mock)`: `getMainView()` → same mock reference
 
 ### Step 4: Test cases
