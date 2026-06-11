@@ -1,6 +1,7 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import domain.Board;
 import domain.FischerRandomBoardInitializer;
@@ -19,18 +20,31 @@ import domain.piece.PieceColor;
 import domain.piece.PieceType;
 import domain.piece.Queen;
 import domain.piece.Rook;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class BoardControllerTest {
 
     private static final String TEST_PLAYER_ONE = "Alice";
     private static final String TEST_PLAYER_TWO = "Bob";
+
+    @AfterEach
+    void disposeOpenUiWindows() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainView || window instanceof EndGameView) {
+                window.dispose();
+            }
+        }
+    }
 
     @Test
     void Constructor_FreshInstance_LastSelectedUnset() {
@@ -52,6 +66,36 @@ class BoardControllerTest {
         Optional<Location> actual = controller.getSelectedLocation();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetMainView_AfterSetMainView_ReturnsInjectedView() {
+        Board boardMock = replayEmptyBoard();
+        MainView mainViewMock = EasyMock.createMock(MainView.class);
+        EasyMock.replay(mainViewMock);
+
+        BoardController controller = newController(boardMock);
+        controller.setMainView(mainViewMock);
+
+        MainView expected = mainViewMock;
+        MainView actual = controller.getMainView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, mainViewMock);
+    }
+
+    @Test
+    void GetBoardView_AfterSetBoardView_ReturnsInjectedView() {
+        Board boardMock = replayEmptyBoard();
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = newController(boardMock);
+        controller.setBoardView(boardViewMock);
+
+        BoardView expected = boardViewMock;
+        BoardView actual = controller.getBoardView();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
     }
 
     @Test
@@ -101,6 +145,21 @@ class BoardControllerTest {
 
         int expected = 0;
         int actual = controller.getLegalMovesForSelection().size();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList() {
+        Board boardMock = replayEmptyBoard();
+        BoardController controller = newController(boardMock);
+
+        List<Move> moves = controller.getLegalMovesForSelection();
+        int sizeBefore = moves.size();
+        moves.add(new Move(new Location(0, 0), new Location(0, 1)));
+
+        int expected = sizeBefore + 1;
+        int actual = moves.size();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
     }
@@ -487,6 +546,22 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_OnWhitePiece_RepaintsBoardView() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        final Location selected = new Location(0, 6);
+        final Board boardMock = boardForWhitePieceClick(standardGrid, 6, 0);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(selected);
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
     void HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForSquareClick(standardGrid, 1, 0);
@@ -612,6 +687,54 @@ class BoardControllerTest {
         boolean actual = cellWiseSameTypeAndColor(standardGrid, controller.getBoardSnapshot());
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnFileEight_IgnoresClick() {
+        Board boardMock = replayEmptyBoard();
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(8, 0));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnRankEight_IgnoresClick() {
+        Board boardMock = replayEmptyBoard();
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(0, 8));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
+    void HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        final Board boardMock = boardForWhitePieceClick(standardGrid, 7, 7);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(7, 7));
+
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
     }
 
     @Test
@@ -744,6 +867,23 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_WhenGameOver_IgnoresClick() {
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN);
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(0, 6));
+
+        boolean expected = false;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
     void HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy() {
         Piece[][] chess960Grid = newChess960FixedStartingGrid();
         Board boardMock = stubSnapshot(chess960Grid);
@@ -842,6 +982,25 @@ class BoardControllerTest {
         EasyMock.replay(boardViewMock);
         controller.setBoardView(boardViewMock);
         return controller;
+    }
+
+    private static BoardController newController(Board board) {
+        return new BoardController(TEST_PLAYER_ONE, TEST_PLAYER_TWO, board, Locale.ENGLISH);
+    }
+
+    private static BoardController controllerWithBoardView(Board board, BoardView boardView) {
+        BoardController controller = newController(board);
+        controller.setBoardView(boardView);
+        return controller;
+    }
+
+    private static boolean anyEndGameViewVisible() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof EndGameView && window.isVisible()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Board replayEmptyBoard() {
@@ -1150,6 +1309,38 @@ class BoardControllerTest {
     }
 
     @Test
+    void ExecuteMove_OnLegalMove_RepaintsBoardViewTwice() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        EasyMock.verify(boardMock, mainViewMock, statsMock, boardViewMock);
+    }
+
+    @Test
     void HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Location selected = new Location(0, 6);
@@ -1172,6 +1363,28 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(3, 3)).andReturn(standardGrid[3][3]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of());
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(new Location(3, 3));
+
+        EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
     void HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = EasyMock.createMock(Board.class);
@@ -1190,6 +1403,26 @@ class BoardControllerTest {
         Optional<Location> actual = controller.getSelectedLocation();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
+    }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = EasyMock.createMock(Board.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
+        EasyMock.replay(boardMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.handleSquareClick(new Location(0, 6));
+        controller.handleSquareClick(new Location(1, 7));
+
+        EasyMock.verify(boardMock, boardViewMock);
     }
 
     @Test
@@ -1220,6 +1453,50 @@ class BoardControllerTest {
         controller.handleSquareClick(selected);
         controller.handleSquareClick(destination);
 
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
+            justification = "Return value not needed; called for side-effectful headless check")
+    @Test
+    void ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible() {
+        assumeTrue(
+                !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
+                "Skipping: no display available");
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location destination = new Location(0, 5);
+        Move move = new Move(selected, destination);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
+        EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
+        boardMock.makeMove(move);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE + " wins!");
+        EasyMock.expectLastCall().once();
+        mainViewMock.setVisible(false);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+        BoardView boardViewMock = EasyMock.createMock(BoardView.class);
+        boardViewMock.repaint();
+        EasyMock.expectLastCall().anyTimes();
+        EasyMock.replay(boardViewMock);
+
+        BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(destination);
+
+        boolean expected = true;
+        boolean actual = anyEndGameViewVisible();
+        assertEquals(expected, actual);
         EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
@@ -1335,7 +1612,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Alice gana!";
+        String expected = "¡Alice gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1349,7 +1626,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Bob gana!";
+        String expected = "¡Bob gana!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1363,7 +1640,7 @@ class BoardControllerTest {
 
         BoardController controller = controllerFor(boardMock, Locale.forLanguageTag("es"));
 
-        String expected = "\u00A1Empate!";
+        String expected = "¡Empate!";
         String actual = controller.buildEndGameMessage();
         assertEquals(expected, actual);
         EasyMock.verify(boardMock);
@@ -1460,6 +1737,27 @@ class BoardControllerTest {
 
         assertEquals(Optional.of(PieceType.QUEEN), capturedMove.getValue().getPromotionType());
         EasyMock.verify(boardMock, mainViewMock, statsMock);
+    }
+
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT",
+            justification = "Return value not needed; called for side-effectful headless check")
+    @Test
+    void Show_WhenCalled_MainViewBecomesVisible() {
+        assumeTrue(
+                !GraphicsEnvironment.getLocalGraphicsEnvironment().isHeadless(),
+                "Skipping: no display available");
+        Board board = new Board(new StandardBoardInitializer());
+        BoardController controller = newController(board);
+        BoardView boardViewMock = EasyMock.createNiceMock(BoardView.class);
+        EasyMock.replay(boardViewMock);
+        controller.setBoardView(boardViewMock);
+
+        controller.show();
+
+        boolean expected = true;
+        boolean actual = controller.getMainView().isVisible();
+        assertEquals(expected, actual);
     }
 
 }
