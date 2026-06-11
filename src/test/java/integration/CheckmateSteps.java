@@ -40,4 +40,11 @@ public class CheckmateSteps {
         GameState actual = gameSteps.board.getCurrentGameState();
         assertEquals(expected, actual);
     }
+
+    @Then("white wins")
+    public void white_wins() {
+        GameState expected = GameState.WHITE_WIN;
+        GameState actual = gameSteps.board.getCurrentGameState();
+        assertEquals(expected, actual);
+    }
 }
