@@ -208,7 +208,7 @@ class WelcomeViewTest {
     void Constructor_OnSpanishLocale_Chess960ModeLabelFromBundle() {
         WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
 
-        String expected = "Chess960";
+        String expected = "Ajedrez960";
         String actual = view.getChess960ModeLabelText();
         assertEquals(expected, actual);
     }
