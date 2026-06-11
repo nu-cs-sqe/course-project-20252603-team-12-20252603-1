@@ -118,7 +118,7 @@ for a real `WelcomeView`.
   - State of the system: mock view; action capturing its `Locale`; English controller
   - Expected output: action invoked once with `Locale.ENGLISH`
 
-- **EC-TC12: PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale** ( :x: )
+- **EC-TC12: PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
   - State of the system: mock view; action capturing its `Locale`; `Locale.forLanguageTag("es")` controller
   - Expected output: action invoked once with `Locale.forLanguageTag("es")`
