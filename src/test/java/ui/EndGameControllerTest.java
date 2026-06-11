@@ -27,7 +27,7 @@ class EndGameControllerTest {
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("", mainView);
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
         controller.show();
 
         EasyMock.verify(mainView);
@@ -40,7 +40,7 @@ class EndGameControllerTest {
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
+        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
         controller.show();
 
         boolean expected = true;
@@ -56,7 +56,7 @@ class EndGameControllerTest {
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
+        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
         controller.show();
         controller.getEndGameView().clickPlayAgain();
 
@@ -73,7 +73,7 @@ class EndGameControllerTest {
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
+        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
         controller.show();
         controller.getEndGameView().clickPlayAgain();
 

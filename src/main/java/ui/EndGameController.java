@@ -9,10 +9,6 @@ class EndGameController {
     private final JFrame mainView;
     private final Locale locale;
 
-    EndGameController(String resultMessage, JFrame mainView) {
-        this(resultMessage, mainView, Locale.ENGLISH);
-    }
-
     EndGameController(String resultMessage, JFrame mainView, Locale locale) {
         this.mainView = mainView;
         this.locale = locale;
