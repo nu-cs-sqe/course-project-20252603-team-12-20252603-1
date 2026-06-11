@@ -113,7 +113,7 @@ for a real `WelcomeView`.
   - State of the system: mock view injected; stub action injected; `playAgain()` called
   - Expected output: `dispose()` called once on the view
 
-- **EC-TC11: PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale** ( :x: )
+- **EC-TC11: PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
   - State of the system: mock view; action capturing its `Locale`; English controller
   - Expected output: action invoked once with `Locale.ENGLISH`

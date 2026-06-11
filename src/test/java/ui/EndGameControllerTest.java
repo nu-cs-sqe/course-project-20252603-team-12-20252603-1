@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.Window;
 import java.util.Locale;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -102,20 +103,27 @@ class EndGameControllerTest {
     }
 
     @Test
-    void PlayAgain_WhenShowHasBeenCalled_WelcomeViewIsVisible() {
+    void PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale() {
         JFrame mainView = EasyMock.createMock(JFrame.class);
-        mainView.setVisible(false);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        @SuppressWarnings("unchecked")
+        Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
-        EasyMock.replay(mainView);
+        endGameView.dispose();
+        EasyMock.expectLastCall().once();
+        Capture<Locale> localeCapture = EasyMock.newCapture();
+        playAgainAction.accept(EasyMock.capture(localeCapture));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView, playAgainAction);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
-        controller.show();
-        controller.getEndGameView().clickPlayAgain();
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+        controller.setPlayAgainAction(playAgainAction);
+        controller.playAgain();
 
-        boolean expected = true;
-        boolean actual = isAnyWindowOfTypeVisible(WelcomeView.class);
-        assertEquals(expected, actual);
-        EasyMock.verify(mainView);
+        assertEquals(Locale.ENGLISH, localeCapture.getValue());
+        EasyMock.verify(mainView, endGameView, playAgainAction);
     }
 
     @Test
@@ -134,15 +142,6 @@ class EndGameControllerTest {
         String actual = findVisibleWelcomeViewTitle();
         assertEquals(expected, actual);
         EasyMock.verify(mainView);
-    }
-
-    private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
-        for (Window window : Window.getWindows()) {
-            if (type.isInstance(window) && window.isVisible()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static String findVisibleWelcomeViewTitle() {
