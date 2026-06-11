@@ -89,7 +89,7 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer2Name("Bob");
         controller.getWelcomeView().clickStartGame();
 
-        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String expected = "El nombre del jugador no puede estar vacío";
         String actual = controller.getWelcomeView().getErrorText();
         assertEquals(expected, actual);
     }
@@ -201,7 +201,7 @@ class WelcomeControllerTest {
         controller.getWelcomeView().setPlayer2Name("Bob");
         controller.getWelcomeView().clickStartGame();
 
-        String expected = "El nombre del jugador no puede estar vac\u00EDo";
+        String expected = "El nombre del jugador no puede estar vacío";
         String actual = controller.getWelcomeView().getErrorText();
         assertEquals(expected, actual);
     }

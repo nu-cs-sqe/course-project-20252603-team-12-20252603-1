@@ -109,7 +109,7 @@ class WelcomeViewTest {
     void Constructor_OnEnglishLocale_WelcomeTitleFromBundle() {
         WelcomeView view = new WelcomeView(Locale.ENGLISH);
 
-        String expected = "\u265F  Chess  \u265F";
+        String expected = "♟  Chess  ♟";
         String actual = view.getWelcomeTitleText();
         assertEquals(expected, actual);
     }
@@ -172,7 +172,7 @@ class WelcomeViewTest {
     void Constructor_OnSpanishLocale_WelcomeTitleFromBundle() {
         WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
 
-        String expected = "\u265F  Ajedrez  \u265F";
+        String expected = "♟  Ajedrez  ♟";
         String actual = view.getWelcomeTitleText();
         assertEquals(expected, actual);
     }
@@ -199,7 +199,7 @@ class WelcomeViewTest {
     void Constructor_OnSpanishLocale_StandardModeLabelFromBundle() {
         WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
 
-        String expected = "Est\u00E1ndar";
+        String expected = "Estándar";
         String actual = view.getStandardModeLabelText();
         assertEquals(expected, actual);
     }
@@ -208,7 +208,7 @@ class WelcomeViewTest {
     void Constructor_OnSpanishLocale_Chess960ModeLabelFromBundle() {
         WelcomeView view = new WelcomeView(Locale.forLanguageTag("es"));
 
-        String expected = "Chess960";
+        String expected = "Ajedrez960";
         String actual = view.getChess960ModeLabelText();
         assertEquals(expected, actual);
     }
@@ -255,7 +255,7 @@ class WelcomeViewTest {
         WelcomeView view = new WelcomeView(Locale.ENGLISH);
         view.selectLanguageIndex(1);
 
-        String expected = "\u265F  Ajedrez  \u265F";
+        String expected = "♟  Ajedrez  ♟";
         String actual = view.getWelcomeTitleText();
         assertEquals(expected, actual);
     }

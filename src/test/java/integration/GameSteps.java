@@ -1,5 +1,7 @@
 package integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import domain.Board;
 import domain.StandardBoardInitializer;
 import domain.gamestate.GameState;
@@ -10,10 +12,7 @@ import domain.piece.PieceType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameSteps {
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.Function;
 
 public class BoardController {
@@ -23,7 +24,7 @@ public class BoardController {
     private final String player1Name;
     private final String player2Name;
     private final Board board;
-    private final Messages messages;
+    private final ResourceBundle bundle;
     private final Locale locale;
     private MainView mainView;
     private BoardView boardView;
@@ -42,7 +43,7 @@ public class BoardController {
         this.player2Name = player2Name;
         this.board = board;
         this.locale = locale;
-        messages = new Messages(locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
         lastSelectedLoc = Optional.empty();
     }
 
@@ -68,7 +69,7 @@ public class BoardController {
                 text = formatWinMessage(player2Name);
                 break;
             case DRAW:
-                text = messages.getString("drawResult");
+                text = bundle.getString("drawResult");
                 break;
             default:
                 text = "";
@@ -207,13 +208,14 @@ public class BoardController {
         switch (board.getCurrentGameState()) {
             case WHITE_WIN: return formatWinMessage(player1Name);
             case BLACK_WIN: return formatWinMessage(player2Name);
-            case DRAW: return messages.getString("drawResult");
+            case DRAW: return bundle.getString("drawResult");
             default: return "";
         }
     }
 
     private String formatWinMessage(String playerName) {
-        return MessageFormat.format(messages.getString("winPattern"), playerName);
+        String winPattern = bundle.getString("winPattern");
+        return MessageFormat.format(winPattern, playerName);
     }
 
     private void repaintBoardView() {
