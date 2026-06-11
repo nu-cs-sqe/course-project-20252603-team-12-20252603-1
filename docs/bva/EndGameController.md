@@ -56,7 +56,7 @@ Constructor has no standalone output; each stored input is verified where it is 
   - State of the system: mock `EndGameView` injected via `setEndGameView`
   - Expected output: `setPlayAgainAction` called once with a non-null action
 
-- **EC-TC9: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :x: )
+- **EC-TC9: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :white_check_mark: )
   - Method(s) under test: `getEndGameView()`, `setEndGameView(EndGameView)`
   - State of the system: mock `EndGameView` injected via `setEndGameView`
   - Expected output: `getEndGameView()` returns the same mock instance

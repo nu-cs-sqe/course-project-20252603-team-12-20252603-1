@@ -2,6 +2,7 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.Window;
 import java.util.Locale;
@@ -65,6 +66,21 @@ class EndGameControllerTest {
 
         EasyMock.verify(mainView, endGameView);
         assertNotNull(action.getValue());
+    }
+
+    @Test
+    void GetEndGameView_AfterSetEndGameView_ReturnsSameView() {
+        JFrame mainView = EasyMock.createMock(JFrame.class);
+        EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
+
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+
+        assertSame(endGameView, controller.getEndGameView());
+        EasyMock.verify(mainView, endGameView);
     }
 
     @Test
