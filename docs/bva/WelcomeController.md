@@ -143,12 +143,12 @@ Invalid (at least one empty name):
   - State of the system: mock view `getPlayer1Name() = "Alice"`, `getPlayer2Name() = ""`
   - Expected output: `showError` called once; launcher not invoked; view not disposed
 
-- **WC-TC6: StartGame_EmptyName_ErrorTextFromEnglishBundle** ( :x: )
+- **WC-TC6: StartGame_EmptyName_ErrorTextFromEnglishBundle** ( :white_check_mark: )
   - Method(s) under test: `startGame()`
   - State of the system: mock view `getPlayer1Name() = ""`, `getSelectedLocale() = ENGLISH`; capture the `showError` argument
   - Expected output: argument is `"Player name cannot be empty"`
 
-- **WC-TC7: StartGame_EmptyName_ErrorTextFromSpanishBundle** ( :x: )
+- **WC-TC7: StartGame_EmptyName_ErrorTextFromSpanishBundle** ( :white_check_mark: )
   - Method(s) under test: `startGame()`
   - State of the system: mock view `getPlayer1Name() = ""`, `getSelectedLocale() = forLanguageTag("es")`; capture the `showError` argument
   - Expected output: argument is `"El nombre del jugador no puede estar vacío"`

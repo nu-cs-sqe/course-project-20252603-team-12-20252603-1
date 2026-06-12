@@ -117,4 +117,25 @@ class WelcomeControllerTest {
         assertEquals("Player name cannot be empty", error.getValue());
         EasyMock.verify(welcomeView);
     }
+
+    @Test
+    void StartGame_EmptyName_ErrorTextFromSpanishBundle() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.forLanguageTag("es"));
+        Capture<String> error = EasyMock.newCapture();
+        welcomeView.showError(EasyMock.capture(error));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        assertEquals("El nombre del jugador no puede estar vacío", error.getValue());
+        EasyMock.verify(welcomeView);
+    }
 }
