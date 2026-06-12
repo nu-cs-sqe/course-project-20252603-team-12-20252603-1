@@ -36,9 +36,7 @@ class MainViewTest {
                 new BoardController("Alice", "Bob", boardMock), Locale.ENGLISH);
 
         boolean wired =
-                view.getGameStatsView() != null
-                        && view.getBoardView() != null
-                        && "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
+                "Alice".equals(view.getGameStatsView().getCurrentPlayerLabelText())
                         && "Alice versus Bob".equals(
                                 view.getGameStatsView().getGameStateLabelText());
         Container contentPane = view.getContentPane();
