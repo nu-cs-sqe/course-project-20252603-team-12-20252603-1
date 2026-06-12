@@ -4,21 +4,36 @@ import domain.Board;
 import domain.BoardInitializer;
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class WelcomeController {
 
-    private final WelcomeView welcomeView;
+    private WelcomeView welcomeView;
+    private final Locale locale;
+    private GameLauncher gameLauncher =
+            (p1, p2, init, loc) -> new BoardController(p1, p2, new Board(init), loc).show();
 
     public WelcomeController() {
         this(Locale.ENGLISH);
     }
 
     WelcomeController(Locale locale) {
-        welcomeView = new WelcomeView(locale);
+        this.locale = locale;
+    }
+
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Intentional shared reference for collaboration")
+    void setWelcomeView(WelcomeView welcomeView) {
+        this.welcomeView = welcomeView;
         welcomeView.setStartGameAction(this::startGame);
+    }
+
+    void setGameLauncher(GameLauncher gameLauncher) {
+        this.gameLauncher = gameLauncher;
     }
 
     WelcomeView getWelcomeView() {
@@ -26,10 +41,11 @@ public class WelcomeController {
     }
 
     public void show() {
+        setWelcomeView(new WelcomeView(locale));
         welcomeView.setVisible(true);
     }
 
-    private void startGame() {
+    void startGame() {
         String player1Name = welcomeView.getPlayer1Name();
         String player2Name = welcomeView.getPlayer2Name();
         if (player1Name.isEmpty() || player2Name.isEmpty()) {
@@ -40,11 +56,8 @@ public class WelcomeController {
             return;
         }
         closeWelcomeView();
-        new BoardController(
-                player1Name,
-                player2Name,
-                new Board(selectedInitializer()),
-                welcomeView.getSelectedLocale()).show();
+        gameLauncher.launch(player1Name, player2Name, selectedInitializer(),
+                welcomeView.getSelectedLocale());
     }
 
     BoardInitializer selectedInitializer() {
@@ -56,5 +69,11 @@ public class WelcomeController {
     private void closeWelcomeView() {
         welcomeView.setVisible(false);
         welcomeView.dispose();
+    }
+
+    @FunctionalInterface
+    interface GameLauncher {
+        void launch(String player1Name, String player2Name, BoardInitializer initializer,
+                Locale locale);
     }
 }

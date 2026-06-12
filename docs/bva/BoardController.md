@@ -261,6 +261,7 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 ### Step 3: Concrete boundary values
 
 - In-bounds max: `Location(7, 7)` on white turn with white rook → selection set
+- In-bounds min: `Location(0, 0)` on black turn with black rook → selection set
 - Out-of-bounds file: `Location(8, 0)` → early return, no board calls
 - Out-of-bounds rank: `Location(0, 8)` → early return, no board calls
 - Out-of-bounds negative: `Location(-1, 0)` (BC-TC36–38)
@@ -346,6 +347,11 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 - **BC-TC82: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(7, 7)` white rook on white turn
+  - **Expected output**: `hasSelection()` is `true`
+
+- **BC-TC88: HandleSquareClick_OnMinInBoundsSquare_AcceptsClick** ( :white_check_mark: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
+  - **State of the system**: `Location(0, 0)` black rook on black turn
   - **Expected output**: `hasSelection()` is `true`
 
 - **BC-TC39: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
