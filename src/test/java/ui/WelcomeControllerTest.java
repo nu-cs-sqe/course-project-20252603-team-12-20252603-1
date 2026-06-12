@@ -1,5 +1,6 @@
 package ui;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -93,6 +94,27 @@ class WelcomeControllerTest {
         controller.setWelcomeView(welcomeView);
         controller.startGame();
 
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void StartGame_EmptyName_ErrorTextFromEnglishBundle() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        Capture<String> error = EasyMock.newCapture();
+        welcomeView.showError(EasyMock.capture(error));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        assertEquals("Player name cannot be empty", error.getValue());
         EasyMock.verify(welcomeView);
     }
 }
