@@ -45,7 +45,7 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
 ### Step 1: Equivalence Classes
 
 - **Input: piece type at `from`** — the `PieceType` on the source square
-- **Input: board layout** — lone piece on empty board
+- **Input: board layout** — lone piece on empty board, with selected destination occupancy cases
 - **Output: move list size** — count of legal moves returned
 
 ### Step 2: Data Types (from BVA Catalog)
@@ -53,7 +53,7 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: piece type at `from` | Cases | NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING |
-| Input: board layout | Collections | lone piece on otherwise empty board |
+| Input: board layout | Collections | lone piece on otherwise empty board; destination occupied by friendly piece; destination occupied by enemy piece |
 | Output: move list size | Counts | `0`, `2`, `8`, `13`, `14`, `27` |
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -71,6 +71,12 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
 **Move list size — Counts:**
 
 - `0`, `2`, `8`, `13`, `14`, `27`
+
+**Destination occupancy — Cases:**
+
+- Empty destination — white knight at `(4, 4)` can move to empty `(5, 6)`
+- Friendly occupied destination — white knight at `(4, 4)`; white pawn at `(5, 6)`
+- Enemy occupied destination — white knight at `(4, 4)`; black pawn at `(5, 6)`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -98,6 +104,10 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(4, 4)`; white pawn at `(5, 6)`
   - **Expected output**: no returned move has destination `(5, 6)`
+- **TC92: GenerateLegalMoves_OnKnightFacingEnemy_IncludesCaptureDestination** ( :x: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
+  - **State of the system**: white knight at `(4, 4)`; black pawn at `(5, 6)`
+  - **Expected output**: returned moves include destination `(5, 6)`
 - **TC8: GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white bishop at `(4, 4)`; all other squares `NonePiece`
@@ -478,6 +488,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 
 - **Input: color** — side whose king is queried
 - **Input: king attack state** — king square attacked vs not attacked
+- **Input: attack-square occupant** — exact attack square occupied by attacking piece vs same-color piece
 - **Output: result** — whether that side's king is in check
 
 ### Step 2: Data Types (from BVA Catalog)
@@ -487,6 +498,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 | ------------------------ | ----------------- | ---------------------- |
 | Input: color             | Cases             | WHITE, BLACK           |
 | Input: king attack state | Cases             | attacked, not attacked |
+| Input: attack-square occupant | Cases | attacking pawn on exact pawn attack square, same-color pawn on exact pawn attack square |
 | Output: result | Boolean | `true`, `false` |
 
 
@@ -507,6 +519,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 - Missing king: board with no white king
 - Not attacked: white king `(4, 4)`; black rook at `(0, 0)` (no attack line)
 - Near-miss: knight one square off L-shape; pawn one file off; king two squares away
+- Same-color occupant on exact pawn attack square: white king `(3, 4)`; white pawn at `(2, 3)`
 
 **Result — Boolean:**
 
@@ -555,6 +568,10 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: white king at `(3, 4)`; black pawn at `(2, 3)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
+- **TC93: IsInCheck_WhenSameColorPawnOnPawnAttackSquare_ReturnsFalse** ( :x: )
+  - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
+  - **State of the system**: white king at `(3, 4)`; white pawn at `(2, 3)`
+  - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
 - **TC61: IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKingAttacking`)
   - **State of the system**: white king at `(4, 4)`; black king at `(3, 3)`
@@ -583,6 +600,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 - **Input: en-passant target** — absent vs present on valid capture square vs present on wrong rank
 - **Input: castling side** — kingside vs queenside unmoved rook
 - **Input: king/rook movement state** — both unmoved vs king moved vs rook moved
+- **Input: castling rook candidate ownership** — own rook vs enemy rook on the searched castling side
 - **Input: castling path safety** — transit squares clear and unattacked vs square under attack
 - **Output: move list contents** — special `MoveType` present vs absent for a given destination
 
@@ -593,6 +611,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 | Input: en-passant target | Cases | no target, valid target at `(5, 2)`, invalid target at `(5, 4)` |
 | Input: castling side | Cases | kingside, queenside |
 | Input: king/rook movement state | Cases | both unmoved, king moved, rook moved |
+| Input: castling rook candidate ownership | Cases | own rook at candidate square, enemy rook at kingside candidate square, enemy rook at queenside candidate square |
 | Input: castling path safety | Cases | safe path, attacked transit square `(5, 7)` |
 | Output: move list contents | Collections | includes / excludes `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE` |
 
@@ -615,6 +634,13 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 - Both unmoved — castling allowed when path safe
 - King moved — `king.changeToMoved()`; no castling types
 - Kingside rook moved — `rook.changeToMoved()` at `(7, 7)`; kingside excluded
+
+**Castling rook candidate ownership — Cases:**
+
+- Own kingside rook — white king `(4, 7)`, white rook `(7, 7)`
+- Enemy kingside rook — white king `(4, 7)`, black rook `(7, 7)`
+- Own queenside rook — white king `(4, 7)`, white rook `(0, 7)`
+- Enemy queenside rook — white king `(4, 7)`, black rook `(0, 7)`
 
 **Castling path safety — Cases:**
 
@@ -657,6 +683,10 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
+- **TC94: GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling** ( :x: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
+  - **State of the system**: white king `(4, 7)` unmoved; black rook at `(7, 7)`
+  - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
 - **TC73: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
@@ -676,6 +706,10 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 - **TC77: GenerateLegalMoves_OnMovedQueensideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(0, 7)` with `hasMoved() == true`
+  - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
+- **TC95: GenerateLegalMoves_OnKingWithEnemyQueensideRook_ExcludesQueensideCastling** ( :x: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
+  - **State of the system**: white king `(4, 7)` unmoved; black rook at `(0, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
 - **TC78: GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
