@@ -199,7 +199,7 @@ Valid (both names non-empty):
   - State of the system: mock view `isChess960Selected() = false`
   - Expected output: instance of `StandardBoardInitializer`
 
-- **WC-TC13: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :x: )
+- **WC-TC13: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :white_check_mark: )
   - Method(s) under test: `selectedInitializer()`
   - State of the system: mock view `isChess960Selected() = true`
   - Expected output: instance of `FischerRandomBoardInitializer`

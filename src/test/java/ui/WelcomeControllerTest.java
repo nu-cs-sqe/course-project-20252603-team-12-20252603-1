@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.awt.Window;
 import java.util.Locale;
@@ -266,6 +267,21 @@ class WelcomeControllerTest {
         controller.setWelcomeView(welcomeView);
 
         assertInstanceOf(StandardBoardInitializer.class, controller.selectedInitializer());
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(true);
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+
+        assertInstanceOf(FischerRandomBoardInitializer.class, controller.selectedInitializer());
         EasyMock.verify(welcomeView);
     }
 }
