@@ -477,7 +477,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
@@ -499,7 +499,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
@@ -515,7 +515,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
@@ -547,7 +547,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -569,7 +569,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -585,7 +585,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -601,7 +601,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][3] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(3, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 

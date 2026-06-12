@@ -163,15 +163,13 @@ public class Board {
             return;
         }
         if (move.getType() == MoveType.CASTLING_KINGSIDE) {
-            executeCastling(
-                    fromRank, fromFile,
-                    KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE, true);
+            executeCastling(fromRank, fromFile, toFile,
+                    KINGSIDE_KING_DEST_FILE, KINGSIDE_ROOK_DEST_FILE);
             return;
         }
         if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
-            executeCastling(
-                    fromRank, fromFile,
-                    QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE, false);
+            executeCastling(fromRank, fromFile, toFile,
+                    QUEENSIDE_KING_DEST_FILE, QUEENSIDE_ROOK_DEST_FILE);
             return;
         }
         if (move.getType() == MoveType.PROMOTION) {
@@ -187,37 +185,15 @@ public class Board {
     }
 
     private void executeCastling(
-            int rank, int kingFile, int kingDestFile, int rookDestFile, boolean kingside) {
-        int rookFile = findCastlingRookFile(rank, kingFile, kingside);
+            int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile) {
         Piece king = pieces[rank][kingFile];
-        pieces[rank][kingFile] = new NonePiece();
         Piece rook = pieces[rank][rookFile];
+        pieces[rank][kingFile] = new NonePiece();
         pieces[rank][rookFile] = new NonePiece();
         king.changeToMoved();
         rook.changeToMoved();
         pieces[rank][kingDestFile] = king;
         pieces[rank][rookDestFile] = rook;
-    }
-
-    private int findCastlingRookFile(int rank, int kingFile, boolean kingside) {
-        PieceColor color = pieces[rank][kingFile].getColor();
-        if (kingside) {
-            for (int f = BOARD_SIZE - 1; f > kingFile; f--) {
-                Piece p = pieces[rank][f];
-                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
-                    return f;
-                }
-            }
-        } else {
-            for (int f = 0; f < kingFile; f++) {
-                Piece p = pieces[rank][f];
-                if (p.getType() == PieceType.ROOK && p.getColor() == color && !p.hasMoved()) {
-                    return f;
-                }
-            }
-        }
-        throw new IllegalStateException(
-                "No unmoved castling rook found on rank " + rank + " kingside=" + kingside);
     }
 
     boolean isInsufficientMaterial() {
