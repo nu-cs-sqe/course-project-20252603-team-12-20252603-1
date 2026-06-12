@@ -1,133 +1,157 @@
 # BVA Analysis for EndGameController
 
-## Method: `EndGameController(String resultMessage, JFrame mainView)`
+## Method: `EndGameController(String, JFrame, Locale)`
 
 ### Step 1: Equivalence Classes
-
-- **Input: result message** — the game outcome text to display in the end-game screen
-- **Input: main view reference** — the main game JFrame to be hidden when the end-game screen is shown
-- **Output: main view visibility after `show()`** — whether the main game window is hidden
-- **Output: end-game view visibility after `show()`** — whether the end-game screen is showing
+- Input: result message — stored, passed to `EndGameView` in `show()`
+- Input: main view reference — stored, hidden in `show()`
+- Input: locale — stored, used by `show()` and `playAgain()`
+- Output: none (constructor only stores fields)
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class | Catalog data type |
+| Class | Type |
 | --- | --- |
-| Input: result message | String |
-| Input: main view reference | Pointer |
-| Output: main view visibility after `show()` | Boolean |
-| Output: end-game view visibility after `show()` | Boolean |
+| Result message | Strings |
+| Main view reference | Pointers |
+| Locale | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- Result message: `""`, `"Alice wins!"`
+- Main view: non-null `JFrame` (`null` CAN'T SET — `show()` calls `mainView.setVisible(false)`)
+- Locale: `Locale.ENGLISH`, `Locale.forLanguageTag("es")`
+- Exceptions: none from the constructor
 
-**Result message — String:**
-- `""` (the empty string)
-- `"Alice wins!"` (a non-empty string)
-
-**Main view reference — Pointer:**
-- `null` — CAN'T SET: `show()` calls `mainView.setVisible(false)`, which throws `NullPointerException`
-- a non-null `JFrame` instance
-
-**Main view visibility — Boolean:**
-- `false` — `show()` always hides mainView; expected post-condition
-- `true` — CAN'T SET as a post-`show()` output
-
-**End-game view visibility — Boolean:**
-- `true` — `show()` always shows endGameView; expected post-condition
-- `false` — CAN'T SET as a post-`show()` output
-
-### Step 4: Test Cases (Each-Choice Strategy)
-
-- **TC1: Constructor_WithEmptyResultMessage_ShowHidesMainView** ( :white_check_mark: )
-  - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
-  - **State of the system**: `resultMessage = ""`, `mainView` = a non-null visible `JFrame`; `show()` is called
-  - **Expected output**: `mainView.isVisible()` returns `false`
-
-- **TC2: Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView** ( :white_check_mark: )
-  - **Method(s) under test**: `EndGameController(String, JFrame)`, `show()`
-  - **State of the system**: `resultMessage = "Alice wins!"`, `mainView` = a non-null visible `JFrame`; `show()` is called
-  - **Expected output**: `mainView.isVisible()` returns `false`; `getEndGameView().isVisible()` returns `true`
-  - **Note**: observing end-game view visibility requires a package-private `getEndGameView()` accessor on `EndGameController`, consistent with the `WelcomeController.getWelcomeView()` pattern
+### Step 4: Test Cases
+Constructor has no standalone output; each stored input is verified where it is used:
+- `mainView` → TC3 (`show()` hides the exact `mainView` mock; `verify(mainView)`)
+- `locale` → EC-TC11/EC-TC12 (`playAgain()` forwards the stored locale to the action)
+- `resultMessage` → passed to `EndGameView` in `show()`; observable only if `EndGameView`
+  exposes the label text (no such accessor today)
 
 ---
 
-## Method: `void show()`
+## Method: `setEndGameView(EndGameView)` / `getEndGameView()`
 
 ### Step 1: Equivalence Classes
-
-- **Output: main view visibility** — mainView is hidden after `show()`
-- **Output: end-game view visibility** — end-game screen is displayed after `show()`
+- Input: injected end-game view
+- Output: play-again action wired on the injected view
+- Output: `getEndGameView()` returns the injected view
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class | Catalog data type |
+| Class | Type |
 | --- | --- |
-| Output: main view visibility | Boolean |
-| Output: end-game view visibility | Boolean |
+| Injected view | Pointers |
+| `setPlayAgainAction` calls | Counts |
+| `getEndGameView()` return | Pointers |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- Injected view: non-null mock (`null` CAN'T SET — setter calls `setPlayAgainAction` immediately)
+- `setPlayAgainAction` calls: `1` (`0` CAN'T SET)
+- Return: same reference as injected; `null` before first `setEndGameView`/`show()`
+- Exceptions: none
 
-**Main view visibility — Boolean:**
-- `false` — `show()` always hides mainView; expected post-condition
-- `true` — CAN'T SET as a post-`show()` output
+### Step 4: Test Cases
+- **EC-TC8: SetEndGameView_WhenCalled_WiresPlayAgainAction** ( :white_check_mark: )
+  - Method(s) under test: `setEndGameView(EndGameView)`
+  - State of the system: mock `EndGameView` injected via `setEndGameView`
+  - Expected output: `setPlayAgainAction` called once with a non-null action
 
-**End-game view visibility — Boolean:**
-- `true` — `show()` always shows endGameView; expected post-condition
-- `false` — CAN'T SET as a post-`show()` output
+- **EC-TC9: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :white_check_mark: )
+  - Method(s) under test: `getEndGameView()`, `setEndGameView(EndGameView)`
+  - State of the system: mock `EndGameView` injected via `setEndGameView`
+  - Expected output: `getEndGameView()` returns the same mock instance
 
-### Step 4: Test Cases (Each-Choice Strategy)
+---
 
+## Method: `setPlayAgainAction(Consumer<Locale>)`
+
+### Step 1: Equivalence Classes
+- Input: injected play-again action
+- Output: `playAgain()` invokes the injected action instead of the default
+
+### Step 2: Data Types (from BVA Catalog)
+| Class | Type |
+| --- | --- |
+| Injected action | Pointers |
+
+### Step 3: Boundary Values (from BVA Catalog)
+- Injected action: non-null `Consumer<Locale>`; default lambda when unset
+- Exceptions: none
+
+### Step 4: Test Cases
+Verified through `playAgain()` (EC-TC11, EC-TC12).
+
+---
+
+## Method: `playAgain()`
+
+### Step 1: Equivalence Classes
+- Input: locale held by the controller
+- Output: end-game view disposed
+- Output: play-again action invoked with the locale
+
+### Step 2: Data Types (from BVA Catalog)
+| Class | Type |
+| --- | --- |
+| Locale | Cases |
+| `dispose()` calls | Counts |
+| Action invocations | Counts |
+| Locale passed to action | Cases |
+
+### Step 3: Boundary Values (from BVA Catalog)
+- Locale: `Locale.ENGLISH`, `Locale.forLanguageTag("es")`
+- `dispose()` calls: `1` (`0` CAN'T SET)
+- Action invocations: `1` (`0` CAN'T SET)
+- Exceptions: none
+
+### Step 4: Test Cases
+EC-TC10–EC-TC12 replace the headed TC5/TC6/EC-TC7, which scanned `Window.getWindows()`
+for a real `WelcomeView`.
+
+- **EC-TC10: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
+  - Method(s) under test: `playAgain()`
+  - State of the system: mock view injected; stub action injected; `playAgain()` called
+  - Expected output: `dispose()` called once on the view
+
+- **EC-TC11: PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale** ( :white_check_mark: )
+  - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
+  - State of the system: mock view; action capturing its `Locale`; English controller
+  - Expected output: action invoked once with `Locale.ENGLISH`
+
+- **EC-TC12: PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale** ( :white_check_mark: )
+  - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
+  - State of the system: mock view; action capturing its `Locale`; `Locale.forLanguageTag("es")` controller
+  - Expected output: action invoked once with `Locale.forLanguageTag("es")`
+
+---
+
+## Method: `show()`
+
+### Step 1: Equivalence Classes
+- Output: end-game view created
+- Output: main view hidden
+- Output: end-game view shown
+
+### Step 2: Data Types (from BVA Catalog)
+| Class | Type |
+| --- | --- |
+| End-game view created | Pointers |
+| Main view visibility | Boolean |
+| End-game view visibility | Boolean |
+
+### Step 3: Boundary Values (from BVA Catalog)
+- End-game view: a real `EndGameView` is created (no injection path; opens a window)
+- Main view visibility: `false` (`true` CAN'T SET post-`show()`)
+- End-game view visibility: `true` (`false` CAN'T SET post-`show()`)
+- Exceptions: `HeadlessException` with no display — tests guard with `assumeTrue`
+
+### Step 4: Test Cases
 - **TC3: Show_HidesMainView** ( :white_check_mark: )
-  - **Method(s) under test**: `show()`
-  - **State of the system**: `EndGameController` constructed with a non-null visible `mainView`; `show()` is called
-  - **Expected output**: `mainView.isVisible()` returns `false`
-  - **Covered by**: TC1, TC2
+  - Method(s) under test: `show()`
+  - State of the system: controller constructed with a non-null `mainView`; display available; `show()` called
+  - Expected output: `mainView.isVisible()` is `false`
 
 - **TC4: Show_DisplaysEndGameView** ( :white_check_mark: )
-  - **Method(s) under test**: `show()`
-  - **State of the system**: `EndGameController` constructed; `show()` is called
-  - **Expected output**: `getEndGameView().isVisible()` returns `true`
-  - **Covered by**: TC2
-
----
-
-## Method: `playAgain()` (invoked via `getEndGameView().clickPlayAgain()`)
-
-### Step 1: Equivalence Classes
-
-- **Output: end-game view disposal** — end-game screen is disposed after "Play Again" is clicked
-- **Output: welcome screen shown** — a new `WelcomeView` becomes visible
-
-### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class | Catalog data type |
-| --- | --- |
-| Output: end-game view disposal | Boolean |
-| Output: welcome screen shown | Boolean |
-
-### Step 3: Boundary Values (from BVA Catalog)
-
-**End-game view disposal — Boolean:**
-- `true` — end-game view is disposed after `playAgain()`; expected post-condition
-- `false` — CAN'T SET as a post-`playAgain()` output
-
-**Welcome screen shown — Boolean:**
-- `true` — a new `WelcomeView` is shown after `playAgain()`; expected post-condition
-- `false` — CAN'T SET as a post-`playAgain()` output
-
-### Step 4: Test Cases (Each-Choice Strategy)
-
-- **TC5: PlayAgain_DisposesEndGameView** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
-  - **Expected output**: `getEndGameView().isDisplayable()` returns `false`
-
-- **TC6: PlayAgain_WhenShowHasBeenCalled_WelcomeViewIsVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: `EndGameController` constructed and `show()` called; `getEndGameView().clickPlayAgain()` is called
-  - **Expected output**: a new `WelcomeView` is visible
-
-- **EC-TC7: PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `playAgain()` (via `getEndGameView().clickPlayAgain()`)
-  - **State of the system**: `EndGameController(..., Locale.forLanguageTag("es"))`; `show()` called; play again clicked
-  - **Expected output**: new visible `WelcomeView` title is `"Ajedrez"`
+  - Method(s) under test: `show()`
+  - State of the system: controller constructed; display available; `show()` called
+  - Expected output: `getEndGameView().isVisible()` is `true`
