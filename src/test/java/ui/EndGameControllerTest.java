@@ -1,10 +1,14 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.Window;
 import java.util.Locale;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,26 +25,27 @@ class EndGameControllerTest {
     }
 
     @Test
-    void Constructor_WithEmptyResultMessage_ShowHidesMainView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
+    void Show_HidesMainView() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
         mainView.setVisible(false);
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("", mainView);
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
         controller.show();
 
         EasyMock.verify(mainView);
     }
 
     @Test
-    void Constructor_WithNonEmptyResultMessage_ShowHidesMainViewAndDisplaysEndGameView() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
+    void Show_DisplaysEndGameView() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
         mainView.setVisible(false);
         EasyMock.expectLastCall().once();
         EasyMock.replay(mainView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
+        EndGameController controller =
+                new EndGameController("Alice wins!", mainView, Locale.ENGLISH);
         controller.show();
 
         boolean expected = true;
@@ -50,73 +55,100 @@ class EndGameControllerTest {
     }
 
     @Test
-    void PlayAgain_WhenShowHasBeenCalled_EndGameViewIsDisposed() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        mainView.setVisible(false);
+    void SetEndGameView_WhenCalled_WiresPlayAgainAction() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        Capture<Runnable> action = EasyMock.newCapture();
+        endGameView.setPlayAgainAction(EasyMock.capture(action));
         EasyMock.expectLastCall().once();
-        EasyMock.replay(mainView);
+        EasyMock.replay(mainView, endGameView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
-        controller.show();
-        controller.getEndGameView().clickPlayAgain();
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
 
-        boolean expected = false;
-        boolean actual = controller.getEndGameView().isDisplayable();
-        assertEquals(expected, actual);
-        EasyMock.verify(mainView);
+        EasyMock.verify(mainView, endGameView);
+        assertNotNull(action.getValue());
     }
 
     @Test
-    void PlayAgain_WhenShowHasBeenCalled_WelcomeViewIsVisible() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        mainView.setVisible(false);
+    void GetEndGameView_AfterSetEndGameView_ReturnsSameView() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
-        EasyMock.replay(mainView);
+        EasyMock.replay(mainView, endGameView);
 
-        EndGameController controller = new EndGameController("Alice wins!", mainView);
-        controller.show();
-        controller.getEndGameView().clickPlayAgain();
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
 
-        boolean expected = true;
-        boolean actual = isAnyWindowOfTypeVisible(WelcomeView.class);
-        assertEquals(expected, actual);
-        EasyMock.verify(mainView);
+        assertSame(endGameView, controller.getEndGameView());
+        EasyMock.verify(mainView, endGameView);
     }
 
     @Test
-    void PlayAgain_OnSpanishLocale_WelcomeViewTitleFromSpanishBundle() {
-        JFrame mainView = EasyMock.createMock(JFrame.class);
-        mainView.setVisible(false);
+    void PlayAgain_WhenCalled_DisposesEndGameView() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
         EasyMock.expectLastCall().once();
-        EasyMock.replay(mainView);
+        endGameView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView);
 
-        EndGameController controller = new EndGameController(
-                "¡Alice gana!", mainView, Locale.forLanguageTag("es"));
-        controller.show();
-        controller.getEndGameView().clickPlayAgain();
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+        controller.setPlayAgainAction(loc -> {});
+        controller.playAgain();
 
-        String expected = "Ajedrez";
-        String actual = findVisibleWelcomeViewTitle();
-        assertEquals(expected, actual);
-        EasyMock.verify(mainView);
+        EasyMock.verify(mainView, endGameView);
     }
 
-    private static boolean isAnyWindowOfTypeVisible(Class<?> type) {
-        for (Window window : Window.getWindows()) {
-            if (type.isInstance(window) && window.isVisible()) {
-                return true;
-            }
-        }
-        return false;
+    @Test
+    void PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        @SuppressWarnings("unchecked")
+        final Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        endGameView.dispose();
+        EasyMock.expectLastCall().once();
+        Capture<Locale> localeCapture = EasyMock.newCapture();
+        playAgainAction.accept(EasyMock.capture(localeCapture));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView, playAgainAction);
+
+        EndGameController controller = new EndGameController("", mainView, Locale.ENGLISH);
+        controller.setEndGameView(endGameView);
+        controller.setPlayAgainAction(playAgainAction);
+        controller.playAgain();
+
+        assertEquals(Locale.ENGLISH, localeCapture.getValue());
+        EasyMock.verify(mainView, endGameView, playAgainAction);
     }
 
-    private static String findVisibleWelcomeViewTitle() {
-        for (Window window : Window.getWindows()) {
-            if (window instanceof WelcomeView && window.isVisible()) {
-                WelcomeView welcomeView = (WelcomeView) window;
-                return welcomeView.getTitle();
-            }
-        }
-        return "";
+    @Test
+    void PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale() {
+        final JFrame mainView = EasyMock.createMock(JFrame.class);
+        final EndGameView endGameView = EasyMock.createMock(EndGameView.class);
+        @SuppressWarnings("unchecked")
+        final Consumer<Locale> playAgainAction = EasyMock.createMock(Consumer.class);
+        endGameView.setPlayAgainAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        endGameView.dispose();
+        EasyMock.expectLastCall().once();
+        Capture<Locale> localeCapture = EasyMock.newCapture();
+        playAgainAction.accept(EasyMock.capture(localeCapture));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(mainView, endGameView, playAgainAction);
+
+        EndGameController controller =
+                new EndGameController("", mainView, Locale.forLanguageTag("es"));
+        controller.setEndGameView(endGameView);
+        controller.setPlayAgainAction(playAgainAction);
+        controller.playAgain();
+
+        assertEquals(Locale.forLanguageTag("es"), localeCapture.getValue());
+        EasyMock.verify(mainView, endGameView, playAgainAction);
     }
 }
