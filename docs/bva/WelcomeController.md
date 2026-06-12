@@ -164,7 +164,7 @@ Valid (both names non-empty):
   - State of the system: mock view `"Alice"`/`"Bob"`; mock launcher
   - Expected output: launcher invoked exactly once
 
-- **WC-TC10: StartGame_NonEmptyNames_LauncherReceivesPlayerNames** ( :x: )
+- **WC-TC10: StartGame_NonEmptyNames_LauncherReceivesPlayerNames** ( :white_check_mark: )
   - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
   - State of the system: mock view `"Alice"`/`"Bob"`; launcher capturing its arguments
   - Expected output: launcher received `player1Name = "Alice"`, `player2Name = "Bob"`
