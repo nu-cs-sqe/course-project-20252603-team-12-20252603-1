@@ -541,6 +541,20 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnKnightFacingEnemy_IncludesCaptureDestination() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        board[6][5] = new Pawn(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveTo(
+                moveGenerator.generateLegalMoves(new Location(4, 4)), 5, 6);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);

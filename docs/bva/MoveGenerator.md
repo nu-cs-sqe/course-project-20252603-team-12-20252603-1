@@ -104,7 +104,7 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(4, 4)`; white pawn at `(5, 6)`
   - **Expected output**: no returned move has destination `(5, 6)`
-- **TC92: GenerateLegalMoves_OnKnightFacingEnemy_IncludesCaptureDestination** ( :x: )
+- **TC92: GenerateLegalMoves_OnKnightFacingEnemy_IncludesCaptureDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(4, 4)`; black pawn at `(5, 6)`
   - **Expected output**: returned moves include destination `(5, 6)`
