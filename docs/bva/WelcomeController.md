@@ -138,7 +138,7 @@ Invalid (at least one empty name):
   - State of the system: mock view `getPlayer1Name() = ""`, `getPlayer2Name() = "Bob"`, `getSelectedLocale() = ENGLISH`; stub launcher
   - Expected output: `showError` called once; launcher not invoked; view not disposed
 
-- **WC-TC5: StartGame_EmptyPlayer2Name_ShowsErrorAndDoesNotLaunch** ( :x: )
+- **WC-TC5: StartGame_EmptyPlayer2Name_ShowsErrorAndDoesNotLaunch** ( :white_check_mark: )
   - Method(s) under test: `startGame()`
   - State of the system: mock view `getPlayer1Name() = "Alice"`, `getPlayer2Name() = ""`
   - Expected output: `showError` called once; launcher not invoked; view not disposed

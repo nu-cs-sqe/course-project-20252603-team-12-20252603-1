@@ -76,4 +76,23 @@ class WelcomeControllerTest {
 
         EasyMock.verify(welcomeView);
     }
+
+    @Test
+    void StartGame_EmptyPlayer2Name_ShowsErrorAndDoesNotLaunch() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        welcomeView.showError(EasyMock.anyString());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        EasyMock.verify(welcomeView);
+    }
 }
