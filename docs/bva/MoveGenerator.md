@@ -685,7 +685,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` alone; no rooks on back rank
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC92: GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare** ( :x: )
+- **MG-TC92: GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`, `isPathClearForCastling`)
   - **State of the system**: white king `(5, 7)`, rook `(6, 7)` unmoved (Chess960 adjacent); destination squares occupied only by the castling pieces themselves; path safe
   - **Expected output**: returned moves include destination `(6, 7)` (rook square) with `MoveType.CASTLING_KINGSIDE`
