@@ -759,6 +759,25 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void ApplyMoveToBoard_OnKingAlreadyOnDestination_KingStaysRookMoves() {
+        Piece[][] board = emptyBoard();
+        board[7][6] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(6, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = result[7][6].getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = result[7][5].getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
     void ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook() {
         Piece[][] board = emptyBoard();
         board[7][5] = new King(PieceColor.WHITE);
