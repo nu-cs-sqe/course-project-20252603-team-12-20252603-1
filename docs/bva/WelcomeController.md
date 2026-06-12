@@ -194,7 +194,7 @@ Valid (both names non-empty):
 - Exceptions: none
 
 ### Step 4: Test Cases
-- **WC-TC12: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :x: )
+- **WC-TC12: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :white_check_mark: )
   - Method(s) under test: `selectedInitializer()`
   - State of the system: mock view `isChess960Selected() = false`
   - Expected output: instance of `StandardBoardInitializer`

@@ -1,10 +1,12 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import domain.StandardBoardInitializer;
 import java.awt.Window;
 import java.util.Locale;
 import org.easymock.Capture;
@@ -250,5 +252,20 @@ class WelcomeControllerTest {
 
         assertEquals(Locale.forLanguageTag("es"), locale.getValue());
         EasyMock.verify(welcomeView, launcher);
+    }
+
+    @Test
+    void SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+
+        assertInstanceOf(StandardBoardInitializer.class, controller.selectedInitializer());
+        EasyMock.verify(welcomeView);
     }
 }
