@@ -638,9 +638,9 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 **Castling rook candidate ownership — Cases:**
 
 - Own kingside rook — white king `(4, 7)`, white rook `(7, 7)`
-- Enemy kingside rook — white king `(4, 7)`, black rook `(7, 7)`
+- Enemy kingside rook — white king `(4, 7)`, white blocker `(5, 7)`, black rook `(7, 7)`
 - Own queenside rook — white king `(4, 7)`, white rook `(0, 7)`
-- Enemy queenside rook — white king `(4, 7)`, black rook `(0, 7)`
+- Enemy queenside rook — white king `(4, 7)`, white blocker `(3, 7)`, black rook `(0, 7)`
 
 **Castling path safety — Cases:**
 
@@ -685,7 +685,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
 - **TC94: GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
-  - **State of the system**: white king `(4, 7)` unmoved; black rook at `(7, 7)`
+  - **State of the system**: white king `(4, 7)` unmoved; white bishop at `(5, 7)` blocks check; black rook at `(7, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
 - **TC73: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
@@ -707,9 +707,9 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(0, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
-- **TC95: GenerateLegalMoves_OnKingWithEnemyQueensideRook_ExcludesQueensideCastling** ( :x: )
+- **TC95: GenerateLegalMoves_OnKingWithEnemyQueensideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
-  - **State of the system**: white king `(4, 7)` unmoved; black rook at `(0, 7)`
+  - **State of the system**: white king `(4, 7)` unmoved; white bishop at `(3, 7)` blocks check; black rook at `(0, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
 - **TC78: GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)

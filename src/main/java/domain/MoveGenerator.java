@@ -211,7 +211,6 @@ public class MoveGenerator {
         }
         int twoAhead = rank + 2 * direction;
         if (rank == startRank
-                && isOnBoard(twoAhead, file)
                 && board[twoAhead][file].getType() == PieceType.NONE) {
             moves.add(new Move(from, new Location(file, twoAhead)));
         }

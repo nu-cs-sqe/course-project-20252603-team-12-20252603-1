@@ -1073,6 +1073,7 @@ class MoveGeneratorTest {
     void GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling() {
         Piece[][] board = emptyBoard();
         board[7][4] = new King(PieceColor.WHITE);
+        board[7][5] = new Bishop(PieceColor.WHITE);
         board[7][7] = new Rook(PieceColor.BLACK);
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
@@ -1122,6 +1123,22 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][0] = new Rook(PieceColor.WHITE);
         board[7][0].changeToMoved();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_QUEENSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnKingWithEnemyQueensideRook_ExcludesQueensideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.BLACK);
+        board[7][3] = new Bishop(PieceColor.WHITE);
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
         boolean expected = false;
