@@ -154,7 +154,7 @@ Invalid (at least one empty name):
   - Expected output: argument is `"El nombre del jugador no puede estar vacío"`
 
 Valid (both names non-empty):
-- **WC-TC8: StartGame_NonEmptyNames_ClosesWelcomeView** ( :x: )
+- **WC-TC8: StartGame_NonEmptyNames_ClosesWelcomeView** ( :white_check_mark: )
   - Method(s) under test: `startGame()`
   - State of the system: mock view `"Alice"`/`"Bob"`; stub launcher
   - Expected output: view `setVisible(false)` and `dispose()` each called once

@@ -138,4 +138,27 @@ class WelcomeControllerTest {
         assertEquals("El nombre del jugador no puede estar vacío", error.getValue());
         EasyMock.verify(welcomeView);
     }
+
+    @Test
+    void StartGame_NonEmptyNames_ClosesWelcomeView() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher((p1, p2, init, loc) -> {});
+        controller.startGame();
+
+        EasyMock.verify(welcomeView);
+    }
 }
