@@ -726,7 +726,7 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][0] = new Rook(PieceColor.WHITE);
         Move move = new Move(
-                new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+                new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
 
@@ -981,7 +981,7 @@ class MoveGeneratorTest {
         boolean expected = true;
         boolean actual = hasMoveToWithType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
-                2,
+                0,
                 7,
                 MoveType.CASTLING_QUEENSIDE);
 
