@@ -272,7 +272,7 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to rook square `(0, 7)`
   - **Expected output**: returned board at `(2, 7)` is `KING` and at `(3, 7)` is `ROOK`
-- **MG-TC90: ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :x: )
+- **MG-TC90: ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(5, 7)`, rook `(6, 7)` (Chess960 adjacent); `CASTLING_KINGSIDE` to `(6, 7)`
   - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
