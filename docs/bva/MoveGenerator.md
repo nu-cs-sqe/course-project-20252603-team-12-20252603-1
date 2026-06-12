@@ -568,7 +568,7 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: white king at `(3, 4)`; black pawn at `(2, 3)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **TC93: IsInCheck_WhenSameColorPawnOnPawnAttackSquare_ReturnsFalse** ( :x: )
+- **TC93: IsInCheck_WhenSameColorPawnOnPawnAttackSquare_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: white king at `(3, 4)`; white pawn at `(2, 3)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`

@@ -151,6 +151,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void IsInCheck_WhenSameColorPawnOnPawnAttackSquare_ReturnsFalse() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new King(PieceColor.WHITE);
+        board[2][3] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = moveGenerator.isInCheck(PieceColor.WHITE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
