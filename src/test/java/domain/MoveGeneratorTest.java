@@ -745,7 +745,7 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][7] = new Rook(PieceColor.WHITE);
         Move move = new Move(
-                new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+                new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
 
