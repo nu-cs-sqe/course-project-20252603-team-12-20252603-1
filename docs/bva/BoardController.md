@@ -349,7 +349,7 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
   - **State of the system**: `Location(7, 7)` white rook on white turn
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC88: HandleSquareClick_OnMinInBoundsSquare_AcceptsClick** ( :x: )
+- **BC-TC88: HandleSquareClick_OnMinInBoundsSquare_AcceptsClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(0, 0)` black rook on black turn
   - **Expected output**: `hasSelection()` is `true`
