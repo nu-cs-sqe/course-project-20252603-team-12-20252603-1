@@ -133,7 +133,7 @@ Verified through `startGame()` success path (WC-TC8–WC-TC11).
 
 ### Step 4: Test Cases
 Invalid (at least one empty name):
-- **WC-TC4: StartGame_EmptyPlayer1Name_ShowsErrorAndDoesNotLaunch** ( :x: )
+- **WC-TC4: StartGame_EmptyPlayer1Name_ShowsErrorAndDoesNotLaunch** ( :white_check_mark: )
   - Method(s) under test: `startGame()`
   - State of the system: mock view `getPlayer1Name() = ""`, `getPlayer2Name() = "Bob"`, `getSelectedLocale() = ENGLISH`; stub launcher
   - Expected output: `showError` called once; launcher not invoked; view not disposed

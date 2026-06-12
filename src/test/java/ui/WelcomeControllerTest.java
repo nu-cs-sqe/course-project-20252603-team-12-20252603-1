@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Window;
+import java.util.Locale;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
@@ -54,6 +55,25 @@ class WelcomeControllerTest {
         controller.setWelcomeView(welcomeView);
 
         assertSame(welcomeView, controller.getWelcomeView());
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void StartGame_EmptyPlayer1Name_ShowsErrorAndDoesNotLaunch() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        welcomeView.showError(EasyMock.anyString());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
         EasyMock.verify(welcomeView);
     }
 }
