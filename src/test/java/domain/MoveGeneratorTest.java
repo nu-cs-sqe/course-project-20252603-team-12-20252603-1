@@ -46,6 +46,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenNoKingForColor_ReturnsFalse() {
         Piece[][] board = emptyBoard();
@@ -57,6 +58,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenPawnAttacksKing_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -69,6 +71,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenKnightAttacksKing_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -81,6 +84,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenBishopAttacksKing_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -93,6 +97,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenQueenAttacksKing_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -105,6 +110,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenAdjacentEnemyKingAttacksKing_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -117,6 +123,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenKnightOnExactAttackSquare_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -129,6 +136,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenPawnOnExactAttackSquare_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -141,6 +149,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue() {
         Piece[][] board = emptyBoard();
@@ -153,6 +162,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenKnightOneSquareOffAttackLine_ReturnsFalse() {
         Piece[][] board = emptyBoard();
@@ -165,6 +175,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenPawnOneFileOffAttackLine_ReturnsFalse() {
         Piece[][] board = emptyBoard();
@@ -177,6 +188,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void IsInCheck_WhenKingTwoSquaresAway_ReturnsFalse() {
         Piece[][] board = emptyBoard();
@@ -308,6 +320,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnAtStart_IncludesTwoStepDestination() {
         Piece[][] board = emptyBoard();
@@ -320,6 +333,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnAtStartWithBlockerAtTwoAhead_ExcludesTwoStep() {
         Piece[][] board = emptyBoard();
@@ -333,6 +347,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnBlackPawnAtStart_ReturnsOneAndTwoStepMoves() {
         Piece[][] board = emptyBoard();
@@ -356,6 +371,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingBlockedByFriendly_ExcludesFriendlySquare() {
         Piece[][] board = emptyBoard();
@@ -369,6 +385,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingAtCenter_IncludesNorthEastDestination() {
         Piece[][] board = emptyBoard();
@@ -381,6 +398,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingAtCenter_IncludesSouthWestDestination() {
         Piece[][] board = emptyBoard();
@@ -417,6 +435,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnRookBlockedByFriendly_ExcludesSquareBeyondFriendly() {
         Piece[][] board = emptyBoard();
@@ -430,6 +449,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnRookFacingEnemy_IncludesCaptureDestination() {
         Piece[][] board = emptyBoard();
@@ -443,6 +463,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnRookFacingEnemy_ReturnsThirteenMoves() {
         Piece[][] board = emptyBoard();
@@ -479,6 +500,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKnightAtCorner_ReturnsTwoMoves() {
         Piece[][] board = emptyBoard();
@@ -490,6 +512,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKnightAtCorner_IncludesDestinationOneTwo() {
         Piece[][] board = emptyBoard();
@@ -502,6 +525,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKnightBlockedByFriendly_ExcludesBlockedSquare() {
         Piece[][] board = emptyBoard();
@@ -605,6 +629,7 @@ class MoveGeneratorTest {
         PieceType actual = result[0][4].getType();
         assertEquals(expected, actual);
     }
+
     @Test
     void ApplyMoveToBoard_OnPromotionRook_DestinationHasRook() {
         Piece[][] board = emptyBoard();
@@ -618,6 +643,7 @@ class MoveGeneratorTest {
         PieceType actual = result[0][4].getType();
         assertEquals(expected, actual);
     }
+
     @Test
     void ApplyMoveToBoard_OnPromotionBishop_DestinationHasBishop() {
         Piece[][] board = emptyBoard();
@@ -631,6 +657,7 @@ class MoveGeneratorTest {
         PieceType actual = result[0][4].getType();
         assertEquals(expected, actual);
     }
+
     @Test
     void ApplyMoveToBoard_OnPromotionKnight_DestinationHasKnight() {
         Piece[][] board = emptyBoard();
@@ -644,6 +671,7 @@ class MoveGeneratorTest {
         PieceType actual = result[0][4].getType();
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnUnmovedQueensideRookAtFileZero_FindsRookAtFileThree() {
         Piece[][] board = emptyBoard();
@@ -658,6 +686,7 @@ class MoveGeneratorTest {
         PieceType actual = result[7][3].getType();
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnRookType_ReturnsRook() {
         PieceType expected = PieceType.ROOK;
@@ -665,6 +694,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnBishopType_ReturnsBishop() {
         PieceType expected = PieceType.BISHOP;
@@ -672,6 +702,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnKnightType_ReturnsKnight() {
         PieceType expected = PieceType.KNIGHT;
@@ -679,6 +710,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnPawnType_ReturnsPawn() {
         PieceType expected = PieceType.PAWN;
@@ -686,6 +718,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnKingType_ReturnsKing() {
         PieceType expected = PieceType.KING;
@@ -693,6 +726,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void CreatePiece_OnNoneType_ReturnsNonePiece() {
         PieceType expected = PieceType.NONE;
@@ -776,6 +810,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnEmptySquare_ReturnsMutableEmptyList() {
         Piece[][] board = emptyBoard();
@@ -790,6 +825,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GeneratePseudoLegalMoves_OnNonePiece_ReturnsEmptyList() throws Exception {
         Piece[][] board = emptyBoard();
@@ -806,6 +842,7 @@ class MoveGeneratorTest {
         int actual = moves.size();
         assertEquals(expected, actual);
     }
+
     @Test
     void GeneratePseudoLegalMoves_OnNonePiece_ReturnsMutableEmptyList() throws Exception {
         Piece[][] board = emptyBoard();
@@ -883,6 +920,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnEnPassantTargetSameFile_ExcludesEnPassantMove() {
         Piece[][] board = emptyBoard();
@@ -897,6 +935,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnBlackPawnWithEnPassantTarget_IncludesEnPassantMove() {
         Piece[][] board = emptyBoard();
@@ -979,6 +1018,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingsideCastlingWithBlockingPiece_ExcludesKingsideCastling() {
         Piece[][] board = emptyBoard();
@@ -994,6 +1034,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnQueensideCastlingWithBlockingPiece_ExcludesQueensideCastling() {
         Piece[][] board = emptyBoard();
@@ -1009,6 +1050,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnMovedQueensideRook_ExcludesQueensideCastling() {
         Piece[][] board = emptyBoard();
@@ -1024,6 +1066,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling() {
         Piece[][] board = emptyBoard();
@@ -1038,6 +1081,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnKingWithoutRooks_ExcludesAllCastling() {
         Piece[][] board = emptyBoard();
@@ -1080,6 +1124,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnWithFriendlyDiagonal_SkipsDiagonalCapture() {
         Piece[][] board = emptyBoard();
@@ -1092,6 +1137,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_IncludesCaptureDestination() {
         Piece[][] board = emptyBoard();
@@ -1105,6 +1151,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_IncludesLeftCaptureOnly() {
         Piece[][] board = emptyBoard();
@@ -1118,6 +1165,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_ExcludesRightCapture() {
         Piece[][] board = emptyBoard();
@@ -1131,6 +1179,7 @@ class MoveGeneratorTest {
 
         assertEquals(expected, actual);
     }
+
     @Test
     void GenerateLegalMoves_OnWhitePawnAtBackRankWithNoCaptures_ReturnsEmptyList() {
         Piece[][] board = emptyBoard();
