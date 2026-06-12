@@ -522,18 +522,6 @@ class BoardTest {
         assertTrue(board.getPieceAt(7, 5).hasMoved());
     }
 
-    @Test
-    void MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException() {
-        Piece[][] layout = new Piece[8][8];
-        for (Piece[] row : layout) {
-            Arrays.fill(row, new NonePiece());
-        }
-        layout[7][4] = new King(PieceColor.WHITE);
-        Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
-
-        assertThrows(IllegalStateException.class, () -> board.makeMove(move));
-    }
 
     @Test
     void MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen() {

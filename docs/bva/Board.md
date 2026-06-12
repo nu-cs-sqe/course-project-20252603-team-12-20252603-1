@@ -844,8 +844,6 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
   - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
 
-- **TC63: removed** — tested the `IllegalStateException` from the rook search in `executeCastling`; with king-takes-rook encoding the rook file comes from `move.getTo()` and no search exists. CAN'T SET: `makeMove` only receives generated moves, which always carry a valid rook square.
-
 - **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with no promotion type specified

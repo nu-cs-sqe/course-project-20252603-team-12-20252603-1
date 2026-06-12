@@ -296,8 +296,6 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.KNIGHT`
   - **Expected output**: returned board at `(4, 0)` has type `KNIGHT`
-- **MG-TC81: removed** — tested the rook search inside `applyMoveToBoard`; with king-takes-rook encoding the rook file comes from `move.getTo()` and the search no longer exists. Relocation of the file-0 rook is covered by MG-TC35.
-
 ---
 
 ## Method: `createPiece(PieceType type, PieceColor color)` (package-private static)
