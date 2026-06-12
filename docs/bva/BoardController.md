@@ -24,12 +24,12 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-- **BC-TC1: Constructor_FreshInstance_LastSelectedUnset** ( :white_check_mark: )
+- **TC1: Constructor_FreshInstance_LastSelectedUnset** ( :white_check_mark: )
   - **Method(s) under test**: `BoardController()`, `hasSelection()`
   - **State of the system**: newly constructed controller
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC2: GetSelectedLocation_FreshInstance_ReturnsEmpty** ( :white_check_mark: )
+- **TC2: GetSelectedLocation_FreshInstance_ReturnsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `getSelectedLocation()`
   - **State of the system**: newly constructed controller; no clicks yet
   - **Expected output**: `Optional.empty()`
@@ -61,7 +61,7 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-- **BC-TC86: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
+- **TC3: GetMainView_AfterSetMainView_ReturnsInjectedView** ( :white_check_mark: )
   - **Method(s) under test**: `getMainView()`, `setMainView(MainView)`
   - **State of the system**: `MainView` mock injected via `setMainView`
   - **Expected output**: `getMainView()` returns the same mock instance
@@ -93,7 +93,7 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-- **BC-TC75: GetBoardView_AfterSetBoardView_ReturnsInjectedView** ( :white_check_mark: )
+- **TC4: GetBoardView_AfterSetBoardView_ReturnsInjectedView** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardView()`, `setBoardView(BoardView)`
   - **State of the system**: `BoardView` mock injected via `setBoardView`
   - **Expected output**: `getBoardView()` returns the same mock instance
@@ -117,102 +117,102 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-- **BC-TC3: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :white_check_mark: )
+- **TC5: GetBoardSnapshot_AfterStandardInit_EightByEightGrid** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: `new BoardController()`
   - **Expected output**: outer length 8; each inner array length 8
 
-- **BC-TC4: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
+- **TC6: GetBoardSnapshot_AfterStandardInit_CornerCellsOccupied** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: standard start
   - **Expected output**: cell-wise type and color match canonical standard grid (including `NonePiece` on empty ranks)
 
-- **BC-TC5: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
+- **TC7: GetBoardSnapshot_MatchesBoardSnapshot_Cellwise** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: expected grid built in test; new controller
   - **Expected output**: snapshot matches expected grid by type and color per cell
 
-- **BC-TC6: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )
+- **TC8: GetBoardSnapshot_StandardStart_ExactlySixteenWhitePieces** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: standard initialization
   - **Expected output**: count of white pieces with `type != NONE` is `16`
 
-- **BC-TC7: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :white_check_mark: )
+- **TC9: GetBoardSnapshot_StandardStart_ExactlySixteenBlackPieces** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: standard initialization
   - **Expected output**: count of black pieces with `type != NONE` is `16`
 
-- **BC-TC8: GameStart_Standard_WhiteTurn** ( :white_check_mark: )
+- **TC10: GameStart_Standard_WhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`
   - **State of the system**: immediately after standard new game
   - **Expected output**: `GameState.WHITE_TURN`
 
-- **BC-TC9: GameStart_Standard_NoOccupiedPieceHasMoved** ( :white_check_mark: )
+- **TC11: GameStart_Standard_NoOccupiedPieceHasMoved** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: immediately after standard new game
   - **Expected output**: every piece with `type != NONE` has `hasMoved() == false`
 
-- **BC-TC10: GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy** ( :white_check_mark: )
+- **TC12: GetBoardSnapshot_AfterStandardInit_ReturnsIndependentCopy** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()` twice
   - **State of the system**: standard start
   - **Expected output**: two returned arrays are different references
 
 **Chess960 (fixed layout via `Chess960FixedBoardInitializer`)**
 
-- **BC-TC11: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
+- **TC13: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()` with mock returning fixed Chess960 grid
   - **State of the system**: fixed Chess960 start
   - **Expected output**: white back rank bishops on opposite color parity
 
-- **BC-TC12: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
+- **TC14: GetBoardSnapshot_Chess960_BishopsOnOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()` with mock returning fixed Chess960 grid
   - **State of the system**: fixed Chess960 start
   - **Expected output**: black back rank bishops on opposite color parity
 
-- **BC-TC13: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_WhiteBackRank** ( :white_check_mark: )
+- **TC15: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_WhiteBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: white king file strictly between own rook files
 
-- **BC-TC14: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_BlackBackRank** ( :white_check_mark: )
+- **TC16: GetBoardSnapshot_Chess960_KingStrictlyBetweenRooksOnBackRank_BlackBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: black king file strictly between own rook files
 
-- **BC-TC15: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_BackRankTypesMirror** ( :white_check_mark: )
+- **TC17: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_BackRankTypesMirror** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: same piece types per file on ranks 0 and 7; opposite colors
 
-- **BC-TC16: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_StandardPawnRows** ( :white_check_mark: )
+- **TC18: GetBoardSnapshot_Chess960_BackRanksMirrorPieceTypes_StandardPawnRows** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: pawn rows on ranks 1 and 6 with correct colors
 
-- **BC-TC17: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
+- **TC19: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: white back rank has one queen, two knights, two bishops, two rooks, one king
 
-- **BC-TC18: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
+- **TC20: GetBoardSnapshot_Chess960_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
   - **Method(s) under test**: `getBoardSnapshot()`
   - **State of the system**: fixed Chess960 start
   - **Expected output**: black back rank has one queen, two knights, two bishops, two rooks, one king
 
 **Chess960 (seeded via `FischerRandomBoardInitializer`, seed `1L`)**
 
-- **BC-TC19: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
-- **BC-TC20: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
-- **BC-TC21: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_WhiteBackRank** ( :white_check_mark: )
-- **BC-TC22: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_BlackBackRank** ( :white_check_mark: )
-- **BC-TC23: GetBoardSnapshot_Chess960_SeedOne_BackRanksMirrorPieceTypes** ( :white_check_mark: )
-- **BC-TC24: GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows** ( :white_check_mark: )
-- **BC-TC25: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
-- **BC-TC26: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
+- **TC21: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_WhiteBackRank** ( :white_check_mark: )
+- **TC22: GetBoardSnapshot_Chess960_SeedOne_BishopsOppositeColorSquares_BlackBackRank** ( :white_check_mark: )
+- **TC23: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_WhiteBackRank** ( :white_check_mark: )
+- **TC24: GetBoardSnapshot_Chess960_SeedOne_KingStrictlyBetweenRooks_BlackBackRank** ( :white_check_mark: )
+- **TC25: GetBoardSnapshot_Chess960_SeedOne_BackRanksMirrorPieceTypes** ( :white_check_mark: )
+- **TC26: GetBoardSnapshot_Chess960_SeedOne_StandardPawnRows** ( :white_check_mark: )
+- **TC27: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_WhiteBackRank** ( :white_check_mark: )
+- **TC28: GetBoardSnapshot_Chess960_SeedOne_OneQueenTwoKnightsOnBackRank_BlackBackRank** ( :white_check_mark: )
 
   - **Method(s) under test**: `getBoardSnapshot()` with mock returning seed-`1L` Chess960 grid (built in test)
   - **State of the system**: `chess960Seed == 1L`
-  - **Expected output**: same predicates as BC-TC11–BC-TC18 for the seeded layout
+  - **Expected output**: same predicates as TC13–TC20 for the seeded layout
 
 ---
 
@@ -233,7 +233,7 @@ Scope: **Game Initialization and interaction** — selection state, snapshot/tur
 
 ### Step 4: Test cases
 
-_(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `handleSquareClick`.)_
+_(TC1, TC2 cover fresh instance; selection-after-click covered under `handleSquareClick`.)_
 
 ---
 
@@ -264,112 +264,112 @@ _(BC-TC1, BC-TC2 cover fresh instance; selection-after-click covered under `hand
 - In-bounds min: `Location(0, 0)` on black turn with black rook → selection set
 - Out-of-bounds file: `Location(8, 0)` → early return, no board calls
 - Out-of-bounds rank: `Location(0, 8)` → early return, no board calls
-- Out-of-bounds negative: `Location(-1, 0)` (BC-TC36–38)
+- Out-of-bounds negative: `Location(-1, 0)` (TC39–38)
 - Repaint: strict `BoardView` mock; one `repaint()` on successful source click
 
 ### Step 4: Test cases
 
-- **BC-TC27: HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection** ( :white_check_mark: )
+- **TC29: HandleSquareClick_BeforeFirstMove_OnWhitePiece_HasSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: standard new game; white piece at `loc`
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC28: HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches** ( :white_check_mark: )
+- **TC30: HandleSquareClick_BeforeFirstMove_OnWhitePiece_SelectedLocationMatches** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: standard new game; click `Location(0, 1)`
   - **Expected output**: `getSelectedLocation()` present with same coordinates as click
 
-- **BC-TC29: HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
+- **TC31: HandleSquareClick_BeforeFirstMove_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: standard new game; click white piece
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC77: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :white_check_mark: )
+- **TC32: HandleSquareClick_OnWhitePiece_RepaintsBoardView** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleSourceClick`, `repaintBoardView`)
   - **State of the system**: `BoardView` strict mock; white turn; click own white pawn
   - **Expected output**: `boardView.repaint()` called once; `verify(boardViewMock)` passes
 
-- **BC-TC30: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick** ( :white_check_mark: )
+- **TC33: HandleSquareClick_BeforeFirstMove_OnBlackPiece_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: standard new game; black piece square
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC31: HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite** ( :white_check_mark: )
+- **TC34: HandleSquareClick_BeforeFirstMove_OnBlackPiece_TurnRemainsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: standard new game; black piece square
   - **Expected output**: `GameState.WHITE_TURN`
 
-- **BC-TC32: HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
+- **TC35: HandleSquareClick_BeforeFirstMove_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: standard new game; black piece square
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC33: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
+- **TC36: HandleSquareClick_BeforeFirstMove_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: standard new game; `NonePiece` square (e.g. center)
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC34: HandleSquareClick_BeforeFirstMove_OnEmptySquare_TurnRemainsWhite** ( :white_check_mark: )
+- **TC37: HandleSquareClick_BeforeFirstMove_OnEmptySquare_TurnRemainsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: standard new game; empty square
   - **Expected output**: `GameState.WHITE_TURN`
 
-- **BC-TC35: HandleSquareClick_BeforeFirstMove_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
+- **TC38: HandleSquareClick_BeforeFirstMove_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: standard new game; empty square
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC36: HandleSquareClick_InvalidLocation_NoSelectionAfterClick** ( :white_check_mark: )
+- **TC39: HandleSquareClick_InvalidLocation_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `new Location(-1, 0)`
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC37: HandleSquareClick_InvalidLocation_TurnRemainsWhite** ( :white_check_mark: )
+- **TC40: HandleSquareClick_InvalidLocation_TurnRemainsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: out-of-bounds `loc`
   - **Expected output**: `GameState.WHITE_TURN`
 
-- **BC-TC38: HandleSquareClick_InvalidLocation_BoardUnchanged** ( :white_check_mark: )
+- **TC41: HandleSquareClick_InvalidLocation_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: out-of-bounds `loc`
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC81: HandleSquareClick_OnFileEight_IgnoresClick** ( :white_check_mark: )
+- **TC42: HandleSquareClick_OnFileEight_IgnoresClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(8, 0)` — file index at upper boundary + 1
   - **Expected output**: `hasSelection()` remains `false`; board not consulted
 
-- **BC-TC87: HandleSquareClick_OnRankEight_IgnoresClick** ( :white_check_mark: )
+- **TC43: HandleSquareClick_OnRankEight_IgnoresClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(0, 8)` — rank index at upper boundary + 1
   - **Expected output**: `hasSelection()` remains `false`; board not consulted
 
-- **BC-TC82: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :white_check_mark: )
+- **TC44: HandleSquareClick_OnMaxInBoundsSquare_AcceptsClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(7, 7)` white rook on white turn
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC88: HandleSquareClick_OnMinInBoundsSquare_AcceptsClick** ( :white_check_mark: )
+- **TC45: HandleSquareClick_OnMinInBoundsSquare_AcceptsClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `isInBounds`)
   - **State of the system**: `Location(0, 0)` black rook on black turn
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC39: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
+- **TC46: HandleSquareClick_Chess960Start_FirstWhiteSelectionSamePolicy** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: Chess960 fixed start
   - **Expected output**: snapshot matches fixed Chess960 grid before/after policy check
 
-- **BC-TC40: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn** ( :white_check_mark: )
+- **TC47: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectsAndKeepsTurn** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: Chess960 fixed start; white piece click
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC41: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches** ( :white_check_mark: )
+- **TC48: HandleSquareClick_Chess960Start_FirstWhiteSelection_SelectedLocationMatches** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: Chess960 fixed start; click `Location(0, 1)`
   - **Expected output**: `getSelectedLocation()` present with same coordinates
 
-- **BC-TC42: HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite** ( :white_check_mark: )
+- **TC49: HandleSquareClick_Chess960Start_FirstWhiteSelection_TurnRemainsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: Chess960 fixed start; white piece click
   - **Expected output**: `GameState.WHITE_TURN`
@@ -402,59 +402,59 @@ Scope addition: derive **current player color** from `board.getCurrentGameState(
 
 ### Step 3: Concrete boundary values
 
-- Turn: `WHITE_TURN` (existing BC-TC27–35) vs **`BLACK_TURN`** (new)
+- Turn: `WHITE_TURN` (existing TC29–35) vs **`BLACK_TURN`** (new)
 - Black turn own piece: standard grid rank `1` file `0` (black pawn)
 - Black turn opponent: standard grid rank `6` file `0` (white pawn)
 - Black turn empty: rank `3` file `3`
 
 ### Step 4: Test cases — `BLACK_TURN` source selection
 
-- **BC-TC43: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :white_check_mark: )
+- **TC50: HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; click black piece at `Location(0, 1)`
   - **Expected output**: `hasSelection()` is `true`
 
-- **BC-TC44: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :white_check_mark: )
+- **TC51: HandleSquareClick_OnBlackTurn_OnBlackPiece_SelectedLocationMatches** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: `GameState.BLACK_TURN`; click `Location(0, 1)`
   - **Expected output**: `getSelectedLocation()` present with same coordinates
 
-- **BC-TC45: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
+- **TC52: HandleSquareClick_OnBlackTurn_OnBlackPiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; click black piece
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC46: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :white_check_mark: )
+- **TC53: HandleSquareClick_OnBlackTurn_OnWhitePiece_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece at `Location(0, 6)`
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC47: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :white_check_mark: )
+- **TC54: HandleSquareClick_OnBlackTurn_OnWhitePiece_TurnRemainsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece
   - **Expected output**: `GameState.BLACK_TURN`
 
-- **BC-TC48: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
+- **TC55: HandleSquareClick_OnBlackTurn_OnWhitePiece_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; click white piece
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC49: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
+- **TC56: HandleSquareClick_OnBlackTurn_OnEmptySquare_NoSelectionAfterClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `hasSelection()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square `Location(3, 3)`
   - **Expected output**: `hasSelection()` is `false`
 
-- **BC-TC50: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :white_check_mark: )
+- **TC57: HandleSquareClick_OnBlackTurn_OnEmptySquare_TurnRemainsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getCurrentGameState()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: `GameState.BLACK_TURN`
 
-- **BC-TC51: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
+- **TC58: HandleSquareClick_OnBlackTurn_OnEmptySquare_BoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getBoardSnapshot()`
   - **State of the system**: `GameState.BLACK_TURN`; empty square
   - **Expected output**: snapshot unchanged cell-wise
 
-- **BC-TC83: HandleSquareClick_WhenGameOver_IgnoresClick** ( :white_check_mark: )
+- **TC59: HandleSquareClick_WhenGameOver_IgnoresClick** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: board returns `WHITE_WIN`; click `(0, 6)`
   - **Expected output**: `hasSelection()` remains `false`
@@ -492,22 +492,22 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ### Step 4: Test cases
 
-- **BC-TC52: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :white_check_mark: )
+- **TC60: GetLegalMovesForSelection_NoSelection_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: newly constructed controller; no piece selected
   - **Expected output**: returned list size is `0`
 
-- **BC-TC76: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :white_check_mark: )
+- **TC61: GetLegalMovesForSelection_NoSelection_ReturnsMutableEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`
   - **State of the system**: no selection (`Optional.empty()`)
   - **Expected output**: returned list accepts an added element (mutable `ArrayList`)
 
-- **BC-TC53: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
+- **TC62: GetLegalMovesForSelection_WithSelection_ReturnsMovesFromBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
   - **State of the system**: white turn; white pawn selected at `Location(0, 6)`; board stubs one legal move
   - **Expected output**: returned list equals board's `getLegalMoves` result for selected square
 
-- **BC-TC54: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :white_check_mark: )
+- **TC63: GetLegalMovesForSelection_WithSelection_WhenBoardReturnsEmpty_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMovesForSelection()`, `handleSquareClick(Location)`
   - **State of the system**: white turn; own piece selected; board stubs empty legal-move list
   - **Expected output**: returned list size is `0`
@@ -516,12 +516,12 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ## Method / behavior: move execution via `handleSquareClick(Location loc)`
 
-Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion and end-game paths are covered in the sections below.
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. A legal move match takes precedence over own-piece re-selection, so a castling move targeting the own rook square (king-takes-rook encoding) executes instead of re-selecting the rook. Promotion and end-game paths are covered in the sections below.
 
 ### Step 1: Equivalence Classes
 
 - **Input: selection state** — `lastSelectedLoc` present vs absent (second click path)
-- **Input: destination square** — legal move target vs illegal vs another own piece
+- **Input: destination square** — legal move target vs illegal vs another own piece (no matching move) vs own castling rook (matching castling move)
 - **Output: board interaction** — `makeMove` invoked vs not
 - **Output: selection after click** — cleared vs updated
 
@@ -530,7 +530,7 @@ Scope: when a piece is already selected, a second click either executes a legal 
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: selection state | Cases | selected, not selected |
-| Input: destination square | Cases | legal destination, illegal empty, own piece |
+| Input: destination square | Cases | legal destination, illegal empty, own piece without matching move, own rook with matching castling move |
 | Output: `makeMove` called | Boolean | `true`, `false` |
 | Output: selection cleared | Boolean | `true`, `false` |
 | Output: `BoardView.repaint()` | Counts | 0, 1, 2 calls per click sequence |
@@ -539,41 +539,47 @@ Scope: when a piece is already selected, a second click either executes a legal 
 
 - Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once; **two** `repaint()` calls (select + move)
 - Illegal destination: stub returns move list with no matching `to` → selection cleared; **two** `repaint()` calls
-- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`; **two** `repaint()` calls
+- Own piece, no matching move: stub returns no move targeting the clicked square → new `lastSelectedLoc`, no `makeMove`; **two** `repaint()` calls
+- Own rook, matching castling move: stub returns `CASTLING_KINGSIDE` move targeting the rook square → `makeMove` once, selection cleared
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
 Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verify`. Repaint tests use strict `BoardView` mocks via `controllerWithBoardView`.
 
-- **BC-TC55: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
+- **TC64: HandleSquareClick_WithSelection_OnLegalDestination_CallsMakeMove** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; pawn selected at `(0, 6)`; board returns legal move to `(0, 5)`
   - **Expected output**: `board.makeMove` called once with that move; `hasSelection()` is `false`
 
-- **BC-TC80: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :white_check_mark: )
+- **TC65: ExecuteMove_OnLegalMove_RepaintsBoardViewTwice** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `executeMove`, `repaintBoardView`)
   - **State of the system**: selection then legal destination; `makeMove` invoked; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
 
-- **BC-TC56: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
+- **TC66: HandleSquareClick_WithSelection_OnIllegalDestination_ClearsSelection** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)`
   - **State of the system**: white turn; piece selected; click `(3, 3)` not in legal moves
   - **Expected output**: `board.makeMove` not called; `hasSelection()` is `false`
 
-- **BC-TC79: HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice** ( :white_check_mark: )
+- **TC67: HandleSquareClick_WithSelection_OnIllegalDestination_RepaintsBoardViewTwice** ( :white_check_mark: )
   - **Method(s) under test**: `handleSquareClick(Location)` (illegal destination path)
   - **State of the system**: selection then illegal empty destination with no matching move; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
 
-- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
+- **TC68: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( ✅ )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
-  - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
+  - **State of the system**: white turn; pawn at `(0, 6)` selected; board stubs legal moves with no move targeting `(1, 7)`; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
 
-- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :white_check_mark: )
+- **TC69: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( ✅ )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
-  - **State of the system**: selection then click second own piece; strict `BoardView` mock
+  - **State of the system**: selection then click second own piece; board stubs legal moves with no move targeting it; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
+
+- **TC70: HandleSquareClick_WithSelection_OnOwnCastlingRook_ExecutesCastling** ( ✅ )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick`, `findMoveToDestination`)
+  - **State of the system**: white turn; king at `(4, 7)` selected; board stubs a `CASTLING_KINGSIDE` move from `(4, 7)` to own rook square `(7, 7)`; click `(7, 7)`
+  - **Expected output**: `board.makeMove` called once with the castling move; `hasSelection()` is `false`
 
 ---
 
@@ -614,45 +620,45 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 **`board.getCurrentGameState()` after move — Cases:**
 - game over (`WHITE_WIN` / `BLACK_WIN` / `DRAW`) → `showEndGame()` called
-- game continues (`WHITE_TURN` / `BLACK_TURN`) → covered by BC-TC55
+- game continues (`WHITE_TURN` / `BLACK_TURN`) → covered by TC64
 
 **`promptForPromotionPiece` called — Boolean:**
-- `false`: non-promotion move — covered by BC-TC55
+- `false`: non-promotion move — covered by TC64
 - `true`: promotion move
 
 **`showEndGame()` called — Boolean:**
 - `true`: game is over
-- `false`: game continues — covered by BC-TC55
+- `false`: game continues — covered by TC64
 
 ### Step 4: Test cases
 
-- **BC-TC58: ExecuteMove_OnNonPromotionMove_AsWhite_MakeMoveCalledDirectly** ( :white_check_mark: )
+- **TC71: ExecuteMove_OnNonPromotionMove_AsWhite_MakeMoveCalledDirectly** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: white pawn normal move; board stubs `WHITE_TURN` before move, `BLACK_TURN` after; `makeMove` expected once
   - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
-  - **Covered by**: BC-TC55
+  - **Covered by**: TC64
 
-- **BC-TC59: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
+- **TC72: ExecuteMove_AfterMoveResultsInGameOver_ShowEndGameCalled** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)` (via `showEndGame()`)
   - **State of the system**: board returns `WHITE_WIN` after `makeMove`; `mainView` wired
   - **Expected output**: `mainView.setVisible(false)` called once (EndGameController.show side effect)
 
-- **BC-TC84: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :white_check_mark: )
+- **TC73: ExecuteMove_AfterMoveResultsInGameOver_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)` → `showEndGame()` → `EndGameController.show()`
   - **State of the system**: mocked `MainView`; post-move `WHITE_WIN`; display available (not headless)
   - **Expected output**: an `EndGameView` window is visible after the move
 
-- **BC-TC60: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :white_check_mark: )
+- **TC74: ExecuteMove_OnNonPromotionMove_AsBlack_MakeMoveCalledDirectly** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: black pawn normal move; board stubs `BLACK_TURN` before move, `WHITE_TURN` after; `makeMove` expected once
   - **Expected output**: `board.makeMove` called once with the non-promotion move; `hasSelection()` is `false`
 
-- **BC-TC61: ExecuteMove_OnPromotionMove_AsWhite_CallsPromptForPromotionPiece** ( :white_check_mark: )
+- **TC75: ExecuteMove_OnPromotionMove_AsWhite_CallsPromptForPromotionPiece** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: white pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `WHITE_TURN` → `BLACK_TURN`; dialog returns `QUEEN`
   - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
 
-- **BC-TC62: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :white_check_mark: )
+- **TC76: ExecuteMove_OnPromotionMove_AsBlack_CallsPromptForPromotionPiece** ( :white_check_mark: )
   - **Method(s) under test**: `executeMove(Move, PieceColor)`
   - **State of the system**: black pawn promotion move (`MoveType.PROMOTION`) to back rank; `mainView` wired; board stubs `BLACK_TURN` → `WHITE_TURN`; dialog returns `QUEEN`
   - **Expected output**: `board.makeMove` called once with a `PROMOTION` move carrying `QUEEN` as promotion type
@@ -693,27 +699,27 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC63: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
+- **TC77: IsGameOver_WhenStateIsWhiteWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `getCurrentGameState()` returning `WHITE_WIN`; move executed
   - **Expected output**: `EndGameView` visible (observable proxy for `isGameOver()` returning `true`)
-  - **Covered by**: BC-TC59
+  - **Covered by**: TC72
 
-- **BC-TC64: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
+- **TC78: IsGameOver_WhenStateIsBlackWin_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `BLACK_WIN`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC65: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
+- **TC79: IsGameOver_WhenStateIsDraw_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `DRAW`
   - **Expected output**: `EndGameView` visible
 
-- **BC-TC66: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
+- **TC80: IsGameOver_WhenStateIsWhiteTurn_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isGameOver()`
   - **State of the system**: board stubs `WHITE_TURN` after move
   - **Expected output**: no `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC59 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
+  - **Covered by**: TC72 (board returns WHITE_TURN post-move; no `EndGameView` is shown)
 
 ---
 
@@ -739,11 +745,11 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC67: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
+- **TC81: ShowEndGame_WhenCalled_EndGameViewIsVisible** ( :white_check_mark: )
   - **Method(s) under test**: `showEndGame()`
   - **State of the system**: game is in a terminal state; move path triggers `showEndGame()`
   - **Expected output**: a visible `EndGameView` in `Window.getWindows()`
-  - **Covered by**: BC-TC59, BC-TC64, BC-TC65, BC-TC84
+  - **Covered by**: TC72, TC78, TC79, TC73
 
 ---
 
@@ -775,7 +781,7 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
 
 ### Step 4: Test cases
 
-- **BC-TC85: Show_WhenCalled_MainViewBecomesVisible** ( :white_check_mark: )
+- **TC82: Show_WhenCalled_MainViewBecomesVisible** ( :white_check_mark: )
   - **Method(s) under test**: `show()`
   - **State of the system**: real `Board` standard start; display available (not headless)
   - **Expected output**: `getMainView().isVisible()` is `true`
@@ -818,32 +824,33 @@ Win and draw text load from `messages.properties` / `messages_es.properties` via
 
 ### Step 4: Test cases
 
-- **BC-TC68: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
+- **TC83: BuildEndGameMessage_WhiteWin_ReturnsPlayer1WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.ENGLISH`; board returns `WHITE_WIN`; `player1Name = "Alice"`
   - **Expected output**: `"Alice wins!"`
 
-- **BC-TC69: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
+- **TC84: BuildEndGameMessage_BlackWin_ReturnsPlayer2WinsMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.ENGLISH`; board returns `BLACK_WIN`; `player2Name = "Bob"`
   - **Expected output**: `"Bob wins!"`
 
-- **BC-TC70: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
+- **TC85: BuildEndGameMessage_Draw_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.ENGLISH`; board returns `DRAW`
   - **Expected output**: `"Draw!"`
 
-- **BC-TC71: BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage** ( :white_check_mark: )
+- **TC86: BuildEndGameMessage_OnSpanishLocale_WhiteWin_ReturnsSpanishWinMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `WHITE_WIN`; `player1Name = "Alice"`
   - **Expected output**: `"¡Alice gana!"`
 
-- **BC-TC72: BuildEndGameMessage_OnSpanishLocale_BlackWin_ReturnsSpanishWinMessage** ( :white_check_mark: )
+- **TC87: BuildEndGameMessage_OnSpanishLocale_BlackWin_ReturnsSpanishWinMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `BLACK_WIN`; `player2Name = "Bob"`
   - **Expected output**: `"¡Bob gana!"`
 
-- **BC-TC73: BuildEndGameMessage_OnSpanishLocale_Draw_ReturnsSpanishDrawMessage** ( :white_check_mark: )
+- **TC88: BuildEndGameMessage_OnSpanishLocale_Draw_ReturnsSpanishDrawMessage** ( :white_check_mark: )
   - **Method(s) under test**: `buildEndGameMessage()`
   - **State of the system**: `locale = Locale.forLanguageTag("es")`; board returns `DRAW`
   - **Expected output**: `"¡Empate!"`
+

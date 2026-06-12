@@ -23,8 +23,8 @@
 
 ### Step 4: Test Cases
 Constructor has no standalone output; each stored input is verified where it is used:
-- `mainView` → TC3 (`show()` hides the exact `mainView` mock; `verify(mainView)`)
-- `locale` → EC-TC11/EC-TC12 (`playAgain()` forwards the stored locale to the action)
+- `mainView` → TC6 (`show()` hides the exact `mainView` mock; `verify(mainView)`)
+- `locale` → TC4/TC5 (`playAgain()` forwards the stored locale to the action)
 - `resultMessage` → passed to `EndGameView` in `show()`; observable only if `EndGameView`
   exposes the label text (no such accessor today)
 
@@ -51,12 +51,12 @@ Constructor has no standalone output; each stored input is verified where it is 
 - Exceptions: none
 
 ### Step 4: Test Cases
-- **EC-TC8: SetEndGameView_WhenCalled_WiresPlayAgainAction** ( :white_check_mark: )
+- **TC1: SetEndGameView_WhenCalled_WiresPlayAgainAction** ( :white_check_mark: )
   - Method(s) under test: `setEndGameView(EndGameView)`
   - State of the system: mock `EndGameView` injected via `setEndGameView`
   - Expected output: `setPlayAgainAction` called once with a non-null action
 
-- **EC-TC9: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :white_check_mark: )
+- **TC2: GetEndGameView_AfterSetEndGameView_ReturnsSameView** ( :white_check_mark: )
   - Method(s) under test: `getEndGameView()`, `setEndGameView(EndGameView)`
   - State of the system: mock `EndGameView` injected via `setEndGameView`
   - Expected output: `getEndGameView()` returns the same mock instance
@@ -79,7 +79,7 @@ Constructor has no standalone output; each stored input is verified where it is 
 - Exceptions: none
 
 ### Step 4: Test Cases
-Verified through `playAgain()` (EC-TC11, EC-TC12).
+Verified through `playAgain()` (TC4, TC5).
 
 ---
 
@@ -105,20 +105,18 @@ Verified through `playAgain()` (EC-TC11, EC-TC12).
 - Exceptions: none
 
 ### Step 4: Test Cases
-EC-TC10–EC-TC12 replace the headed TC5/TC6/EC-TC7, which scanned `Window.getWindows()`
-for a real `WelcomeView`.
 
-- **EC-TC10: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
+- **TC3: PlayAgain_WhenCalled_DisposesEndGameView** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`
   - State of the system: mock view injected; stub action injected; `playAgain()` called
   - Expected output: `dispose()` called once on the view
 
-- **EC-TC11: PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale** ( :white_check_mark: )
+- **TC4: PlayAgain_OnEnglishLocale_InvokesActionWithEnglishLocale** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
   - State of the system: mock view; action capturing its `Locale`; English controller
   - Expected output: action invoked once with `Locale.ENGLISH`
 
-- **EC-TC12: PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale** ( :white_check_mark: )
+- **TC5: PlayAgain_OnSpanishLocale_InvokesActionWithSpanishLocale** ( :white_check_mark: )
   - Method(s) under test: `playAgain()`, `setPlayAgainAction(Consumer)`
   - State of the system: mock view; action capturing its `Locale`; `Locale.forLanguageTag("es")` controller
   - Expected output: action invoked once with `Locale.forLanguageTag("es")`
@@ -146,12 +144,12 @@ for a real `WelcomeView`.
 - Exceptions: `HeadlessException` with no display — tests guard with `assumeTrue`
 
 ### Step 4: Test Cases
-- **TC3: Show_HidesMainView** ( :white_check_mark: )
+- **TC6: Show_HidesMainView** ( :white_check_mark: )
   - Method(s) under test: `show()`
   - State of the system: controller constructed with a non-null `mainView`; display available; `show()` called
   - Expected output: `mainView.isVisible()` is `false`
 
-- **TC4: Show_DisplaysEndGameView** ( :white_check_mark: )
+- **TC7: Show_DisplaysEndGameView** ( :white_check_mark: )
   - Method(s) under test: `show()`
   - State of the system: controller constructed; display available; `show()` called
   - Expected output: `getEndGameView().isVisible()` is `true`

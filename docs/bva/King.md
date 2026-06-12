@@ -56,37 +56,37 @@
 
 ### Step 4: Test Cases (Catalog-aligned Each-Choice Strategy)
 
-- **TC3: Copy a white king and check its type** ( :white_check_mark: )
+- **TC4: Copy a white king and check its type** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king
   - **Expected output**: returned piece type is `KING`
 
-- **TC4: Copy a black king and check its type** ( :white_check_mark: )
+- **TC5: Copy a black king and check its type** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece type is `KING`
 
-- **TC5: Copy a black king and check its color** ( :white_check_mark: )
+- **TC6: Copy a black king and check its color** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece color is `BLACK`
 
-- **TC6: Copy a black king and check jump capability** ( :white_check_mark: )
+- **TC7: Copy a black king and check jump capability** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece cannot jump
 
-- **TC7: Copy a black king and check reference equality** ( :white_check_mark: )
+- **TC8: Copy a black king and check reference equality** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing black king
   - **Expected output**: returned piece is a different object from the original
 
-- **TC8: MakeCopy_OnUnmovedWhiteKing_CopyHasMovedIsFalse** ( :white_check_mark: )
+- **TC9: MakeCopy_OnUnmovedWhiteKing_CopyHasMovedIsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king that has not moved
   - **Expected output**: returned piece reports `hasMoved()` as `false`
 
-- **TC9: MakeCopy_OnMovedWhiteKing_CopyHasMovedIsTrue** ( :white_check_mark: )
+- **TC10: MakeCopy_OnMovedWhiteKing_CopyHasMovedIsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `makeCopy()`
   - **State of the system**: an existing white king on which `changeToMoved()` has been called
   - **Expected output**: returned piece reports `hasMoved()` as `true`

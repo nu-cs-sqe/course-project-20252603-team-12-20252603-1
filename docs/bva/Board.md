@@ -104,17 +104,17 @@
   - **State of the system**: initializer returns a non-NONE piece type at a row 4–7 position; board is constructed
   - **Expected output**: piece at that position has color WHITE
 
-- **TC94: Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack** ( :white_check_mark: )
+- **TC11: Constructor_WhenInitializerHasNonNoneTypeAtRowThree_PieceColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at row 3 (max of BLACK sub-range [0, 3]); all other positions NONE; board is constructed
   - **Expected output**: piece at `[3][0]` has color BLACK
 
-- **TC95: Constructor_WhenInitializerHasNonNoneTypeAtRowFour_PieceColorIsWhite** ( :white_check_mark: )
+- **TC12: Constructor_WhenInitializerHasNonNoneTypeAtRowFour_PieceColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece type at row 4 (min of WHITE sub-range [4, 7]); all other positions NONE; board is constructed
   - **Expected output**: piece at `[4][0]` has color WHITE
 
-- **TC11: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC13: Constructor_OnNewBoard_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `Board(BoardInitializer)`, `getCurrentGameState()`
   - **State of the system**: board is freshly constructed
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
@@ -171,68 +171,68 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC12: `Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook`** ( :white_check_mark: )
+- **TC14: `Constructor_WhenPieceArrayHasRookAtPosition_PieceTypeIsRook`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getType()` equals `ROOK`
-  - **Note**: TC13–TC18 and TC22 are covered by this test case as a parameterized test
+  - **Note**: TC15–TC20 and TC24 are covered by this test case as a parameterized test
 
-- **TC13: `Constructor_WhenPieceArrayHasKnightAtPosition_PieceTypeIsKnight`** ( :white_check_mark: )
+- **TC15: `Constructor_WhenPieceArrayHasKnightAtPosition_PieceTypeIsKnight`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][1].getType()` equals `KNIGHT`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC14: `Constructor_WhenPieceArrayHasBishopAtPosition_PieceTypeIsBishop`** ( :white_check_mark: )
+- **TC16: `Constructor_WhenPieceArrayHasBishopAtPosition_PieceTypeIsBishop`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][2].getType()` equals `BISHOP`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC15: `Constructor_WhenPieceArrayHasQueenAtPosition_PieceTypeIsQueen`** ( :white_check_mark: )
+- **TC17: `Constructor_WhenPieceArrayHasQueenAtPosition_PieceTypeIsQueen`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][3].getType()` equals `QUEEN`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC16: `Constructor_WhenPieceArrayHasKingAtPosition_PieceTypeIsKing`** ( :white_check_mark: )
+- **TC18: `Constructor_WhenPieceArrayHasKingAtPosition_PieceTypeIsKing`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `King(BLACK)` at `[0][4]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][4].getType()` equals `KING`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC17: `Constructor_WhenPieceArrayHasPawnAtPosition_PieceTypeIsPawn`** ( :white_check_mark: )
+- **TC19: `Constructor_WhenPieceArrayHasPawnAtPosition_PieceTypeIsPawn`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[1][0].getType()` equals `PAWN`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC18: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`** ( :white_check_mark: )
+- **TC20: `Constructor_WhenPieceArrayHasNonePieceAtPosition_PieceTypeIsNone`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `NonePiece` at `[7][0]`; all other positions `NonePiece`; board is constructed — covers row 7 (max)
   - **Expected output**: `getSnapshot()[7][0].getType()` equals `NONE`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
-- **TC19: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`** ( :white_check_mark: )
+- **TC21: `Constructor_WhenPieceArrayHasBlackPieceAtPosition_PieceColorIsBlack`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[7][0]` (bottom half, which `Board(BoardInitializer)` would assign `WHITE`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[7][0].getColor()` equals `BLACK`
 
-- **TC20: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`** ( :white_check_mark: )
+- **TC22: `Constructor_WhenPieceArrayHasWhitePieceAtPosition_PieceColorIsWhite`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(WHITE)` at `[0][0]` (top half, which `Board(BoardInitializer)` would assign `BLACK`); all other positions `NonePiece`; board is constructed
   - **Expected output**: `getSnapshot()[0][0].getColor()` equals `WHITE`
 
-- **TC21: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`** ( :white_check_mark: )
+- **TC23: `Constructor_WithPieceArray_OnNewBoard_GameStateIsWhiteTurn`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: board constructed with an all-`NonePiece` `Piece[][]`
   - **Expected output**: `getCurrentGameState()` returns `WHITE_TURN`
 
-- **TC22: `Constructor_WhenPieceArrayHasPieceAtRowZeroColSeven_PieceTypeMatches`** ( :white_check_mark: )
+- **TC24: `Constructor_WhenPieceArrayHasPieceAtRowZeroColSeven_PieceTypeMatches`** ( :white_check_mark: )
   - **Method(s) under test**: `Board(Piece[][])`
   - **State of the system**: `Piece[][]` with a `Rook(BLACK)` at `[0][7]`; all other positions `NonePiece`; board is constructed — covers col 7 (max)
   - **Expected output**: `getSnapshot()[0][7].getType()` equals `ROOK`
-  - **Covered by**: TC12 (parameterized test)
+  - **Covered by**: TC14 (parameterized test)
 
 ---
 
@@ -266,31 +266,31 @@
 
 `createPiece` is private; all test cases are exercised indirectly through `Board(BoardInitializer)`.
 
-- **TC23: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :white_check_mark: )
+- **TC25: CreatePiece_WithRookAndBlack_ReturnsPieceWithTypeRookAndColorBlack** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns ROOK at a top-half position
   - **Expected output**: piece has type ROOK and color BLACK
   - **Covered by**: TC2 + TC9
 
-- **TC24: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :white_check_mark: )
+- **TC26: CreatePiece_WithKnight_ReturnsPieceWithTypeKnight** ( :white_check_mark: )
   - **Covered by**: TC3
 
-- **TC25: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :white_check_mark: )
+- **TC27: CreatePiece_WithBishop_ReturnsPieceWithTypeBishop** ( :white_check_mark: )
   - **Covered by**: TC4
 
-- **TC26: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :white_check_mark: )
+- **TC28: CreatePiece_WithQueen_ReturnsPieceWithTypeQueen** ( :white_check_mark: )
   - **Covered by**: TC5
 
-- **TC27: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :white_check_mark: )
+- **TC29: CreatePiece_WithKing_ReturnsPieceWithTypeKing** ( :white_check_mark: )
   - **Covered by**: TC6
 
-- **TC28: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :white_check_mark: )
+- **TC30: CreatePiece_WithPawn_ReturnsPieceWithTypePawn** ( :white_check_mark: )
   - **Covered by**: TC7
 
-- **TC29: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
+- **TC31: CreatePiece_WithNone_ReturnsPieceWithTypeNone** ( :white_check_mark: )
   - **Covered by**: TC8
 
-- **TC30: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :white_check_mark: )
+- **TC32: CreatePiece_WithWhite_ReturnsPieceWithColorWhite** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)` via `Board(BoardInitializer)`
   - **State of the system**: initializer returns a non-NONE piece at a bottom-half position
   - **Expected output**: piece has color WHITE
@@ -325,27 +325,27 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC31: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
+- **TC33: GetSnapshot_ReturnedOuterArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the returned `Piece[][]` reference is not the same object as a second call to `getSnapshot()`
 
-- **TC32: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
+- **TC34: GetSnapshot_ReturnedRowArrayIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[0]` is not the same array reference as a second `getSnapshot()[0]`
 
-- **TC33: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
+- **TC35: GetSnapshot_ReturnedPieceIsDifferentObjectWithSameContents** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: the Piece object at `getSnapshot()[0][0]` is not the same reference as the Piece at a second `getSnapshot()[0][0]`, but has the same type and color
 
-- **TC34: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
+- **TC36: GetSnapshot_SnapshotContentMatchesBoardState** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: `getSnapshot()[7][4]` has type `KING` and color `WHITE`
 
-- **TC35: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
+- **TC37: GetSnapshot_ModifySnapshotDoesNotAffectBoard** ( :white_check_mark: )
   - **Method(s) under test**: `getSnapshot()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; set `getSnapshot()[7][0]` to `null`
   - **Expected output**: a subsequent `getSnapshot()[7][0]` still has type `ROOK` and color `WHITE`
@@ -386,17 +386,17 @@
 
 ### Step 4: Test Cases
 
-- **TC50: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
+- **TC38: GetLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMoves(Location)`
   - **State of the system**: board with `NonePiece` at `(3,3)`; no other pieces
   - **Expected output**: returned list size is `0`
 
-- **TC51: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :white_check_mark: )
+- **TC39: GetLegalMoves_OnCenterKnight_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMoves(Location)`
   - **State of the system**: lone white knight at `(4,4)` on otherwise empty board
   - **Expected output**: returned list size is `8`
 
-- **TC52: GetLegalMoves_WhenCalled_MatchesMoveGenerator** ( :white_check_mark: )
+- **TC40: GetLegalMoves_WhenCalled_MatchesMoveGenerator** ( :white_check_mark: )
   - **Method(s) under test**: `getLegalMoves(Location)`
   - **State of the system**: board with white pawn at `(5,3)` and `enPassantTarget` set
   - **Expected output**: returned list size matches `new MoveGenerator(snapshot, enPassantTarget).generateLegalMoves(from)`
@@ -426,28 +426,28 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC36: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
+- **TC41: GetCurrentGameState_OnNewBoard_ReturnsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`
   - **Expected output**: returns `WHITE_TURN`
-  - **Covered by**: TC11
+  - **Covered by**: TC13
 
-- **TC37: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
+- **TC42: GetCurrentGameState_AfterSwitchTurn_ReturnsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `switchTurn()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` called once
   - **Expected output**: returns `BLACK_TURN`
 
-- **TC65: GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin** ( :white_check_mark: )
+- **TC43: GetCurrentGameState_AfterWhiteCheckmate_ReturnsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
   - **State of the system**: one-move checkmate position; white's move leaves black with no legal moves and in check
   - **Expected output**: returns `WHITE_WIN`
 
-- **TC66: GetCurrentGameState_AfterBlackCheckmate_ReturnsBlackWin** ( :white_check_mark: )
+- **TC44: GetCurrentGameState_AfterBlackCheckmate_ReturnsBlackWin** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
   - **State of the system**: one-move checkmate position; black's move leaves white with no legal moves and in check
   - **Expected output**: returns `BLACK_WIN`
 
-- **TC67: GetCurrentGameState_AfterStalemate_ReturnsDraw** ( :white_check_mark: )
+- **TC45: GetCurrentGameState_AfterStalemate_ReturnsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `getCurrentGameState()`, `makeMove()`
   - **State of the system**: white's move leaves black with no legal moves and not in check
   - **Expected output**: returns `DRAW`
@@ -480,13 +480,13 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC38: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC46: SwitchTurn_FromWhiteTurn_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `currentGameState` is `WHITE_TURN`
-  - **Covered by**: TC37
+  - **Covered by**: TC42
   - **Expected output**: after `switchTurn()`, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC39: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC47: SwitchTurn_FromBlackTurn_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `switchTurn()`, `getCurrentGameState()`
   - **State of the system**: a board constructed with `StandardBoardInitializer`; `switchTurn()` has been called once (state is `BLACK_TURN`)
   - **Expected output**: after a second `switchTurn()`, `getCurrentGameState()` returns `WHITE_TURN`
@@ -532,59 +532,59 @@
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC40: GetPieceAt_WhenBoardHasRookAtPosition_PieceTypeMatches** ( :white_check_mark: )
+- **TC48: GetPieceAt_WhenBoardHasRookAtPosition_PieceTypeMatches** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 0).getType()` equals `ROOK` — covers rank 0 (min), file 0 (min)
-  - **Note**: TC41–TC46 are covered by this test case as a parameterized test
+  - **Note**: TC49–TC54 are covered by this test case as a parameterized test
 
-- **TC41: GetPieceAt_WhenBoardHasKnightAtPosition_PieceTypeIsKnight** ( :white_check_mark: )
+- **TC49: GetPieceAt_WhenBoardHasKnightAtPosition_PieceTypeIsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Knight(BLACK)` at `[0][1]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 1).getType()` equals `KNIGHT`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC42: GetPieceAt_WhenBoardHasBishopAtPosition_PieceTypeIsBishop** ( :white_check_mark: )
+- **TC50: GetPieceAt_WhenBoardHasBishopAtPosition_PieceTypeIsBishop** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Bishop(BLACK)` at `[0][2]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 2).getType()` equals `BISHOP`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC43: GetPieceAt_WhenBoardHasQueenAtPosition_PieceTypeIsQueen** ( :white_check_mark: )
+- **TC51: GetPieceAt_WhenBoardHasQueenAtPosition_PieceTypeIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Queen(BLACK)` at `[0][3]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 3).getType()` equals `QUEEN`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC44: GetPieceAt_WhenBoardHasKingAtPosition_PieceTypeIsKing** ( :white_check_mark: )
+- **TC52: GetPieceAt_WhenBoardHasKingAtPosition_PieceTypeIsKing** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `King(BLACK)` at `[0][4]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 4).getType()` equals `KING`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC45: GetPieceAt_WhenBoardHasPawnAtPosition_PieceTypeIsPawn** ( :white_check_mark: )
+- **TC53: GetPieceAt_WhenBoardHasPawnAtPosition_PieceTypeIsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Pawn(BLACK)` at `[1][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(1, 0).getType()` equals `PAWN`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC46: GetPieceAt_WhenBoardHasNonePieceAtPosition_PieceTypeIsNone** ( :white_check_mark: )
+- **TC54: GetPieceAt_WhenBoardHasNonePieceAtPosition_PieceTypeIsNone** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `NonePiece` at `[7][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(7, 0).getType()` equals `NONE`
-  - **Covered by**: TC40 (parameterized test)
+  - **Covered by**: TC48 (parameterized test)
 
-- **TC47: GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack** ( :white_check_mark: )
+- **TC55: GetPieceAt_AtRankZeroFileZero_PieceColorIsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(0, 0).getColor()` equals `BLACK`
 
-- **TC48: GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite** ( :white_check_mark: )
+- **TC56: GetPieceAt_AtRankSevenFileSeven_PieceColorIsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(WHITE)` at `[7][7]`; all other positions `NonePiece`
   - **Expected output**: `getPieceAt(7, 7).getColor()` equals `WHITE` — covers rank 7 (max), file 7 (max)
 
-- **TC49: GetPieceAt_ReturnedPieceIsDifferentObject** ( :white_check_mark: )
+- **TC57: GetPieceAt_ReturnedPieceIsDifferentObject** ( :white_check_mark: )
   - **Method(s) under test**: `getPieceAt(int rank, int file)`
   - **State of the system**: board constructed with `Rook(BLACK)` at `[0][0]`; `getPieceAt(0, 0)` called twice
   - **Expected output**: the two returned `Piece` references are not the same object, but have equal type and color
@@ -649,73 +649,73 @@ Scope: apply a **normal** move to internal board state, update `halfMoveClock`, 
 
 ### Step 4: Test Cases
 
-- **TC53: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
+- **TC58: MakeMove_OnNormalMove_PieceAtDestination** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4)` returns type `PAWN` and color `WHITE`
 
-- **TC96: MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved** ( :white_check_mark: )
+- **TC59: MakeMove_OnNormalMove_MovingPieceIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,6)`, empty `(4,5)`, `WHITE_TURN`
   - **Expected output**: after move, `getPieceAt(5, 4).hasMoved()` returns `true`
 
-- **TC54: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
+- **TC60: MakeMove_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn moves from `(4,6)` to `(4,5)`
   - **Expected output**: after move, `getPieceAt(6, 4)` returns type `NONE`
 
-- **TC55: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC61: MakeMove_AfterWhiteMove_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white pawn normal move on empty board; game state is `WHITE_TURN`
   - **Expected output**: after move, `getCurrentGameState()` returns `BLACK_TURN`
 
-- **TC56: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC62: MakeMove_AfterBlackMove_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: black pawn normal move on empty board; game state is `BLACK_TURN` (via prior `switchTurn()`)
   - **Expected output**: after move, `getCurrentGameState()` returns `WHITE_TURN`
 
-- **TC68: MakeMove_WhenWhiteCausesCheckmate_GameStateIsWhiteWin** ( :white_check_mark: )
+- **TC63: MakeMove_WhenWhiteCausesCheckmate_GameStateIsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white's NORMAL move leaves black in check with no legal moves
   - **Expected output**: `getCurrentGameState()` returns `WHITE_WIN`
 
-- **TC69: MakeMove_WhenBlackCausesCheckmate_GameStateIsBlackWin** ( :white_check_mark: )
+- **TC64: MakeMove_WhenBlackCausesCheckmate_GameStateIsBlackWin** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: game state is `BLACK_TURN`; black's NORMAL move leaves white in check with no legal moves
   - **Expected output**: `getCurrentGameState()` returns `BLACK_WIN`
 
-- **TC70: MakeMove_WhenMoveCausesStalemate_GameStateIsDraw** ( :white_check_mark: )
+- **TC65: MakeMove_WhenMoveCausesStalemate_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white's NORMAL move leaves black with no legal moves and not in check
   - **Expected output**: `getCurrentGameState()` returns `DRAW`
 
-- **TC71: MakeMove_WhenOnlyKingsRemain_GameStateIsDraw** ( :white_check_mark: )
+- **TC66: MakeMove_WhenOnlyKingsRemain_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`
   - **State of the system**: white king and black king only; white knight captures the last non-king piece
   - **Expected output**: `getCurrentGameState()` returns `DRAW`
 
-- **TC72: MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw** ( :white_check_mark: )
+- **TC67: MakeMove_WhenHalfMoveClockReachesLimit_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getCurrentGameState()`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 99; one non-pawn non-capture NORMAL move made
   - **Expected output**: `getHalfMoveClock()` returns 100 AND `getCurrentGameState()` returns `DRAW`
 
-- **TC73: MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements** ( :white_check_mark: )
+- **TC68: MakeMove_OnNonPawnNonCaptureMove_HalfMoveClockIncrements** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 0; white knight makes a NORMAL move to an empty square
   - **Expected output**: `getHalfMoveClock()` returns 1
-  - **Note**: TC74–TC75 are covered by this test case as a parameterized test
+  - **Note**: TC69–TC70 are covered by this test case as a parameterized test
 
-- **TC74: MakeMove_OnPawnMove_HalfMoveClockResets** ( :white_check_mark: )
+- **TC69: MakeMove_OnPawnMove_HalfMoveClockResets** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 5; white pawn makes a one-step NORMAL move
   - **Expected output**: `getHalfMoveClock()` returns 0
-  - **Covered by**: TC73 (parameterized test)
+  - **Covered by**: TC68 (parameterized test)
 
-- **TC75: MakeMove_OnCapture_HalfMoveClockResets** ( :white_check_mark: )
+- **TC70: MakeMove_OnCapture_HalfMoveClockResets** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getHalfMoveClock()`
   - **State of the system**: `halfMoveClock` set to 5; white knight captures a black pawn
   - **Expected output**: `getHalfMoveClock()` returns 0
-  - **Covered by**: TC73 (parameterized test)
+  - **Covered by**: TC68 (parameterized test)
 
 ---
 
@@ -728,14 +728,13 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 ### Step 1: Equivalence Classes
 
 - **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`
-- **Input: initial file of the queenside rook** — which file the unmoved rook occupies before queenside castling
+- **Input: castling rook file** — carried by the castling move's `to` square (king-takes-rook encoding)
 - **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
 - **Output: hasMoved flag on capturing pawn (EN_PASSANT)** — the pawn that performed the capture is marked as having moved
 - **Output: castling effect** — king and rook relocate to castling destination files
 - **Output: hasMoved flag on king after castling** — the king is marked as having moved
 - **Output: hasMoved flag on rook after castling** — the rook is marked as having moved
 - **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
-- **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
 - **Output: promotion execution** — pawn replaced by promoted piece type at the destination
 
 ### Step 2: Data Types (from BVA Catalog)
@@ -743,13 +742,12 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: move type | Cases | EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
-| Input: queenside rook initial file | Interval | [0, kingFile−1] = [0, 3] (assuming standard king at file 4) |
+| Input: castling rook file (`move.getTo().getX()`) | Interval | queenside [0, kingFile−1] = [0, 3]; kingside [kingFile+1, 7] |
 | Output: piece positions | Cases | expected squares occupied/empty |
 | Output: hasMoved on capturing pawn (EN_PASSANT) | Boolean | true |
 | Output: hasMoved on king after castling | Boolean | true |
 | Output: hasMoved on rook after castling | Boolean | true |
 | Output: enPassantTarget | Cases | target set, no target |
-| Output: invalid castling | Cases | exception thrown vs successful relocation |
 | Output: promotion | Cases | promoted piece at destination |
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -768,89 +766,85 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 - true (only achievable post-condition; `changeToMoved()` is always called)
 - false is CAN'T SET as a post-condition of these move types
 
-**queenside rook initial file — Interval [0, 3] (Searching: using position of match):**
-- 0 (min — rook found in the first searched position; tested by TC60)
-- 3 (max = kingFile−1 — rook found in the last searched position; not yet tested)
+**castling rook file (from `move.getTo()`) — Interval:**
+- queenside: 0 (min; TC77) and 3 (max = kingFile−1; TC80 — rook already on its destination)
+- kingside: 7 (max; TC74) and 5 (min = kingFile+1, Chess960 adjacent swap; TC81)
 
 **enPassantTarget — Cases:**
 - target set
 - no target
-
-**invalid castling — Cases:**
-- exception thrown
-- successful relocation
 
 **promotion — Cases:**
 - promoted piece at destination
 
 ### Step 4: Test Cases
 
-- **TC57: MakeMove_OnEnPassantMove_DestinationHasMovingPawn** ( :white_check_mark: )
+- **TC71: MakeMove_OnEnPassantMove_DestinationHasMovingPawn** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
   - **Expected output**: destination `(5,2)` has a white pawn
 
-- **TC58: MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty** ( :white_check_mark: )
+- **TC72: MakeMove_OnEnPassantMove_CapturedPawnSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: same as TC57
+  - **State of the system**: same as TC71
   - **Expected output**: captured pawn square `(5,3)` is `NONE`
 
-- **TC97: MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved** ( :white_check_mark: )
+- **TC73: MakeMove_OnEnPassantMove_MovingPawnIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: same as TC57 — white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
+  - **State of the system**: same as TC71 — white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
   - **Expected output**: `getPieceAt(5, 2).hasMoved()` returns `true`
 
-- **TC59: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC74: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: king at `(6,7)` and rook at `(5,7)`
 
-- **TC98: MakeMove_OnKingsideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
+- **TC75: MakeMove_OnKingsideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: `getPieceAt(7, 6).hasMoved()` returns `true`
 
-- **TC99: MakeMove_OnKingsideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
+- **TC76: MakeMove_OnKingsideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: `getPieceAt(7, 5).hasMoved()` returns `true`
 
-- **TC60: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC77: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)`
 
-- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
+- **TC78: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: `getPieceAt(7, 2).hasMoved()` returns `true`
 
-- **TC101: MakeMove_OnQueensideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
+- **TC79: MakeMove_OnQueensideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: `getPieceAt(7, 3).hasMoved()` returns `true`
 
-- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC80: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of [0, 3] queenside interval — rook in the last searched position), move type `CASTLING_QUEENSIDE`
-  - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook's file equals its destination; it effectively stays in place)
+  - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of queenside interval; rook already on its destination), move type `CASTLING_QUEENSIDE` to rook square `(3,7)`
+  - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook stays in place)
 
-- **TC61: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
+- **TC81: MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :white_check_mark: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(5,7)`, white rook `(6,7)` (Chess960 adjacent; rook file 5+1 = min of kingside interval), move type `CASTLING_KINGSIDE` to rook square `(6,7)`
+  - **Expected output**: king at `(6,7)` and rook at `(5,7)`
+
+- **TC82: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
   - **State of the system**: only white pawn at `(4,6)`; white pawn double-steps to `(4,4)`
   - **Expected output**: `getEnPassantTarget()` is present at `(4,5)` (passed-over square for a later en-passant capture)
 
-- **TC62: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
+- **TC83: MakeMove_OnNonDoubleStepMove_ClearsEnPassantTarget** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getLegalMoves(Location)`
   - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
   - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
 
-- **TC63: MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`
-  - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
-  - **Expected output**: `IllegalStateException`
-
-- **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :white_check_mark: )
+- **TC84: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white pawn at `(4,1)`, move type `PROMOTION` to `(4,0)` with no promotion type specified
   - **Expected output**: `getPieceAt(0, 4).getType()` equals `QUEEN`
@@ -912,49 +906,49 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC76: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsWhite_GameStateIsWhiteWin** ( :white_check_mark: )
+- **TC85: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsWhite_GameStateIsWhiteWin** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where black has no legal moves and is in check; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `WHITE_WIN`
-  - **Note**: TC77 is covered by this test case as a parameterized test
+  - **Note**: TC86 is covered by this test case as a parameterized test
 
-- **TC77: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsBlack_GameStateIsBlackWin** ( :white_check_mark: )
+- **TC86: UpdateGameState_WhenNextHasNoMovesAndIsInCheckAndJustMovedIsBlack_GameStateIsBlackWin** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where white has no legal moves and is in check; call `updateGameState(BLACK)`
   - **Expected output**: `currentGameState` = `BLACK_WIN`
-  - **Covered by**: TC76 (parameterized test)
+  - **Covered by**: TC85 (parameterized test)
 
-- **TC78: UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw** ( :white_check_mark: )
+- **TC87: UpdateGameState_WhenNextHasNoMovesAndNotInCheck_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board where black has no legal moves and is not in check; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
 
-- **TC79: UpdateGameState_WhenInsufficientMaterial_GameStateIsDraw** ( :white_check_mark: )
+- **TC88: UpdateGameState_WhenInsufficientMaterial_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board has only two kings and black has legal moves; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
 
-- **TC80: UpdateGameState_WhenHalfMoveClockAtLimit_GameStateIsDraw** ( :white_check_mark: )
+- **TC89: UpdateGameState_WhenHalfMoveClockAtLimit_GameStateIsDraw** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for next player; `halfMoveClock` = 100; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `DRAW`
 
-- **TC81: UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn** ( :white_check_mark: )
+- **TC90: UpdateGameState_WhenHalfMoveClockBelowLimit_GameStateIsNextTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves; `halfMoveClock` = 99; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `BLACK_TURN`
 
-- **TC82: UpdateGameState_WhenJustMovedWhiteAndGameContinues_GameStateIsBlackTurn** ( :white_check_mark: )
+- **TC91: UpdateGameState_WhenJustMovedWhiteAndGameContinues_GameStateIsBlackTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for black; `halfMoveClock` = 0; not insufficient material; call `updateGameState(WHITE)`
   - **Expected output**: `currentGameState` = `BLACK_TURN`
-  - **Note**: TC83 is covered by this test case as a parameterized test
+  - **Note**: TC92 is covered by this test case as a parameterized test
 
-- **TC83: UpdateGameState_WhenJustMovedBlackAndGameContinues_GameStateIsWhiteTurn** ( :white_check_mark: )
+- **TC92: UpdateGameState_WhenJustMovedBlackAndGameContinues_GameStateIsWhiteTurn** ( :white_check_mark: )
   - **Method(s) under test**: `updateGameState(PieceColor)`
   - **State of the system**: board with legal moves for white; `halfMoveClock` = 1; not insufficient material; call `updateGameState(BLACK)`
   - **Expected output**: `currentGameState` = `WHITE_TURN`
-  - **Covered by**: TC82 (parameterized test)
+  - **Covered by**: TC91 (parameterized test)
 
 ---
 
@@ -993,35 +987,35 @@ Logic: returns `true` iff `!hasMajorOrPawn && nonKingCount <= 1`.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC84: IsInsufficientMaterial_WithOnlyKings_ReturnsTrue** ( :white_check_mark: )
+- **TC93: IsInsufficientMaterial_WithOnlyKings_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: board with one white king and one black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
-  - **Note**: TC85–TC88 are covered by this test case as a parameterized test
+  - **Note**: TC94–TC97 are covered by this test case as a parameterized test
 
-- **TC85: IsInsufficientMaterial_WithKingAndBishopVsKing_ReturnsTrue** ( :white_check_mark: )
+- **TC94: IsInsufficientMaterial_WithKingAndBishopVsKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white bishop, black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
-  - **Covered by**: TC84 (parameterized test)
+  - **Covered by**: TC93 (parameterized test)
 
-- **TC86: IsInsufficientMaterial_WithKingAndKnightVsKing_ReturnsTrue** ( :white_check_mark: )
+- **TC95: IsInsufficientMaterial_WithKingAndKnightVsKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white knight, black king
   - **Expected output**: `isInsufficientMaterial()` returns `true`
-  - **Covered by**: TC84 (parameterized test)
+  - **Covered by**: TC93 (parameterized test)
 
-- **TC87: IsInsufficientMaterial_WithKingAndPawnVsKing_ReturnsFalse** ( :white_check_mark: )
+- **TC96: IsInsufficientMaterial_WithKingAndPawnVsKing_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white pawn, black king
   - **Expected output**: `isInsufficientMaterial()` returns `false`
-  - **Covered by**: TC84 (parameterized test)
+  - **Covered by**: TC93 (parameterized test)
 
-- **TC88: IsInsufficientMaterial_WithKingAndTwoBishopsVsKing_ReturnsFalse** ( :white_check_mark: )
+- **TC97: IsInsufficientMaterial_WithKingAndTwoBishopsVsKing_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInsufficientMaterial()`
   - **State of the system**: white king, white bishop, black bishop, black king
   - **Expected output**: `isInsufficientMaterial()` returns `false`
-  - **Covered by**: TC84 (parameterized test)
+  - **Covered by**: TC93 (parameterized test)
 
 ---
 
@@ -1057,23 +1051,23 @@ Logic: returns `true` iff `!hasMajorOrPawn && nonKingCount <= 1`.
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC89: IsCapture_OnEnPassantMove_ReturnsTrue** ( :white_check_mark: )
+- **TC98: IsCapture_OnEnPassantMove_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white pawn at `(4,3)`, black pawn at `(5,3)`; EN_PASSANT move from `(4,3)` to `(5,2)`
   - **Expected output**: `isCapture(move)` returns `true`
-  - **Note**: TC90–TC91 are covered by this test case as a parameterized test
+  - **Note**: TC99–TC100 are covered by this test case as a parameterized test
 
-- **TC90: IsCapture_OnNormalMoveToEmptySquare_ReturnsFalse** ( :white_check_mark: )
+- **TC99: IsCapture_OnNormalMoveToEmptySquare_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white pawn at `(4,6)`, empty destination `(4,5)`; NORMAL move
   - **Expected output**: `isCapture(move)` returns `false`
-  - **Covered by**: TC89 (parameterized test)
+  - **Covered by**: TC98 (parameterized test)
 
-- **TC91: IsCapture_OnNormalMoveToOccupiedSquare_ReturnsTrue** ( :white_check_mark: )
+- **TC100: IsCapture_OnNormalMoveToOccupiedSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isCapture(Move)`
   - **State of the system**: white knight at `(3,5)`, black pawn at `(4,3)`; NORMAL move from `(3,5)` to `(4,3)`
   - **Expected output**: `isCapture(move)` returns `true`
-  - **Covered by**: TC89 (parameterized test)
+  - **Covered by**: TC98 (parameterized test)
 
 ---
 
@@ -1105,14 +1099,14 @@ Terminal states are impossible inputs: `currentPlayerColor()` is only called at 
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **TC92: CurrentPlayerColor_WhenWhiteTurn_ReturnsWhite** ( :white_check_mark: )
+- **TC101: CurrentPlayerColor_WhenWhiteTurn_ReturnsWhite** ( :white_check_mark: )
   - **Method(s) under test**: `currentPlayerColor()`
   - **State of the system**: board freshly constructed; state is `WHITE_TURN`
   - **Expected output**: `currentPlayerColor()` returns `WHITE`
-  - **Note**: TC93 is covered by this test case as a parameterized test
+  - **Note**: TC102 is covered by this test case as a parameterized test
 
-- **TC93: CurrentPlayerColor_WhenBlackTurn_ReturnsBlack** ( :white_check_mark: )
+- **TC102: CurrentPlayerColor_WhenBlackTurn_ReturnsBlack** ( :white_check_mark: )
   - **Method(s) under test**: `currentPlayerColor()`
   - **State of the system**: board with state set to `BLACK_TURN` via `switchTurn()`
   - **Expected output**: `currentPlayerColor()` returns `BLACK`
-  - **Covered by**: TC92 (parameterized test)
+  - **Covered by**: TC101 (parameterized test)

@@ -477,7 +477,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
@@ -499,7 +499,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
@@ -515,25 +515,13 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][7] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+        Move move = new Move(new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
 
         board.makeMove(move);
 
         assertTrue(board.getPieceAt(7, 5).hasMoved());
     }
 
-    @Test
-    void MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException() {
-        Piece[][] layout = new Piece[8][8];
-        for (Piece[] row : layout) {
-            Arrays.fill(row, new NonePiece());
-        }
-        layout[7][4] = new King(PieceColor.WHITE);
-        Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
-
-        assertThrows(IllegalStateException.class, () -> board.makeMove(move));
-    }
 
     @Test
     void MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen() {
@@ -559,7 +547,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -581,7 +569,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -597,7 +585,7 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][0] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
@@ -613,12 +601,29 @@ class BoardTest {
         layout[7][4] = new King(PieceColor.WHITE);
         layout[7][3] = new Rook(PieceColor.WHITE);
         Board board = new Board(layout);
-        Move move = new Move(new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+        Move move = new Move(new Location(4, 7), new Location(3, 7), MoveType.CASTLING_QUEENSIDE);
 
         board.makeMove(move);
 
         assertEquals(PieceType.KING, board.getPieceAt(7, 2).getType());
         assertEquals(PieceType.ROOK, board.getPieceAt(7, 3).getType());
+    }
+
+    @Test
+    void MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][5] = new King(PieceColor.WHITE);
+        layout[7][6] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(5, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        assertEquals(PieceType.KING, board.getPieceAt(7, 6).getType());
+        assertEquals(PieceType.ROOK, board.getPieceAt(7, 5).getType());
     }
 
     @Test

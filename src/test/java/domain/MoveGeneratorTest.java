@@ -151,6 +151,19 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void IsInCheck_WhenSameColorPawnOnPawnAttackSquare_ReturnsFalse() {
+        Piece[][] board = emptyBoard();
+        board[3][4] = new King(PieceColor.WHITE);
+        board[2][3] = new Pawn(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = moveGenerator.isInCheck(PieceColor.WHITE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
@@ -541,6 +554,20 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnKnightFacingEnemy_IncludesCaptureDestination() {
+        Piece[][] board = emptyBoard();
+        board[4][4] = new Knight(PieceColor.WHITE);
+        board[6][5] = new Pawn(PieceColor.BLACK);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveTo(
+                moveGenerator.generateLegalMoves(new Location(4, 4)), 5, 6);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue() {
         Piece[][] board = emptyBoard();
         board[4][4] = new King(PieceColor.WHITE);
@@ -673,21 +700,6 @@ class MoveGeneratorTest {
     }
 
     @Test
-    void GenerateLegalMoves_OnUnmovedQueensideRookAtFileZero_FindsRookAtFileThree() {
-        Piece[][] board = emptyBoard();
-        board[7][4] = new King(PieceColor.WHITE);
-        board[7][0] = new Rook(PieceColor.WHITE);
-        Move move = new Move(
-                new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
-
-        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
-
-        PieceType expected = PieceType.ROOK;
-        PieceType actual = result[7][3].getType();
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void CreatePiece_OnRookType_ReturnsRook() {
         PieceType expected = PieceType.ROOK;
         PieceType actual = MoveGenerator.createPiece(PieceType.ROOK, PieceColor.WHITE).getType();
@@ -741,7 +753,7 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][0] = new Rook(PieceColor.WHITE);
         Move move = new Move(
-                new Location(4, 7), new Location(2, 7), MoveType.CASTLING_QUEENSIDE);
+                new Location(4, 7), new Location(0, 7), MoveType.CASTLING_QUEENSIDE);
 
         Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
 
@@ -760,7 +772,45 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][7] = new Rook(PieceColor.WHITE);
         Move move = new Move(
-                new Location(4, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+                new Location(4, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = result[7][6].getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = result[7][5].getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnKingAlreadyOnDestination_KingStaysRookMoves() {
+        Piece[][] board = emptyBoard();
+        board[7][6] = new King(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(6, 7), new Location(7, 7), MoveType.CASTLING_KINGSIDE);
+
+        Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
+
+        PieceType expectedKing = PieceType.KING;
+        PieceType actualKing = result[7][6].getType();
+        assertEquals(expectedKing, actualKing);
+
+        PieceType expectedRook = PieceType.ROOK;
+        PieceType actualRook = result[7][5].getType();
+        assertEquals(expectedRook, actualRook);
+    }
+
+    @Test
+    void ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook() {
+        Piece[][] board = emptyBoard();
+        board[7][5] = new King(PieceColor.WHITE);
+        board[7][6] = new Rook(PieceColor.WHITE);
+        Move move = new Move(
+                new Location(5, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
 
         Piece[][] result = MoveGenerator.applyMoveToBoard(board, move);
 
@@ -963,7 +1013,7 @@ class MoveGeneratorTest {
         boolean expected = true;
         boolean actual = hasMoveToWithType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
-                6,
+                7,
                 7,
                 MoveType.CASTLING_KINGSIDE);
 
@@ -996,7 +1046,7 @@ class MoveGeneratorTest {
         boolean expected = true;
         boolean actual = hasMoveToWithType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
-                2,
+                0,
                 7,
                 MoveType.CASTLING_QUEENSIDE);
 
@@ -1009,6 +1059,22 @@ class MoveGeneratorTest {
         board[7][4] = new King(PieceColor.WHITE);
         board[7][7] = new Rook(PieceColor.WHITE);
         board[7][7].changeToMoved();
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][5] = new Bishop(PieceColor.WHITE);
+        board[7][7] = new Rook(PieceColor.BLACK);
         MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
 
         boolean expected = false;
@@ -1068,6 +1134,22 @@ class MoveGeneratorTest {
     }
 
     @Test
+    void GenerateLegalMoves_OnKingWithEnemyQueensideRook_ExcludesQueensideCastling() {
+        Piece[][] board = emptyBoard();
+        board[7][4] = new King(PieceColor.WHITE);
+        board[7][0] = new Rook(PieceColor.BLACK);
+        board[7][3] = new Bishop(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = false;
+        boolean actual = hasMoveType(
+                moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_QUEENSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling() {
         Piece[][] board = emptyBoard();
         board[7][4] = new King(PieceColor.WHITE);
@@ -1091,6 +1173,23 @@ class MoveGeneratorTest {
         boolean expected = false;
         boolean actual = hasMoveType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
+                MoveType.CASTLING_KINGSIDE);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare() {
+        Piece[][] board = emptyBoard();
+        board[7][5] = new King(PieceColor.WHITE);
+        board[7][6] = new Rook(PieceColor.WHITE);
+        MoveGenerator moveGenerator = new MoveGenerator(board, Optional.empty());
+
+        boolean expected = true;
+        boolean actual = hasMoveToWithType(
+                moveGenerator.generateLegalMoves(new Location(5, 7)),
+                6,
+                7,
                 MoveType.CASTLING_KINGSIDE);
 
         assertEquals(expected, actual);
