@@ -140,7 +140,7 @@ public class MoveGenerator {
         if (move.getType() == MoveType.CASTLING_KINGSIDE) {
             int rookFile = toFile;
             Piece king = copy[fromRank][fromFile];
-            Piece rook = copy[fromRank][rookFile];
+            final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
             copy[fromRank][rookFile] = new NonePiece();
             copy[fromRank][KINGSIDE_KING_DEST_FILE] = king;
@@ -150,7 +150,7 @@ public class MoveGenerator {
         if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
             int rookFile = toFile;
             Piece king = copy[fromRank][fromFile];
-            Piece rook = copy[fromRank][rookFile];
+            final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
             copy[fromRank][rookFile] = new NonePiece();
             copy[fromRank][QUEENSIDE_KING_DEST_FILE] = king;

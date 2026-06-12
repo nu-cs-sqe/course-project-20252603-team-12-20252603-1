@@ -187,7 +187,7 @@ public class Board {
     private void executeCastling(
             int rank, int kingFile, int rookFile, int kingDestFile, int rookDestFile) {
         Piece king = pieces[rank][kingFile];
-        Piece rook = pieces[rank][rookFile];
+        final Piece rook = pieces[rank][rookFile];
         pieces[rank][kingFile] = new NonePiece();
         pieces[rank][rookFile] = new NonePiece();
         king.changeToMoved();
