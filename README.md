@@ -37,6 +37,7 @@ All testable code has 100% line coverage and 100% of its mutants killed. The rem
 | `EndGameController` | The lines in `show()` open a real window, which needs a display. The default welcome-screen navigation never runs in tests because tests replace it with a mock. These uncovered lines account for all missed mutants. |
 | `BoardController` | The lines in `show()` open a real window, which needs a display. The default promotion dialog never runs in tests because tests replace it with a mock.                                                                |
 | `MoveGenerator` | 100% line coverage. 15 equivalent mutants: swapping `+`/`-` on symmetric move offsets, or `*`/`/` by ±1, produces identical behavior; the boundary mutants test values that can never occur.                           |
+
 ## Acknowledgements
  - Dr Yiji Zhang
  - PM Eiko Reisz
