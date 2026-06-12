@@ -27,11 +27,11 @@
 **En-passant target state — Cases:**
 
 - No en-passant target (`Optional.empty()`)
-- En-passant target present at capture square (see MG-TC25–26, MG-TC32)
+- En-passant target present at capture square (see TC65–26, TC73)
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable** ( :white_check_mark: )
+- **TC1: Constructor_WithBoardAndEmptyEnPassant_GenerateLegalMovesUsable** ( :white_check_mark: )
   - **Method(s) under test**: `MoveGenerator(Piece[][], Optional<Location>)`, `generateLegalMoves(Location)`
   - **State of the system**: 8×8 board with white knight at `(4, 4)`; no en-passant target
   - **Expected output**: `generateLegalMoves(new Location(4, 4))` returns a non-null list
@@ -74,83 +74,83 @@ Scope: pseudo-legal moves for the piece at `from`, then check filtering (see che
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC2: GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
+- **TC2: GenerateLegalMoves_OnEmptySquare_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: `from` `(3, 3)` holds `NonePiece`
   - **Expected output**: returned move list size is `0`
-- **MG-TC53: GenerateLegalMoves_OnEmptySquare_ReturnsMutableEmptyList** ( :white_check_mark: )
+- **TC3: GenerateLegalMoves_OnEmptySquare_ReturnsMutableEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: `from` `(3, 3)` holds `NonePiece`
   - **Expected output**: returned list accepts an added move (mutable `ArrayList`)
-- **MG-TC3: GenerateLegalMoves_OnKnightAtCenter_ReturnsEightMoves** ( :white_check_mark: )
+- **TC4: GenerateLegalMoves_OnKnightAtCenter_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white knight at `(4, 4)`; all other squares `NonePiece`
   - **Expected output**: returned move list size is `8`
-- **MG-TC70: GenerateLegalMoves_OnKnightAtCorner_ReturnsTwoMoves** ( :white_check_mark: )
+- **TC5: GenerateLegalMoves_OnKnightAtCorner_ReturnsTwoMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(0, 0)`; board otherwise empty
   - **Expected output**: returned move list size is `2`
-- **MG-TC71: GenerateLegalMoves_OnKnightAtCorner_IncludesDestinationOneTwo** ( :white_check_mark: )
+- **TC6: GenerateLegalMoves_OnKnightAtCorner_IncludesDestinationOneTwo** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(0, 0)`; board otherwise empty
   - **Expected output**: returned moves include destination `(1, 2)`
-- **MG-TC54: GenerateLegalMoves_OnKnightBlockedByFriendly_ExcludesBlockedSquare** ( :white_check_mark: )
+- **TC7: GenerateLegalMoves_OnKnightBlockedByFriendly_ExcludesBlockedSquare** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKnightMoves`)
   - **State of the system**: white knight at `(4, 4)`; white pawn at `(5, 6)`
   - **Expected output**: no returned move has destination `(5, 6)`
-- **MG-TC4: GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves** ( :white_check_mark: )
+- **TC8: GenerateLegalMoves_OnBishopAtCenter_ReturnsThirteenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white bishop at `(4, 4)`; all other squares `NonePiece`
   - **Expected output**: returned move list size is `13`
-- **MG-TC5: GenerateLegalMoves_OnRookAtCenter_ReturnsFourteenMoves** ( :white_check_mark: )
+- **TC9: GenerateLegalMoves_OnRookAtCenter_ReturnsFourteenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white rook at `(4, 4)`; all other squares `NonePiece`
   - **Expected output**: returned move list size is `14`
-- **MG-TC55: GenerateLegalMoves_OnRookBlockedByFriendly_ExcludesSquareBeyondFriendly** ( :white_check_mark: )
+- **TC10: GenerateLegalMoves_OnRookBlockedByFriendly_ExcludesSquareBeyondFriendly** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateSlidingMoves`)
   - **State of the system**: white rook at `(4, 4)`; white pawn at `(4, 6)`
   - **Expected output**: no returned move has destination `(4, 6)` or `(4, 7)`
-- **MG-TC72: GenerateLegalMoves_OnRookFacingEnemy_IncludesCaptureDestination** ( :white_check_mark: )
+- **TC11: GenerateLegalMoves_OnRookFacingEnemy_IncludesCaptureDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateSlidingMoves`)
   - **State of the system**: white rook at `(4, 4)`; black rook at `(4, 6)`
   - **Expected output**: returned moves include destination `(4, 6)`
-- **MG-TC73: GenerateLegalMoves_OnRookFacingEnemy_ReturnsThirteenMoves** ( :white_check_mark: )
+- **TC12: GenerateLegalMoves_OnRookFacingEnemy_ReturnsThirteenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateSlidingMoves`)
   - **State of the system**: white rook at `(4, 4)`; black rook at `(4, 6)`
   - **Expected output**: returned move list size is `13`
-- **MG-TC6: GenerateLegalMoves_OnQueenAtCenter_ReturnsTwentySevenMoves** ( :white_check_mark: )
+- **TC13: GenerateLegalMoves_OnQueenAtCenter_ReturnsTwentySevenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white queen at `(4, 4)`; all other squares `NonePiece`
   - **Expected output**: returned move list size is `27`
-- **MG-TC7: GenerateLegalMoves_OnKingAtCenter_ReturnsEightMoves** ( :white_check_mark: )
+- **TC14: GenerateLegalMoves_OnKingAtCenter_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white king at `(4, 4)`; all other squares `NonePiece`
   - **Expected output**: returned move list size is `8`
-- **MG-TC56: GenerateLegalMoves_OnKingBlockedByFriendly_ExcludesFriendlySquare** ( :white_check_mark: )
+- **TC15: GenerateLegalMoves_OnKingBlockedByFriendly_ExcludesFriendlySquare** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKingMoves`)
   - **State of the system**: white king at `(4, 4)`; white pawn at `(5, 5)`
   - **Expected output**: no returned move has destination `(5, 5)`
-- **MG-TC69: GenerateLegalMoves_OnKingAtCenter_IncludesNorthEastDestination** ( :white_check_mark: )
+- **TC16: GenerateLegalMoves_OnKingAtCenter_IncludesNorthEastDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKingMoves`)
   - **State of the system**: white king at `(4, 4)`; board otherwise empty
   - **Expected output**: returned moves include destination `(5, 3)`
-- **MG-TC74: GenerateLegalMoves_OnKingAtCenter_IncludesSouthWestDestination** ( :white_check_mark: )
+- **TC17: GenerateLegalMoves_OnKingAtCenter_IncludesSouthWestDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generateKingMoves`)
   - **State of the system**: white king at `(4, 4)`; board otherwise empty
   - **Expected output**: returned moves include destination `(3, 5)`
-- **MG-TC8: GenerateLegalMoves_OnWhitePawnAtStart_ReturnsOneAndTwoStepMoves** ( :white_check_mark: )
+- **TC18: GenerateLegalMoves_OnWhitePawnAtStart_ReturnsOneAndTwoStepMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)`
   - **State of the system**: white pawn at `(4, 6)`; squares `(4, 5)` and `(4, 4)` empty
   - **Expected output**: returned move list size is `2`
-- **MG-TC61: GenerateLegalMoves_OnWhitePawnAtStart_IncludesTwoStepDestination** ( :white_check_mark: )
+- **TC19: GenerateLegalMoves_OnWhitePawnAtStart_IncludesTwoStepDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`)
   - **State of the system**: white pawn at `(4, 6)`; squares ahead empty
   - **Expected output**: returned moves include destination `(4, 4)`
-- **MG-TC62: GenerateLegalMoves_OnWhitePawnAtStartWithBlockerAtTwoAhead_ExcludesTwoStep** ( :white_check_mark: )
+- **TC20: GenerateLegalMoves_OnWhitePawnAtStartWithBlockerAtTwoAhead_ExcludesTwoStep** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`)
   - **State of the system**: white pawn at `(4, 6)`; blocker at `(4, 4)`; `(4, 5)` empty
   - **Expected output**: no returned move has destination `(4, 4)`
-- **MG-TC67: GenerateLegalMoves_OnBlackPawnAtStart_ReturnsOneAndTwoStepMoves** ( :white_check_mark: )
+- **TC21: GenerateLegalMoves_OnBlackPawnAtStart_ReturnsOneAndTwoStepMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generatePawnMoves`)
   - **State of the system**: black pawn at `(4, 1)`; squares ahead empty
   - **Expected output**: returned move list size is `2`
@@ -197,15 +197,15 @@ Scope: after pseudo-legal generation, remove moves that leave the moving side's 
 
 `filterLegalMoves` and `leavesOwnKingInCheck` are private; exercised indirectly through `generateLegalMoves`.
 
-- **MG-TC14: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :white_check_mark: )
+- **TC22: GenerateLegalMoves_OnPinnedBishop_ExcludesMoveThatExposesKing** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `filterLegalMoves`, `leavesOwnKingInCheck`, `applyMoveToBoard`)
   - **State of the system**: pinned white bishop at `(2, 3)`; king `(2, 2)`; black rook `(2, 7)`
   - **Expected output**: no returned move has destination `(3, 4)`
-- **MG-TC15: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :white_check_mark: )
+- **TC23: GenerateLegalMoves_OnKingInCheck_ReturnsSixEscapeMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via check filtering)
   - **State of the system**: white king at `(4, 4)`; black rook at `(4, 0)`
   - **Expected output**: returned move list size is `6`
-- **MG-TC16: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :white_check_mark: )
+- **TC24: GenerateLegalMoves_OnKingInCheck_ExcludesSquareStillInCheck** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via check filtering)
   - **State of the system**: white king at `(4, 4)`; black rook at `(4, 0)`
   - **Expected output**: no returned move has destination `(4, 3)`
@@ -248,51 +248,51 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC18: ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece** ( :white_check_mark: )
+- **TC25: ApplyMoveToBoard_OnNormalMove_DestinationHasMovingPiece** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white knight at `(4, 4)`; NORMAL move to `(5, 6)`
   - **Expected output**: returned board at `(5, 6)` has type `KNIGHT`
-- **MG-TC19: ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
+- **TC26: ApplyMoveToBoard_OnNormalMove_SourceSquareIsEmpty** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
-  - **State of the system**: same as MG-TC18
+  - **State of the system**: same as TC25
   - **Expected output**: returned board at `(4, 4)` has type `NONE`
-- **MG-TC20: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :white_check_mark: )
+- **TC27: ApplyMoveToBoard_OnNormalMove_OriginalBoardUnchanged** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
-  - **State of the system**: same as MG-TC18
+  - **State of the system**: same as TC25
   - **Expected output**: after the call, `original[4][4].getType()` is still `KNIGHT`
-- **MG-TC33: ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn** ( :white_check_mark: )
+- **TC28: ApplyMoveToBoard_OnEnPassant_RemovesCapturedPawn** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 3)`; black pawn `(5, 3)`; `EN_PASSANT` to `(5, 2)`
   - **Expected output**: returned board at `(5, 3)` has type `NONE`
-- **MG-TC34: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+- **TC29: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; `CASTLING_KINGSIDE` to rook square `(7, 7)`
   - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
-- **MG-TC35: ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+- **TC30: ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to rook square `(0, 7)`
   - **Expected output**: returned board at `(2, 7)` is `KING` and at `(3, 7)` is `ROOK`
-- **MG-TC90: ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :white_check_mark: )
+- **TC31: ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(5, 7)`, rook `(6, 7)` (Chess960 adjacent); `CASTLING_KINGSIDE` to `(6, 7)`
   - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
-- **MG-TC91: ApplyMoveToBoard_OnKingAlreadyOnDestination_KingStaysRookMoves** ( :white_check_mark: )
+- **TC32: ApplyMoveToBoard_OnKingAlreadyOnDestination_KingStaysRookMoves** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white king `(6, 7)`, rook `(7, 7)` (Chess960); `CASTLING_KINGSIDE` to `(7, 7)`
   - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
-- **MG-TC36: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :white_check_mark: )
+- **TC33: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.QUEEN`
   - **Expected output**: returned board at `(4, 0)` has type `QUEEN`
-- **MG-TC64: ApplyMoveToBoard_OnPromotionRook_DestinationHasRook** ( :white_check_mark: )
+- **TC34: ApplyMoveToBoard_OnPromotionRook_DestinationHasRook** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)` (via `createPiece`)
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.ROOK`
   - **Expected output**: returned board at `(4, 0)` has type `ROOK`
-- **MG-TC65: ApplyMoveToBoard_OnPromotionBishop_DestinationHasBishop** ( :white_check_mark: )
+- **TC35: ApplyMoveToBoard_OnPromotionBishop_DestinationHasBishop** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.BISHOP`
   - **Expected output**: returned board at `(4, 0)` has type `BISHOP`
-- **MG-TC66: ApplyMoveToBoard_OnPromotionKnight_DestinationHasKnight** ( :white_check_mark: )
+- **TC36: ApplyMoveToBoard_OnPromotionKnight_DestinationHasKnight** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.KNIGHT`
   - **Expected output**: returned board at `(4, 0)` has type `KNIGHT`
@@ -320,27 +320,27 @@ Scope: factory used by `applyMoveToBoard` for promotion pieces. Each `PieceType`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC47: CreatePiece_OnRookType_ReturnsRook** ( :white_check_mark: )
+- **TC37: CreatePiece_OnRookType_ReturnsRook** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.ROOK`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `ROOK`
-- **MG-TC48: CreatePiece_OnBishopType_ReturnsBishop** ( :white_check_mark: )
+- **TC38: CreatePiece_OnBishopType_ReturnsBishop** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.BISHOP`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `BISHOP`
-- **MG-TC49: CreatePiece_OnKnightType_ReturnsKnight** ( :white_check_mark: )
+- **TC39: CreatePiece_OnKnightType_ReturnsKnight** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.KNIGHT`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `KNIGHT`
-- **MG-TC50: CreatePiece_OnPawnType_ReturnsPawn** ( :white_check_mark: )
+- **TC40: CreatePiece_OnPawnType_ReturnsPawn** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.PAWN`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `PAWN`
-- **MG-TC51: CreatePiece_OnKingType_ReturnsKing** ( :white_check_mark: )
+- **TC41: CreatePiece_OnKingType_ReturnsKing** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.KING`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `KING`
-- **MG-TC52: CreatePiece_OnNoneType_ReturnsNonePiece** ( :white_check_mark: )
+- **TC42: CreatePiece_OnNoneType_ReturnsNonePiece** ( :white_check_mark: )
   - **Method(s) under test**: `createPiece(PieceType, PieceColor)`
   - **State of the system**: `PieceType.NONE`, `PieceColor.WHITE`
   - **Expected output**: returned piece type is `NONE`
@@ -391,23 +391,23 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC9: GenerateAllLegalMovesForColor_OnSingleWhiteKnight_ReturnsEightMoves** ( :white_check_mark: )
+- **TC43: GenerateAllLegalMovesForColor_OnSingleWhiteKnight_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only movable white piece is knight at `(4, 4)`
   - **Expected output**: returned move list size is `8` for `PieceColor.WHITE`
-- **MG-TC21: GenerateAllLegalMovesForColor_WhenWhiteCheckmated_ReturnsZeroMoves** ( :white_check_mark: )
+- **TC44: GenerateAllLegalMovesForColor_WhenWhiteCheckmated_ReturnsZeroMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: white king at `(0, 0)`; black rooks at `(0, 7)` and `(1, 7)`; black king at `(7, 0)`
   - **Expected output**: returned move list size is `0` for `PieceColor.WHITE`
-- **MG-TC22: GenerateAllLegalMovesForColor_OnPawnWithOnlyOneStep_ReturnsOneMove** ( :white_check_mark: )
+- **TC45: GenerateAllLegalMovesForColor_OnPawnWithOnlyOneStep_ReturnsOneMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only white piece is pawn at `(4, 5)` (not on starting rank; one empty square ahead)
   - **Expected output**: returned move list size is `1` for `PieceColor.WHITE`
-- **MG-TC23: GenerateAllLegalMovesForColor_WhenOnlyKingInCheck_ReturnsSixMoves** ( :white_check_mark: )
+- **TC46: GenerateAllLegalMovesForColor_WhenOnlyKingInCheck_ReturnsSixMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: only white piece is king at `(4, 4)` in check from black rook at `(4, 0)`
   - **Expected output**: returned move list size is `6` for `PieceColor.WHITE`
-- **MG-TC24: GenerateAllLegalMovesForColor_OnKingAndBishop_ReturnsSeventeenMoves** ( :white_check_mark: )
+- **TC47: GenerateAllLegalMovesForColor_OnKingAndBishop_ReturnsSeventeenMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateAllLegalMovesForColor(PieceColor)`
   - **State of the system**: white king at `(2, 2)` and bishop at `(2, 3)`; black rook at `(7, 7)` does not pin; black king at `(0, 0)`
   - **Expected output**: returned move list size is `17` for `PieceColor.WHITE` (`8` + `9` per-piece legal counts summed)
@@ -457,15 +457,15 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC10: HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue** ( :white_check_mark: )
+- **TC48: HasLegalMovesForColor_OnMovableWhitePiece_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `hasLegalMovesForColor(PieceColor)`
   - **State of the system**: white knight at `(4, 4)`
   - **Expected output**: `hasLegalMovesForColor(PieceColor.WHITE)` is `true`
-- **MG-TC11: HasLegalMovesForColor_OnNoPiecesForColor_ReturnsFalse** ( :white_check_mark: )
+- **TC49: HasLegalMovesForColor_OnNoPiecesForColor_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `hasLegalMovesForColor(PieceColor)`
   - **State of the system**: board has no black pieces
   - **Expected output**: `hasLegalMovesForColor(PieceColor.BLACK)` is `false`
-- **MG-TC17: HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue** ( :white_check_mark: )
+- **TC50: HasLegalMovesForColor_WhenInCheckWithLegalEscape_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `hasLegalMovesForColor(PieceColor)`
   - **State of the system**: white king in check from rook on same file but can escape off the file
   - **Expected output**: `hasLegalMovesForColor(PieceColor.WHITE)` is `true`
@@ -515,59 +515,59 @@ Scope: aggregates `generateLegalMoves` for every piece of `color`, so check filt
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
-- **MG-TC12: IsInCheck_WhenRookAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC51: IsInCheck_WhenRookAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)`
   - **State of the system**: white king on same file as black rook with empty squares between
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC13: IsInCheck_WhenKingNotAttacked_ReturnsFalse** ( :white_check_mark: )
+- **TC52: IsInCheck_WhenKingNotAttacked_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)`
   - **State of the system**: white king present; no black piece attacks it
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
-- **MG-TC41: IsInCheck_WhenNoKingForColor_ReturnsFalse** ( :white_check_mark: )
+- **TC53: IsInCheck_WhenNoKingForColor_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)`
   - **State of the system**: board with no white king
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
-- **MG-TC42: IsInCheck_WhenPawnAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC54: IsInCheck_WhenPawnAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: black king at `(4, 4)`; white pawn at `(3, 5)`
   - **Expected output**: `isInCheck(PieceColor.BLACK)` is `true`
-- **MG-TC43: IsInCheck_WhenKnightAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC55: IsInCheck_WhenKnightAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKnightAttacking`)
   - **State of the system**: white king at `(4, 4)`; black knight at `(6, 5)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC44: IsInCheck_WhenBishopAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC56: IsInCheck_WhenBishopAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isSliderAttacking`)
   - **State of the system**: white king at `(4, 4)`; black bishop at `(0, 0)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC45: IsInCheck_WhenQueenAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC57: IsInCheck_WhenQueenAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isSliderAttacking`)
   - **State of the system**: white king at `(4, 4)`; black queen at `(4, 0)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC46: IsInCheck_WhenAdjacentEnemyKingAttacksKing_ReturnsTrue** ( :white_check_mark: )
+- **TC58: IsInCheck_WhenAdjacentEnemyKingAttacksKing_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKingAttacking`)
   - **State of the system**: white king at `(4, 4)`; black king at `(5, 5)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC75: IsInCheck_WhenKnightOnExactAttackSquare_ReturnsTrue** ( :white_check_mark: )
+- **TC59: IsInCheck_WhenKnightOnExactAttackSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKnightAttacking`)
   - **State of the system**: white king at `(4, 4)`; black knight at `(2, 5)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC76: IsInCheck_WhenPawnOnExactAttackSquare_ReturnsTrue** ( :white_check_mark: )
+- **TC60: IsInCheck_WhenPawnOnExactAttackSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: white king at `(3, 4)`; black pawn at `(2, 3)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC77: IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue** ( :white_check_mark: )
+- **TC61: IsInCheck_WhenKingOnExactAdjacentSquare_ReturnsTrue** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKingAttacking`)
   - **State of the system**: white king at `(4, 4)`; black king at `(3, 3)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `true`
-- **MG-TC78: IsInCheck_WhenKnightOneSquareOffAttackLine_ReturnsFalse** ( :white_check_mark: )
+- **TC62: IsInCheck_WhenKnightOneSquareOffAttackLine_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKnightAttacking`)
   - **State of the system**: white king at `(4, 4)`; black knight at `(2, 6)` (not on L-shape)
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
-- **MG-TC79: IsInCheck_WhenPawnOneFileOffAttackLine_ReturnsFalse** ( :white_check_mark: )
+- **TC63: IsInCheck_WhenPawnOneFileOffAttackLine_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isPawnAttacking`)
   - **State of the system**: white king at `(3, 4)`; black pawn at `(2, 4)` (same file, not diagonal)
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
-- **MG-TC80: IsInCheck_WhenKingTwoSquaresAway_ReturnsFalse** ( :white_check_mark: )
+- **TC64: IsInCheck_WhenKingTwoSquaresAway_ReturnsFalse** ( :white_check_mark: )
   - **Method(s) under test**: `isInCheck(PieceColor)` (via `isKingAttacking`)
   - **State of the system**: white king at `(4, 4)`; black king at `(6, 6)`
   - **Expected output**: `isInCheck(PieceColor.WHITE)` is `false`
@@ -625,67 +625,67 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 
 `addEnPassantMoves` and `addCastlingMoves` are private; exercised indirectly through `generateLegalMoves`.
 
-- **MG-TC25: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove** ( :white_check_mark: )
+- **TC65: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_IncludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 2)`
   - **Expected output**: returned moves include destination `(5, 2)` with `MoveType.EN_PASSANT`
-- **MG-TC68: GenerateLegalMoves_OnBlackPawnWithEnPassantTarget_IncludesEnPassantMove** ( :white_check_mark: )
+- **TC66: GenerateLegalMoves_OnBlackPawnWithEnPassantTarget_IncludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: black pawn at `(4, 4)`; `enPassantTarget` at `(3, 5)`
   - **Expected output**: returned moves include destination `(3, 5)` with `MoveType.EN_PASSANT`
-- **MG-TC26: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove** ( :white_check_mark: )
+- **TC67: GenerateLegalMoves_OnWhitePawnWithoutEnPassantTarget_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `Optional.empty()` en-passant target
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
-- **MG-TC27: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling** ( :white_check_mark: )
+- **TC68: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and rook `(7, 7)` unmoved; path clear and safe
   - **Expected output**: returned moves include destination `(7, 7)` (rook square) with `MoveType.CASTLING_KINGSIDE`
-- **MG-TC28: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves** ( :white_check_mark: )
+- **TC69: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
-  - **State of the system**: same as MG-TC27 but king has `hasMoved() == true`
+  - **State of the system**: same as TC68 but king has `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE` or `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC29: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling** ( :white_check_mark: )
+- **TC70: GenerateLegalMoves_OnKingsidePathSquareUnderAttack_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
-  - **State of the system**: same as MG-TC27 with black rook at `(5, 0)` attacking transit square `(5, 7)`
+  - **State of the system**: same as TC68 with black rook at `(5, 0)` attacking transit square `(5, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC30: GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling** ( :white_check_mark: )
+- **TC71: GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and rook `(0, 7)` unmoved; squares `(1, 7)`, `(2, 7)`, `(3, 7)` empty; path safe
   - **Expected output**: returned moves include destination `(0, 7)` (rook square) with `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC31: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
+- **TC72: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC32: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
+- **TC73: GenerateLegalMoves_OnEnPassantTargetWrongRank_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 4)` (not on capture rank `2`)
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
-- **MG-TC60: GenerateLegalMoves_OnEnPassantTargetSameFile_ExcludesEnPassantMove** ( :white_check_mark: )
+- **TC74: GenerateLegalMoves_OnEnPassantTargetSameFile_ExcludesEnPassantMove** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(4, 2)` (same file)
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
-- **MG-TC57: GenerateLegalMoves_OnKingsideCastlingWithBlockingPiece_ExcludesKingsideCastling** ( :white_check_mark: )
+- **TC75: GenerateLegalMoves_OnKingsideCastlingWithBlockingPiece_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `isPathClearForCastling`)
   - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; white bishop at `(5, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC58: GenerateLegalMoves_OnQueensideCastlingWithBlockingPiece_ExcludesQueensideCastling** ( :white_check_mark: )
+- **TC76: GenerateLegalMoves_OnQueensideCastlingWithBlockingPiece_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `isPathClearForCastling`)
   - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; white knight at `(1, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC59: GenerateLegalMoves_OnMovedQueensideRook_ExcludesQueensideCastling** ( :white_check_mark: )
+- **TC77: GenerateLegalMoves_OnMovedQueensideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(0, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC82: GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling** ( :white_check_mark: )
+- **TC78: GenerateLegalMoves_OnKingWithOnlyKingsideRook_ExcludesQueensideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and kingside rook `(7, 7)` only; no queenside rook
   - **Expected output**: no returned move has `MoveType.CASTLING_QUEENSIDE`
-- **MG-TC83: GenerateLegalMoves_OnKingWithoutRooks_ExcludesAllCastling** ( :white_check_mark: )
+- **TC79: GenerateLegalMoves_OnKingWithoutRooks_ExcludesAllCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` alone; no rooks on back rank
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC92: GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare** ( :white_check_mark: )
+- **TC80: GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`, `isPathClearForCastling`)
   - **State of the system**: white king `(5, 7)`, rook `(6, 7)` unmoved (Chess960 adjacent); destination squares occupied only by the castling pieces themselves; path safe
   - **Expected output**: returned moves include destination `(6, 7)` (rook square) with `MoveType.CASTLING_KINGSIDE`
@@ -722,39 +722,39 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 
 `addPawnForwardMoves`, `addPawnCaptureMoves`, and `addPromotionMoves` are private; exercised indirectly through `generateLegalMoves`.
 
-- **MG-TC37: GenerateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves** ( :white_check_mark: )
+- **TC81: GenerateLegalMoves_OnWhitePawnOneStepFromBackRank_ReturnsFourMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addPromotionMoves`)
   - **State of the system**: white pawn at `(4, 1)`; square `(4, 0)` empty; no diagonals; no en-passant target
   - **Expected output**: returned move list size is `4` (four `PROMOTION` moves; no normal forward move)
-- **MG-TC38: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves** ( :white_check_mark: )
+- **TC82: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_ReturnsTwoMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
   - **State of the system**: white pawn at `(4, 4)`; black rook at `(5, 3)`; square `(4, 3)` empty; no en-passant target
   - **Expected output**: returned move list size is `2` (forward to `(4, 3)` + capture to `(5, 3)`)
-- **MG-TC39: GenerateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves** ( :white_check_mark: )
+- **TC83: GenerateLegalMoves_OnWhitePawnCaptureToBackRank_ReturnsEightMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`, `addPromotionMoves`)
   - **State of the system**: white pawn at `(4, 1)`; black rook at `(5, 0)`; square `(4, 0)` empty; no en-passant target
   - **Expected output**: returned move list size is `8` (four forward `PROMOTION` + four capture `PROMOTION`)
-- **MG-TC40: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves** ( :white_check_mark: )
+- **TC84: GenerateLegalMoves_OnWhitePawnWithEnPassantTarget_ReturnsTwoMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnForwardMoves`, `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `enPassantTarget` at `(5, 2)`; square `(4, 2)` empty
   - **Expected output**: returned move list size is `2` (forward to `(4, 2)` + `EN_PASSANT` to `(5, 2)`)
-- **MG-TC63: GenerateLegalMoves_OnWhitePawnWithFriendlyDiagonal_SkipsDiagonalCapture** ( :white_check_mark: )
+- **TC85: GenerateLegalMoves_OnWhitePawnWithFriendlyDiagonal_SkipsDiagonalCapture** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
   - **State of the system**: white pawn at `(4, 4)`; white pawn at `(5, 3)`; `(4, 3)` empty
   - **Expected output**: returned move list size is `1` (forward only)
-- **MG-TC84: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_IncludesCaptureDestination** ( :white_check_mark: )
+- **TC86: GenerateLegalMoves_OnWhitePawnWithEnemyDiagonal_IncludesCaptureDestination** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
   - **State of the system**: white pawn at `(4, 4)`; black rook at `(5, 3)`
   - **Expected output**: returned moves include destination `(5, 3)`
-- **MG-TC85: GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_IncludesLeftCaptureOnly** ( :white_check_mark: )
+- **TC87: GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_IncludesLeftCaptureOnly** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
   - **State of the system**: white pawn at `(4, 4)`; black rook at `(3, 3)` only
   - **Expected output**: returned moves include destination `(3, 3)`
-- **MG-TC86: GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_ExcludesRightCapture** ( :white_check_mark: )
+- **TC88: GenerateLegalMoves_OnWhitePawnWithLeftDiagonalEnemy_ExcludesRightCapture** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addPawnCaptureMoves`)
   - **State of the system**: white pawn at `(4, 4)`; black rook at `(3, 3)` only
   - **Expected output**: no returned move has destination `(5, 3)`
-- **MG-TC87: GenerateLegalMoves_OnWhitePawnAtBackRankWithNoCaptures_ReturnsEmptyList** ( :white_check_mark: )
+- **TC89: GenerateLegalMoves_OnWhitePawnAtBackRankWithNoCaptures_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `generatePawnMoves`)
   - **State of the system**: white pawn at `(4, 0)`; no diagonal enemies
   - **Expected output**: returned move list size is `0`
@@ -767,11 +767,11 @@ Scope: fallback when `piece.getType()` is `NONE`; exercised via reflection in un
 
 ### Step 4: Test Cases
 
-- **MG-TC88: GeneratePseudoLegalMoves_OnNonePiece_ReturnsEmptyList** ( :white_check_mark: )
+- **TC90: GeneratePseudoLegalMoves_OnNonePiece_ReturnsEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `generatePseudoLegalMoves(Location, Piece)` (via reflection)
   - **State of the system**: `NonePiece` at `(3, 3)`
   - **Expected output**: returned move list size is `0`
-- **MG-TC89: GeneratePseudoLegalMoves_OnNonePiece_ReturnsMutableEmptyList** ( :white_check_mark: )
+- **TC91: GeneratePseudoLegalMoves_OnNonePiece_ReturnsMutableEmptyList** ( :white_check_mark: )
   - **Method(s) under test**: `generatePseudoLegalMoves(Location, Piece)` (via reflection)
   - **State of the system**: `NonePiece` at `(3, 3)`
   - **Expected output**: returned list accepts an added move (mutable `ArrayList`)
