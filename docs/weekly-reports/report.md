@@ -150,9 +150,22 @@
     ([#39](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/39))
 
 **Planning Tracking**:
-1. [not started] Matthew: Update Board tests to kill mutants
-2. [not started] Didier: Update MoveGenerator and BoardController for code coverage and mutants
-3. [not started] Alex: Update EndGameController for code coverage and mutants
+1. [not started] Matthew: Update Board tests to kill mutants ([#89](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/89))
+2. [not started] Didier: Update MoveGenerator and BoardController for code coverage and mutants ([#87](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/87))
+3. [not started] Alex: Update EndGameController for code coverage and mutants ([#91](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/91))
+
+# Week 11 (06/08/2026-06/14/2026)
+**Progress Tracking**:
+1. [done] Matthew: Added tests to kill Board mutants, reaching 98% mutation coverage with the last 2 documented as equivalent mutants ([#89](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/89))
+2. [done] Matthew: Fixed style and Clean Code issues (unicode escapes, import order, variable declaration distance) ([#90](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/90))
+3. [done] Matthew: Expanded Cucumber BDD tests for GameInitialization (full piece placement, pawn placement after first move) and Checkmate ([#92](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/92))
+4. [done] Matthew: Removed -1 error code from MoveGenerator in favor of exceptions and fixed MoveGeneratorTest spacing per CheckStyle ([#94](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/94))
+5. [done] Matthew: Refactored EndGameController to move view creation out of the constructor, enabling headless unit tests and mutation coverage ([#95](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/95))
+6. [done] Matthew: Refactored WelcomeController with injectable view and game-launch dependencies ([#96](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/96))
+7. [done] Didier: Added BVA and unit tests for MoveGenerator to kill mutations ([#87](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/87))
+8. [done] Didier: Added BVA and unit tests for BoardController to close PIT line and mutation gaps ([#88](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/88)). Added acknowledgements to README ([#93](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/93)). Reviewed [#92](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/92)
+9. [done] Alex: Reviewed and approved Board mutant coverage ([#89](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/89)), style fixes ([#90](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/90)), and Clean Code fixes ([#94](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/94))
+10. [done] Alex: Update EndGameController for code coverage and mutants, PR deprecated due to group deciding to take a different approach (separate view creation instead of changing build) ([#91](https://github.com/nu-cs-sqe/course-project-20252603-team-12-20252603-1/pull/91))
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
