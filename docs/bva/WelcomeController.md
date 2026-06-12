@@ -52,7 +52,7 @@ No standalone output; verified through `show()` (WC-TC3) and `startGame()` (WC-T
   - State of the system: mock `WelcomeView` injected via `setWelcomeView`
   - Expected output: `setStartGameAction` called once with a non-null action
 
-- **WC-TC2: GetWelcomeView_AfterSetWelcomeView_ReturnsSameView** ( :x: )
+- **WC-TC2: GetWelcomeView_AfterSetWelcomeView_ReturnsSameView** ( :white_check_mark: )
   - Method(s) under test: `getWelcomeView()`, `setWelcomeView(WelcomeView)`
   - State of the system: mock `WelcomeView` injected via `setWelcomeView`
   - Expected output: `getWelcomeView()` returns the same mock instance
