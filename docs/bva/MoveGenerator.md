@@ -683,7 +683,7 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **TC94: GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling** ( :x: )
+- **TC94: GenerateLegalMoves_OnKingWithEnemyKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `findUnmovedRookFileIn`)
   - **State of the system**: white king `(4, 7)` unmoved; black rook at `(7, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
