@@ -516,12 +516,12 @@ Scope: After the player selects an own-color piece on their turn, expose that pi
 
 ## Method / behavior: move execution via `handleSquareClick(Location loc)`
 
-Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. Promotion and end-game paths are covered in the sections below.
+Scope: when a piece is already selected, a second click either executes a legal move (`board.makeMove`), changes selection to another own piece, or clears selection. A legal move match takes precedence over own-piece re-selection, so a castling move targeting the own rook square (king-takes-rook encoding) executes instead of re-selecting the rook. Promotion and end-game paths are covered in the sections below.
 
 ### Step 1: Equivalence Classes
 
 - **Input: selection state** — `lastSelectedLoc` present vs absent (second click path)
-- **Input: destination square** — legal move target vs illegal vs another own piece
+- **Input: destination square** — legal move target vs illegal vs another own piece (no matching move) vs own castling rook (matching castling move)
 - **Output: board interaction** — `makeMove` invoked vs not
 - **Output: selection after click** — cleared vs updated
 
@@ -530,7 +530,7 @@ Scope: when a piece is already selected, a second click either executes a legal 
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: selection state | Cases | selected, not selected |
-| Input: destination square | Cases | legal destination, illegal empty, own piece |
+| Input: destination square | Cases | legal destination, illegal empty, own piece without matching move, own rook with matching castling move |
 | Output: `makeMove` called | Boolean | `true`, `false` |
 | Output: selection cleared | Boolean | `true`, `false` |
 | Output: `BoardView.repaint()` | Counts | 0, 1, 2 calls per click sequence |
@@ -539,7 +539,8 @@ Scope: when a piece is already selected, a second click either executes a legal 
 
 - Legal destination: stub `getLegalMoves(src)` returns move to `(0, 5)`; click `(0, 5)` → `makeMove` once; **two** `repaint()` calls (select + move)
 - Illegal destination: stub returns move list with no matching `to` → selection cleared; **two** `repaint()` calls
-- Own piece: click another white piece while selected → new `lastSelectedLoc`, no `makeMove`; **two** `repaint()` calls
+- Own piece, no matching move: stub returns no move targeting the clicked square → new `lastSelectedLoc`, no `makeMove`; **two** `repaint()` calls
+- Own rook, matching castling move: stub returns `CASTLING_KINGSIDE` move targeting the rook square → `makeMove` once, selection cleared
 
 ### Step 4: Test Cases (Each-Choice Strategy)
 
@@ -565,15 +566,20 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: selection then illegal empty destination with no matching move; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
 
-- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :white_check_mark: )
+- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
-  - **State of the system**: white turn; pawn at `(0, 6)` selected; click white knight at `(1, 7)`
+  - **State of the system**: white turn; pawn at `(0, 6)` selected; board stubs legal moves with no move targeting `(1, 7)`; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
 
-- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :white_check_mark: )
+- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :x: )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
-  - **State of the system**: selection then click second own piece; strict `BoardView` mock
+  - **State of the system**: selection then click second own piece; board stubs legal moves with no move targeting it; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
+
+- **BC-TC89: HandleSquareClick_WithSelection_OnOwnCastlingRook_ExecutesCastling** ( :x: )
+  - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick`, `findMoveToDestination`)
+  - **State of the system**: white turn; king at `(4, 7)` selected; board stubs a `CASTLING_KINGSIDE` move from `(4, 7)` to own rook square `(7, 7)`; click `(7, 7)`
+  - **Expected output**: `board.makeMove` called once with the castling move; `hasSelection()` is `false`
 
 ---
 

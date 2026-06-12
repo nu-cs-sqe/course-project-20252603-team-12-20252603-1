@@ -728,14 +728,13 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 ### Step 1: Equivalence Classes
 
 - **Input: move type** — `EN_PASSANT`, `CASTLING_KINGSIDE`, `CASTLING_QUEENSIDE`, `PROMOTION`
-- **Input: initial file of the queenside rook** — which file the unmoved rook occupies before queenside castling
+- **Input: castling rook file** — carried by the castling move's `to` square (king-takes-rook encoding)
 - **Output: en passant capture effect** — destination filled by mover; captured pawn square emptied
 - **Output: hasMoved flag on capturing pawn (EN_PASSANT)** — the pawn that performed the capture is marked as having moved
 - **Output: castling effect** — king and rook relocate to castling destination files
 - **Output: hasMoved flag on king after castling** — the king is marked as having moved
 - **Output: hasMoved flag on rook after castling** — the rook is marked as having moved
 - **Output: enPassantTarget state** — set after two-step pawn move, cleared otherwise
-- **Output: invalid castling execution** — `IllegalStateException` when no unmoved castling rook on the king's rank
 - **Output: promotion execution** — pawn replaced by promoted piece type at the destination
 
 ### Step 2: Data Types (from BVA Catalog)
@@ -743,13 +742,12 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 | Equivalence class | Catalog data type | Parameters |
 | --- | --- | --- |
 | Input: move type | Cases | EN_PASSANT, CASTLING_KINGSIDE, CASTLING_QUEENSIDE, PROMOTION |
-| Input: queenside rook initial file | Interval | [0, kingFile−1] = [0, 3] (assuming standard king at file 4) |
+| Input: castling rook file (`move.getTo().getX()`) | Interval | queenside [0, kingFile−1] = [0, 3]; kingside [kingFile+1, 7] |
 | Output: piece positions | Cases | expected squares occupied/empty |
 | Output: hasMoved on capturing pawn (EN_PASSANT) | Boolean | true |
 | Output: hasMoved on king after castling | Boolean | true |
 | Output: hasMoved on rook after castling | Boolean | true |
 | Output: enPassantTarget | Cases | target set, no target |
-| Output: invalid castling | Cases | exception thrown vs successful relocation |
 | Output: promotion | Cases | promoted piece at destination |
 
 ### Step 3: Boundary Values (from BVA Catalog)
@@ -768,17 +766,13 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
 - true (only achievable post-condition; `changeToMoved()` is always called)
 - false is CAN'T SET as a post-condition of these move types
 
-**queenside rook initial file — Interval [0, 3] (Searching: using position of match):**
-- 0 (min — rook found in the first searched position; tested by TC60)
-- 3 (max = kingFile−1 — rook found in the last searched position; not yet tested)
+**castling rook file (from `move.getTo()`) — Interval:**
+- queenside: 0 (min; TC60) and 3 (max = kingFile−1; TC102 — rook already on its destination)
+- kingside: 7 (max; TC59) and 5 (min = kingFile+1, Chess960 adjacent swap; TC103)
 
 **enPassantTarget — Cases:**
 - target set
 - no target
-
-**invalid castling — Cases:**
-- exception thrown
-- successful relocation
 
 **promotion — Cases:**
 - promoted piece at destination
@@ -800,40 +794,45 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: same as TC57 — white pawn at `(4,3)`, black pawn at `(5,3)`, move type `EN_PASSANT` from `(4,3)` to `(5,2)`
   - **Expected output**: `getPieceAt(5, 2).hasMoved()` returns `true`
 
-- **TC59: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC59: MakeMove_OnKingsideCastling_KingAndRookReachCastledSquares** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: king at `(6,7)` and rook at `(5,7)`
 
-- **TC98: MakeMove_OnKingsideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
+- **TC98: MakeMove_OnKingsideCastling_KingIsMarkedAsMoved** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: `getPieceAt(7, 6).hasMoved()` returns `true`
 
-- **TC99: MakeMove_OnKingsideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
+- **TC99: MakeMove_OnKingsideCastling_RookIsMarkedAsMoved** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(7,7)`, move type `CASTLING_KINGSIDE` to rook square `(7,7)`
   - **Expected output**: `getPieceAt(7, 5).hasMoved()` returns `true`
 
-- **TC60: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC60: MakeMove_OnQueensideCastling_KingAndRookReachCastledSquares** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)`
 
-- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :white_check_mark: )
+- **TC100: MakeMove_OnQueensideCastling_KingIsMarkedAsMoved** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: `getPieceAt(7, 2).hasMoved()` returns `true`
 
-- **TC101: MakeMove_OnQueensideCastling_RookIsMarkedAsMoved** ( :white_check_mark: )
+- **TC101: MakeMove_OnQueensideCastling_RookIsMarkedAsMoved** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE`
+  - **State of the system**: white king `(4,7)`, white rook `(0,7)`, move type `CASTLING_QUEENSIDE` to rook square `(0,7)`
   - **Expected output**: `getPieceAt(7, 3).hasMoved()` returns `true`
 
-- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :white_check_mark: )
+- **TC102: MakeMove_OnQueensideCastlingWithRookAtFileThree_KingAndRookReachCastledSquares** ( :x: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
-  - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of [0, 3] queenside interval — rook in the last searched position), move type `CASTLING_QUEENSIDE`
-  - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook's file equals its destination; it effectively stays in place)
+  - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of queenside interval; rook already on its destination), move type `CASTLING_QUEENSIDE` to rook square `(3,7)`
+  - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook stays in place)
+
+- **TC103: MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :x: )
+  - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
+  - **State of the system**: white king `(5,7)`, white rook `(6,7)` (Chess960 adjacent; rook file 5+1 = min of kingside interval), move type `CASTLING_KINGSIDE` to rook square `(6,7)`
+  - **Expected output**: king at `(6,7)` and rook at `(5,7)`
 
 - **TC61: MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getEnPassantTarget()`
@@ -845,10 +844,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: board starts with en-passant target set to `(4,5)`; then white knight makes a normal move
   - **Expected output**: adjacent black pawn legal moves include no `EN_PASSANT` move
 
-- **TC63: MakeMove_OnKingsideCastlingWithoutUnmovedRook_ThrowsIllegalStateException** ( :white_check_mark: )
-  - **Method(s) under test**: `makeMove(Move)`
-  - **State of the system**: white king at `(4,7)`, no unmoved rook on rank 7, move type `CASTLING_KINGSIDE`
-  - **Expected output**: `IllegalStateException`
+- **TC63: removed** — tested the `IllegalStateException` from the rook search in `executeCastling`; with king-takes-rook encoding the rook file comes from `move.getTo()` and no search exists. CAN'T SET: `makeMove` only receives generated moves, which always carry a valid rook square.
 
 - **TC64: MakeMove_OnPromotionMove_PromotedPieceAtDestinationIsQueen** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`

@@ -240,8 +240,10 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
 
 - NORMAL — knight `(4, 4)` → `(5, 6)`
 - EN_PASSANT — white pawn `(4, 3)` → `(5, 2)`; black pawn at `(5, 3)` (rank `3`, file `5`) removed
-- CASTLING_KINGSIDE — white king `(4, 7)` → `(6, 7)`; rook `(7, 7)` → `(5, 7)`
-- CASTLING_QUEENSIDE — white king `(4, 7)` → `(2, 7)`; rook `(0, 7)` → `(3, 7)`
+- CASTLING_KINGSIDE — move `to` = rook square `(7, 7)` (king-takes-rook encoding); king `(4, 7)` → `(6, 7)`; rook `(7, 7)` → `(5, 7)`
+- CASTLING_QUEENSIDE — move `to` = rook square `(0, 7)`; king `(4, 7)` → `(2, 7)`; rook `(0, 7)` → `(3, 7)`
+- CASTLING_KINGSIDE (Chess960 adjacent swap) — king `(5, 7)`, rook `(6, 7)`; pieces swap to `(6, 7)` / `(5, 7)`
+- CASTLING_KINGSIDE (Chess960 king already on destination) — king `(6, 7)`, rook `(7, 7)`; king stays, rook → `(5, 7)`
 - PROMOTION — white pawn `(4, 1)` → `(4, 0)` with `PieceType.QUEEN`
 
 ### Step 4: Test Cases (Each-Choice Strategy)
@@ -262,14 +264,22 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 3)`; black pawn `(5, 3)`; `EN_PASSANT` to `(5, 2)`
   - **Expected output**: returned board at `(5, 3)` has type `NONE`
-- **MG-TC34: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+- **MG-TC34: ApplyMoveToBoard_OnKingsideCastling_RelocatesKingAndRook** ( :x: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
-  - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; `CASTLING_KINGSIDE` to `(6, 7)`
+  - **State of the system**: white king `(4, 7)`, rook `(7, 7)`; `CASTLING_KINGSIDE` to rook square `(7, 7)`
   - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
-- **MG-TC35: ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook** ( :white_check_mark: )
+- **MG-TC35: ApplyMoveToBoard_OnQueensideCastling_RelocatesKingAndRook** ( :x: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
-  - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to `(2, 7)`
+  - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to rook square `(0, 7)`
   - **Expected output**: returned board at `(2, 7)` is `KING` and at `(3, 7)` is `ROOK`
+- **MG-TC90: ApplyMoveToBoard_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :x: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white king `(5, 7)`, rook `(6, 7)` (Chess960 adjacent); `CASTLING_KINGSIDE` to `(6, 7)`
+  - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
+- **MG-TC91: ApplyMoveToBoard_OnKingAlreadyOnDestination_KingStaysRookMoves** ( :x: )
+  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
+  - **State of the system**: white king `(6, 7)`, rook `(7, 7)` (Chess960); `CASTLING_KINGSIDE` to `(7, 7)`
+  - **Expected output**: returned board at `(6, 7)` is `KING` and at `(5, 7)` is `ROOK`
 - **MG-TC36: ApplyMoveToBoard_OnPromotion_DestinationHasQueen** ( :white_check_mark: )
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.QUEEN`
@@ -286,10 +296,7 @@ Scope: simulate a move on a deep copy for **check filtering**. Supports `NORMAL`
   - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)`
   - **State of the system**: white pawn `(4, 1)`; `PROMOTION` to `(4, 0)` with `PieceType.KNIGHT`
   - **Expected output**: returned board at `(4, 0)` has type `KNIGHT`
-- **MG-TC81: GenerateLegalMoves_OnUnmovedQueensideRookAtFileZero_FindsRookAtFileThree** ( :white_check_mark: )
-  - **Method(s) under test**: `applyMoveToBoard(Piece[][], Move)` (via `findUnmovedRookFileIn`)
-  - **State of the system**: white king `(4, 7)`, rook `(0, 7)`; `CASTLING_QUEENSIDE` to `(2, 7)`
-  - **Expected output**: returned board at `(3, 7)` has type `ROOK`
+- **MG-TC81: removed** — tested the rook search inside `applyMoveToBoard`; with king-takes-rook encoding the rook file comes from `move.getTo()` and the search no longer exists. Relocation of the file-0 rook is covered by MG-TC35.
 
 ---
 
@@ -601,8 +608,9 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
 
 **Castling side — Cases:**
 
-- Kingside — white king `(4, 7)`, rook `(7, 7)` unmoved; destination `(6, 7)`
-- Queenside — white king `(4, 7)`, rook `(0, 7)` unmoved; destination `(2, 7)`
+- Kingside — white king `(4, 7)`, rook `(7, 7)` unmoved; move `to` = rook square `(7, 7)` (king-takes-rook encoding)
+- Queenside — white king `(4, 7)`, rook `(0, 7)` unmoved; move `to` = rook square `(0, 7)`
+- Kingside, Chess960 adjacent — white king `(5, 7)`, rook `(6, 7)` unmoved; move `to` = `(6, 7)`
 
 **King/rook movement — Cases:**
 
@@ -631,10 +639,10 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addEnPassantMoves`)
   - **State of the system**: white pawn at `(4, 3)`; `Optional.empty()` en-passant target
   - **Expected output**: no returned move has `MoveType.EN_PASSANT`
-- **MG-TC27: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling** ( :white_check_mark: )
+- **MG-TC27: GenerateLegalMoves_OnUnmovedKingWithClearKingsidePath_IncludesKingsideCastling** ( :x: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and rook `(7, 7)` unmoved; path clear and safe
-  - **Expected output**: returned moves include destination `(6, 7)` with `MoveType.CASTLING_KINGSIDE`
+  - **Expected output**: returned moves include destination `(7, 7)` (rook square) with `MoveType.CASTLING_KINGSIDE`
 - **MG-TC28: GenerateLegalMoves_OnMovedKing_ExcludesCastlingMoves** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: same as MG-TC27 but king has `hasMoved() == true`
@@ -643,10 +651,10 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: same as MG-TC27 with black rook at `(5, 0)` attacking transit square `(5, 7)`
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
-- **MG-TC30: GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling** ( :white_check_mark: )
+- **MG-TC30: GenerateLegalMoves_OnUnmovedKingWithClearQueensidePath_IncludesQueensideCastling** ( :x: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` and rook `(0, 7)` unmoved; squares `(1, 7)`, `(2, 7)`, `(3, 7)` empty; path safe
-  - **Expected output**: returned moves include destination `(2, 7)` with `MoveType.CASTLING_QUEENSIDE`
+  - **Expected output**: returned moves include destination `(0, 7)` (rook square) with `MoveType.CASTLING_QUEENSIDE`
 - **MG-TC31: GenerateLegalMoves_OnMovedKingsideRook_ExcludesKingsideCastling** ( :white_check_mark: )
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` unmoved; rook `(7, 7)` with `hasMoved() == true`
@@ -679,6 +687,10 @@ Scope: pseudo-legal **en passant** (via stored `enPassantTarget`) and **castling
   - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`)
   - **State of the system**: white king `(4, 7)` alone; no rooks on back rank
   - **Expected output**: no returned move has `MoveType.CASTLING_KINGSIDE`
+- **MG-TC92: GenerateLegalMoves_OnAdjacentKingAndRook_IncludesKingsideCastlingToRookSquare** ( :x: )
+  - **Method(s) under test**: `generateLegalMoves(Location)` (via `addCastlingMoves`, `isPathClearForCastling`)
+  - **State of the system**: white king `(5, 7)`, rook `(6, 7)` unmoved (Chess960 adjacent); destination squares occupied only by the castling pieces themselves; path safe
+  - **Expected output**: returned moves include destination `(6, 7)` (rook square) with `MoveType.CASTLING_KINGSIDE`
 
 ---
 
