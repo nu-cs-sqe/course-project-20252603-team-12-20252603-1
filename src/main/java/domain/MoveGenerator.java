@@ -152,7 +152,8 @@ public class MoveGenerator {
         if (move.getType() == MoveType.CASTLING_QUEENSIDE) {
             PieceColor color = copy[fromRank][fromFile].getColor();
             int rookFile = findUnmovedRookFileIn(copy, fromRank, fromFile, false, color)
-                    .orElseThrow(() -> new IllegalStateException("No unmoved queenside rook found"));
+                    .orElseThrow(() ->
+                            new IllegalStateException("No unmoved queenside rook found"));
             Piece king = copy[fromRank][fromFile];
             final Piece rook = copy[fromRank][rookFile];
             copy[fromRank][fromFile] = new NonePiece();
