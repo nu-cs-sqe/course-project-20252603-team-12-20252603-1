@@ -948,7 +948,7 @@ class MoveGeneratorTest {
         boolean expected = true;
         boolean actual = hasMoveToWithType(
                 moveGenerator.generateLegalMoves(new Location(4, 7)),
-                6,
+                7,
                 7,
                 MoveType.CASTLING_KINGSIDE);
 
