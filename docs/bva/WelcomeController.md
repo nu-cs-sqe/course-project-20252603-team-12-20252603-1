@@ -1,267 +1,205 @@
 # BVA Analysis for WelcomeController
 
-## Method: `WelcomeController()`
+`WelcomeView` and the game launch are injected seams (`setWelcomeView`,
+`setGameLauncher`), so controller logic is unit-tested headless with EasyMock.
+Only `show()` builds a real `WelcomeView`, so its line stays headed
+(`assumeTrue` on a display), matching `BoardController.show()`. `MainView` state
+(visibility, title, current-player label) is `BoardController`'s responsibility
+and is verified in `BoardControllerTest`, not here.
+
+## Method: `WelcomeController()` / `WelcomeController(Locale)`
 
 ### Step 1: Equivalence Classes
-
-- **Output: WelcomeView initial visibility** — whether the welcome screen is visible immediately after construction, before `show()` is called
-- **Output: start-game action wired** — whether clicking the Start Game button invokes `startGame()`
-- **Output: default locale** — no-arg constructor builds `WelcomeView` with `Locale.ENGLISH`; user may switch language on the welcome screen before start
+- Input: locale — stored, passed to `WelcomeView` in `show()` (no-arg defaults to English)
+- Output: none (constructor only stores the locale)
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class                      | Catalog data type | Parameters                          |
-| -------------------------------------- | ----------------- | ----------------------------------- |
-| Output: WelcomeView initial visibility | Boolean           | true (visible), false (not visible) |
-| Output: start-game action wired        | Boolean           | true (wired), false (not wired)     |
-| Output: default locale                 | **Cases**         | `Locale.ENGLISH`                    |
+| Class | Type |
+| --- | --- |
+| Locale | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- Locale: `Locale.ENGLISH` (no-arg default), `Locale.forLanguageTag("es")`
+- Exceptions: none
 
-**WelcomeView initial visibility — Boolean:**
+### Step 4: Test Cases
+No standalone output; verified through `show()` (WC-TC3) and `startGame()` (WC-TC4–WC-TC11).
 
-- `false` (0)
-- `true` (1) — CAN'T SET: `show()` has not been called
+---
 
-**start-game action wired — Boolean:**
+## Method: `setWelcomeView(WelcomeView)` / `getWelcomeView()`
 
-- `false` (0) — CAN'T SET: the constructor always wires the action
-- `true` (1)
+### Step 1: Equivalence Classes
+- Input: injected welcome view
+- Output: start-game action wired on the injected view
+- Output: `getWelcomeView()` returns the injected view
 
-### Step 4: Test Cases (Each-Choice Strategy)
+### Step 2: Data Types (from BVA Catalog)
+| Class | Type |
+| --- | --- |
+| Injected view | Pointers |
+| `setStartGameAction` calls | Counts |
+| `getWelcomeView()` return | Pointers |
 
-- **TC1: Constructor_FreshInstance_WelcomeViewNotVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeController()`
-  - **State of the system**: freshly constructed controller; `show()` has not been called
-  - **Expected output**: `welcomeView.isVisible()` is `false`
+### Step 3: Boundary Values (from BVA Catalog)
+- Injected view: non-null mock (`null` CAN'T SET — setter calls `setStartGameAction` immediately)
+- `setStartGameAction` calls: `1` (`0` CAN'T SET)
+- Return: same reference as injected; `null` before first `setWelcomeView`/`show()`
 
-- **TC6: Constructor_ActionWired_ClickingStartGameCallsStartGame** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeController()`
-  - **State of the system**: freshly constructed controller; `player1Name = "Alice"`, `player2Name = "Bob"`; `show()` called; `clickStartGame()` called on the view
-  - **Expected output**: `WelcomeView` is disposed (`isDisplayable()` is `false`)
+### Step 4: Test Cases
+- **WC-TC1: SetWelcomeView_WhenCalled_WiresStartGameAction** ( :white_check_mark: )
+  - Method(s) under test: `setWelcomeView(WelcomeView)`
+  - State of the system: mock `WelcomeView` injected via `setWelcomeView`
+  - Expected output: `setStartGameAction` called once with a non-null action
 
-- **WC-TC17: Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale** ( :white_check_mark: )
-  - **Method(s) under test**: `WelcomeController()`
-  - **State of the system**: freshly constructed controller; JVM default locale may differ from English
-  - **Expected output**: `getWelcomeView().getTitle()` is `"Chess"` (English bundle, not system locale)
+- **WC-TC2: GetWelcomeView_AfterSetWelcomeView_ReturnsSameView** ( :white_check_mark: )
+  - Method(s) under test: `getWelcomeView()`, `setWelcomeView(WelcomeView)`
+  - State of the system: mock `WelcomeView` injected via `setWelcomeView`
+  - Expected output: `getWelcomeView()` returns the same mock instance
+
+---
+
+## Method: `setGameLauncher(GameLauncher)`
+
+### Step 1: Equivalence Classes
+- Input: injected game launcher
+- Output: `startGame()` invokes the injected launcher instead of the default
+
+### Step 2: Data Types (from BVA Catalog)
+| Class | Type |
+| --- | --- |
+| Injected launcher | Pointers |
+
+### Step 3: Boundary Values (from BVA Catalog)
+- Injected launcher: non-null `GameLauncher`; default launches a real `BoardController` when unset
+- Exceptions: none
+
+### Step 4: Test Cases
+Verified through `startGame()` success path (WC-TC8–WC-TC11).
 
 ---
 
 ## Method: `show()`
 
 ### Step 1: Equivalence Classes
-
-- **Output: WelcomeView visibility** — whether the welcome screen becomes visible after `show()` is called
+- Output: welcome view created
+- Output: welcome view visible
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class                             | Catalog data type | Parameters                          |
-| --------------------------------------------- | ----------------- | ----------------------------------- |
-| Output: WelcomeView visibility after `show()` | Boolean           | true (visible), false (not visible) |
+| Class | Type |
+| --- | --- |
+| Welcome view created | Pointers |
+| Welcome view visibility | Boolean |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- Welcome view: a real `WelcomeView` is created (no injection path; opens a window)
+- Visibility: `true` (`false` CAN'T SET post-`show()`)
+- Exceptions: `HeadlessException` with no display — tests guard with `assumeTrue`
 
-**WelcomeView visibility — Boolean:**
-
-- `false` (0) — CAN'T SET: `show()` always makes the view visible
-- `true` (1)
-
-### Step 4: Test Cases (Each-Choice Strategy)
-
-- **TC2: Show_WhenCalled_WelcomeViewBecomesVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `show()`
-  - **State of the system**: freshly constructed controller; `show()` called
-  - **Expected output**: `welcomeView.isVisible()` is `true`
+### Step 4: Test Cases
+- **WC-TC3: Show_WhenCalled_WelcomeViewBecomesVisible** ( :white_check_mark: )
+  - Method(s) under test: `show()`
+  - State of the system: freshly constructed controller; display available; `show()` called
+  - Expected output: `getWelcomeView().isVisible()` is `true`
 
 ---
 
 ## Method: `startGame()`
 
 ### Step 1: Equivalence Classes
-
-- **Input: player1Name** — the text in the player 1 name field at the moment start is triggered
-- **Input: player2Name** — the text in the player 2 name field at the moment start is triggered
-- **Output: WelcomeView disposed** — whether the `WelcomeView` is closed and disposed after start is triggered
-- **Output: error message** — whether an error message is displayed to the user when validation fails
+- Input: player1Name, player2Name — read from the view
+- Input: selected locale — read from the view
+- Output (invalid): error shown, launcher not invoked, view not closed
+- Output (valid): view closed, launcher invoked with names, initializer, and locale
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class            | Catalog data type | Parameters                            |
-| ---------------------------- | ----------------- | ------------------------------------- |
-| Input: player1Name           | String            | —                                     |
-| Input: player2Name           | String            | —                                     |
-| Output: WelcomeView disposed | Boolean           | true (disposed), false (not disposed) |
-| Output: error message        | Boolean           | true (shown), false (not shown)       |
+| Class | Type |
+| --- | --- |
+| player1Name, player2Name | Strings |
+| Selected locale | Cases |
+| `showError` calls | Counts |
+| `closeWelcomeView` calls (`setVisible(false)`, `dispose`) | Counts |
+| Launcher invocations | Counts |
+| Names forwarded to launcher | Strings |
+| Locale forwarded to launcher | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- player1Name / player2Name: `""` vs non-empty (`"Alice"`, `"Bob"`)
+- Selected locale: `Locale.ENGLISH`, `Locale.forLanguageTag("es")`
+- `showError` calls: invalid → `1`; valid → `0`
+- Launcher invocations: valid → `1`; invalid → `0`
+- Error text: English `"Player name cannot be empty"`, Spanish `"El nombre del jugador no puede estar vacío"`
+- Exceptions: none
 
-**player1Name — String:**
+### Step 4: Test Cases
+Invalid (at least one empty name):
+- **WC-TC4: StartGame_EmptyPlayer1Name_ShowsErrorAndDoesNotLaunch** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`
+  - State of the system: mock view `getPlayer1Name() = ""`, `getPlayer2Name() = "Bob"`, `getSelectedLocale() = ENGLISH`; stub launcher
+  - Expected output: `showError` called once; launcher not invoked; view not disposed
 
-- `""` (empty string)
-- A non-empty string (e.g., `"Alice"`)
+- **WC-TC5: StartGame_EmptyPlayer2Name_ShowsErrorAndDoesNotLaunch** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`
+  - State of the system: mock view `getPlayer1Name() = "Alice"`, `getPlayer2Name() = ""`
+  - Expected output: `showError` called once; launcher not invoked; view not disposed
 
-**player2Name — String:**
+- **WC-TC6: StartGame_EmptyName_ErrorTextFromEnglishBundle** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`
+  - State of the system: mock view `getPlayer1Name() = ""`, `getSelectedLocale() = ENGLISH`; capture the `showError` argument
+  - Expected output: argument is `"Player name cannot be empty"`
 
-- `""` (empty string)
-- A non-empty string (e.g., `"Bob"`)
+- **WC-TC7: StartGame_EmptyName_ErrorTextFromSpanishBundle** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`
+  - State of the system: mock view `getPlayer1Name() = ""`, `getSelectedLocale() = forLanguageTag("es")`; capture the `showError` argument
+  - Expected output: argument is `"El nombre del jugador no puede estar vacío"`
 
-**WelcomeView disposed — Boolean:**
+Valid (both names non-empty):
+- **WC-TC8: StartGame_NonEmptyNames_ClosesWelcomeView** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`
+  - State of the system: mock view `"Alice"`/`"Bob"`; stub launcher
+  - Expected output: view `setVisible(false)` and `dispose()` each called once
 
-- `false` (0) — at least one name is empty; validation rejects the start
-- `true` (1) — both names are non-empty; game proceeds
+- **WC-TC9: StartGame_NonEmptyNames_InvokesLauncherOnce** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
+  - State of the system: mock view `"Alice"`/`"Bob"`; mock launcher
+  - Expected output: launcher invoked exactly once
 
-**error message — Boolean:**
+- **WC-TC10: StartGame_NonEmptyNames_LauncherReceivesPlayerNames** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
+  - State of the system: mock view `"Alice"`/`"Bob"`; launcher capturing its arguments
+  - Expected output: launcher received `player1Name = "Alice"`, `player2Name = "Bob"`
 
-- `false` (0) — both names non-empty; no error shown
-- `true` (1) — at least one name is empty; error message displayed
-
-### Step 4: Test Cases (Each-Choice Strategy)
-
-- **TC3: StartGame_NonEmptyNames_WelcomeViewDisposed** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = "Bob"`; `startGame()` called
-  - **Expected output**: the `WelcomeView` is disposed (`isDisplayable()` is `false`)
-
-- **TC4: StartGame_EmptyPlayer1Name_GameDoesNotStart** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
-  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
-
-- **TC5: StartGame_EmptyPlayer2Name_GameDoesNotStart** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `player1Name = "Alice"`, `player2Name = ""`; `startGame()` called
-  - **Expected output**: `WelcomeView` is not disposed (`isDisplayable()` is `true`); error message is displayed (`getErrorText()` is non-empty)
-
-### Step 4 (i18n): error message text from bundle
-
-- **WC-TC18: StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `WelcomeController` constructed with `Locale.ENGLISH`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
-  - **Expected output**: `getErrorText()` is `"Player name cannot be empty"`
-
-- **WC-TC19: StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `WelcomeController(Locale.forLanguageTag("es"))`; `player1Name = ""`, `player2Name = "Bob"`; `startGame()` called
-  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
+- **WC-TC11: StartGame_OnSpanishLocale_LauncherReceivesSpanishLocale** ( :white_check_mark: )
+  - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
+  - State of the system: mock view valid names, `getSelectedLocale() = forLanguageTag("es")`; launcher capturing its arguments
+  - Expected output: launcher received `Locale.forLanguageTag("es")` (resulting `MainView` title verified in `BoardControllerTest`)
 
 ---
 
 ## Method: `selectedInitializer()`
 
 ### Step 1: Equivalence Classes
-
-- **Input: chess960 mode selected** — whether the Chess960 radio button is selected on the WelcomeView at the moment `selectedInitializer()` is called
-- **Output: BoardInitializer type** — which concrete `BoardInitializer` implementation is returned
+- Input: chess960 mode selected — read from the view
+- Output: concrete `BoardInitializer` type
 
 ### Step 2: Data Types (from BVA Catalog)
-
-| Equivalence class             | Catalog data type | Parameters                                              |
-| ----------------------------- | ----------------- | ------------------------------------------------------- |
-| Input: chess960 mode selected | Boolean           | true (chess960 selected), false (standard selected)     |
-| Output: BoardInitializer type | Cases             | StandardBoardInitializer, FischerRandomBoardInitializer |
+| Class | Type |
+| --- | --- |
+| chess960 selected | Boolean |
+| BoardInitializer type | Cases |
 
 ### Step 3: Boundary Values (from BVA Catalog)
+- chess960 selected: `false` (standard), `true` (chess960)
+- BoardInitializer type: `StandardBoardInitializer`, `FischerRandomBoardInitializer`
+- Exceptions: none
 
-**chess960 mode selected — Boolean:**
+### Step 4: Test Cases
+- **WC-TC12: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :white_check_mark: )
+  - Method(s) under test: `selectedInitializer()`
+  - State of the system: mock view `isChess960Selected() = false`
+  - Expected output: instance of `StandardBoardInitializer`
 
-- `false` (0) — standard radio button selected (default)
-- `true` (1) — chess960 radio button selected
-
-**BoardInitializer type — Cases:**
-
-- `StandardBoardInitializer`
-- `FischerRandomBoardInitializer`
-
-### Step 4: Test Cases (Each-Choice Strategy)
-
-- **TC7: SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer** ( :white_check_mark: )
-  - **Method(s) under test**: `selectedInitializer()`
-  - **State of the system**: chess960 not selected (default); `selectedInitializer()` called
-  - **Expected output**: returned value is an instance of `StandardBoardInitializer`
-
-- **TC8: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :white_check_mark: )
-  - **Method(s) under test**: `selectedInitializer()`
-  - **State of the system**: chess960 selected; `selectedInitializer()` called
-  - **Expected output**: returned value is an instance of `FischerRandomBoardInitializer`
-
----
-
-## Method / behavior: `startGame()` — BoardController launch wiring
-
-Scope: After name validation, create `BoardController(player1Name, player2Name, board)` and call `boardController.show()` so the game UI (including turn labels) is owned by `BoardController`, not constructed directly in `WelcomeController`.
-
-### Step 1: Equivalence Classes
-
-| Input / state | Equivalence classes                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------ |
-| Player names  | both non-empty (valid start)                                                                           |
-| Board mode    | standard or chess960 via `selectedInitializer()`                                                       |
-| Output        | `BoardController` created and `show()` launches visible `MainView` with player-one label on white turn |
-
-### Step 2: Data Types (from BVA Catalog)
-
-| Variable / output            | Catalog data type |
-| ---------------------------- | ----------------- |
-| `player1Name`, `player2Name` | Strings           |
-| Started controller reference | Pointers          |
-| Main view visibility         | Boolean           |
-| Current player label text    | Strings           |
-
-### Step 3: Concrete boundary values
-
-- Valid start: `player1Name = "Alice"`, `player2Name = "Bob"`.
-- Fresh board from standard initializer; initial turn `WHITE_TURN`.
-
-### Step 4: Test cases
-
-- **TC9: StartGame_NonEmptyNames_StartedBoardControllerNotNull** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: valid player names; `startGame()` called after `show()`
-  - **Expected output**: `getStartedBoardController()` is not `null`
-
-- **TC10: StartGame_NonEmptyNames_MainViewIsVisible** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: valid player names; game started
-  - **Expected output**: `getStartedBoardController().getMainView().isVisible()` is `true`
-
-- **TC11: StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: valid player names; standard new game (`WHITE_TURN`)
-  - **Expected output**: game stats current-player label text is `player1Name`
-
----
-
-## Method / behavior: language selection → `BoardController` locale
-
-`startGame()` reads `welcomeView.getSelectedLocale()` and passes it to `BoardController` and error messages.
-
-### Step 1: Equivalence classes
-
-| Input / state | Equivalence classes |
-| ------------- | ------------------- |
-| Language combo | English; Spanish |
-| Output | `MainView` title and error text match selected bundle |
-
-### Step 2: Data types
-
-| Variable / output | Catalog type |
-| ----------------- | ------------ |
-| Selected locale | **Cases** |
-| Main view title | **String** |
-| Error message | **String** |
-
-### Step 3: Boundary values
-
-- **Cases:** English selected → `"Chess"` title; Spanish selected → `"Ajedrez"` title.
-
-### Step 4: Test cases
-
-- **WC-TC20: StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `WelcomeController()` with Spanish selected; valid player names; game started
-  - **Expected output**: visible `MainView` title is `"Ajedrez"`
-
-- **WC-TC21: StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle** ( :white_check_mark: )
-  - **Method(s) under test**: `startGame()`
-  - **State of the system**: `WelcomeController()` (English welcome); Spanish selected; `player1Name = ""`; start triggered
-  - **Expected output**: `getErrorText()` is `"El nombre del jugador no puede estar vacío"`
+- **WC-TC13: SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer** ( :white_check_mark: )
+  - Method(s) under test: `selectedInitializer()`
+  - State of the system: mock view `isChess960Selected() = true`
+  - Expected output: instance of `FischerRandomBoardInitializer`

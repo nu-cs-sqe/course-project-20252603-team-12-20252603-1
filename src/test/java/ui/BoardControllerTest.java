@@ -738,6 +738,20 @@ class BoardControllerTest {
     }
 
     @Test
+    void HandleSquareClick_OnMinInBoundsSquare_AcceptsClick() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Board boardMock = boardForBlackPieceClick(standardGrid, 0, 0);
+        BoardController controller = controllerFor(boardMock);
+
+        controller.handleSquareClick(new Location(0, 0));
+
+        boolean expected = true;
+        boolean actual = controller.hasSelection();
+        assertEquals(expected, actual);
+        EasyMock.verify(boardMock);
+    }
+
+    @Test
     void HandleSquareClick_OnBlackTurn_OnBlackPiece_HasSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
         Board boardMock = boardForBlackPieceClick(standardGrid, 1, 0);

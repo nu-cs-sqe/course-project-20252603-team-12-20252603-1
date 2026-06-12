@@ -9,14 +9,23 @@ package ui {
 
     +class WelcomeController {
         -welcomeView: WelcomeView
+        -locale: Locale
+        -gameLauncher: GameLauncher
 
         +WelcomeController()
+        ~WelcomeController(locale: Locale)
         +show(): void
+        ~setWelcomeView(welcomeView: WelcomeView): void
+        ~setGameLauncher(gameLauncher: GameLauncher): void
         ~getWelcomeView(): WelcomeView
 
-        -startGame(): void
-        -selectedInitializer(): BoardInitializer
+        ~startGame(): void
+        ~selectedInitializer(): BoardInitializer
         -closeWelcomeView(): void
+    }
+
+    ~interface GameLauncher {
+        ~launch(player1Name: String, player2Name: String, initializer: BoardInitializer, locale: Locale): void
     }
 
     +class WelcomeView {
@@ -94,15 +103,21 @@ package ui {
         -player1Name: String
         -player2Name: String
         -board: Board
+        -bundle: ResourceBundle
+        -locale: Locale
         -mainView: MainView
         -boardView: BoardView
         -lastSelectedLoc: Optional<Location>
+        -promotionPicker: Function<PieceColor, PieceType>
 
         +BoardController(player1Name: String, player2Name: String, board: Board)
+        ~BoardController(player1Name: String, player2Name: String, board: Board, locale: Locale)
         +show(): void
+        ~setMainView(mainView: MainView): void
+        ~getMainView(): MainView
         +setBoardView(boardView: BoardView): void
         ~getBoardView(): BoardView
-        ~getMainView(): MainView
+        ~setPromotionPicker(promotionPicker: Function<PieceColor, PieceType>): void
         +handleSquareClick(loc: Location): void
         +hasSelection(): boolean
         +getSelectedLocation(): Optional<Location>
@@ -117,7 +132,8 @@ package ui {
         -promptForPromotionPiece(color: PieceColor): PieceType
         -isGameOver(): boolean
         -showEndGame(): void
-        -buildEndGameMessage(): String
+        ~buildEndGameMessage(): String
+        -formatWinMessage(playerName: String): String
         -updateCurrentPlayerLabel(): void
         -repaintBoardView(): void
         -{static} isInBounds(loc: Location): boolean
@@ -155,9 +171,12 @@ package ui {
     ~class EndGameController {
         -endGameView: EndGameView
         -mainView: JFrame
+        -locale: Locale
 
         ~EndGameController(resultMessage: String, mainView: JFrame)
+        ~EndGameController(resultMessage: String, mainView: JFrame, locale: Locale)
         ~show(): void
+        ~getEndGameView(): EndGameView
         -playAgain(): void
     }
 
@@ -383,9 +402,11 @@ Main ..> WelcomeController
 
 ' --- WelcomeController ---
 WelcomeController --> WelcomeView
+WelcomeController --> GameLauncher
 WelcomeController ..> BoardController
 WelcomeController ..> Board
 WelcomeController ..> BoardInitializer
+GameLauncher --+ WelcomeController
 
 ' --- View inheritance ---
 WelcomeView -u-|> JFrame

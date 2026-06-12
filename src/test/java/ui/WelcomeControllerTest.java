@@ -1,43 +1,29 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.FischerRandomBoardInitializer;
 import domain.StandardBoardInitializer;
 import java.awt.Window;
 import java.util.Locale;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class WelcomeControllerTest {
 
     @AfterEach
-    void disposeOpenMainViews() {
+    void disposeOpenUiWindows() {
         for (Window window : Window.getWindows()) {
-            if (window instanceof MainView) {
-                ((MainView) window).dispose();
+            if (window instanceof WelcomeView || window instanceof MainView) {
+                window.dispose();
             }
         }
-    }
-
-    @Test
-    void Constructor_FreshInstance_WelcomeViewNotVisible() {
-        WelcomeController controller = new WelcomeController();
-        assertFalse(controller.getWelcomeView().isVisible());
-    }
-
-    @Test
-    void Constructor_OnFreshInstance_WelcomeViewUsesEnglishLocale() {
-        WelcomeController controller = new WelcomeController();
-
-        String expected = "Chess";
-        String actual = controller.getWelcomeView().getTitle();
-        assertEquals(expected, actual);
     }
 
     @Test
@@ -48,173 +34,254 @@ class WelcomeControllerTest {
     }
 
     @Test
-    void StartGame_NonEmptyNames_WelcomeViewDisposed() {
+    void SetWelcomeView_WhenCalled_WiresStartGameAction() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        Capture<Runnable> action = EasyMock.newCapture();
+        welcomeView.setStartGameAction(EasyMock.capture(action));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
         WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
-        assertFalse(controller.getWelcomeView().isDisplayable());
+        controller.setWelcomeView(welcomeView);
+
+        EasyMock.verify(welcomeView);
+        assertNotNull(action.getValue());
     }
 
     @Test
-    void StartGame_EmptyPlayer1Name_GameDoesNotStart() {
+    void GetWelcomeView_AfterSetWelcomeView_ReturnsSameView() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
         WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
-        assertTrue(controller.getWelcomeView().isDisplayable());
-        assertNotEquals("", controller.getWelcomeView().getErrorText());
+        controller.setWelcomeView(welcomeView);
+
+        assertSame(welcomeView, controller.getWelcomeView());
+        EasyMock.verify(welcomeView);
     }
 
     @Test
-    void StartGame_EmptyPlayer1Name_ErrorTextFromEnglishBundle() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
+    void StartGame_EmptyPlayer1Name_ShowsErrorAndDoesNotLaunch() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        welcomeView.showError(EasyMock.anyString());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
 
-        String expected = "Player name cannot be empty";
-        String actual = controller.getWelcomeView().getErrorText();
-        assertEquals(expected, actual);
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        EasyMock.verify(welcomeView);
     }
 
     @Test
-    void StartGame_EmptyPlayer1Name_ErrorTextFromSpanishBundle() {
-        WelcomeController controller = new WelcomeController(Locale.forLanguageTag("es"));
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
+    void StartGame_EmptyPlayer2Name_ShowsErrorAndDoesNotLaunch() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        welcomeView.showError(EasyMock.anyString());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
 
-        String expected = "El nombre del jugador no puede estar vacío";
-        String actual = controller.getWelcomeView().getErrorText();
-        assertEquals(expected, actual);
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        EasyMock.verify(welcomeView);
     }
 
     @Test
-    void StartGame_EmptyPlayer2Name_GameDoesNotStart() {
+    void StartGame_EmptyName_ErrorTextFromEnglishBundle() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        Capture<String> error = EasyMock.newCapture();
+        welcomeView.showError(EasyMock.capture(error));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
         WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("");
-        controller.getWelcomeView().clickStartGame();
-        assertTrue(controller.getWelcomeView().isDisplayable());
-        assertNotEquals("", controller.getWelcomeView().getErrorText());
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        assertEquals("Player name cannot be empty", error.getValue());
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void StartGame_EmptyName_ErrorTextFromSpanishBundle() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.forLanguageTag("es"));
+        Capture<String> error = EasyMock.newCapture();
+        welcomeView.showError(EasyMock.capture(error));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.startGame();
+
+        assertEquals("El nombre del jugador no puede estar vacío", error.getValue());
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_ClosesWelcomeView() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        EasyMock.replay(welcomeView);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher((p1, p2, init, loc) -> {});
+        controller.startGame();
+
+        EasyMock.verify(welcomeView);
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_InvokesLauncherOnce() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        final WelcomeController.GameLauncher launcher =
+                EasyMock.createMock(WelcomeController.GameLauncher.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        launcher.launch(EasyMock.anyObject(), EasyMock.anyObject(),
+                EasyMock.anyObject(), EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView, launcher);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher(launcher);
+        controller.startGame();
+
+        EasyMock.verify(welcomeView, launcher);
+    }
+
+    @Test
+    void StartGame_NonEmptyNames_LauncherReceivesPlayerNames() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        final WelcomeController.GameLauncher launcher =
+                EasyMock.createMock(WelcomeController.GameLauncher.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        Capture<String> player1 = EasyMock.newCapture();
+        Capture<String> player2 = EasyMock.newCapture();
+        launcher.launch(EasyMock.capture(player1), EasyMock.capture(player2),
+                EasyMock.anyObject(), EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView, launcher);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher(launcher);
+        controller.startGame();
+
+        assertEquals("Alice", player1.getValue());
+        assertEquals("Bob", player2.getValue());
+        EasyMock.verify(welcomeView, launcher);
+    }
+
+    @Test
+    void StartGame_OnSpanishLocale_LauncherReceivesSpanishLocale() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        final WelcomeController.GameLauncher launcher =
+                EasyMock.createMock(WelcomeController.GameLauncher.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.forLanguageTag("es"));
+        Capture<Locale> locale = EasyMock.newCapture();
+        launcher.launch(EasyMock.anyObject(), EasyMock.anyObject(),
+                EasyMock.anyObject(), EasyMock.capture(locale));
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView, launcher);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher(launcher);
+        controller.startGame();
+
+        assertEquals(Locale.forLanguageTag("es"), locale.getValue());
+        EasyMock.verify(welcomeView, launcher);
     }
 
     @Test
     void SelectedInitializer_StandardModeSelected_ReturnsStandardBoardInitializer() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.replay(welcomeView);
+
         WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+
         assertInstanceOf(StandardBoardInitializer.class, controller.selectedInitializer());
+        EasyMock.verify(welcomeView);
     }
 
     @Test
     void SelectedInitializer_Chess960ModeSelected_ReturnsFischerRandomBoardInitializer() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(true);
+        EasyMock.replay(welcomeView);
+
         WelcomeController controller = new WelcomeController();
-        controller.getWelcomeView().setChess960Selected(true);
+        controller.setWelcomeView(welcomeView);
+
         assertInstanceOf(FischerRandomBoardInitializer.class, controller.selectedInitializer());
-    }
-
-    @Test
-    void Constructor_ActionWired_ClickingStartGameCallsStartGame() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
-        assertFalse(controller.getWelcomeView().isDisplayable());
-    }
-
-    @Test
-    void StartGame_NonEmptyNames_StartedBoardControllerNotNull() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-
-        controller.getWelcomeView().clickStartGame();
-
-        assertNotNull(findVisibleMainView());
-    }
-
-    @Test
-    void StartGame_NonEmptyNames_MainViewIsVisible() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-
-        controller.getWelcomeView().clickStartGame();
-
-        MainView mainView = findVisibleMainView();
-        assertNotNull(mainView);
-
-        boolean expected = true;
-        boolean actual = mainView.isVisible();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void StartGame_NonEmptyNames_CurrentPlayerLabelShowsPlayer1Name() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-
-        controller.getWelcomeView().clickStartGame();
-
-        MainView mainView = findVisibleMainView();
-        assertNotNull(mainView);
-
-        String expected = "Alice";
-        String actual = mainView.getGameStatsView().getCurrentPlayerLabelText();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void StartGame_WhenSpanishLanguageSelected_MainViewTitleFromSpanishBundle() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().selectLanguageIndex(1);
-        controller.getWelcomeView().setPlayer1Name("Alice");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-
-        controller.getWelcomeView().clickStartGame();
-
-        MainView mainView = findVisibleMainView();
-        assertNotNull(mainView);
-
-        String expected = "Ajedrez";
-        String actual = mainView.getTitle();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void StartGame_WhenSpanishLanguageSelectedOnEnglishView_ErrorTextFromSpanishBundle() {
-        WelcomeController controller = new WelcomeController();
-        controller.show();
-        controller.getWelcomeView().selectLanguageIndex(1);
-        controller.getWelcomeView().setPlayer1Name("");
-        controller.getWelcomeView().setPlayer2Name("Bob");
-        controller.getWelcomeView().clickStartGame();
-
-        String expected = "El nombre del jugador no puede estar vacío";
-        String actual = controller.getWelcomeView().getErrorText();
-        assertEquals(expected, actual);
-    }
-
-    private static MainView findVisibleMainView() {
-        for (Window window : Window.getWindows()) {
-            if (window instanceof MainView) {
-                MainView mainView = (MainView) window;
-                if (mainView.isVisible()) {
-                    return mainView;
-                }
-            }
-        }
-        return null;
+        EasyMock.verify(welcomeView);
     }
 }
