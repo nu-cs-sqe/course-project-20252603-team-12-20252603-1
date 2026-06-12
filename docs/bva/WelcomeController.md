@@ -169,7 +169,7 @@ Valid (both names non-empty):
   - State of the system: mock view `"Alice"`/`"Bob"`; launcher capturing its arguments
   - Expected output: launcher received `player1Name = "Alice"`, `player2Name = "Bob"`
 
-- **WC-TC11: StartGame_OnSpanishLocale_LauncherReceivesSpanishLocale** ( :x: )
+- **WC-TC11: StartGame_OnSpanishLocale_LauncherReceivesSpanishLocale** ( :white_check_mark: )
   - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
   - State of the system: mock view valid names, `getSelectedLocale() = forLanguageTag("es")`; launcher capturing its arguments
   - Expected output: launcher received `Locale.forLanguageTag("es")` (resulting `MainView` title verified in `BoardControllerTest`)
