@@ -1044,11 +1044,11 @@ class BoardControllerTest {
     }
 
     private static boolean isEightByEight(Piece[][] snapshot) {
-        if (snapshot == null || snapshot.length != 8) {
+        if (snapshot.length != 8) {
             return false;
         }
         for (Piece[] row : snapshot) {
-            if (row == null || row.length != 8) {
+            if (row.length != 8) {
                 return false;
             }
         }
