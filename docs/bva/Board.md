@@ -829,7 +829,7 @@ Scope: execute `EN_PASSANT`, `CASTLING_KINGSIDE`/`CASTLING_QUEENSIDE`, and `PROM
   - **State of the system**: white king `(4,7)`, white rook at `(3,7)` (file 3 = max of queenside interval; rook already on its destination), move type `CASTLING_QUEENSIDE` to rook square `(3,7)`
   - **Expected output**: king at `(2,7)` and rook at `(3,7)` (rook stays in place)
 
-- **TC103: MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :x: )
+- **TC103: MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook** ( :white_check_mark: )
   - **Method(s) under test**: `makeMove(Move)`, `getPieceAt(int, int)`
   - **State of the system**: white king `(5,7)`, white rook `(6,7)` (Chess960 adjacent; rook file 5+1 = min of kingside interval), move type `CASTLING_KINGSIDE` to rook square `(6,7)`
   - **Expected output**: king at `(6,7)` and rook at `(5,7)`

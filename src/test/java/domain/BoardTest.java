@@ -610,6 +610,23 @@ class BoardTest {
     }
 
     @Test
+    void MakeMove_OnAdjacentKingsideCastling_SwapsKingAndRook() {
+        Piece[][] layout = new Piece[8][8];
+        for (Piece[] row : layout) {
+            Arrays.fill(row, new NonePiece());
+        }
+        layout[7][5] = new King(PieceColor.WHITE);
+        layout[7][6] = new Rook(PieceColor.WHITE);
+        Board board = new Board(layout);
+        Move move = new Move(new Location(5, 7), new Location(6, 7), MoveType.CASTLING_KINGSIDE);
+
+        board.makeMove(move);
+
+        assertEquals(PieceType.KING, board.getPieceAt(7, 6).getType());
+        assertEquals(PieceType.ROOK, board.getPieceAt(7, 5).getType());
+    }
+
+    @Test
     void MakeMove_OnTwoStepPawnMove_SetsEnPassantTargetForOpponentCapture() {
         Piece[][] layout = new Piece[8][8];
         for (Piece[] row : layout) {
