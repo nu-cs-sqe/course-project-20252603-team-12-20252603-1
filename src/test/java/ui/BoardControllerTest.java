@@ -23,6 +23,7 @@ import domain.piece.Rook;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.GraphicsEnvironment;
 import java.awt.Window;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -1302,7 +1303,7 @@ class BoardControllerTest {
         final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1333,7 +1334,7 @@ class BoardControllerTest {
         final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1401,13 +1402,15 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection() {
         Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected))
+                .andReturn(new ArrayList<>());
         EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
         EasyMock.replay(boardMock);
 
-        Location selected = new Location(0, 6);
         BoardController controller = controllerFor(boardMock);
         controller.handleSquareClick(selected);
         Location otherPiece = new Location(1, 7);
@@ -1422,9 +1425,13 @@ class BoardControllerTest {
     @Test
     void HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice() {
         Piece[][] standardGrid = newStandardStartingGrid();
+        Location selected = new Location(0, 6);
+        Location otherPiece = new Location(1, 7);
         Board boardMock = EasyMock.createMock(Board.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
+        EasyMock.expect(boardMock.getLegalMoves(selected))
+                .andReturn(new ArrayList<>());
         EasyMock.expect(boardMock.getPieceAt(7, 1)).andReturn(standardGrid[7][1]);
         EasyMock.replay(boardMock);
         BoardView boardViewMock = EasyMock.createMock(BoardView.class);
@@ -1433,10 +1440,39 @@ class BoardControllerTest {
         EasyMock.replay(boardViewMock);
 
         BoardController controller = controllerWithBoardView(boardMock, boardViewMock);
-        controller.handleSquareClick(new Location(0, 6));
-        controller.handleSquareClick(new Location(1, 7));
+        controller.handleSquareClick(selected);
+        controller.handleSquareClick(otherPiece);
 
         EasyMock.verify(boardMock, boardViewMock);
+    }
+
+    @Test
+    void HandleSquareClick_WithSelection_OnOwnCastlingRook_ExecutesCastling() {
+        Piece[][] standardGrid = newStandardStartingGrid();
+        Location kingLoc = new Location(4, 7);
+        Location rookSquare = new Location(7, 7);
+        Move castlingMove = new Move(kingLoc, rookSquare, MoveType.CASTLING_KINGSIDE);
+        Board boardMock = EasyMock.createMock(Board.class);
+        final MainView mainViewMock = EasyMock.createMock(MainView.class);
+        final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
+        EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
+        EasyMock.expect(boardMock.getPieceAt(7, 4)).andReturn(standardGrid[7][4]);
+        EasyMock.expect(boardMock.getLegalMoves(kingLoc)).andReturn(List.of(castlingMove));
+        boardMock.makeMove(castlingMove);
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(mainViewMock.getGameStatsView()).andReturn(statsMock);
+        statsMock.updateCurrentPlayerLabel(TEST_PLAYER_ONE);
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(boardMock, mainViewMock, statsMock);
+
+        BoardController controller = controllerFor(boardMock);
+        controller.setMainView(mainViewMock);
+        controller.handleSquareClick(kingLoc);
+        controller.handleSquareClick(rookSquare);
+
+        boolean actual = controller.hasSelection();
+        assertEquals(false, actual);
+        EasyMock.verify(boardMock, mainViewMock, statsMock);
     }
 
     @Test
@@ -1451,7 +1487,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1488,7 +1524,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_WIN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1526,7 +1562,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_WIN).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1557,7 +1593,7 @@ class BoardControllerTest {
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(2);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.DRAW).times(3);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1671,7 +1707,6 @@ class BoardControllerTest {
         final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(1, 0)).andReturn(standardGrid[1][0]);
-        EasyMock.expect(boardMock.getPieceAt(2, 0)).andReturn(standardGrid[2][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(move));
         boardMock.makeMove(move);
         EasyMock.expectLastCall().once();
@@ -1702,7 +1737,7 @@ class BoardControllerTest {
         final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.WHITE_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(6, 0)).andReturn(standardGrid[6][0]);
-        EasyMock.expect(boardMock.getPieceAt(5, 0)).andReturn(standardGrid[5][0]);
+
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
         Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));
@@ -1733,7 +1768,6 @@ class BoardControllerTest {
         final GameStatsView statsMock = EasyMock.createMock(GameStatsView.class);
         EasyMock.expect(boardMock.getCurrentGameState()).andReturn(GameState.BLACK_TURN).times(4);
         EasyMock.expect(boardMock.getPieceAt(1, 0)).andReturn(standardGrid[1][0]);
-        EasyMock.expect(boardMock.getPieceAt(2, 0)).andReturn(standardGrid[2][0]);
         EasyMock.expect(boardMock.getLegalMoves(selected)).andReturn(List.of(promotionMove));
         Capture<Move> capturedMove = EasyMock.newCapture();
         boardMock.makeMove(EasyMock.capture(capturedMove));

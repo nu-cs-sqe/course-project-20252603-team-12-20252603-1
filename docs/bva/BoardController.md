@@ -566,17 +566,17 @@ Unit tests use **EasyMock** on `Board`; `makeMove` verified with `EasyMock.verif
   - **State of the system**: selection then illegal empty destination with no matching move; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
 
-- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( :x: )
+- **BC-TC57: HandleSquareClick_WithSelection_OnOwnPiece_ChangesSelection** ( ✅ )
   - **Method(s) under test**: `handleSquareClick(Location)`, `getSelectedLocation()`
   - **State of the system**: white turn; pawn at `(0, 6)` selected; board stubs legal moves with no move targeting `(1, 7)`; click white knight at `(1, 7)`
   - **Expected output**: `makeMove` not called; `getSelectedLocation()` is `(1, 7)`
 
-- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( :x: )
+- **BC-TC78: HandleSquareClick_WithSelection_OnOwnPiece_RepaintsBoardViewTwice** ( ✅ )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick` reselect)
   - **State of the system**: selection then click second own piece; board stubs legal moves with no move targeting it; strict `BoardView` mock
   - **Expected output**: `boardView.repaint()` called twice
 
-- **BC-TC89: HandleSquareClick_WithSelection_OnOwnCastlingRook_ExecutesCastling** ( :x: )
+- **BC-TC89: HandleSquareClick_WithSelection_OnOwnCastlingRook_ExecutesCastling** ( ✅ )
   - **Method(s) under test**: `handleSquareClick(Location)` (via `handleDestinationClick`, `findMoveToDestination`)
   - **State of the system**: white turn; king at `(4, 7)` selected; board stubs a `CASTLING_KINGSIDE` move from `(4, 7)` to own rook square `(7, 7)`; click `(7, 7)`
   - **Expected output**: `board.makeMove` called once with the castling move; `hasSelection()` is `false`

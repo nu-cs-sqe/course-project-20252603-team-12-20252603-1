@@ -146,24 +146,24 @@ public class BoardController {
 
     private void handleDestinationClick(Location dest, PieceColor currentColor) {
         Location src = lastSelectedLoc.get();
-        Piece destPiece = board.getPieceAt(dest.getY(), dest.getX());
 
+        List<Move> legalMoves = board.getLegalMoves(src);
+        Optional<Move> matchingMove = findMoveToDestination(legalMoves, dest);
+
+        if (matchingMove.isPresent()) {
+            executeMove(matchingMove.get(), currentColor);
+            return;
+        }
+
+        Piece destPiece = board.getPieceAt(dest.getY(), dest.getX());
         if (destPiece.getType() != PieceType.NONE && destPiece.getColor() == currentColor) {
             lastSelectedLoc = Optional.of(dest);
             repaintBoardView();
             return;
         }
 
-        List<Move> legalMoves = board.getLegalMoves(src);
-        Optional<Move> matchingMove = findMoveToDestination(legalMoves, dest);
-
-        if (!matchingMove.isPresent()) {
-            lastSelectedLoc = Optional.empty();
-            repaintBoardView();
-            return;
-        }
-
-        executeMove(matchingMove.get(), currentColor);
+        lastSelectedLoc = Optional.empty();
+        repaintBoardView();
     }
 
     private void executeMove(Move move, PieceColor currentColor) {
