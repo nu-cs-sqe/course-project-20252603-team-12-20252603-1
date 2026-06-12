@@ -159,7 +159,7 @@ Valid (both names non-empty):
   - State of the system: mock view `"Alice"`/`"Bob"`; stub launcher
   - Expected output: view `setVisible(false)` and `dispose()` each called once
 
-- **WC-TC9: StartGame_NonEmptyNames_InvokesLauncherOnce** ( :x: )
+- **WC-TC9: StartGame_NonEmptyNames_InvokesLauncherOnce** ( :white_check_mark: )
   - Method(s) under test: `startGame()`, `setGameLauncher(GameLauncher)`
   - State of the system: mock view `"Alice"`/`"Bob"`; mock launcher
   - Expected output: launcher invoked exactly once

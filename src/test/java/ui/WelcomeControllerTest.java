@@ -161,4 +161,32 @@ class WelcomeControllerTest {
 
         EasyMock.verify(welcomeView);
     }
+
+    @Test
+    void StartGame_NonEmptyNames_InvokesLauncherOnce() {
+        final WelcomeView welcomeView = EasyMock.createMock(WelcomeView.class);
+        final WelcomeController.GameLauncher launcher =
+                EasyMock.createMock(WelcomeController.GameLauncher.class);
+        welcomeView.setStartGameAction(EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.getPlayer1Name()).andReturn("Alice");
+        EasyMock.expect(welcomeView.getPlayer2Name()).andReturn("Bob");
+        welcomeView.setVisible(false);
+        EasyMock.expectLastCall().once();
+        welcomeView.dispose();
+        EasyMock.expectLastCall().once();
+        EasyMock.expect(welcomeView.isChess960Selected()).andReturn(false);
+        EasyMock.expect(welcomeView.getSelectedLocale()).andReturn(Locale.ENGLISH);
+        launcher.launch(EasyMock.anyObject(), EasyMock.anyObject(),
+                EasyMock.anyObject(), EasyMock.anyObject());
+        EasyMock.expectLastCall().once();
+        EasyMock.replay(welcomeView, launcher);
+
+        WelcomeController controller = new WelcomeController();
+        controller.setWelcomeView(welcomeView);
+        controller.setGameLauncher(launcher);
+        controller.startGame();
+
+        EasyMock.verify(welcomeView, launcher);
+    }
 }
